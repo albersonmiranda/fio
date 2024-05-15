@@ -1,0 +1,42 @@
+Package: fio
+Title: Friendly Input-Output Analysis
+Version: 0.0.0.9001
+Authors@R: c(
+  person(
+    given = "Alberson",
+    family = "da Silva Miranda",
+    email = "albersonmiranda@hotmail.com",
+    role = c("aut", "cre"),
+    comment = c(ORCID = "0000-0001-9252-4175")
+    ),
+  person(
+    given = "Celso",
+    family = "Bissoli Sessa",
+    email = "celso.sessa@ufes.br",
+    role = c("dtc"),
+    comment = c(ORCID = "0000-0001-7616-0244")
+    ),
+  person(
+    given = "Vinícius",
+    family = "de Almeida Vale",
+    email = "viniciusvale@ufpr.br",
+    role = c("aut"),
+    comment = c(ORCID = "0000-0001-5869-9860")
+    ),
+  person(
+    given = "Fernando",
+    family = "Salgueiro Perobelli",
+    email = "fernando.perobelli@ufjf.edu.br",
+    role = c("aut"),
+    comment = c(ORCID = "0000-0003-2364-8865")
+    )
+  )
+Description: A set of functions to help with input-output analysis, including
+  international and brazilian matrices data, and a convenient addin for easy input.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Depends: 
+    R (>= 2.10)
+LazyData: true
