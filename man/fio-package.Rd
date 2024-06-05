@@ -8,6 +8,13 @@
 \description{
 A set of functions to help with input-output analysis, including international and brazilian matrices data, and a convenient addin for easy input.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://albersonmiranda.github.io/fio/}
+}
+
+}
 \author{
 \strong{Maintainer}: Alberson da Silva Miranda \email{albersonmiranda@hotmail.com} (\href{https://orcid.org/0000-0001-9252-4175}{ORCID})
 
