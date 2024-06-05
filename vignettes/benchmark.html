@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Benchmarking</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Benchmarking</h1>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>This vignette presents a benchmarking analysis comparing the performance of functions from the <code>fio</code> package with equivalent base R functions. The <code>fio</code> package provides a set of functions for input-output analysis, a method used in economics to analyze the interdependencies between different sectors of an economy.</p>
+<p>In this document, we will focus on two key functions: the technical coefficients matrix calculation and the Leontief inverse matrix calculation. These functions are fundamental to input-output analysis, and their performance can significantly impact the speed of larger analyses.</p>
+<p>Our benchmarking tests, which involve running these functions repeatedely in simulated datasets, show that the <code>fio</code> package functions are faster than the equivalent base R functions. This improved performance can make a substantial difference in larger analyses, making the <code>fio</code> package a valuable tool for input-output analysis in R.</p>
+<p>The tests were run on a simulated <span class="math inline">\(1000 \times 1000\)</span> matrix, and each test was repeated 100 times to account for variability. Please note that the results of this benchmarking analysis are dependent on the specific test datasets used and the hardware on which the algorithms are run. Therefore, the results should be interpreted in the context of these specific conditions.</p>
+<div id="tecnical-coefficients-matrix" class="section level2">
+<h2>Tecnical coefficients matrix</h2>
+<p>The technical coefficients matrix calculation, a key step in input-output analysis, was tested using the <code>tec_coeff()</code> function from the <code>{fio}</code> package, equivalent functions from the <code>{leontief}</code> package, and a base R implementation. The results show that both <code>{fio}</code> and <code>{leontief}</code> functions execute almost instantaneously, with <code>{leontief}</code> slightly faster. In contrast, the base R implementation is about 100 times slower.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co"># data</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>matrix_dim &lt;-<span class="st"> </span><span class="dv">2000</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>intermediate_transactions &lt;-<span class="st"> </span><span class="kw">matrix</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>  <span class="kw">as.double</span>(<span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>, matrix_dim<span class="op">^</span><span class="dv">2</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>  <span class="dt">nrow =</span> matrix_dim,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>  <span class="dt">ncol =</span> matrix_dim</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>total_production &lt;-<span class="st"> </span><span class="kw">matrix</span>(</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>  <span class="kw">as.double</span>(<span class="kw">sample</span>(<span class="dv">10000</span><span class="op">:</span><span class="dv">20000</span>, matrix_dim, <span class="dt">replace =</span> <span class="ot">TRUE</span>)),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>  <span class="dt">nrow =</span> <span class="dv">1</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>  <span class="dt">ncol =</span> matrix_dim</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a><span class="co"># Base R function</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>tec_coeff_r &lt;-<span class="st"> </span><span class="cf">function</span>(intermediate_transactions, total_production) {</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a>  tec_coeff_matrix &lt;-<span class="st"> </span>intermediate_transactions <span class="op">%*%</span><span class="st"> </span><span class="kw">diag</span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw">as.vector</span>(total_production))</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a>  <span class="kw">return</span>(tec_coeff_matrix)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a>}</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true"></a><span class="co"># {fio} setup</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true"></a>iom_fio &lt;-<span class="st"> </span>fio<span class="op">::</span>iom<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;iom&quot;</span>, intermediate_transactions, total_production)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true"></a><span class="co"># benchmark</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true"></a>benchmark_a &lt;-<span class="st"> </span>microbenchmark<span class="op">::</span><span class="kw">microbenchmark</span>(</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true"></a>  <span class="st">`</span><span class="dt">Base R</span><span class="st">`</span> =<span class="st"> </span><span class="kw">tec_coeff_r</span>(intermediate_transactions, total_production),</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true"></a>  <span class="dt">leontief =</span> leontief<span class="op">::</span><span class="kw">input_requirement</span>(intermediate_transactions, total_production),</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true"></a>  <span class="dt">fio =</span> fio<span class="op">:::</span><span class="kw">tec_coeff</span>(intermediate_transactions, total_production),</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true"></a>  <span class="dt">times =</span> <span class="dv">100</span>,</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true"></a>  <span class="dt">check =</span> <span class="st">&quot;equivalent&quot;</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true"></a>)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true"></a><span class="kw">print</span>(benchmark_a)</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true"></a><span class="co">#&gt; Unit: milliseconds</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true"></a><span class="co">#&gt;      expr        min         lq       mean     median         uq        max</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true"></a><span class="co">#&gt;    Base R 6248.77392 6438.30607 6895.59125 6655.36290 7046.36321 9976.49519</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true"></a><span class="co">#&gt;  leontief   26.78872   29.44291   39.21655   35.10583   44.85788   95.80741</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true"></a><span class="co">#&gt;       fio   29.70865   37.47815   50.51540   48.60041   60.87408  113.05328</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true"></a><span class="co">#&gt;  neval</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true"></a><span class="co">#&gt;    100</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true"></a><span class="co">#&gt;    100</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true"></a><span class="co">#&gt;    100</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true"></a><span class="co"># plot</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true"></a>ggplot2<span class="op">::</span><span class="kw">autoplot</span>(benchmark_a)</span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAAC4lBMVEUAAAABAQECAgIDAwMEBAQFBQUGBgYHBwcICAgJCQkKCgoLCwsMDAwODg4PDw8QEBARERESEhIUFBQVFRUXFxcYGBgZGRkaGhobGxscHBwdHR0eHh4fHx8gICAiIiIjIyMkJCQmJiYnJycoKCgqKiorKyssLCwtLS0wMDAxMTEzMzM0NDQ1NTU2NjY3Nzc4ODg5OTk6Ojo7Ozs8PDw9PT0+Pj4/Pz9AQEBBQUFCQkJDQ0NERERFRUVGRkZHR0dISEhJSUlKSkpLS0tMTExNTU1OTk5PT09QUFBRUVFSUlJTU1NUVFRVVVVWVlZXV1dYWFhZWVlaWlpbW1tcXFxdXV1eXl5fX19gYGBhYWFiYmJjY2NkZGRlZWVmZmZnZ2doaGhpaWlqampra2tsbGxubm5vb29wcHBxcXFycnJzc3N0dHR1dXV2dnZ3d3d4eHh5eXl6enp7e3t8fHx9fX1+fn5/f3+AgICBgYGCgoKDg4OEhISFhYWGhoaHh4eIiIiJiYmKioqLi4uMjIyNjY2Ojo6Pj4+QkJCRkZGSkpKTk5OUlJSVlZWWlpaXl5eYmJiZmZmampqbm5ucnJydnZ2enp6fn5+goKChoaGioqKjo6OkpKSlpaWmpqanp6eoqKipqamqqqqrq6usrKytra2urq6vr6+wsLCxsbGysrKzs7O0tLS1tbW2tra3t7e4uLi5ubm6urq7u7u8vLy9vb2+vr6/v7/AwMDBwcHCwsLDw8PExMTFxcXGxsbHx8fIyMjJycnKysrLy8vMzMzNzc3Ozs7Pz8/Q0NDR0dHS0tLT09PU1NTV1dXW1tbX19fY2NjZ2dna2trb29vc3Nzd3d3e3t7f39/g4ODh4eHi4uLj4+Pk5OTl5eXm5ubn5+fo6Ojp6enq6urr6+vs7Ozt7e3u7u7v7+/w8PDx8fHy8vLz8/P09PT19fX29vb39/f4+Pj5+fn6+vr7+/v8/Pz9/f3+/v7///90EZOwAAAACXBIWXMAAA7DAAAOwwHHb6hkAAANCElEQVR4nO3de1hUdRrA8Wl1a2u3tt21217c2t12298MF43MzEumqCAIAl4TFQ1veEHLzEukUoKp5S3wUiripRKzEHGNAF3TFAtFCGGMENRhYLjN5f1/z5k5Z85wZob3gNOODO/36fHwzvnNj3k+zQzIo0cVUO2m8vYDuNsjICQCQiIgJAJCIiAkjwHp29SsxzMY6xWsUrJTo1HBonpFO7XaP/I0UE2bWmrw9FCLL6pVslM94GtqapsVLGqwiB/VEZCrCAiJgJAICImAkAgIiYCQCAiJgJAICImAkAgIiYCQCAiJgJAICImAkAgIiYCQCAiJgJAICImAkAgIiYCQCAiJgJAICImAkAgIiYCQCAiJgJAICImAkAgIyWtApUfXz5+1aEeZ423dHKggNXZoIGNBA0MiJ4cP4D6ImR6h6bumUlrjy0AbZ0JsbTtAVQfDWFBcctq+3WnvrVq8YOl7n101c2uqkwOGfmFf5MNALREWKDG6BbqxdxibntPi6p6lE9WJpcIyHwZaNiKBfwblxo5f1+QC6FM245K7u5p3B/VLvmRd5sNATVHAAV2P1pqS0rnRpNVq625JZTJdO3e+8VagOnRe0oZNm9M27dz5xa32u92KLOAzgIJFt1sULGq076S/c6CD73MvmThurGKMpTqc/rxdIIC6pAAm5teZz///SHwHuQOgbZkA+ghubCksLKzQSR1oF6h170gWEBY357VlK5cufSNN1351RmQBXyMoWFTXqmBRk32nhjsHOvABwA/TxdscXsgH2Nrbbu+bP1ITf/RHfpnPvwdVxlSZ1nzoAuj66j5Byddc3lO/TB1dICzzeSDIiZ3wrquvYjU1V5KDWGTy4a8KC09l7UtL25H1fSu/xnh4UN+t1eIiHwZyVdtP1FK5Z9Yg4X342ee59+SAmKUpiQPZzCJpTfcG4n+pvHjm/MUy/hlTenzTnPCXI9/82nENASEREBIBIREQEgEhERASASEREBIBIREQEgEhERASASEREBIBIREQEgEhERASASEREBIBIREQEgEhERASASEREBIBIREQEgEhERASASEREBIBIREQEgEhERASASEREBIBIREQEgEhERASASEREBIBIREQEgEhERASASEREBIBIREQEgEhERASASEREBIBIREQEgEhdVug/0ztP3pLBf5guivQR35hmxb6D9x7A3sw3RTooOb1VoCKeDY2o6ymNGf39iNaNw+mmwLNGmO2znnjxeu4PZfyo8sH0+WBSua5vt2SBN8likP6FLMMaIp4qvzInqzvGi0lSX7Bua4ejM8CmUPBUC4OYeLl9MSN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" width="100%" /></p>
+</div>
+<div id="leontief-inverse-matrix" class="section level2">
+<h2>Leontief inverse matrix</h2>
+<p>For the Leontief inverse matrix calculation, we will use the technical coefficients matrix calculated in the previous section. Here, <code>{fio}</code> is the fastest algorithm, followed by <code>{leontief}</code> and a surprisingly efficient base R implementation.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="co"># data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>iom_fio &lt;-<span class="st"> </span>iom_fio<span class="op">$</span><span class="kw">tec_coeff</span>()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>tecnical_coefficients_matrix &lt;-<span class="st"> </span>iom_fio<span class="op">$</span>tecnical_coefficients_matrix</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="co"># R function</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>leontief_inverse_r &lt;-<span class="st"> </span><span class="cf">function</span>(tecnical_coefficients_matrix) {</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>  dim &lt;-<span class="st"> </span><span class="kw">nrow</span>(tecnical_coefficients_matrix)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>  leontief_inverse_matrix &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">diag</span>(dim) <span class="op">-</span><span class="st"> </span>tecnical_coefficients_matrix)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>  <span class="kw">return</span>(leontief_inverse_matrix)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a>}</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a><span class="co"># benchmark</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>benchmark_b &lt;-<span class="st"> </span>microbenchmark<span class="op">::</span><span class="kw">microbenchmark</span>(</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a>  <span class="st">`</span><span class="dt">Base R</span><span class="st">`</span> =<span class="st"> </span><span class="kw">leontief_inverse_r</span>(tecnical_coefficients_matrix),</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a>  <span class="dt">leontief =</span> leontief<span class="op">::</span><span class="kw">leontief_inverse</span>(tecnical_coefficients_matrix),</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a>  <span class="dt">fio =</span> fio<span class="op">:::</span><span class="kw">leontief_inverse</span>(tecnical_coefficients_matrix),</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>  <span class="dt">times =</span> <span class="dv">100</span>,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a>  <span class="dt">check =</span> <span class="st">&quot;equivalent&quot;</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a><span class="kw">print</span>(benchmark_b)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true"></a><span class="co">#&gt; Unit: seconds</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true"></a><span class="co">#&gt;      expr      min       lq     mean   median       uq      max neval</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true"></a><span class="co">#&gt;    Base R 6.023189 6.127685 6.589487 6.363803 6.629908 13.62084   100</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true"></a><span class="co">#&gt;  leontief 5.312552 5.396286 5.864627 5.604669 5.959323 19.10500   100</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true"></a><span class="co">#&gt;       fio 6.788901 7.144201 8.394065 7.845953 8.700717 28.26612   100</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true"></a></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true"></a><span class="co"># plot</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true"></a>ggplot2<span class="op">::</span><span class="kw">autoplot</span>(benchmark_b)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" width="100%" /></p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
