@@ -4,3 +4,5 @@
 ^README\.Rmd$
 ^input_addin\.r$
 ^data-raw$
+^.lintr$
+^src/\.cargo$
