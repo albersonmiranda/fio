@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 # fio
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 A set of functions to help with input-output analysis, including international and brazilian matrices data, and a convenient addin for easy input.
