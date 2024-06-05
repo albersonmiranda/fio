@@ -25,12 +25,12 @@ Import data from a input-output matrix (IOM) from Excel format.
 }
 \examples{
 \dontrun{
-z = import_element(
- file = "MIP-BR (2020).xlsx",
+Z = import_element(
+ file = "inst/extdata/iom/br/2020.xlsx",
  sheet = "MIP",
  range = "D6:BB56",
  col_names = "D4:BB4",
- row_names = "D4:BB4"
+ row_names = "B6:B56"
 )
 }
 }
