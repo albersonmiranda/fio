@@ -112,17 +112,17 @@ slightly faster. In contrast, the base R implementation is about 100
 times slower.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># set seed</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># data</span></span>
-<span><span class="va">matrix_dim</span> <span class="op">&lt;-</span> <span class="fl">1000</span></span>
+<span><span class="va">matrix_dim</span> <span class="op">&lt;-</span> <span class="fl">500</span></span>
 <span><span class="va">intermediate_transactions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>, <span class="va">matrix_dim</span><span class="op">^</span><span class="fl">2</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  nrow <span class="op">=</span> <span class="va">matrix_dim</span>,</span>
 <span>  ncol <span class="op">=</span> <span class="va">matrix_dim</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">total_production</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">10000</span><span class="op">:</span><span class="fl">20000</span>, <span class="va">matrix_dim</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">4000000</span><span class="op">:</span><span class="fl">6000000</span>, <span class="va">matrix_dim</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  nrow <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  ncol <span class="op">=</span> <span class="va">matrix_dim</span></span>
 <span><span class="op">)</span></span>
@@ -145,11 +145,11 @@ times slower.</p>
 <span>  check <span class="op">=</span> <span class="st">"equivalent"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_a</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Unit: milliseconds</span></span>
-<span><span class="co">#&gt;      expr       min        lq      mean    median        uq      max neval</span></span>
-<span><span class="co">#&gt;    Base R 23.607286 24.020536 26.228416 24.810237 26.940257 78.13220   100</span></span>
-<span><span class="co">#&gt;  leontief  3.029566  3.326630  4.914469  3.383346  6.077531 56.56972   100</span></span>
-<span><span class="co">#&gt;       fio  5.397659  5.718938  7.619067  6.967274  8.508031 15.84406   100</span></span></code></pre></div>
+<span><span class="co">#&gt; Unit: microseconds</span></span>
+<span><span class="co">#&gt;      expr      min        lq     mean    median       uq       max neval</span></span>
+<span><span class="co">#&gt;    Base R 3416.378 3523.6490 4202.348 3568.1220 4332.755 15612.679   100</span></span>
+<span><span class="co">#&gt;  leontief  755.480  802.4985 1556.852  840.6345 1694.284  9335.028   100</span></span>
+<span><span class="co">#&gt;       fio 1332.958 1372.6280 2042.262 1427.4200 2266.181  9435.576   100</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># plot</span></span>
@@ -187,9 +187,9 @@ implementation.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_b</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unit: milliseconds</span></span>
 <span><span class="co">#&gt;      expr       min        lq      mean    median        uq      max neval</span></span>
-<span><span class="co">#&gt;    Base R  41.45114  44.19652  45.94423  45.23245  45.91992 121.5851   100</span></span>
-<span><span class="co">#&gt;  leontief  32.67364  33.15450  36.10588  33.53647  34.97881 114.3692   100</span></span>
-<span><span class="co">#&gt;       fio 362.91062 367.39203 390.63695 402.14694 403.88145 408.0281   100</span></span></code></pre></div>
+<span><span class="co">#&gt;    Base R  7.110205  7.343851  9.823111  7.596096 11.004941 88.19357   100</span></span>
+<span><span class="co">#&gt;  leontief  5.875810  6.065980  6.643875  6.157451  6.327949 12.54463   100</span></span>
+<span><span class="co">#&gt;       fio 52.726379 64.252499 70.485423 74.650171 75.048634 83.17785   100</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># plot</span></span>
