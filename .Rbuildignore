@@ -5,3 +5,5 @@
 ^input_addin\.r$
 ^data-raw$
 ^\.github$
+^.lintr$
+^src/\.cargo$
