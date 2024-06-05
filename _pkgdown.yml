@@ -34,4 +34,4 @@ articles:
     desc: >
       {fio} isn't only friendly, it's also fast. Here we show how it compares to base R and other packages.
     contents:
-      - benchmark
+      - articles/benchmarking

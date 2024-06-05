@@ -1,10 +1,5 @@
 ---
-title: "Benchmarking"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Benchmarking}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+title: "benchmarking"
 ---
 
 ```{r, include = FALSE}
@@ -33,7 +28,7 @@ The technical coefficients matrix calculation, a key step in input-output analys
 set.seed(100)
 
 # data
-matrix_dim <- 500
+matrix_dim <- 2000
 intermediate_transactions <- matrix(
   as.double(sample(1:1000, matrix_dim^2, replace = TRUE)),
   nrow = matrix_dim,
