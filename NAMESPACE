@@ -2,5 +2,6 @@
 
 export(import_element)
 export(iom)
+export(leontief_inverse)
 export(tec_coeff)
 useDynLib(fio, .registration = TRUE)
