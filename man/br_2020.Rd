@@ -19,6 +19,7 @@ A R6 class containing a set of matrices:
 \item{\code{value_added}}{Value added matrix.}
 }
 }
+}
 \usage{
 br_2020
 }

@@ -9,13 +9,14 @@
 #' @format ## `br_2020`
 #' A R6 class containing a set of matrices:
 #' \describe{
-#'  \item{\code{id}}{Identifier of the new instance}
-#'  \item{\code{intermediate_transactions}}{Intermediate transactions matrix.}
-#'  \item{\code{total_production}}{Total production matrix.}
-#'  \item{\code{final_demand}}{Final demand matrix.}
-#'  \item{\code{exports}}{Exports matrix.}
-#'  \item{\code{imports}}{Imports matrix.}
-#'  \item{\code{taxes}}{Taxes matrix.}
-#'  \item{\code{value_added}}{Value added matrix.}
+#'   \item{\code{id}}{Identifier of the new instance}
+#'   \item{\code{intermediate_transactions}}{Intermediate transactions matrix.}
+#'   \item{\code{total_production}}{Total production matrix.}
+#'   \item{\code{final_demand}}{Final demand matrix.}
+#'   \item{\code{exports}}{Exports matrix.}
+#'   \item{\code{imports}}{Imports matrix.}
+#'   \item{\code{taxes}}{Taxes matrix.}
+#'   \item{\code{value_added}}{Value added matrix.}
+#' }
 #'
 "br_2020"
