@@ -2,7 +2,7 @@
 title: "Benchmarking"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{benchmark}
+  %\VignetteIndexEntry{Benchmarking}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -10,8 +10,7 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  out.width = "100%"
+  comment = "#>"
 )
 ```
 
@@ -25,13 +24,16 @@ Our benchmarking tests, which involve running these functions repeatedely in sim
 
 The tests were run on a simulated $1000 \times 1000$ matrix, and each test was repeated 100 times to account for variability. Please note that the results of this benchmarking analysis are dependent on the specific test datasets used and the hardware on which the algorithms are run. Therefore, the results should be interpreted in the context of these specific conditions.
 
-## Tecnical coefficients matrix
+## Technical coefficients matrix
 
 The technical coefficients matrix calculation, a key step in input-output analysis, was tested using the `tec_coeff()` function from the `{fio}` package, equivalent functions from the `{leontief}` package, and a base R implementation. The results show that both `{fio}` and `{leontief}` functions execute almost instantaneously, with `{leontief}` slightly faster. In contrast, the base R implementation is about 100 times slower.
 
 ```{r benchmark_a}
+# set seed
+set.seed(1)
+
 # data
-matrix_dim <- 2000
+matrix_dim <- 1000
 intermediate_transactions <- matrix(
   as.double(sample(1:1000, matrix_dim^2, replace = TRUE)),
   nrow = matrix_dim,
@@ -73,20 +75,20 @@ For the Leontief inverse matrix calculation, we will use the technical coefficie
 ```{r benchmark_b}
 # data
 iom_fio <- iom_fio$tec_coeff()
-tecnical_coefficients_matrix <- iom_fio$tecnical_coefficients_matrix
+technical_coefficients_matrix <- iom_fio$technical_coefficients_matrix
 
 # R function
-leontief_inverse_r <- function(tecnical_coefficients_matrix) {
-  dim <- nrow(tecnical_coefficients_matrix)
-  leontief_inverse_matrix <- solve(diag(dim) - tecnical_coefficients_matrix)
+leontief_inverse_r <- function(technical_coefficients_matrix) {
+  dim <- nrow(technical_coefficients_matrix)
+  leontief_inverse_matrix <- solve(diag(dim) - technical_coefficients_matrix)
   return(leontief_inverse_matrix)
 }
 
 # benchmark
 benchmark_b <- microbenchmark::microbenchmark(
-  `Base R` = leontief_inverse_r(tecnical_coefficients_matrix),
-  leontief = leontief::leontief_inverse(tecnical_coefficients_matrix),
-  fio = fio:::leontief_inverse(tecnical_coefficients_matrix),
+  `Base R` = leontief_inverse_r(technical_coefficients_matrix),
+  leontief = leontief::leontief_inverse(technical_coefficients_matrix),
+  fio = fio:::leontief_inverse(technical_coefficients_matrix),
   times = 100,
   check = "equivalent"
 )
