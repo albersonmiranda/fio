@@ -26,8 +26,8 @@
 #' Value added matrix.
 #' @param occupation
 #' Occupation matrix.
-#' @param tecnical_coefficients_matrix
-#' Tecnical coefficients matrix.
+#' @param technical_coefficients_matrix
+#' Technical coefficients matrix.
 #' @param leontief_inverse_matrix
 #' Leontief inverse matrix.
 #' @export
@@ -84,9 +84,9 @@ iom <- R6::R6Class(
     #' Occupation vector
     occupation = NULL,
 
-    #' @field tecnical_coefficients_matrix
-    #' Tecnical coefficients matrix.
-    tecnical_coefficients_matrix = NULL,
+    #' @field technical_coefficients_matrix
+    #' Technical coefficients matrix.
+    technical_coefficients_matrix = NULL,
 
     #' @field leontief_inverse_matrix
     #' Leontief inverse matrix.
@@ -106,7 +106,7 @@ iom <- R6::R6Class(
                           added_value_final_demand = NULL,
                           added_value = NULL,
                           occupation = NULL,
-                          tecnical_coefficients_matrix = NULL,
+                          technical_coefficients_matrix = NULL,
                           leontief_inverse_matrix = NULL) {
       self$id <- id
       self$intermediate_transactions <- intermediate_transactions
@@ -120,7 +120,7 @@ iom <- R6::R6Class(
       self$added_value_final_demand <- added_value_final_demand
       self$added_value <- added_value
       self$occupation <- occupation
-      self$tecnical_coefficients_matrix <- tecnical_coefficients_matrix
+      self$technical_coefficients_matrix <- technical_coefficients_matrix
       self$leontief_inverse_matrix <- leontief_inverse_matrix
     },
 
@@ -165,36 +165,36 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Calculate the tecnical coefficients matrix.
+    #' Calculate the technical coefficients matrix.
     tec_coeff = function() {
       # save row and column names
       row_names <- rownames(self$intermediate_transactions)
       col_names <- colnames(self$intermediate_transactions)
-      # calculate tecnical coefficients matrix
-      tecnical_coefficients_matrix <- tec_coeff(
+      # calculate technical coefficients matrix
+      technical_coefficients_matrix <- tec_coeff(
         intermediate_transactions = self$intermediate_transactions,
         total_production = self$total_production
       )
       # set row and column names
-      rownames(tecnical_coefficients_matrix) <- row_names
-      colnames(tecnical_coefficients_matrix) <- col_names
+      rownames(technical_coefficients_matrix) <- row_names
+      colnames(technical_coefficients_matrix) <- col_names
 
       # store matrix
-      self$tecnical_coefficients_matrix <- tecnical_coefficients_matrix
+      self$technical_coefficients_matrix <- technical_coefficients_matrix
       invisible(self)
     },
 
     #' @description
     #' Calculate the Leontief inverse matrix.
-    #' @param tecnical_coefficients_matrix
-    #' Tecnical coefficients matrix.
-    leontief_inverse = function(tecnical_coefficients_matrix) {
+    #' @param technical_coefficients_matrix
+    #' Technical coefficients matrix.
+    leontief_inverse = function(technical_coefficients_matrix) {
       # save row and column names
-      row_names <- rownames(self$tecnical_coefficients_matrix)
-      col_names <- colnames(self$tecnical_coefficients_matrix)
+      row_names <- rownames(self$technical_coefficients_matrix)
+      col_names <- colnames(self$technical_coefficients_matrix)
       # calculate leontief inverse matrix
       leontief_inverse_matrix <- leontief_inverse(
-        tec_coeff = self$tecnical_coefficients_matrix
+        tec_coeff = self$technical_coefficients_matrix
       )
       # set row and column names
       rownames(leontief_inverse_matrix) <- row_names

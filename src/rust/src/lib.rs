@@ -1,7 +1,7 @@
 use extendr_api::prelude::*;
 use nalgebra as na;
 
-/// Calculates tecnical coefficients matrix to R.
+/// Calculates technical coefficients matrix to R.
 /// @param intermediate_transactions A nxn matrix of intermediate transactions.
 /// @param total_production A 1xn vector of total production.
 /// @return A nxn matrix of technical coefficients, known as A matrix.

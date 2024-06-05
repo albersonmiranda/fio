@@ -14,8 +14,6 @@ A set of functions to help with input-output analysis, including international a
 Other contributors:
 \itemize{
   \item Celso Bissoli Sessa \email{celso.sessa@ufes.br} (\href{https://orcid.org/0000-0001-7616-0244}{ORCID}) [data contributor]
-  \item Vinícius de Almeida Vale \email{viniciusvale@ufpr.br} (\href{https://orcid.org/0000-0001-5869-9860}{ORCID}) [contributor]
-  \item Fernando Salgueiro Perobelli \email{fernando.perobelli@ufjf.edu.br} (\href{https://orcid.org/0000-0003-2364-8865}{ORCID}) [contributor]
 }
 
 }
