@@ -2,7 +2,7 @@
 % Please edit documentation in R/extendr-wrappers.R
 \name{tec_coeff}
 \alias{tec_coeff}
-\title{Calculates tecnical coefficients matrix to R.}
+\title{Calculates technical coefficients matrix to R.}
 \usage{
 tec_coeff(intermediate_transactions, total_production)
 }
@@ -15,5 +15,5 @@ tec_coeff(intermediate_transactions, total_production)
 A nxn matrix of technical coefficients, known as A matrix.
 }
 \description{
-Calculates tecnical coefficients matrix to R.
+Calculates technical coefficients matrix to R.
 }

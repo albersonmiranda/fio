@@ -33,7 +33,7 @@ R6 class for input-output matrix.
 
 \item{\code{occupation}}{Occupation vector}
 
-\item{\code{tecnical_coefficients_matrix}}{Tecnical coefficients matrix.}
+\item{\code{technical_coefficients_matrix}}{Technical coefficients matrix.}
 
 \item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
 }
@@ -69,7 +69,7 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
   added_value_final_demand = NULL,
   added_value = NULL,
   occupation = NULL,
-  tecnical_coefficients_matrix = NULL,
+  technical_coefficients_matrix = NULL,
   leontief_inverse_matrix = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -101,7 +101,7 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
 
 \item{\code{occupation}}{Occupation matrix.}
 
-\item{\code{tecnical_coefficients_matrix}}{Tecnical coefficients matrix.}
+\item{\code{technical_coefficients_matrix}}{Technical coefficients matrix.}
 
 \item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
 }
@@ -150,7 +150,7 @@ Removes a matrix from a previously imported IO matrix.
 \if{html}{\out{<a id="method-iom-tec_coeff"></a>}}
 \if{latex}{\out{\hypertarget{method-iom-tec_coeff}{}}}
 \subsection{Method \code{tec_coeff()}}{
-Calculate the tecnical coefficients matrix.
+Calculate the technical coefficients matrix.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$tec_coeff()}\if{html}{\out{</div>}}
 }
@@ -162,13 +162,13 @@ Calculate the tecnical coefficients matrix.
 \subsection{Method \code{leontief_inverse()}}{
 Calculate the Leontief inverse matrix.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{iom$leontief_inverse(tecnical_coefficients_matrix)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{iom$leontief_inverse(technical_coefficients_matrix)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{tecnical_coefficients_matrix}}{Tecnical coefficients matrix.}
+\item{\code{technical_coefficients_matrix}}{Technical coefficients matrix.}
 }
 \if{html}{\out{</div>}}
 }
