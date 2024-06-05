@@ -30,17 +30,17 @@ The technical coefficients matrix calculation, a key step in input-output analys
 
 ```{r benchmark_a}
 # set seed
-set.seed(1)
+set.seed(100)
 
 # data
-matrix_dim <- 1000
+matrix_dim <- 500
 intermediate_transactions <- matrix(
   as.double(sample(1:1000, matrix_dim^2, replace = TRUE)),
   nrow = matrix_dim,
   ncol = matrix_dim
 )
 total_production <- matrix(
-  as.double(sample(10000:20000, matrix_dim, replace = TRUE)),
+  as.double(sample(4000000:6000000, matrix_dim, replace = TRUE)),
   nrow = 1,
   ncol = matrix_dim
 )
