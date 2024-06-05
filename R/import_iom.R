@@ -16,12 +16,12 @@
 #' A matrix with row and column names.
 #' @examples
 #' \dontrun{
-#' z = import_element(
-#'  file = "MIP-BR (2020).xlsx",
-#'  sheet = "MIP",
-#'  range = "D6:BB56",
-#'  col_names = "D4:BB4",
-#'  row_names = "D4:BB4"
+#' intermediate_transactions = import_element(
+#'  file = "path/to/file.xlsx",
+#'  sheet = "sheet_name",
+#'  range = "B2:Z56",
+#'  col_names = "B2:Z2",
+#'  row_names = "A2:A56"
 #' )
 #' }
 #' @export
@@ -32,24 +32,25 @@ import_element = function(file, sheet, range, col_names = FALSE, row_names = FAL
     col_names = NULL
   } else {
     col_names = readxl::read_excel(file, sheet = sheet, range = col_names, col_names = FALSE) |>
-      suppressMessages() |>
-      as.character()
+      suppressMessages()
   }
 
   if (row_names == FALSE) {
     row_names = NULL
   } else {
     row_names = readxl::read_excel(file, sheet = sheet, range = row_names, col_names = FALSE) |>
-      suppressMessages() |>
-      as.character()
+      suppressMessages()
   }
 
   data = readxl::read_excel(file, sheet = sheet, range = range, col_names = FALSE) |>
-    suppressMessages()
+    suppressMessages() |>
+    as.data.frame()
+
+  rownames(data) = row_names[[1]]
+  colnames(data) = as.character(col_names)
 
   # convert to matrix
   data = as.matrix(data)
-  dimnames(data) = list(row_names, col_names)
 
   return(data)
 }
