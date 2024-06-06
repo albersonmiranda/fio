@@ -1,4 +1,37 @@
 url: https://albersonmiranda.github.io/fio/
 template:
-  bootstrap: 5
+  params:
+    bootswatch: cosmo
 
+navbar:
+  title: "fio"
+  left:
+    - icon: fa-home fa-lg
+      href: index.html
+    - text: "Vignettes"
+      href: articles/index.html
+    - text: "Functions"
+      href: reference/index.html
+    - text: "News"
+      href: news/index.html
+  right:
+   - icon: fa-github
+     href: https://github.com/albersonmiranda/fio
+
+home:
+  links:
+  - text: Ask a question
+    href: https://www.google.com/
+
+articles:
+#  - title: "Using {fio}"
+#    desc: >
+#      These vignettes provide an introduction to performing input-output analysis using the {fio} package.
+#    contents:
+#      - data
+#      - analysis
+  - title: "Performance"
+    desc: >
+      {fio} isn't only friendly, it's also fast. Here we show how it compares to base R and other packages.
+    contents:
+      - articles/benchmarking
