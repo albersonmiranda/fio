@@ -2,8 +2,8 @@ pandoc: 3.1.11
 pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
-  benchmark: benchmark.html
-last_built: 2024-06-05T20:39Z
+  benchmarking: benchmarking.html
+last_built: 2024-06-06T20:19Z
 urls:
   reference: https://albersonmiranda.github.io/fio/reference
   article: https://albersonmiranda.github.io/fio/articles

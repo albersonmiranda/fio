@@ -7,7 +7,7 @@
     <loc>https://albersonmiranda.github.io/fio/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://albersonmiranda.github.io/fio/articles/benchmark.html</loc>
+    <loc>https://albersonmiranda.github.io/fio/articles/benchmarking.html</loc>
   </url>
   <url>
     <loc>https://albersonmiranda.github.io/fio/articles/index.html</loc>
@@ -38,6 +38,9 @@
   </url>
   <url>
     <loc>https://albersonmiranda.github.io/fio/reference/iom.html</loc>
+  </url>
+  <url>
+    <loc>https://albersonmiranda.github.io/fio/reference/leontief_inverse.html</loc>
   </url>
   <url>
     <loc>https://albersonmiranda.github.io/fio/reference/tec_coeff.html</loc>
