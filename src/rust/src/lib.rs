@@ -1,5 +1,6 @@
 use extendr_api::prelude::*;
-use nalgebra as na;
+use faer;
+use faer::prelude::SpSolver;
 
 #[extendr]
 /// Calculates technical coefficients matrix to R.
@@ -48,14 +49,17 @@ fn leontief_inverse(tec_coeff: Vec<f64>) -> RArray<f64, [usize;2]> {
   // get dimensions
   let n = (tec_coeff.len() as f64).sqrt() as usize;
 
-  // convert to nalgebra matrix
-  let tec_coeff_matrix = na::DMatrix::from_vec(n, n, tec_coeff);
+  // create faer matrix
+  let tec_coeff_matrix = faer::Mat::from_fn(n, n, |r, c| (r + c) as f64);
 
-  // calculate
-  let identity_matrix = na::DMatrix::identity(n, n);
-  let leontief_matrix: na::DMatrix<_> = identity_matrix - tec_coeff_matrix;
-  let leontief_inverse = leontief_matrix.try_inverse().unwrap();
-  
+  // calculate Leontief matrix
+  let identity_matrix: faer::Mat<f64> = faer::Mat::identity(n, n);
+  let leontief_matrix = identity_matrix.clone() - tec_coeff_matrix;
+
+  // calculate Leontief inverse
+  let leontief_lu = leontief_matrix.partial_piv_lu();
+  let leontief_inverse = leontief_lu.solve(&identity_matrix);
+
   // convert to R matrix
   let leontief_inverse_r = RArray::new_matrix(n, n, |r, c| leontief_inverse[(r, c)]);
   leontief_inverse_r

@@ -9,4 +9,5 @@ name = 'fio'
 
 [dependencies]
 extendr-api = '*'
-nalgebra = '*'
+faer = '*'
+
