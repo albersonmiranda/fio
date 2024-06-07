@@ -6,13 +6,14 @@
 <div style="text-align: justify">
 
 Friendly & Fast Input-Output Analysis
+<img src="man/figures/leontief.jpg" align="right" width="240px" style="margin-left: 20px;" />
 
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-### Outline <img src="man/figures/leontief.jpg" align="right" width="240px" style="margin-left: 20px;" />
+### Outline
 
 `{fio}` (*Friendly Input-Output*) is a R package for input-output
 analysis, focusing on two key aspects: ease of use for Excel users and
