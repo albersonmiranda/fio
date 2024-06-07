@@ -3,7 +3,7 @@ pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   benchmarking: benchmarking.html
-last_built: 2024-06-07T03:03Z
+last_built: 2024-06-07T03:34Z
 urls:
   reference: https://albersonmiranda.github.io/fio/reference
   article: https://albersonmiranda.github.io/fio/articles
