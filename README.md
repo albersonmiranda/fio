@@ -1,44 +1,22 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-<style>
-figcaption {
-  position: absolute;
-  top: 305px;
-  left: 0;
-  right: 20px;
-  text-align: right;
-  font-size: 8px;
-  font-style: italic;
-  line-height: 1.5;
-  color: #777;
-  padding-right: 10px;
-  /*adjust this to control how far it should be from egde*/
-}
 
-figure {
-  position: relative;
-}
-</style>
-# fio
-<figure>
-<img src="img/leontief.jpg" align="right" width="240px">
-<figcaption>
-1973 Economics Nobel Prize Laureate Wassily Leontief
-</figcaption>
-</figure>
-<!-- badges: start -->
+# {fio}
 
+<div style="text-align: justify">
+
+Friendly & Fast Input-Output Analysis <!-- badges: start -->
 [![R-CMD-check](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-### Outline
+### Outline <img src="man/figures/leontief.jpg" align="right" width="240px" style="margin-left: 20px;" />
 
-{fio} (*Friendly Input-Output*) is a R package for input-output
+`{fio}` (*Friendly Input-Output*) is a R package for input-output
 analysis, focusing on two key aspects: ease of use for Excel users and
 performance. It provides an [RStudio
 Addin](https://rstudio.github.io/rstudioaddins/) and a set of functions
 for easy import of input-output tables from Excel, either
-programmatically or from clipboard.
+programmatically or direclty from clipboard.
 
 The package is designed to be fast and efficient. It embraces [R6
 class](https://r6.r-lib.org/) for a clean, memory-efficient
@@ -54,6 +32,33 @@ Install the lastest development version from **Github**:
 devtools::install_github("albersonmiranda/fio")
 ```
 
-## Usage
+## Getting Started
 
-Import included complete brazilian 2020 input-output matrix:
+If you are just getting started with `{fio}`, we recommend you to read
+the [vignettes](https://albersonmiranda.github.io/fio/articles/fio.html)
+for a comprehensive overview of the package.
+
+## Examples
+
+Calculate Leontief’s inverse from brazilian 2020 input-output matrix:
+
+``` r
+# load included dataset
+iom_br <- fio::br_2020
+
+# calculate technical coefficients matrix
+iom_br$tec_coeff()
+
+# calculate Leontief's inverse
+iom_br$leontief_inverse()
+```
+
+And pronto\! 🎉, you’re all good to carry on with your analysis. You can
+evoke the Data Viewer to inspect the results with
+`iom_br$technical_coefficients_matrix |> View()` and
+`iom_br$leontief_inverse_matrix |> View()`.
+
+![](man/figures/example_leontief_inverse.png) *<small>Leontief’s inverse
+from brazilian 2020 input-output matrix</small>*
+
+</div>

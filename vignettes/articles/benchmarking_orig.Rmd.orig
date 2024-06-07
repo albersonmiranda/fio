@@ -2,7 +2,13 @@
 title: "benchmarking"
 ---
 
-
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "vignettes/figure"
+)
+```
 
 # Introduction
 
@@ -12,14 +18,13 @@ In this document, we will focus on two key functions: the technical coefficients
 
 Our benchmarking tests, which involve running these functions repeatedely in simulated datasets, show that the `fio` package functions are faster than the equivalent base R functions. This improved performance can make a substantial difference in larger analyses, making the `fio` package a valuable tool for input-output analysis in R.
 
-The tests were run on a simulated $2000 \times 2000$ matrix, and each test was repeated 100 times to account for variability. Please note that the results of this benchmarking analysis are dependent on the specific test datasets used and the hardware on which the algorithms are run. Therefore, the results should be interpreted in the context of these specific conditions.
+The tests were run on a simulated $2000 \times 2000$ matrix, and each test was repeated 100 times to account for variability. Please note that the results of this benchmarking analysis are dependent on the specific test datasets used and the hardware on which the algorithms were run. Therefore, the results should be interpreted in the context of these specific conditions.
 
 ## Technical coefficients matrix
 
 The technical coefficients matrix calculation, a key and initial step in input-output analysis, was tested using the `tec_coeff()` function from the `{fio}` package, equivalent functions from the `{leontief}` package, and a base R implementation. It consists on dividing each $a_{ij}$ element of intermediate transactions matrix by the correspondent $x_j$ element of total production vector^[Or in a equivalent way, multiplying intermediate transactions matrix by a diagonal matrix constructed from total production vector.]. The results show that both `{fio}` and `{leontief}` functions execute almost instantaneously, with `{leontief}` slightly faster (about 15 milliseconds apart). In contrast, the base R implementation is about 100 times slower.
 
-
-``` r
+```{r benchmark_a}
 # set seed
 set.seed(100)
 
@@ -53,20 +58,10 @@ benchmark_a <- microbenchmark::microbenchmark(
   times = 100
 )
 print(benchmark_a)
-#> Unit: milliseconds
-#>      expr        min         lq       mean     median         uq        max neval
-#>       fio   31.97065   40.32022   57.55164   63.04944   68.62957   84.36548   100
-#>    Base R 6001.42973 6064.82169 6147.27023 6100.11455 6220.87087 6557.67636   100
-#>  leontief   20.63873   28.75914   41.08759   44.40144   49.10843  121.40652   100
-```
-
-``` r
 
 # plot
 ggplot2::autoplot(benchmark_a)
 ```
-
-![plot of chunk benchmark_a](figure/benchmark_a-1.png)
 
 ## Leontief inverse matrix
 
@@ -76,8 +71,7 @@ $$B = I - A$$
 
 It allows for solving the linear system through LU decomposition, which is a more efficient method than the direct inverse matrix calculation. `{fio}` takes advantage of LU decomposition and becomes incredibly faster, while `{leontief}` is about 18 times slower, followed closed by the 20 times slower base R implementation. 
 
-
-``` r
+```{r benchmark_b}
 # data
 iom_fio <- iom_fio$tec_coeff()
 technical_coefficients_matrix <- iom_fio$technical_coefficients_matrix
@@ -97,17 +91,7 @@ benchmark_b <- microbenchmark::microbenchmark(
   times = 100
 )
 print(benchmark_b)
-#> Unit: milliseconds
-#>      expr       min       lq      mean   median       uq       max neval
-#>       fio  245.3217  292.559  316.0075  312.112  328.852  511.8544   100
-#>    Base R 6297.9825 6373.770 6496.4747 6434.066 6585.954 7164.5178   100
-#>  leontief 5585.4059 5613.459 5701.8515 5654.122 5758.876 6205.4889   100
-```
-
-``` r
 
 # plot
 ggplot2::autoplot(benchmark_b)
 ```
-
-![plot of chunk benchmark_b](figure/benchmark_b-1.png)
