@@ -25,6 +25,15 @@
     <loc>https://albersonmiranda.github.io/fio/reference/br_2020.html</loc>
   </url>
   <url>
+    <loc>https://albersonmiranda.github.io/fio/reference/compute_leontief_inverse.html</loc>
+  </url>
+  <url>
+    <loc>https://albersonmiranda.github.io/fio/reference/compute_multiplier_output.html</loc>
+  </url>
+  <url>
+    <loc>https://albersonmiranda.github.io/fio/reference/compute_tech_coeff.html</loc>
+  </url>
+  <url>
     <loc>https://albersonmiranda.github.io/fio/reference/fio-package.html</loc>
   </url>
   <url>
@@ -38,11 +47,5 @@
   </url>
   <url>
     <loc>https://albersonmiranda.github.io/fio/reference/iom.html</loc>
-  </url>
-  <url>
-    <loc>https://albersonmiranda.github.io/fio/reference/leontief_inverse.html</loc>
-  </url>
-  <url>
-    <loc>https://albersonmiranda.github.io/fio/reference/tec_coeff.html</loc>
   </url>
 </urlset>

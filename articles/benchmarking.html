@@ -115,7 +115,7 @@ should be interpreted in the context of these specific conditions.</p>
 <h3 id="technical-coefficients-matrix">Technical coefficients matrix<a class="anchor" aria-label="anchor" href="#technical-coefficients-matrix"></a>
 </h3>
 <p>The technical coefficients matrix calculation, a key and initial step
-in input-output analysis, was tested using the <code><a href="../reference/tec_coeff.html">tec_coeff()</a></code>
+in input-output analysis, was tested using the <code>tec_coeff()</code>
 function from the <a href="https://albersonmiranda.github.io/fio/">fio</a> package, equivalent functions from
 the <a href="https://pachamaltese.github.io/leontief" class="external-link">leontief</a> package, and a base R implementation. It
 consists on dividing each <span class="math inline">\(a_{ij}\)</span>
@@ -152,7 +152,7 @@ implementation is about 100 times slower.</p>
 <span></span>
 <span><span class="co"># benchmark</span></span>
 <span><span class="va">benchmark_a</span> <span class="op">&lt;-</span> <span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html" class="external-link">microbenchmark</a></span><span class="op">(</span></span>
-<span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu"><a href="../reference/tec_coeff.html">tec_coeff</a></span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span>,</span>
+<span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu">tec_coeff</span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span>,</span>
 <span>  `Base R` <span class="op">=</span> <span class="fu">tec_coeff_r</span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span>,</span>
 <span>  leontief <span class="op">=</span> <span class="fu">leontief</span><span class="fu">::</span><span class="fu"><a href="https://pachamaltese.github.io/leontief/reference/input_requirement.html" class="external-link">input_requirement</a></span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span>,</span>
 <span>  times <span class="op">=</span> <span class="fl">100</span></span>
@@ -201,7 +201,7 @@ implementation.</p>
 <span></span>
 <span><span class="co"># benchmark</span></span>
 <span><span class="va">benchmark_b</span> <span class="op">&lt;-</span> <span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html" class="external-link">microbenchmark</a></span><span class="op">(</span></span>
-<span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu"><a href="../reference/leontief_inverse.html">leontief_inverse</a></span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span>,</span>
+<span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu">leontief_inverse</span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span>,</span>
 <span>  `Base R` <span class="op">=</span> <span class="fu">leontief_inverse_r</span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span>,</span>
 <span>  leontief <span class="op">=</span> <span class="fu">leontief</span><span class="fu">::</span><span class="fu"><a href="https://pachamaltese.github.io/leontief/reference/leontief_inverse.html" class="external-link">leontief_inverse</a></span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span>,</span>
 <span>  times <span class="op">=</span> <span class="fl">100</span></span>
