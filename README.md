@@ -5,7 +5,10 @@
 
 <div style="text-align: justify">
 
-Friendly & Fast Input-Output Analysis <!-- badges: start -->
+Friendly & Fast Input-Output Analysis
+
+<!-- badges: start -->
+
 [![R-CMD-check](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
