@@ -36,6 +36,8 @@ R6 class for input-output matrix.
 \item{\code{technical_coefficients_matrix}}{Technical coefficients matrix.}
 
 \item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
+
+\item{\code{multiplier_output}}{Output multiplier vector.}
 }
 \if{html}{\out{</div>}}
 }
@@ -45,8 +47,9 @@ R6 class for input-output matrix.
 \item \href{#method-iom-new}{\code{iom$new()}}
 \item \href{#method-iom-add}{\code{iom$add()}}
 \item \href{#method-iom-remove}{\code{iom$remove()}}
-\item \href{#method-iom-tec_coeff}{\code{iom$tec_coeff()}}
-\item \href{#method-iom-leontief_inverse}{\code{iom$leontief_inverse()}}
+\item \href{#method-iom-compute_tech_coeff}{\code{iom$compute_tech_coeff()}}
+\item \href{#method-iom-compute_leontief_inverse}{\code{iom$compute_leontief_inverse()}}
+\item \href{#method-iom-compute_multiplier_output}{\code{iom$compute_multiplier_output()}}
 \item \href{#method-iom-clone}{\code{iom$clone()}}
 }
 }
@@ -70,7 +73,8 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
   added_value = NULL,
   occupation = NULL,
   technical_coefficients_matrix = NULL,
-  leontief_inverse_matrix = NULL
+  leontief_inverse_matrix = NULL,
+  multiplier_output = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -104,6 +108,8 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
 \item{\code{technical_coefficients_matrix}}{Technical coefficients matrix.}
 
 \item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
+
+\item{\code{multiplier_output}}{Output multipler vector.}
 }
 \if{html}{\out{</div>}}
 }
@@ -147,28 +153,45 @@ Removes a matrix from a previously imported IO matrix.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-iom-tec_coeff"></a>}}
-\if{latex}{\out{\hypertarget{method-iom-tec_coeff}{}}}
-\subsection{Method \code{tec_coeff()}}{
-Calculate the technical coefficients matrix.
+\if{html}{\out{<a id="method-iom-compute_tech_coeff"></a>}}
+\if{latex}{\out{\hypertarget{method-iom-compute_tech_coeff}{}}}
+\subsection{Method \code{compute_tech_coeff()}}{
+Computes the technical coefficients matrix.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{iom$tec_coeff()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{iom$compute_tech_coeff()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-iom-leontief_inverse"></a>}}
-\if{latex}{\out{\hypertarget{method-iom-leontief_inverse}{}}}
-\subsection{Method \code{leontief_inverse()}}{
-Calculate the Leontief inverse matrix.
+\if{html}{\out{<a id="method-iom-compute_leontief_inverse"></a>}}
+\if{latex}{\out{\hypertarget{method-iom-compute_leontief_inverse}{}}}
+\subsection{Method \code{compute_leontief_inverse()}}{
+Computes the Leontief inverse matrix.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{iom$leontief_inverse(technical_coefficients_matrix)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{iom$compute_leontief_inverse(technical_coefficients_matrix)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{technical_coefficients_matrix}}{Technical coefficients matrix.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-iom-compute_multiplier_output"></a>}}
+\if{latex}{\out{\hypertarget{method-iom-compute_multiplier_output}{}}}
+\subsection{Method \code{compute_multiplier_output()}}{
+Computes the output multiplier vector.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{iom$compute_multiplier_output(leontief_inverse_matrix)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
 }
 \if{html}{\out{</div>}}
 }

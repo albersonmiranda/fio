@@ -30,12 +30,15 @@
 #' Technical coefficients matrix.
 #' @param leontief_inverse_matrix
 #' Leontief inverse matrix.
+#' @param multiplier_output
+#' Output multipler vector.
 #' @export
 
 # input-output matrix class
 iom <- R6::R6Class(
   classname = "iom",
   public = list(
+    # data members
     #' @field id
     #' Identifier of the new instance
     id = NULL,
@@ -92,6 +95,10 @@ iom <- R6::R6Class(
     #' Leontief inverse matrix.
     leontief_inverse_matrix = NULL,
 
+    #' @field multiplier_output
+    #' Output multiplier vector.
+    multiplier_output = NULL,
+
     #' @description
     #' Creates a new instance of this [R6][R6::R6Class] class.
     initialize = function(id,
@@ -107,7 +114,8 @@ iom <- R6::R6Class(
                           added_value = NULL,
                           occupation = NULL,
                           technical_coefficients_matrix = NULL,
-                          leontief_inverse_matrix = NULL) {
+                          leontief_inverse_matrix = NULL,
+                          multiplier_output = NULL) {
       self$id <- id
       self$intermediate_transactions <- intermediate_transactions
       self$total_production <- total_production
@@ -122,6 +130,7 @@ iom <- R6::R6Class(
       self$occupation <- occupation
       self$technical_coefficients_matrix <- technical_coefficients_matrix
       self$leontief_inverse_matrix <- leontief_inverse_matrix
+      self$multiplier_output <- multiplier_output
     },
 
     #' @description
@@ -165,13 +174,13 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Calculate the technical coefficients matrix.
-    tec_coeff = function() {
+    #' Computes the technical coefficients matrix.
+    compute_tech_coeff = function() {
       # save row and column names
       row_names <- rownames(self$intermediate_transactions)
       col_names <- colnames(self$intermediate_transactions)
       # calculate technical coefficients matrix
-      technical_coefficients_matrix <- tec_coeff(
+      technical_coefficients_matrix <- compute_tech_coeff(
         intermediate_transactions = self$intermediate_transactions,
         total_production = self$total_production
       )
@@ -185,16 +194,16 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Calculate the Leontief inverse matrix.
+    #' Computes the Leontief inverse matrix.
     #' @param technical_coefficients_matrix
     #' Technical coefficients matrix.
-    leontief_inverse = function(technical_coefficients_matrix) {
+    compute_leontief_inverse = function(technical_coefficients_matrix) {
       # save row and column names
       row_names <- rownames(self$technical_coefficients_matrix)
       col_names <- colnames(self$technical_coefficients_matrix)
-      # calculate leontief inverse matrix
-      leontief_inverse_matrix <- leontief_inverse(
-        tec_coeff = self$technical_coefficients_matrix
+      # computes leontief inverse matrix
+      leontief_inverse_matrix <- compute_leontief_inverse(
+        tech_coeff = self$technical_coefficients_matrix
       )
       # set row and column names
       rownames(leontief_inverse_matrix) <- row_names
@@ -202,6 +211,25 @@ iom <- R6::R6Class(
 
       # store matrix
       self$leontief_inverse_matrix <- leontief_inverse_matrix
+      invisible(self)
+    },
+
+    #' @description
+    #' Computes the output multiplier vector.
+    #' @param leontief_inverse_matrix
+    #' Leontief inverse matrix.
+    compute_multiplier_output = function(leontief_inverse_matrix) {
+      # save column names
+      col_names <- colnames(self$leontief_inverse_matrix)
+      # compute output multiplier vector
+      multiplier_output <- compute_multiplier_output(
+        leontief_inverse_matrix = self$leontief_inverse_matrix
+      )
+      # set column names
+      names(multiplier_output) <- col_names
+
+      # store vector
+      self$multiplier_output <- multiplier_output
       invisible(self)
     }
   )
