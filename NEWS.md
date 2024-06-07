@@ -1,7 +1,8 @@
-# fio 0.0.1
+# fio 0.0.0.9001
 
 ## Development version
-* Data import addin by @albersonmiranda in https://github.com/albersonmiranda/fio/pull/14
-* Add IOM BR 2020 by @albersonmiranda in https://github.com/albersonmiranda/fio/pull/15
-* Use Rust by @albersonmiranda in https://github.com/albersonmiranda/fio/pull/16
-* Convert to R6 by @albersonmiranda in https://github.com/albersonmiranda/fio/pull/17
+* New `import_element()` to programmatically import data from an Excel file
+* New data import addin makes easy to import data from clipboard or an Excel file
+* New `iom` uses the efficiency of R6 classes to store data reducing memory footprint
+* New `tec_coeff()` and `leontief_inverse()` uses the power of Rust and `faer` crate to substantially increase performance 
+* New `br_2020` dataset with a 51 sector Brazilian input-output table for 2020

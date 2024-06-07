@@ -66,7 +66,7 @@ print(benchmark_a)
 ggplot2::autoplot(benchmark_a)
 ```
 
-![plot of chunk benchmark_a](figure/benchmark_a-1.png)
+![Base R is about 100 times slower than {fio} and {leontief} functions.](figure/benchmark_a-1.png)
 
 ## Leontief inverse matrix
 
@@ -110,4 +110,4 @@ print(benchmark_b)
 ggplot2::autoplot(benchmark_b)
 ```
 
-![plot of chunk benchmark_b](figure/benchmark_b-1.png)
+![{fio} is about 20 times faster than {leontief} and base R functions.](figure/benchmark_b-1.png)
