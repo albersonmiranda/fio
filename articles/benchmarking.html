@@ -122,8 +122,8 @@ consists on dividing each <span class="math inline">\(a_{ij}\)</span>
 element of intermediate transactions matrix by the correspondent <span class="math inline">\(x_j\)</span> element of total production vector<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. The
 results show that both <a href="https://albersonmiranda.github.io/fio/">fio</a> and <a href="https://pachamaltese.github.io/leontief" class="external-link">leontief</a>
 functions execute almost instantaneously, with <a href="https://pachamaltese.github.io/leontief" class="external-link">leontief</a>
-slightly faster (about 10 milliseconds apart). In contrast, the base R
-implementation is about 150 times slower.</p>
+slightly faster (about 15 milliseconds apart). In contrast, the base R
+implementation is about 100 times slower.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># set seed</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
@@ -159,15 +159,17 @@ implementation is about 150 times slower.</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_a</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unit: milliseconds</span></span>
-<span><span class="co">#&gt;      expr       min        lq      mean    median        uq       max neval</span></span>
-<span><span class="co">#&gt;       fio  17.67681  26.02021  28.93098  26.72472  29.47560  86.07034   100</span></span>
-<span><span class="co">#&gt;    Base R 171.52014 180.07201 184.09612 180.73329 181.53108 237.36467   100</span></span>
-<span><span class="co">#&gt;  leontief  13.05858  14.82553  18.22037  17.34224  18.43106  80.44143   100</span></span></code></pre></div>
+<span><span class="co">#&gt;      expr        min         lq       mean     median         uq        max neval</span></span>
+<span><span class="co">#&gt;       fio   31.97065   40.32022   57.55164   63.04944   68.62957   84.36548   100</span></span>
+<span><span class="co">#&gt;    Base R 6001.42973 6064.82169 6147.27023 6100.11455 6220.87087 6557.67636   100</span></span>
+<span><span class="co">#&gt;  leontief   20.63873   28.75914   41.08759   44.40144   49.10843  121.40652   100</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># plot</span></span>
 <span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">benchmark_a</span><span class="op">)</span></span></code></pre></div>
-<p><img src="benchmarking_files/figure-html/benchmark_a-1.png" width="700"></p>
+<div class="float">
+<img src="figure/benchmark_a-1.png" alt="plot of chunk benchmark_a"><div class="figcaption">plot of chunk benchmark_a</div>
+</div>
 </div>
 <div class="section level3">
 <h3 id="leontief-inverse-matrix">Leontief inverse matrix<a class="anchor" aria-label="anchor" href="#leontief-inverse-matrix"></a>
@@ -177,12 +179,13 @@ implementation is about 150 times slower.</p>
 (<span class="math inline">\(B\)</span>) is obtained from subtracting
 the technical coefficients matrix (<span class="math inline">\(A\)</span>) from the identity matrix (<span class="math inline">\(I\)</span>), therefore it has no null rows or
 columns.</p>
-<p><span class="math inline">\(B = I - A\)</span></p>
+<p><span class="math display">\[B = I - A\]</span></p>
 <p>It allows for solving the linear system through LU decomposition,
 which is a more efficient method than the direct inverse matrix
 calculation. <a href="https://albersonmiranda.github.io/fio/">fio</a> takes advantage of LU decomposition and
-becomes incredibly faster, while <a href="https://pachamaltese.github.io/leontief" class="external-link">leontief</a> is about 20
-times slower, followed closed by the base R implementation.</p>
+becomes incredibly faster, while <a href="https://pachamaltese.github.io/leontief" class="external-link">leontief</a> is about 18
+times slower, followed closed by the 20 times slower base R
+implementation.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># data</span></span>
 <span><span class="va">iom_fio</span> <span class="op">&lt;-</span> <span class="va">iom_fio</span><span class="op">$</span><span class="fu">tec_coeff</span><span class="op">(</span><span class="op">)</span></span>
@@ -204,15 +207,17 @@ times slower, followed closed by the base R implementation.</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_b</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unit: milliseconds</span></span>
-<span><span class="co">#&gt;      expr      min       lq     mean   median       uq      max neval</span></span>
-<span><span class="co">#&gt;       fio 285.3315 299.6726 331.9876 339.2860 348.8565 420.8740   100</span></span>
-<span><span class="co">#&gt;    Base R 269.5824 276.7337 288.3734 279.7294 286.1631 366.0303   100</span></span>
-<span><span class="co">#&gt;  leontief 214.6119 217.6373 226.2849 221.6032 225.0877 375.4000   100</span></span></code></pre></div>
+<span><span class="co">#&gt;      expr       min       lq      mean   median       uq       max neval</span></span>
+<span><span class="co">#&gt;       fio  245.3217  292.559  316.0075  312.112  328.852  511.8544   100</span></span>
+<span><span class="co">#&gt;    Base R 6297.9825 6373.770 6496.4747 6434.066 6585.954 7164.5178   100</span></span>
+<span><span class="co">#&gt;  leontief 5585.4059 5613.459 5701.8515 5654.122 5758.876 6205.4889   100</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># plot</span></span>
 <span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">benchmark_b</span><span class="op">)</span></span></code></pre></div>
-<p><img src="benchmarking_files/figure-html/benchmark_b-1.png" width="700"></p>
+<div class="float">
+<img src="figure/benchmark_b-1.png" alt="plot of chunk benchmark_b"><div class="figcaption">plot of chunk benchmark_b</div>
+</div>
 </div>
 </div>
 <div class="footnotes footnotes-end-of-document">

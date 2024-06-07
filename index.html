@@ -75,15 +75,14 @@
       </header><div class="row">
   <div class="contents col-md-9">
 <div class="section level1">
-<div class="page-header"><h1 id="fio">fio<a class="anchor" aria-label="anchor" href="#fio"></a>
+<div class="page-header"><h1 id="fio">{fio}<a class="anchor" aria-label="anchor" href="#fio"></a>
 </h1></div>
-<figure><img src="img/leontief.jpg" align="right" width="240px"><figcaption>
-1973 Economics Nobel Prize Laureate Wassily Leontief
-</figcaption></figure><!-- badges: start -->
+<div style="text-align: justify">
+<p>Friendly &amp; Fast Input-Output Analysis <!-- badges: start --> <a href="https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <!-- badges: end --></p>
 <div class="section level3">
-<h3 id="outline">Outline<a class="anchor" aria-label="anchor" href="#outline"></a>
+<h3 id="outline-">Outline <img src="reference/figures/leontief.jpg" align="right" width="240px" style="margin-left: 20px;"><a class="anchor" aria-label="anchor" href="#outline-"></a>
 </h3>
-<p>{fio} (<em>Friendly Input-Output</em>) is a R package for input-output analysis, focusing on two key aspects: ease of use for Excel users and performance. It provides an <a href="https://rstudio.github.io/rstudioaddins/" class="external-link">RStudio Addin</a> and a set of functions for easy import of input-output tables from Excel, either programmatically or from clipboard.</p>
+<p><a href="https://albersonmiranda.github.io/fio/">fio</a> (<em>Friendly Input-Output</em>) is a R package for input-output analysis, focusing on two key aspects: ease of use for Excel users and performance. It provides an <a href="https://rstudio.github.io/rstudioaddins/" class="external-link">RStudio Addin</a> and a set of functions for easy import of input-output tables from Excel, either programmatically or direclty from clipboard.</p>
 <p>The package is designed to be fast and efficient. It embraces <a href="https://r6.r-lib.org/" class="external-link">R6 class</a> for a clean, memory-efficient object-oriented programming. Additionally, all linear algebra computations are written in <a href="https://www.rust-lang.org/" class="external-link">Rust</a> for highly optimized performance.</p>
 </div>
 <div class="section level2">
@@ -94,9 +93,26 @@
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"albersonmiranda/fio"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
+<h2 id="getting-started">Getting Started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h2>
-<p>Import included complete brazilian 2020 input-output matrix:</p>
+<p>If you are just getting started with <a href="https://albersonmiranda.github.io/fio/">fio</a>, we recommend you to read the <a href="https://albersonmiranda.github.io/fio/articles/fio.html">vignettes</a> for a comprehensive overview of the package.</p>
+</div>
+<div class="section level2">
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h2>
+<p>Calculate Leontief’s inverse from brazilian 2020 input-output matrix:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># load included dataset</span></span>
+<span><span class="va">iom_br</span> <span class="op">&lt;-</span> <span class="fu">fio</span><span class="fu">::</span><span class="va"><a href="reference/br_2020.html">br_2020</a></span></span>
+<span></span>
+<span><span class="co"># calculate technical coefficients matrix</span></span>
+<span><span class="va">iom_br</span><span class="op">$</span><span class="fu">tec_coeff</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># calculate Leontief's inverse</span></span>
+<span><span class="va">iom_br</span><span class="op">$</span><span class="fu">leontief_inverse</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>And pronto! 🎉, you’re all good to carry on with your analysis. You can evoke the Data Viewer to inspect the results with <code>iom_br$technical_coefficients_matrix |&gt; View()</code> and <code>iom_br$leontief_inverse_matrix |&gt; View()</code>.</p>
+<p><img src="reference/figures/example_leontief_inverse.png"><em><small>Leontief’s inverse from brazilian 2020 input-output matrix</small></em></p>
+</div>
 </div>
 </div>
   </div>
@@ -133,12 +149,7 @@
 </ul>
 </div>
 
-<div class="dev-status">
-<h2 data-toc-skip>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
-</ul>
-</div>
+
 
   </div>
 </div>
