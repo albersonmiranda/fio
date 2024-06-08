@@ -224,9 +224,10 @@ iom <- R6::R6Class(
       # compute output multiplier vector
       multiplier_output <- compute_multiplier_output(
         leontief_inverse_matrix = self$leontief_inverse_matrix
-      )
+      ) |>
+        matrix(nrow = 1)
       # set column names
-      names(multiplier_output) <- col_names
+      colnames(multiplier_output) <- col_names
 
       # store vector
       self$multiplier_output <- multiplier_output

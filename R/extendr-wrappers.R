@@ -19,7 +19,6 @@ NULL
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4), nrow = 2)
 #' total_production <- c(10, 20)
 #' tech_coeff(intermediate_transactions, total_production)
-#' @export
 compute_tech_coeff <- function(intermediate_transactions, total_production) .Call(wrap__compute_tech_coeff, intermediate_transactions, total_production)
 
 #' Computes Leontief inverse matrix to R.
@@ -28,13 +27,11 @@ compute_tech_coeff <- function(intermediate_transactions, total_production) .Cal
 #' @examples
 #' tech_coeff <- matrix(c(0.1, 0.2, 0.3, 0.4), nrow = 2)
 #' leontief_inverse(tech_coeff)
-#' @export
 compute_leontief_inverse <- function(tech_coeff) .Call(wrap__compute_leontief_inverse, tech_coeff)
 
 #' Calculates output multiplier.
 #' @param leontief_inverse_matrix The open model Leontief inverse matrix.
 #' @return A 1xn vector of output multipliers.
-#' @export
 compute_multiplier_output <- function(leontief_inverse_matrix) .Call(wrap__compute_multiplier_output, leontief_inverse_matrix)
 
 

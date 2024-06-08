@@ -21,7 +21,7 @@ The tests were run on a simulated $2000 \times 2000$ matrix, and each test was r
 
 ## Technical coefficients matrix
 
-The technical coefficients matrix calculation, a key and initial step in input-output analysis, was tested using the `tec_coeff()` function from the `{fio}` package, equivalent functions from the `{leontief}` package, and a base R implementation. It consists on dividing each $a_{ij}$ element of intermediate transactions matrix by the correspondent $x_j$ element of total production vector^[Or in a equivalent way, multiplying intermediate transactions matrix by a diagonal matrix constructed from total production vector.]. The results show that both `{fio}` and `{leontief}` functions execute almost instantaneously, with `{leontief}` slightly faster (about 15 milliseconds apart). In contrast, the base R implementation is about 100 times slower.
+The technical coefficients matrix calculation, a key and initial step in input-output analysis, was tested using the `compute_tech_coeff()` function from the `{fio}` package, equivalent functions from the `{leontief}` package, and a base R implementation. It consists on dividing each $a_{ij}$ element of intermediate transactions matrix by the correspondent $x_j$ element of total production vector^[Or in a equivalent way, multiplying intermediate transactions matrix by a diagonal matrix constructed from total production vector.]. The results show that both `{fio}` and `{leontief}` functions execute almost instantaneously, with `{leontief}` slightly faster (about 15 milliseconds apart). In contrast, the base R implementation is about 130 times slower than `{fio}`.
 
 ```{r benchmark_a, fig.cap="Base R is about 100 times slower than {fio} and {leontief} functions."}
 # set seed
@@ -41,9 +41,9 @@ total_production <- matrix(
 )
 
 # Base R function
-tec_coeff_r <- function(intermediate_transactions, total_production) {
-  tec_coeff_matrix <- intermediate_transactions %*% diag(1 / as.vector(total_production))
-  return(tec_coeff_matrix)
+tech_coeff_r <- function(intermediate_transactions, total_production) {
+  tech_coeff_matrix <- intermediate_transactions %*% diag(1 / as.vector(total_production))
+  return(tech_coeff_matrix)
 }
 
 # {fio} setup
@@ -51,8 +51,8 @@ iom_fio <- fio::iom$new("iom", intermediate_transactions, total_production)
 
 # benchmark
 benchmark_a <- microbenchmark::microbenchmark(
-  fio = fio:::tec_coeff(intermediate_transactions, total_production),
-  `Base R` = tec_coeff_r(intermediate_transactions, total_production),
+  fio = fio:::compute_tech_coeff(intermediate_transactions, total_production),
+  `Base R` = tech_coeff_r(intermediate_transactions, total_production),
   leontief = leontief::input_requirement(intermediate_transactions, total_production),
   times = 100
 )
@@ -72,7 +72,7 @@ It allows for solving the linear system through LU decomposition, which is a mor
 
 ```{r benchmark_b, fig.cap="{fio} is about 20 times faster than {leontief} and base R functions."}
 # data
-iom_fio <- iom_fio$tec_coeff()
+iom_fio <- iom_fio$compute_tech_coeff()
 technical_coefficients_matrix <- iom_fio$technical_coefficients_matrix
 
 # R function
@@ -84,7 +84,7 @@ leontief_inverse_r <- function(technical_coefficients_matrix) {
 
 # benchmark
 benchmark_b <- microbenchmark::microbenchmark(
-  fio = fio:::leontief_inverse(technical_coefficients_matrix),
+  fio = fio:::compute_leontief_inverse(technical_coefficients_matrix),
   `Base R` = leontief_inverse_r(technical_coefficients_matrix),
   leontief = leontief::leontief_inverse(technical_coefficients_matrix),
   times = 100

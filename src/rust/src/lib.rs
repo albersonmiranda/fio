@@ -14,7 +14,6 @@ use extendr_api::prelude::*;
 /// intermediate_transactions <- matrix(c(1, 2, 3, 4), nrow = 2)
 /// total_production <- c(10, 20)
 /// tech_coeff(intermediate_transactions, total_production)
-/// @export
 
 fn compute_tech_coeff(
   intermediate_transactions: Vec<f64>,
@@ -45,7 +44,6 @@ fn compute_tech_coeff(
 /// @examples
 /// tech_coeff <- matrix(c(0.1, 0.2, 0.3, 0.4), nrow = 2)
 /// leontief_inverse(tech_coeff)
-/// @export
 
 fn compute_leontief_inverse(tech_coeff: Vec<f64>) -> RArray<f64, [usize;2]> {
 
@@ -61,10 +59,10 @@ fn compute_leontief_inverse(tech_coeff: Vec<f64>) -> RArray<f64, [usize;2]> {
 
   // calculate Leontief inverse
   let lu = leontief_matrix.partial_piv_lu();
-  let leontief_inverse = lu.solve(&identity_matrix);
+  let leontief_inverse = lu.solve(identity_matrix);
 
   // convert to R matrix
-  let leontief_inverse_r = RArray::new_matrix(n, n, |r, c| leontief_inverse[(r, c)]);
+  let leontief_inverse_r = RArray::new_matrix(n, n, |row, col| leontief_inverse[(row, col)]);
   leontief_inverse_r
 }
 

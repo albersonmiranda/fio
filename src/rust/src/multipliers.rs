@@ -4,7 +4,6 @@ use extendr_api::prelude::*;
 /// Calculates output multiplier.
 /// @param leontief_inverse_matrix The open model Leontief inverse matrix.
 /// @return A 1xn vector of output multipliers.
-/// @export
 
 fn compute_multiplier_output(
   leontief_inverse_matrix: Vec<f64>
