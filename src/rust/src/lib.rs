@@ -11,10 +11,6 @@ use extendr_api::prelude::*;
 /// @param intermediate_transactions A nxn matrix of intermediate transactions.
 /// @param total_production A 1xn vector of total production.
 /// @return A nxn matrix of technical coefficients, known as A matrix.
-/// @examples
-/// intermediate_transactions <- matrix(c(1, 2, 3, 4), nrow = 2)
-/// total_production <- c(10, 20)
-/// tech_coeff(intermediate_transactions, total_production)
 
 fn compute_tech_coeff(
   intermediate_transactions: Vec<f64>,
@@ -42,9 +38,6 @@ fn compute_tech_coeff(
 /// Computes Leontief inverse matrix to R.
 /// @param tech_coeff A nxn matrix of technical coefficients.
 /// @return A nxn matrix of Leontief inverse.
-/// @examples
-/// tech_coeff <- matrix(c(0.1, 0.2, 0.3, 0.4), nrow = 2)
-/// leontief_inverse(tech_coeff)
 
 fn compute_leontief_inverse(tech_coeff: Vec<f64>) -> RArray<f64, [usize;2]> {
 

@@ -7,7 +7,9 @@
 compute_field_influence(tech_coeff_matrix, leontief_inverse_matrix, epsilon)
 }
 \arguments{
-\item{leontief_inverse_matrix}{The open model Leontief inverse matrix.}
+\item{tech_coeff_matrix}{A nxn matrix of technical coefficients.}
+
+\item{leontief_inverse_matrix}{The open model nxn Leontief inverse matrix.}
 
 \item{epsilon}{The epsilon value.}
 }

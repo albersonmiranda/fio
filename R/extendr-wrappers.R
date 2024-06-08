@@ -15,18 +15,11 @@ NULL
 #' @param intermediate_transactions A nxn matrix of intermediate transactions.
 #' @param total_production A 1xn vector of total production.
 #' @return A nxn matrix of technical coefficients, known as A matrix.
-#' @examples
-#' intermediate_transactions <- matrix(c(1, 2, 3, 4), nrow = 2)
-#' total_production <- c(10, 20)
-#' tech_coeff(intermediate_transactions, total_production)
 compute_tech_coeff <- function(intermediate_transactions, total_production) .Call(wrap__compute_tech_coeff, intermediate_transactions, total_production)
 
 #' Computes Leontief inverse matrix to R.
 #' @param tech_coeff A nxn matrix of technical coefficients.
 #' @return A nxn matrix of Leontief inverse.
-#' @examples
-#' tech_coeff <- matrix(c(0.1, 0.2, 0.3, 0.4), nrow = 2)
-#' leontief_inverse(tech_coeff)
 compute_leontief_inverse <- function(tech_coeff) .Call(wrap__compute_leontief_inverse, tech_coeff)
 
 #' Calculates output multiplier.
@@ -35,7 +28,8 @@ compute_leontief_inverse <- function(tech_coeff) .Call(wrap__compute_leontief_in
 compute_multiplier_output <- function(leontief_inverse_matrix) .Call(wrap__compute_multiplier_output, leontief_inverse_matrix)
 
 #' Calculates field of influence given a technical change.
-#' @param leontief_inverse_matrix The open model Leontief inverse matrix.
+#' @param tech_coeff_matrix A nxn matrix of technical coefficients.
+#' @param leontief_inverse_matrix The open model nxn Leontief inverse matrix.
 #' @param epsilon The epsilon value.
 #' @description
 #' Calculates total field of influence given a incremental change in the techincal coefficients matrix.
