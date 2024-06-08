@@ -32,6 +32,8 @@
 #' Leontief inverse matrix.
 #' @param multiplier_output
 #' Output multipler vector.
+#' @param influence_field
+#' Influence field matrix.
 #' @export
 
 # input-output matrix class
@@ -99,6 +101,10 @@ iom <- R6::R6Class(
     #' Output multiplier vector.
     multiplier_output = NULL,
 
+    #' @field influence_field
+    #' Influence field matrix.
+    influence_field = NULL,
+
     #' @description
     #' Creates a new instance of this [R6][R6::R6Class] class.
     initialize = function(id,
@@ -115,7 +121,8 @@ iom <- R6::R6Class(
                           occupation = NULL,
                           technical_coefficients_matrix = NULL,
                           leontief_inverse_matrix = NULL,
-                          multiplier_output = NULL) {
+                          multiplier_output = NULL,
+                          influence_field = NULL) {
       self$id <- id
       self$intermediate_transactions <- intermediate_transactions
       self$total_production <- total_production
@@ -131,6 +138,7 @@ iom <- R6::R6Class(
       self$technical_coefficients_matrix <- technical_coefficients_matrix
       self$leontief_inverse_matrix <- leontief_inverse_matrix
       self$multiplier_output <- multiplier_output
+      self$influence_field <- influence_field
     },
 
     #' @description
@@ -231,6 +239,33 @@ iom <- R6::R6Class(
 
       # store vector
       self$multiplier_output <- multiplier_output
+      invisible(self)
+    },
+
+    #' @description
+    #' Computes the influence field matrix.
+    #' @param technical_coefficients_matrix
+    #' Technical coefficients matrix.
+    #' @param leontief_inverse_matrix
+    #' Leontief inverse matrix.
+    #' @param epsilon
+    #' Epsilon value. A technical change in the input-output matrix.
+    compute_influence_field = function(epsilon) {
+      # save row and column names
+      row_names <- rownames(self$technical_coefficients_matrix)
+      col_names <- colnames(self$technical_coefficients_matrix)
+      # compute influence field matrix
+      influence_field <- compute_influence_field(
+        tech_coeff = self$technical_coefficients_matrix,
+        leontief_inverse_matrix = self$leontief_inverse_matrix,
+        epsilon = epsilon
+      )
+      # set row and column names
+      rownames(influence_field) <- row_names
+      colnames(influence_field) <- col_names
+
+      # store matrix
+      self$influence_field <- influence_field
       invisible(self)
     }
   )

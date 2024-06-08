@@ -38,6 +38,8 @@ R6 class for input-output matrix.
 \item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
 
 \item{\code{multiplier_output}}{Output multiplier vector.}
+
+\item{\code{influence_field}}{Influence field matrix.}
 }
 \if{html}{\out{</div>}}
 }
@@ -50,6 +52,7 @@ R6 class for input-output matrix.
 \item \href{#method-iom-compute_tech_coeff}{\code{iom$compute_tech_coeff()}}
 \item \href{#method-iom-compute_leontief_inverse}{\code{iom$compute_leontief_inverse()}}
 \item \href{#method-iom-compute_multiplier_output}{\code{iom$compute_multiplier_output()}}
+\item \href{#method-iom-compute_influence_field}{\code{iom$compute_influence_field()}}
 \item \href{#method-iom-clone}{\code{iom$clone()}}
 }
 }
@@ -74,7 +77,8 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
   occupation = NULL,
   technical_coefficients_matrix = NULL,
   leontief_inverse_matrix = NULL,
-  multiplier_output = NULL
+  multiplier_output = NULL,
+  influence_field = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -110,6 +114,8 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
 \item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
 
 \item{\code{multiplier_output}}{Output multipler vector.}
+
+\item{\code{influence_field}}{Influence field matrix.}
 }
 \if{html}{\out{</div>}}
 }
@@ -191,6 +197,27 @@ Computes the output multiplier vector.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-iom-compute_influence_field"></a>}}
+\if{latex}{\out{\hypertarget{method-iom-compute_influence_field}{}}}
+\subsection{Method \code{compute_influence_field()}}{
+Computes the influence field matrix.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{iom$compute_influence_field(epsilon)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{epsilon}}{Epsilon value. A technical change in the input-output matrix.}
+
+\item{\code{technical_coefficients_matrix}}{Technical coefficients matrix.}
+
 \item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
 }
 \if{html}{\out{</div>}}

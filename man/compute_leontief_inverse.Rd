@@ -15,7 +15,3 @@ A nxn matrix of Leontief inverse.
 \description{
 Computes Leontief inverse matrix to R.
 }
-\examples{
-tech_coeff <- matrix(c(0.1, 0.2, 0.3, 0.4), nrow = 2)
-leontief_inverse(tech_coeff)
-}

@@ -17,8 +17,3 @@ A nxn matrix of technical coefficients, known as A matrix.
 \description{
 Computes technical coefficients matrix to R.
 }
-\examples{
-intermediate_transactions <- matrix(c(1, 2, 3, 4), nrow = 2)
-total_production <- c(10, 20)
-tech_coeff(intermediate_transactions, total_production)
-}
