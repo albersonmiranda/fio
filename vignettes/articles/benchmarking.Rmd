@@ -2,6 +2,12 @@
 title: "benchmarking"
 ---
 
+<style>
+p.caption {
+  font-size: 0.6em;
+}
+</style>
+
 
 
 # Introduction
@@ -54,10 +60,10 @@ benchmark_a <- microbenchmark::microbenchmark(
 )
 print(benchmark_a)
 #> Unit: milliseconds
-#>      expr        min         lq       mean     median         uq        max neval
-#>       fio   23.47847   34.55138   46.70290   47.99505   61.76715  100.34852   100
-#>    Base R 5965.61344 6005.78251 6059.08691 6024.14538 6050.42473 6512.65805   100
-#>  leontief   20.24697   28.13595   39.19562   42.73718   47.82396   60.78385   100
+#>      expr        min         lq       mean     median         uq       max neval
+#>       fio   29.49149   36.85882   56.23264   60.73933   74.67696   83.7222   100
+#>    Base R 6002.62546 6095.54868 6205.65638 6202.60015 6295.67109 6471.0826   100
+#>  leontief   20.68085   32.05341   44.06614   46.10664   50.85927  294.0564   100
 ```
 
 ``` r
@@ -66,7 +72,10 @@ print(benchmark_a)
 ggplot2::autoplot(benchmark_a)
 ```
 
-![Base R is about 100 times slower than {fio} and {leontief} functions.](figure/benchmark_a-1.png)
+<div class="figure">
+<img src="figure/benchmark_a-1.png" alt="Base R is about 100 times slower than {fio} and {leontief} functions." width="100%" />
+<p class="caption">Base R is about 100 times slower than {fio} and {leontief} functions.</p>
+</div>
 
 ## Leontief inverse matrix
 
@@ -98,10 +107,10 @@ benchmark_b <- microbenchmark::microbenchmark(
 )
 print(benchmark_b)
 #> Unit: milliseconds
-#>      expr       min        lq      mean    median        uq       max neval
-#>       fio  249.4708  287.7534  315.6667  307.6138  331.4278  464.9909   100
-#>    Base R 6322.7461 6430.9753 6559.2352 6507.0055 6640.5332 7143.2907   100
-#>  leontief 5583.9377 5629.5257 5727.2214 5690.8033 5784.2067 6036.1800   100
+#>      expr      min        lq      mean    median        uq       max neval
+#>       fio  253.744  301.2671  326.6016  322.1029  335.0209  485.4682   100
+#>    Base R 6337.971 6471.5698 6582.0580 6547.1319 6671.4814 6896.0379   100
+#>  leontief 5638.750 5682.6602 5778.5809 5758.7420 5850.6630 6091.9533   100
 ```
 
 ``` r
@@ -110,4 +119,7 @@ print(benchmark_b)
 ggplot2::autoplot(benchmark_b)
 ```
 
-![{fio} is about 20 times faster than {leontief} and base R functions.](figure/benchmark_b-1.png)
+<div class="figure">
+<img src="figure/benchmark_b-1.png" alt="{fio} is about 20 times faster than {leontief} and base R functions." width="100%" />
+<p class="caption">{fio} is about 20 times faster than {leontief} and base R functions.</p>
+</div>
