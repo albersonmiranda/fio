@@ -1,5 +1,6 @@
 // module imports
 mod multipliers;
+mod influence;
 
 use faer;
 use faer::prelude::SpSolver;
@@ -72,6 +73,7 @@ fn compute_leontief_inverse(tech_coeff: Vec<f64>) -> RArray<f64, [usize;2]> {
 extendr_module! {
   mod fio;
   use multipliers;
+  use influence;
   fn compute_tech_coeff;
   fn compute_leontief_inverse;
 }
