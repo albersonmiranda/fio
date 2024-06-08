@@ -109,21 +109,22 @@ input-output analysis in R.</p>
 \times 2000\)</span> matrix, and each test was repeated 100 times to
 account for variability. Please note that the results of this
 benchmarking analysis are dependent on the specific test datasets used
-and the hardware on which the algorithms are run. Therefore, the results
-should be interpreted in the context of these specific conditions.</p>
+and the hardware on which the algorithms were run. Therefore, the
+results should be interpreted in the context of these specific
+conditions.</p>
 <div class="section level3">
 <h3 id="technical-coefficients-matrix">Technical coefficients matrix<a class="anchor" aria-label="anchor" href="#technical-coefficients-matrix"></a>
 </h3>
 <p>The technical coefficients matrix calculation, a key and initial step
-in input-output analysis, was tested using the <code>tec_coeff()</code>
-function from the <a href="https://albersonmiranda.github.io/fio/">fio</a> package, equivalent functions from
-the <a href="https://pachamaltese.github.io/leontief" class="external-link">leontief</a> package, and a base R implementation. It
-consists on dividing each <span class="math inline">\(a_{ij}\)</span>
-element of intermediate transactions matrix by the correspondent <span class="math inline">\(x_j\)</span> element of total production vector<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. The
+in input-output analysis, was tested using the
+<code><a href="../reference/compute_tech_coeff.html">compute_tech_coeff()</a></code> function from the <a href="https://albersonmiranda.github.io/fio/">fio</a>
+package, equivalent functions from the <a href="https://pachamaltese.github.io/leontief" class="external-link">leontief</a> package,
+and a base R implementation. It consists on dividing each <span class="math inline">\(a_{ij}\)</span> element of intermediate
+transactions matrix by the correspondent <span class="math inline">\(x_j\)</span> element of total production vector<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. The
 results show that both <a href="https://albersonmiranda.github.io/fio/">fio</a> and <a href="https://pachamaltese.github.io/leontief" class="external-link">leontief</a>
 functions execute almost instantaneously, with <a href="https://pachamaltese.github.io/leontief" class="external-link">leontief</a>
 slightly faster (about 15 milliseconds apart). In contrast, the base R
-implementation is about 100 times slower.</p>
+implementation is about 130 times slower than <a href="https://albersonmiranda.github.io/fio/">fio</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># set seed</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
@@ -142,9 +143,9 @@ implementation is about 100 times slower.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Base R function</span></span>
-<span><span class="va">tec_coeff_r</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">tec_coeff_matrix</span> <span class="op">&lt;-</span> <span class="va">intermediate_transactions</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">total_production</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">tec_coeff_matrix</span><span class="op">)</span></span>
+<span><span class="va">tech_coeff_r</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">tech_coeff_matrix</span> <span class="op">&lt;-</span> <span class="va">intermediate_transactions</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">total_production</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">tech_coeff_matrix</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># {fio} setup</span></span>
@@ -152,17 +153,17 @@ implementation is about 100 times slower.</p>
 <span></span>
 <span><span class="co"># benchmark</span></span>
 <span><span class="va">benchmark_a</span> <span class="op">&lt;-</span> <span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html" class="external-link">microbenchmark</a></span><span class="op">(</span></span>
-<span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu">tec_coeff</span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span>,</span>
-<span>  `Base R` <span class="op">=</span> <span class="fu">tec_coeff_r</span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span>,</span>
+<span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu"><a href="../reference/compute_tech_coeff.html">compute_tech_coeff</a></span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span>,</span>
+<span>  `Base R` <span class="op">=</span> <span class="fu">tech_coeff_r</span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span>,</span>
 <span>  leontief <span class="op">=</span> <span class="fu">leontief</span><span class="fu">::</span><span class="fu"><a href="https://pachamaltese.github.io/leontief/reference/input_requirement.html" class="external-link">input_requirement</a></span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span>,</span>
 <span>  times <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_a</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unit: milliseconds</span></span>
 <span><span class="co">#&gt;      expr        min         lq       mean     median         uq        max neval</span></span>
-<span><span class="co">#&gt;       fio   31.97065   40.32022   57.55164   63.04944   68.62957   84.36548   100</span></span>
-<span><span class="co">#&gt;    Base R 6001.42973 6064.82169 6147.27023 6100.11455 6220.87087 6557.67636   100</span></span>
-<span><span class="co">#&gt;  leontief   20.63873   28.75914   41.08759   44.40144   49.10843  121.40652   100</span></span></code></pre></div>
+<span><span class="co">#&gt;       fio   23.47847   34.55138   46.70290   47.99505   61.76715  100.34852   100</span></span>
+<span><span class="co">#&gt;    Base R 5965.61344 6005.78251 6059.08691 6024.14538 6050.42473 6512.65805   100</span></span>
+<span><span class="co">#&gt;  leontief   20.24697   28.13595   39.19562   42.73718   47.82396   60.78385   100</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># plot</span></span>
@@ -189,7 +190,7 @@ times slower, followed closed by the 20 times slower base R
 implementation.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># data</span></span>
-<span><span class="va">iom_fio</span> <span class="op">&lt;-</span> <span class="va">iom_fio</span><span class="op">$</span><span class="fu">tec_coeff</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">iom_fio</span> <span class="op">&lt;-</span> <span class="va">iom_fio</span><span class="op">$</span><span class="fu">compute_tech_coeff</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">technical_coefficients_matrix</span> <span class="op">&lt;-</span> <span class="va">iom_fio</span><span class="op">$</span><span class="va">technical_coefficients_matrix</span></span>
 <span></span>
 <span><span class="co"># R function</span></span>
@@ -201,17 +202,17 @@ implementation.</p>
 <span></span>
 <span><span class="co"># benchmark</span></span>
 <span><span class="va">benchmark_b</span> <span class="op">&lt;-</span> <span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html" class="external-link">microbenchmark</a></span><span class="op">(</span></span>
-<span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu">leontief_inverse</span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span>,</span>
+<span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu"><a href="../reference/compute_leontief_inverse.html">compute_leontief_inverse</a></span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span>,</span>
 <span>  `Base R` <span class="op">=</span> <span class="fu">leontief_inverse_r</span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span>,</span>
 <span>  leontief <span class="op">=</span> <span class="fu">leontief</span><span class="fu">::</span><span class="fu"><a href="https://pachamaltese.github.io/leontief/reference/leontief_inverse.html" class="external-link">leontief_inverse</a></span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span>,</span>
 <span>  times <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_b</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unit: milliseconds</span></span>
-<span><span class="co">#&gt;      expr       min       lq      mean   median       uq       max neval</span></span>
-<span><span class="co">#&gt;       fio  245.3217  292.559  316.0075  312.112  328.852  511.8544   100</span></span>
-<span><span class="co">#&gt;    Base R 6297.9825 6373.770 6496.4747 6434.066 6585.954 7164.5178   100</span></span>
-<span><span class="co">#&gt;  leontief 5585.4059 5613.459 5701.8515 5654.122 5758.876 6205.4889   100</span></span></code></pre></div>
+<span><span class="co">#&gt;      expr       min        lq      mean    median        uq       max neval</span></span>
+<span><span class="co">#&gt;       fio  249.4708  287.7534  315.6667  307.6138  331.4278  464.9909   100</span></span>
+<span><span class="co">#&gt;    Base R 6322.7461 6430.9753 6559.2352 6507.0055 6640.5332 7143.2907   100</span></span>
+<span><span class="co">#&gt;  leontief 5583.9377 5629.5257 5727.2214 5690.8033 5784.2067 6036.1800   100</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># plot</span></span>
