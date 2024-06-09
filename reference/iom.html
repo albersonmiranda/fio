@@ -128,6 +128,10 @@
 <dd><p>Influence field matrix.</p></dd>
 
 
+<dt><code>key_sectors</code></dt>
+<dd><p>Key sectors dataframe.</p></dd>
+
+
 </dl><p></p></div>
     </div>
     <div id="methods">
@@ -143,6 +147,7 @@
 <li><p><a href="#method-iom-compute_leontief_inverse"><code>iom$compute_leontief_inverse()</code></a></p></li>
 <li><p><a href="#method-iom-compute_multiplier_output"><code>iom$compute_multiplier_output()</code></a></p></li>
 <li><p><a href="#method-iom-compute_influence_field"><code>iom$compute_influence_field()</code></a></p></li>
+<li><p><a href="#method-iom-compute_key_sectors"><code>iom$compute_key_sectors()</code></a></p></li>
 <li><p><a href="#method-iom-clone"><code>iom$clone()</code></a></p></li>
 </ul></div><p></p><hr><a id="method-iom-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
@@ -164,7 +169,8 @@
 <span>  technical_coefficients_matrix <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  leontief_inverse_matrix <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  multiplier_output <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  influence_field <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  influence_field <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  key_sectors <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -232,6 +238,10 @@
 
 <dt><code>influence_field</code></dt>
 <dd><p>Influence field matrix.</p></dd>
+
+
+<dt><code>key_sectors</code></dt>
+<dd><p>Key sectors dataframe.</p></dd>
 
 
 </dl><p></p></div>
@@ -341,15 +351,31 @@
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-iom-clone"></a><div class="section">
-<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
-<p>The objects of this class are cloneable with this method.</p><div class="section">
+</div><p></p><hr><a id="method-iom-compute_key_sectors"></a><div class="section">
+<h3 id="method-compute-key-sectors-">Method <code>compute_key_sectors()</code><a class="anchor" aria-label="anchor" href="#method-compute-key-sectors-"></a></h3>
+<p>Computes the key sectors dataframe.</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_key_sectors</span><span class="op">(</span><span class="va">leontief_inverse_matrix</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-6">Arguments<a class="anchor" aria-label="anchor" href="#arguments-6"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>leontief_inverse_matrix</code></dt>
+<dd><p>Leontief inverse matrix.</p></dd>
+
+
+</dl><p></p></div>
+</div>
+
+</div><p></p><hr><a id="method-iom-clone"></a><div class="section">
+<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
+<p>The objects of this class are cloneable with this method.</p><div class="section">
+<h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-7">Arguments<a class="anchor" aria-label="anchor" href="#arguments-7"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 

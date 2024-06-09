@@ -85,6 +85,11 @@
 
     
     
+<style>
+p.caption {
+  font-size: 0.6em;
+}
+</style>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -160,17 +165,18 @@ implementation is about 130 times slower than <a href="https://albersonmiranda.g
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_a</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unit: milliseconds</span></span>
-<span><span class="co">#&gt;      expr        min         lq       mean     median         uq        max neval</span></span>
-<span><span class="co">#&gt;       fio   23.47847   34.55138   46.70290   47.99505   61.76715  100.34852   100</span></span>
-<span><span class="co">#&gt;    Base R 5965.61344 6005.78251 6059.08691 6024.14538 6050.42473 6512.65805   100</span></span>
-<span><span class="co">#&gt;  leontief   20.24697   28.13595   39.19562   42.73718   47.82396   60.78385   100</span></span></code></pre></div>
+<span><span class="co">#&gt;      expr        min         lq       mean     median         uq       max neval</span></span>
+<span><span class="co">#&gt;       fio   29.49149   36.85882   56.23264   60.73933   74.67696   83.7222   100</span></span>
+<span><span class="co">#&gt;    Base R 6002.62546 6095.54868 6205.65638 6202.60015 6295.67109 6471.0826   100</span></span>
+<span><span class="co">#&gt;  leontief   20.68085   32.05341   44.06614   46.10664   50.85927  294.0564   100</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># plot</span></span>
 <span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">benchmark_a</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="figure/benchmark_a-1.png" alt="Base R is about 100 times slower than {fio} and {leontief} functions."><div class="figcaption">Base R is about 100 times slower than {fio} and
-{leontief} functions.</div>
+<div class="figure">
+<img src="figure/benchmark_a-1.png" alt="Base R is about 100 times slower than {fio} and {leontief} functions." width="100%"><p class="caption">
+Base R is about 100 times slower than {fio} and {leontief} functions.
+</p>
 </div>
 </div>
 <div class="section level3">
@@ -209,17 +215,18 @@ implementation.</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_b</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unit: milliseconds</span></span>
-<span><span class="co">#&gt;      expr       min        lq      mean    median        uq       max neval</span></span>
-<span><span class="co">#&gt;       fio  249.4708  287.7534  315.6667  307.6138  331.4278  464.9909   100</span></span>
-<span><span class="co">#&gt;    Base R 6322.7461 6430.9753 6559.2352 6507.0055 6640.5332 7143.2907   100</span></span>
-<span><span class="co">#&gt;  leontief 5583.9377 5629.5257 5727.2214 5690.8033 5784.2067 6036.1800   100</span></span></code></pre></div>
+<span><span class="co">#&gt;      expr      min        lq      mean    median        uq       max neval</span></span>
+<span><span class="co">#&gt;       fio  253.744  301.2671  326.6016  322.1029  335.0209  485.4682   100</span></span>
+<span><span class="co">#&gt;    Base R 6337.971 6471.5698 6582.0580 6547.1319 6671.4814 6896.0379   100</span></span>
+<span><span class="co">#&gt;  leontief 5638.750 5682.6602 5778.5809 5758.7420 5850.6630 6091.9533   100</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># plot</span></span>
 <span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">benchmark_b</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="figure/benchmark_b-1.png" alt="{fio} is about 20 times faster than {leontief} and base R functions."><div class="figcaption">{fio} is about 20 times faster than {leontief}
-and base R functions.</div>
+<div class="figure">
+<img src="figure/benchmark_b-1.png" alt="{fio} is about 20 times faster than {leontief} and base R functions." width="100%"><p class="caption">
+{fio} is about 20 times faster than {leontief} and base R functions.
+</p>
 </div>
 </div>
 </div>

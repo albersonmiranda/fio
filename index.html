@@ -97,7 +97,7 @@
 <div class="section level2">
 <h2 id="getting-started">Getting Started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h2>
-<p>If you are just getting started with <a href="https://albersonmiranda.github.io/fio/">fio</a>, we recommend you to read the <a href="https://albersonmiranda.github.io/fio/articles/fio.html">vignettes</a> for a comprehensive overview of the package.</p>
+<p>If you are just getting started with <a href="https://albersonmiranda.github.io/fio/">fio</a>, we recommend you to read the <a href="https://albersonmiranda.github.io/fio/articles/index.html">vignettes</a> for a comprehensive overview of the package.</p>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
@@ -108,10 +108,10 @@
 <span><span class="va">iom_br</span> <span class="op">&lt;-</span> <span class="fu">fio</span><span class="fu">::</span><span class="va"><a href="reference/br_2020.html">br_2020</a></span></span>
 <span></span>
 <span><span class="co"># calculate technical coefficients matrix</span></span>
-<span><span class="va">iom_br</span><span class="op">$</span><span class="fu">tec_coeff</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">iom_br</span><span class="op">$</span><span class="fu">compute_tech_coeff</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># calculate Leontief's inverse</span></span>
-<span><span class="va">iom_br</span><span class="op">$</span><span class="fu">leontief_inverse</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">iom_br</span><span class="op">$</span><span class="fu">compute_leontief_inverse</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>And pronto! 🎉, you’re all good to carry on with your analysis. You can evoke the Data Viewer to inspect the results with <code>iom_br$technical_coefficients_matrix |&gt; View()</code> and <code>iom_br$leontief_inverse_matrix |&gt; View()</code>.</p>
 <p><img src="reference/figures/example_leontief_inverse.png"><em><small>Leontief’s inverse from brazilian 2020 input-output matrix</small></em></p>
 </div>

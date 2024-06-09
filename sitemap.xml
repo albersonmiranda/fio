@@ -25,13 +25,25 @@
     <loc>https://albersonmiranda.github.io/fio/reference/br_2020.html</loc>
   </url>
   <url>
+    <loc>https://albersonmiranda.github.io/fio/reference/compute_backward_linkages.html</loc>
+  </url>
+  <url>
     <loc>https://albersonmiranda.github.io/fio/reference/compute_field_influence.html</loc>
+  </url>
+  <url>
+    <loc>https://albersonmiranda.github.io/fio/reference/compute_forward_linkages.html</loc>
   </url>
   <url>
     <loc>https://albersonmiranda.github.io/fio/reference/compute_leontief_inverse.html</loc>
   </url>
   <url>
     <loc>https://albersonmiranda.github.io/fio/reference/compute_multiplier_output.html</loc>
+  </url>
+  <url>
+    <loc>https://albersonmiranda.github.io/fio/reference/compute_power_dispersion.html</loc>
+  </url>
+  <url>
+    <loc>https://albersonmiranda.github.io/fio/reference/compute_sensitivity_dispersion.html</loc>
   </url>
   <url>
     <loc>https://albersonmiranda.github.io/fio/reference/compute_tech_coeff.html</loc>
