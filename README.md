@@ -39,7 +39,8 @@ devtools::install_github("albersonmiranda/fio")
 ## Getting Started
 
 If you are just getting started with `{fio}`, we recommend you to read
-the [vignettes](https://albersonmiranda.github.io/fio/articles/fio.html)
+the
+[vignettes](https://albersonmiranda.github.io/fio/articles/index.html)
 for a comprehensive overview of the package.
 
 ## Examples
@@ -51,10 +52,10 @@ Calculate Leontief’s inverse from brazilian 2020 input-output matrix:
 iom_br <- fio::br_2020
 
 # calculate technical coefficients matrix
-iom_br$tec_coeff()
+iom_br$compute_tech_coeff()
 
 # calculate Leontief's inverse
-iom_br$leontief_inverse()
+iom_br$compute_leontief_inverse()
 ```
 
 And pronto\! 🎉, you’re all good to carry on with your analysis. You can

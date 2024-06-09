@@ -1,6 +1,7 @@
 // module imports
 mod multipliers;
 mod influence;
+mod linkages;
 
 use faer;
 use faer::prelude::SpSolver;
@@ -67,6 +68,7 @@ extendr_module! {
   mod fio;
   use multipliers;
   use influence;
+  use linkages;
   fn compute_tech_coeff;
   fn compute_leontief_inverse;
 }

@@ -2,10 +2,17 @@
 title: "benchmarking"
 ---
 
+<style>
+p.caption {
+  font-size: 0.6em;
+}
+</style>
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  out.width = "100%"
 )
 ```
 
