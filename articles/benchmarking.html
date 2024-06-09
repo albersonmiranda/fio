@@ -88,6 +88,7 @@
 <style>
 p.caption {
   font-size: 0.6em;
+  align: center;
 }
 </style>
 <div class="section level2">
@@ -165,10 +166,10 @@ implementation is about 130 times slower than <a href="https://albersonmiranda.g
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_a</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unit: milliseconds</span></span>
-<span><span class="co">#&gt;      expr        min         lq       mean     median         uq       max neval</span></span>
-<span><span class="co">#&gt;       fio   29.49149   36.85882   56.23264   60.73933   74.67696   83.7222   100</span></span>
-<span><span class="co">#&gt;    Base R 6002.62546 6095.54868 6205.65638 6202.60015 6295.67109 6471.0826   100</span></span>
-<span><span class="co">#&gt;  leontief   20.68085   32.05341   44.06614   46.10664   50.85927  294.0564   100</span></span></code></pre></div>
+<span><span class="co">#&gt;      expr        min         lq       mean     median         uq        max neval</span></span>
+<span><span class="co">#&gt;       fio   31.55184   36.01838   55.62917   61.18193   63.54022   80.96093   100</span></span>
+<span><span class="co">#&gt;    Base R 5994.79476 6002.31148 6018.27259 6007.66749 6019.58009 6457.69276   100</span></span>
+<span><span class="co">#&gt;  leontief   20.16732   29.22828   40.38208   43.91983   48.00528  119.85674   100</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># plot</span></span>
@@ -196,10 +197,10 @@ times slower, followed closed by the 20 times slower base R
 implementation.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># data</span></span>
-<span><span class="va">iom_fio</span> <span class="op">&lt;-</span> <span class="va">iom_fio</span><span class="op">$</span><span class="fu">compute_tech_coeff</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">iom_fio</span><span class="op">$</span><span class="fu">compute_tech_coeff</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">technical_coefficients_matrix</span> <span class="op">&lt;-</span> <span class="va">iom_fio</span><span class="op">$</span><span class="va">technical_coefficients_matrix</span></span>
 <span></span>
-<span><span class="co"># R function</span></span>
+<span><span class="co"># base R function</span></span>
 <span><span class="va">leontief_inverse_r</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">dim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span></span>
 <span>  <span class="va">leontief_inverse_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/solve.html" class="external-link">solve</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">dim</span><span class="op">)</span> <span class="op">-</span> <span class="va">technical_coefficients_matrix</span><span class="op">)</span></span>
@@ -215,10 +216,10 @@ implementation.</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_b</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unit: milliseconds</span></span>
-<span><span class="co">#&gt;      expr      min        lq      mean    median        uq       max neval</span></span>
-<span><span class="co">#&gt;       fio  253.744  301.2671  326.6016  322.1029  335.0209  485.4682   100</span></span>
-<span><span class="co">#&gt;    Base R 6337.971 6471.5698 6582.0580 6547.1319 6671.4814 6896.0379   100</span></span>
-<span><span class="co">#&gt;  leontief 5638.750 5682.6602 5778.5809 5758.7420 5850.6630 6091.9533   100</span></span></code></pre></div>
+<span><span class="co">#&gt;      expr       min        lq      mean    median        uq       max neval</span></span>
+<span><span class="co">#&gt;       fio  245.7323  294.7338  304.0091  307.7074  316.8196  347.0261   100</span></span>
+<span><span class="co">#&gt;    Base R 6291.3791 6310.4933 6338.0640 6332.1657 6358.5777 6425.6532   100</span></span>
+<span><span class="co">#&gt;  leontief 5578.0043 5591.8425 5606.2241 5604.8823 5615.9950 5670.8345   100</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># plot</span></span>
