@@ -5,6 +5,7 @@ title: "benchmarking"
 <style>
 p.caption {
   font-size: 0.6em;
+  align: center;
 }
 </style>
 
@@ -60,10 +61,10 @@ benchmark_a <- microbenchmark::microbenchmark(
 )
 print(benchmark_a)
 #> Unit: milliseconds
-#>      expr        min         lq       mean     median         uq       max neval
-#>       fio   29.49149   36.85882   56.23264   60.73933   74.67696   83.7222   100
-#>    Base R 6002.62546 6095.54868 6205.65638 6202.60015 6295.67109 6471.0826   100
-#>  leontief   20.68085   32.05341   44.06614   46.10664   50.85927  294.0564   100
+#>      expr        min         lq       mean     median         uq        max neval
+#>       fio   31.55184   36.01838   55.62917   61.18193   63.54022   80.96093   100
+#>    Base R 5994.79476 6002.31148 6018.27259 6007.66749 6019.58009 6457.69276   100
+#>  leontief   20.16732   29.22828   40.38208   43.91983   48.00528  119.85674   100
 ```
 
 ``` r
@@ -88,10 +89,10 @@ It allows for solving the linear system through LU decomposition, which is a mor
 
 ``` r
 # data
-iom_fio <- iom_fio$compute_tech_coeff()
+iom_fio$compute_tech_coeff()
 technical_coefficients_matrix <- iom_fio$technical_coefficients_matrix
 
-# R function
+# base R function
 leontief_inverse_r <- function(technical_coefficients_matrix) {
   dim <- nrow(technical_coefficients_matrix)
   leontief_inverse_matrix <- solve(diag(dim) - technical_coefficients_matrix)
@@ -107,10 +108,10 @@ benchmark_b <- microbenchmark::microbenchmark(
 )
 print(benchmark_b)
 #> Unit: milliseconds
-#>      expr      min        lq      mean    median        uq       max neval
-#>       fio  253.744  301.2671  326.6016  322.1029  335.0209  485.4682   100
-#>    Base R 6337.971 6471.5698 6582.0580 6547.1319 6671.4814 6896.0379   100
-#>  leontief 5638.750 5682.6602 5778.5809 5758.7420 5850.6630 6091.9533   100
+#>      expr       min        lq      mean    median        uq       max neval
+#>       fio  245.7323  294.7338  304.0091  307.7074  316.8196  347.0261   100
+#>    Base R 6291.3791 6310.4933 6338.0640 6332.1657 6358.5777 6425.6532   100
+#>  leontief 5578.0043 5591.8425 5606.2241 5604.8823 5615.9950 5670.8345   100
 ```
 
 ``` r

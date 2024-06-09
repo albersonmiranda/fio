@@ -5,6 +5,7 @@ title: "benchmarking"
 <style>
 p.caption {
   font-size: 0.6em;
+  align: center;
 }
 </style>
 
@@ -12,7 +13,8 @@ p.caption {
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  out.width = "100%"
+  out.width = "100%",
+  dpi = 300
 )
 ```
 
@@ -79,10 +81,10 @@ It allows for solving the linear system through LU decomposition, which is a mor
 
 ```{r benchmark_b, fig.cap="{fio} is about 20 times faster than {leontief} and base R functions."}
 # data
-iom_fio <- iom_fio$compute_tech_coeff()
+iom_fio$compute_tech_coeff()
 technical_coefficients_matrix <- iom_fio$technical_coefficients_matrix
 
-# R function
+# base R function
 leontief_inverse_r <- function(technical_coefficients_matrix) {
   dim <- nrow(technical_coefficients_matrix)
   leontief_inverse_matrix <- solve(diag(dim) - technical_coefficients_matrix)
