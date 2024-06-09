@@ -40,6 +40,8 @@ R6 class for input-output matrix.
 \item{\code{multiplier_output}}{Output multiplier vector.}
 
 \item{\code{influence_field}}{Influence field matrix.}
+
+\item{\code{key_sectors}}{Key sectors dataframe.}
 }
 \if{html}{\out{</div>}}
 }
@@ -53,6 +55,7 @@ R6 class for input-output matrix.
 \item \href{#method-iom-compute_leontief_inverse}{\code{iom$compute_leontief_inverse()}}
 \item \href{#method-iom-compute_multiplier_output}{\code{iom$compute_multiplier_output()}}
 \item \href{#method-iom-compute_influence_field}{\code{iom$compute_influence_field()}}
+\item \href{#method-iom-compute_key_sectors}{\code{iom$compute_key_sectors()}}
 \item \href{#method-iom-clone}{\code{iom$clone()}}
 }
 }
@@ -78,7 +81,8 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
   technical_coefficients_matrix = NULL,
   leontief_inverse_matrix = NULL,
   multiplier_output = NULL,
-  influence_field = NULL
+  influence_field = NULL,
+  key_sectors = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -116,6 +120,8 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
 \item{\code{multiplier_output}}{Output multipler vector.}
 
 \item{\code{influence_field}}{Influence field matrix.}
+
+\item{\code{key_sectors}}{Key sectors dataframe.}
 }
 \if{html}{\out{</div>}}
 }
@@ -218,6 +224,23 @@ Computes the influence field matrix.
 
 \item{\code{technical_coefficients_matrix}}{Technical coefficients matrix.}
 
+\item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-iom-compute_key_sectors"></a>}}
+\if{latex}{\out{\hypertarget{method-iom-compute_key_sectors}{}}}
+\subsection{Method \code{compute_key_sectors()}}{
+Computes the key sectors dataframe.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{iom$compute_key_sectors(leontief_inverse_matrix)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
 \item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
 }
 \if{html}{\out{</div>}}

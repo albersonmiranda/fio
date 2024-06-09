@@ -34,6 +34,8 @@
 #' Output multipler vector.
 #' @param influence_field
 #' Influence field matrix.
+#' @param key_sectors
+#' Key sectors dataframe.
 #' @export
 
 # input-output matrix class
@@ -105,6 +107,10 @@ iom <- R6::R6Class(
     #' Influence field matrix.
     influence_field = NULL,
 
+    #' @field key_sectors
+    #' Key sectors dataframe.
+    key_sectors = NULL,
+
     #' @description
     #' Creates a new instance of this [R6][R6::R6Class] class.
     initialize = function(id,
@@ -122,7 +128,8 @@ iom <- R6::R6Class(
                           technical_coefficients_matrix = NULL,
                           leontief_inverse_matrix = NULL,
                           multiplier_output = NULL,
-                          influence_field = NULL) {
+                          influence_field = NULL,
+                          key_sectors = NULL) {
       self$id <- id
       self$intermediate_transactions <- intermediate_transactions
       self$total_production <- total_production
@@ -139,6 +146,7 @@ iom <- R6::R6Class(
       self$leontief_inverse_matrix <- leontief_inverse_matrix
       self$multiplier_output <- multiplier_output
       self$influence_field <- influence_field
+      self$key_sectors <- key_sectors
     },
 
     #' @description
@@ -266,6 +274,46 @@ iom <- R6::R6Class(
 
       # store matrix
       self$influence_field <- influence_field
+      invisible(self)
+    },
+
+    #' @description
+    #' Computes the key sectors dataframe.
+    #' @param leontief_inverse_matrix
+    #' Leontief inverse matrix.
+    compute_key_sectors = function(leontief_inverse_matrix) {
+      # foward linkages
+      forward_linkages <- compute_forward_linkages(
+        leontief_inverse_matrix = self$leontief_inverse_matrix
+      )
+      # backward linkages
+      backward_linkages <- compute_backward_linkages(
+        leontief_inverse_matrix = self$leontief_inverse_matrix
+      )
+      # power of dispersion
+      power_dispersion <- compute_power_dispersion(
+        leontief_inverse_matrix = self$leontief_inverse_matrix
+      )
+      # sensitivity of dispersion
+      sensitivity_dispersion <- compute_sensitivity_dispersion(
+        leontief_inverse_matrix = self$leontief_inverse_matrix
+      )
+      # compute key sectors dataframe
+      key_sectors <- data.frame(
+        sector = rownames(self$leontief_inverse_matrix),
+        forward_linkages = forward_linkages,
+        backward_linkages = backward_linkages,
+        power_dispersion = power_dispersion,
+        sensitivity_dispersion = sensitivity_dispersion
+      ) |>
+        within({
+          key_sectors <- ifelse(forward_linkages <= 1 & backward_linkages <= 1, "Non-Key Sector", "")
+          key_sectors <- ifelse(forward_linkages > 1 & backward_linkages > 1, "Key Sector", key_sectors)
+          key_sectors <- ifelse(forward_linkages > 1 & backward_linkages <= 1, "Strong Forward Linkage", key_sectors)
+          key_sectors <- ifelse(forward_linkages <= 1 & backward_linkages > 1, "Strong Backward Linkage", key_sectors)
+        })
+      # store dataframe
+      self$key_sectors <- key_sectors
       invisible(self)
     }
   )
