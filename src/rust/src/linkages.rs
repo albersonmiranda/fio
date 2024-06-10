@@ -28,7 +28,20 @@ fn compute_row_average(
   let leontief_inverse_matrix_faer = faer::Mat::from_fn(n, n, |row, col| leontief_inverse_matrix[col * n + row]);
 
   // get row means
-  leontief_inverse_matrix_faer.row_iter().par_bridge().map(|row| row.sum()).map(|x| x / n as f64).collect()
+  let mut indexed_results: Vec<(usize, f64)> = leontief_inverse_matrix_faer.row_iter()
+  .enumerate()
+  .par_bridge()
+  .map(|(index, row)| {
+    let sum: f64 = row.iter().sum();
+    (index, sum / n as f64)
+  })
+  .collect();
+
+  // sort by index to ensure order
+  indexed_results.sort_by_key(|&(index, _)| index);
+
+  // extract values
+  indexed_results.into_iter().map(|(_, value)| value).collect()
 }
 
 #[extendr]
@@ -112,9 +125,9 @@ fn compute_power_dispersion_cv(
   let leontief_inverse_matrix_faer = faer::Mat::from_fn(n, n, |row, col| leontief_inverse_matrix[col * n + row]);
 
   // leontief_inverse_matrix - column averages
-  let lim_minus_ca: Vec<f64> = leontief_inverse_matrix_faer.row_iter()
-    .par_bridge()
-    .flat_map_iter(|row| {
+  let lim_minus_ca: Vec<f64> = leontief_inverse_matrix_faer
+    .row_iter()
+    .flat_map(|row| {
       row.iter()
       .zip(cols_average.iter().cycle())
       .map(|(a, b)| a - b)
@@ -124,7 +137,6 @@ fn compute_power_dispersion_cv(
   // get square of row sums of lim_minus_ca
   let row_sums = faer::Mat::from_fn(n, n, |row, col| lim_minus_ca[row * n + col])
     .row_iter()
-    .par_bridge()
     .map(|row| row.iter().map(|x| x.powi(2)).sum::<f64>())
     .collect::<Vec<f64>>();
 
@@ -171,7 +183,6 @@ fn compute_sensitivity_dispersion_cv(
     .zip(rows_average.par_iter())
     .map(|(a, b)| a / b)
     .collect::<Vec<f64>>()
-
 }
 
 // Macro to generate exports.

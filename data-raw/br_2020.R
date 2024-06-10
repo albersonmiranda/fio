@@ -1,9 +1,6 @@
 ## code to prepare `br_2020` dataset goes here
 
 
-# pacote
-library(fio)
-
 # path
 path = "inst/extdata/iom/br/2020.xlsx"
 

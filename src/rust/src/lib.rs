@@ -29,10 +29,7 @@ fn compute_tech_coeff(
     .map(|(i, value)| value / total_production[i / n])
     .collect();
 
-  // convert to R matrix
-  let tech_coeff_r = RArray::new_matrix(n, n, |r, c| tech_coeff[r + c* n]);
-
-  tech_coeff_r
+  RArray::new_matrix(n, n, |r, c| tech_coeff[r + c* n])
 }
 
 #[extendr]
@@ -53,12 +50,10 @@ fn compute_leontief_inverse(tech_coeff: &[f64]) -> RArray<f64, [usize;2]> {
   let leontief_matrix = &identity_matrix - tech_coeff_matrix;
 
   // calculate Leontief inverse
-  let lu = leontief_matrix.partial_piv_lu();
-  let leontief_inverse = lu.solve(identity_matrix);
+  let leontief_inverse = leontief_matrix.partial_piv_lu().solve(identity_matrix);
 
   // convert to R matrix
-  let leontief_inverse_r = RArray::new_matrix(n, n, |row, col| leontief_inverse[(row, col)]);
-  leontief_inverse_r
+  RArray::new_matrix(n, n, |row, col| leontief_inverse[(row, col)])
 }
 
 // Macro to generate exports.
