@@ -10,3 +10,4 @@ name = 'fio'
 [dependencies]
 extendr-api = '*'
 faer = '*'
+rayon = '*'
