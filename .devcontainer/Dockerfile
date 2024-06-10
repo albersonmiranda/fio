@@ -6,7 +6,7 @@ FROM ghcr.io/rocker-org/devcontainer/r-ver:${VARIANT}
 RUN install2.r --error --skipinstalled -n -1 \
         # pacotes R
         leontief \
-        microbenchmark
+        microbenchmark \
     && rm -rf /tmp/downloaded_packages
 
 # Pacotes Python (digitar nomes em requirements.txt)
