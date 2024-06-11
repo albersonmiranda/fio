@@ -17,8 +17,8 @@ output:
 <style>
 p.caption {
   font-size: 0.6em;
+  text-align: "center";
 }
-</style>
 
 
 
@@ -34,10 +34,10 @@ The tests were run on a simulated $2000 \times 2000$ matrix, and each test was r
 
 ## Technical coefficients matrix
 
-The technical coefficients matrix calculation, a key and initial step in input-output analysis, was tested using the `compute_tech_coeff()` function from the `{fio}` package, equivalent functions from the `{leontief}` package, and a base R implementation. It consists on dividing each $a_{ij}$ element of intermediate transactions matrix by the correspondent $x_j$ element of total production vector^[Or in a equivalent way, multiplying intermediate transactions matrix by a diagonal matrix constructed from total production vector.]. The results show that both `{fio}` and `{leontief}` functions execute almost instantaneously, with `{leontief}` slightly faster (about 15 milliseconds apart). In contrast, the base R implementation is about 130 times slower than `{fio}`.
+The technical coefficients matrix calculation, a key and initial step in input-output analysis, was tested using the `compute_tech_coeff()` function from the `{fio}` package, equivalent functions from the `{leontief}` package, and a base R implementation. It consists on dividing each $a_{ij}$ element of intermediate transactions matrix by the correspondent $x_j$ element of total production vector^[Or in a equivalent way, multiplying intermediate transactions matrix by a diagonal matrix constructed from total production vector.]. The results show that both `{fio}` and `{leontief}` functions execute almost instantaneously, with `{fio}` slightly faster (about 8 milliseconds apart). In contrast, the base R implementation is about 150 times slower than `{fio}`.
 
 
-``` r
+```r
 # set seed
 set.seed(100)
 
@@ -70,326 +70,20 @@ benchmark_a <- microbenchmark::microbenchmark(
   leontief = leontief::input_requirement(intermediate_transactions, total_production),
   times = 100
 )
-
-knitr::kable(benchmark_a)
-```
-
-
-
-|expr     |       time|
-|:--------|----------:|
-|leontief |   21431237|
-|Base R   | 6350047647|
-|leontief |   50716695|
-|leontief |   35670117|
-|fio      |   67137791|
-|Base R   | 6597092953|
-|leontief |   39126259|
-|fio      |   68504438|
-|Base R   | 6714409928|
-|Base R   | 6928956120|
-|fio      |   83105462|
-|leontief |   22519839|
-|Base R   | 6513838594|
-|Base R   | 6332740522|
-|Base R   | 6136669092|
-|leontief |   21232278|
-|Base R   | 6103844253|
-|Base R   | 6093535899|
-|Base R   | 6052211792|
-|fio      |   78483558|
-|Base R   | 6521369861|
-|fio      |   49348987|
-|Base R   | 6182019622|
-|leontief |   42216527|
-|fio      |   49531725|
-|leontief |   20891715|
-|fio      |   49524696|
-|fio      |   32864475|
-|leontief |   20973767|
-|leontief |   21134899|
-|Base R   | 6147144899|
-|fio      |   49094395|
-|fio      |   40228081|
-|fio      |   30945509|
-|Base R   | 6040125419|
-|leontief |   37064146|
-|leontief |   21481073|
-|Base R   | 6207160743|
-|fio      |   35683778|
-|leontief |   33239293|
-|leontief |   20921756|
-|Base R   | 6098232096|
-|fio      |   87680390|
-|fio      |   40545658|
-|fio      |   35478681|
-|leontief |   24728153|
-|fio      |   27424721|
-|leontief |   25142941|
-|Base R   | 6209939868|
-|Base R   | 6233461456|
-|Base R   | 6508959798|
-|fio      |   82579381|
-|leontief |   23274282|
-|fio      |   41226282|
-|Base R   | 6324650850|
-|leontief |   21444794|
-|Base R   | 6155049177|
-|fio      |   49199362|
-|leontief |   21092945|
-|fio      |   49947526|
-|leontief |   30724688|
-|fio      |   49646787|
-|leontief |   21336361|
-|fio      |   49507601|
-|leontief |   30985452|
-|Base R   | 6118613419|
-|Base R   | 6035989039|
-|leontief |   21051609|
-|Base R   | 6095594209|
-|leontief |   49083012|
-|Base R   | 6017043728|
-|leontief |   34053582|
-|fio      |   64383617|
-|Base R   | 5983420213|
-|fio      |   57981619|
-|fio      |   24535052|
-|fio      |   39452156|
-|fio      |   37115629|
-|fio      |   37405797|
-|leontief |   36951291|
-|fio      |   63570964|
-|fio      |   36446776|
-|Base R   | 5985987060|
-|fio      |   61898471|
-|Base R   | 5979011442|
-|leontief |   33267298|
-|Base R   | 5994215509|
-|Base R   | 5965379819|
-|Base R   | 6304176040|
-|Base R   | 6272522976|
-|Base R   | 6084470488|
-|leontief |   48194096|
-|Base R   | 6086186890|
-|leontief |   35582285|
-|leontief |   22503129|
-|leontief |   36162166|
-|Base R   | 6100473325|
-|leontief |   49049052|
-|fio      |   65480203|
-|Base R   | 6078552412|
-|fio      |   64242006|
-|leontief |   20632392|
-|fio      |   49740943|
-|leontief |   35797428|
-|leontief |   26339566|
-|fio      |   40384294|
-|fio      |   43125637|
-|fio      |   37108846|
-|Base R   | 6031065819|
-|fio      |   39467282|
-|leontief |   20925741|
-|leontief |   33536731|
-|leontief |   33863848|
-|Base R   | 5992772981|
-|fio      |   49228146|
-|leontief |   20725655|
-|Base R   | 6014236334|
-|leontief |   20904438|
-|Base R   | 6003395799|
-|leontief |   34003204|
-|leontief |   48361925|
-|fio      |   49657070|
-|leontief |   20665251|
-|fio      |   49821993|
-|leontief |   20788179|
-|Base R   | 6047795967|
-|Base R   | 6088964092|
-|Base R   | 6052304121|
-|fio      |  116378299|
-|fio      |   49761215|
-|leontief |   23647874|
-|fio      |   51433805|
-|fio      |   37990254|
-|fio      |   37426969|
-|Base R   | 6018233681|
-|Base R   | 6023547889|
-|fio      |   78592591|
-|leontief |   20165989|
-|fio      |   40990605|
-|fio      |   24800396|
-|leontief |   20871467|
-|leontief |   20821233|
-|leontief |   20961867|
-|fio      |   56030031|
-|leontief |   48282171|
-|leontief |   33938527|
-|Base R   | 5992307126|
-|leontief |   62341720|
-|leontief |   34906433|
-|Base R   | 5996370215|
-|leontief |   47786086|
-|Base R   | 6020310955|
-|Base R   | 6004910548|
-|fio      |   77976865|
-|leontief |   35233520|
-|fio      |   78288879|
-|leontief |   20609678|
-|fio      |   49630246|
-|fio      |   54172171|
-|leontief |   33544992|
-|Base R   | 6022784699|
-|Base R   | 6018256361|
-|Base R   | 6152048699|
-|leontief |   58556460|
-|leontief |   47784428|
-|fio      |   64290980|
-|leontief |   33433199|
-|fio      |   78062880|
-|fio      |   36446718|
-|Base R   | 6290503739|
-|Base R   | 6312626932|
-|fio      |   79643207|
-|fio      |   41500374|
-|fio      |   39040197|
-|leontief |   21748863|
-|leontief |   36267634|
-|Base R   | 6351938895|
-|leontief |   22731403|
-|Base R   | 6070985161|
-|leontief |   20912935|
-|fio      |   59301881|
-|leontief |   20189301|
-|Base R   | 6179361204|
-|fio      |   50349661|
-|fio      |   46045743|
-|fio      |   24939031|
-|fio      |   24765617|
-|Base R   | 6382702267|
-|Base R   | 6705363396|
-|Base R   | 6851668920|
-|leontief |   27376474|
-|leontief |   28015493|
-|fio      |   29267331|
-|Base R   | 7039204382|
-|Base R   | 6973760315|
-|Base R   | 6332291080|
-|fio      |   43537116|
-|Base R   | 6217757750|
-|Base R   | 6208368759|
-|fio      |   52085720|
-|Base R   | 6195018973|
-|fio      |   64798566|
-|leontief |   21251380|
-|leontief |   20906437|
-|Base R   | 6054177184|
-|leontief |   21150758|
-|fio      |   49724579|
-|leontief |   20760778|
-|Base R   | 5991227441|
-|fio      |   63819813|
-|Base R   | 6151778819|
-|leontief |   48988334|
-|Base R   | 6060389846|
-|Base R   | 6108259598|
-|leontief |   56418794|
-|Base R   | 6247927123|
-|Base R   | 6289360212|
-|fio      |   69970859|
-|fio      |   34916167|
-|Base R   | 6347561251|
-|Base R   | 6031857218|
-|Base R   | 6351946357|
-|fio      |   78542172|
-|fio      |   40911490|
-|fio      |   45476014|
-|leontief |   33957091|
-|fio      |   52868074|
-|fio      |   43539033|
-|leontief |   32127966|
-|fio      |   54328636|
-|Base R   | 6359597840|
-|leontief |   21339549|
-|leontief |   33864475|
-|fio      |   50488917|
-|Base R   | 6132603962|
-|leontief |   35334809|
-|Base R   | 6261366712|
-|fio      |   39374918|
-|Base R   | 6244691395|
-|fio      |   49515367|
-|fio      |   46181397|
-|Base R   | 6226043805|
-|Base R   | 6020355079|
-|Base R   | 6001230834|
-|leontief |   21007060|
-|leontief |   21121446|
-|fio      |   35915083|
-|leontief |   28838673|
-|leontief |   20922522|
-|leontief |   21541348|
-|fio      |   63099201|
-|fio      |   32699584|
-|leontief |   20928604|
-|Base R   | 6021936620|
-|Base R   | 5998903417|
-|Base R   | 6000887232|
-|leontief |   50376291|
-|leontief |   20764384|
-|Base R   | 5986971823|
-|leontief |   20912726|
-|fio      |   51996879|
-|leontief |   20878433|
-|leontief |   34027018|
-|Base R   | 6154759142|
-|fio      |   82529123|
-|leontief |   35192479|
-|Base R   | 6173542322|
-|Base R   | 6144839097|
-|leontief |   48006734|
-|Base R   | 6048442352|
-|Base R   | 6091701241|
-|fio      |   78346416|
-|fio      |   36214933|
-|fio      |   81488372|
-|leontief |   20945225|
-|Base R   | 6038173793|
-|fio      |   50745008|
-|leontief |   20659656|
-|fio      |   40455598|
-|leontief |   20794233|
-|Base R   | 6044795503|
-|leontief |   20736343|
-|fio      |   26806888|
-|leontief |   34975919|
-|fio      |   49913390|
-|leontief |   20779255|
-|fio      |   51744947|
-|Base R   | 6059699236|
-|leontief |   61696416|
-|fio      |   50979918|
-|fio      |   40094061|
-|Base R   | 6033197415|
-|Base R   | 6043846776|
-|Base R   | 6027061891|
-|fio      |   36040545|
-|fio      |   35886796|
-|Base R   | 6018183073|
-|Base R   | 6038818376|
-|leontief |   20097792|
-|leontief |   23035159|
-
-
-
-``` r
+print(benchmark_a)
+#> Unit: milliseconds
+#>      expr        min         lq       mean     median         uq         max neval
+#>       fio   32.24106   38.22049   42.28276   40.77030   42.92088    90.20673   100
+#>    Base R 7116.86712 7136.63368 7553.85911 7152.95092 7336.31015 11166.83317   100
+#>  leontief   41.04016   44.61389   50.98095   48.07349   53.46332   107.02680   100
 
 # plot
 ggplot2::autoplot(benchmark_a)
 ```
 
-<div class="figure">
-<img src="figure/benchmark_a-1.png" alt="\label{fig:benchmark_a}Base R is about 100 times slower than {fio} and {leontief} functions." width="100%" />
-<p class="caption">\label{fig:benchmark_a}Base R is about 100 times slower than {fio} and {leontief} functions.</p>
+<div class="figure" style="text-align: center">
+<img src="figure/benchmark_a-1.png" alt="\label{fig:benchmark_a}{fio} is about 150 times faster than base R." width="100%" />
+<p class="caption">\label{fig:benchmark_a}{fio} is about 150 times faster than base R.</p>
 </div>
 
 ## Leontief inverse matrix
@@ -398,10 +92,10 @@ When we're talking about inverting a $2000 \times 2000$ there's a lot more work 
 
 $$B = I - A$$
 
-It allows for solving the linear system through LU decomposition, which is a more efficient method than the direct inverse matrix calculation. `{fio}` takes advantage of LU decomposition and becomes incredibly faster, while `{leontief}` is about 18 times slower, followed closed by the 20 times slower base R implementation. 
+It allows for solving the linear system through LU decomposition, which is a more efficient method than the direct inverse matrix calculation. `{fio}` takes advantage of LU decomposition and becomes incredibly faster, while `{leontief}` is over 15 times slower, followed closed by the base R implementation. 
 
 
-``` r
+```r
 # data
 iom_fio$compute_tech_coeff()
 technical_coefficients_matrix <- iom_fio$technical_coefficients_matrix
@@ -420,324 +114,125 @@ benchmark_b <- microbenchmark::microbenchmark(
   leontief = leontief::leontief_inverse(technical_coefficients_matrix),
   times = 100
 )
-
-knitr::kable(benchmark_b)
-```
-
-
-
-|expr     |       time|
-|:--------|----------:|
-|fio      |  330934754|
-|fio      |  261696488|
-|fio      |  258383846|
-|leontief | 5890022326|
-|Base R   | 6581035422|
-|leontief | 5619190642|
-|Base R   | 6321813702|
-|Base R   | 6350548694|
-|fio      |  328557474|
-|fio      |  262850315|
-|fio      |  273103955|
-|leontief | 5892557191|
-|fio      |  307856600|
-|fio      |  310609694|
-|Base R   | 6842956299|
-|fio      |  324976895|
-|leontief | 5719085706|
-|fio      |  250301719|
-|leontief | 5659803968|
-|fio      |  266239208|
-|fio      |  278945209|
-|leontief | 5638500870|
-|leontief | 5631859733|
-|fio      |  250820953|
-|leontief | 5662437699|
-|fio      |  298886404|
-|leontief | 5706544672|
-|fio      |  253980971|
-|fio      |  269193445|
-|Base R   | 6460690298|
-|Base R   | 6441873934|
-|Base R   | 6493805768|
-|fio      |  283356753|
-|Base R   | 6432825334|
-|leontief | 5667491025|
-|leontief | 5682795484|
-|fio      |  252255608|
-|leontief | 5643212817|
-|fio      |  296528469|
-|fio      |  291439799|
-|leontief | 5682331760|
-|leontief | 5669696629|
-|fio      |  265778100|
-|leontief | 5680256992|
-|leontief | 5676301481|
-|fio      |  313080806|
-|Base R   | 6504972193|
-|leontief | 5645455893|
-|Base R   | 6424135136|
-|fio      |  323301631|
-|leontief | 5634274278|
-|leontief | 5706171616|
-|fio      |  327311123|
-|leontief | 5922840081|
-|Base R   | 6578439150|
-|Base R   | 6784173360|
-|leontief | 5805599367|
-|leontief | 5695360596|
-|Base R   | 6741819133|
-|leontief | 5679246217|
-|Base R   | 6463325378|
-|leontief | 5738490683|
-|leontief | 5655837232|
-|fio      |  277779718|
-|fio      |  269768102|
-|Base R   | 6499152334|
-|fio      |  352073737|
-|fio      |  250118682|
-|fio      |  250169523|
-|fio      |  263135599|
-|Base R   | 6555192389|
-|Base R   | 6584767340|
-|Base R   | 6666357557|
-|leontief | 5924132892|
-|fio      |  279833978|
-|leontief | 5627737087|
-|fio      |  273515297|
-|fio      |  258164255|
-|leontief | 5619006623|
-|Base R   | 6794648606|
-|Base R   | 6554310853|
-|Base R   | 6693815845|
-|fio      |  319094809|
-|leontief | 5989208270|
-|leontief | 6106240353|
-|leontief | 5779618819|
-|fio      |  302213099|
-|leontief | 5681840657|
-|fio      |  322819780|
-|leontief | 5750168936|
-|Base R   | 6700353524|
-|fio      |  312464072|
-|Base R   | 6592162376|
-|Base R   | 6458889498|
-|leontief | 5700307449|
-|fio      |  291222707|
-|leontief | 5948689934|
-|leontief | 5782167493|
-|fio      |  340890909|
-|leontief | 5706405215|
-|Base R   | 6472962429|
-|leontief | 5734317929|
-|fio      |  362074035|
-|fio      |  251057067|
-|leontief | 5767884490|
-|leontief | 5907325006|
-|leontief | 5681956452|
-|leontief | 5614626918|
-|fio      |  276558207|
-|Base R   | 6408789067|
-|leontief | 5619939202|
-|Base R   | 6371871275|
-|fio      |  245338436|
-|Base R   | 6345003920|
-|fio      |  247902882|
-|fio      |  277865065|
-|leontief | 5596058140|
-|Base R   | 6341265668|
-|fio      |  269488676|
-|Base R   | 6351393663|
-|leontief | 5595414557|
-|Base R   | 6349178348|
-|fio      |  305397306|
-|Base R   | 6376469127|
-|fio      |  292160354|
-|fio      |  282613887|
-|leontief | 5611285680|
-|leontief | 5623901885|
-|leontief | 5608847406|
-|Base R   | 6350028236|
-|leontief | 5642203706|
-|leontief | 5621573969|
-|leontief | 5631522788|
-|leontief | 5620445674|
-|Base R   | 6413078397|
-|Base R   | 6362733864|
-|Base R   | 6324816901|
-|leontief | 5633632165|
-|Base R   | 6349813592|
-|fio      |  291661959|
-|Base R   | 6374907895|
-|fio      |  318400205|
-|Base R   | 6362793744|
-|fio      |  322894942|
-|leontief | 5603713456|
-|fio      |  256508995|
-|Base R   | 6304500143|
-|Base R   | 6333679180|
-|fio      |  305483693|
-|fio      |  320802229|
-|fio      |  286691014|
-|Base R   | 6359869641|
-|fio      |  382924037|
-|Base R   | 6339410449|
-|leontief | 5578491947|
-|Base R   | 6301399060|
-|leontief | 5582619021|
-|Base R   | 6301656650|
-|fio      |  299273234|
-|fio      |  280599686|
-|fio      |  256354016|
-|Base R   | 6336422402|
-|Base R   | 6329412356|
-|Base R   | 6330339804|
-|leontief | 5620589307|
-|fio      |  288261926|
-|leontief | 5637215965|
-|Base R   | 6338997878|
-|leontief | 5601069871|
-|Base R   | 6317379525|
-|fio      |  307318922|
-|Base R   | 6344410913|
-|Base R   | 6385185834|
-|Base R   | 6313754653|
-|leontief | 5591908230|
-|leontief | 5603035839|
-|leontief | 5626409035|
-|leontief | 5611858715|
-|Base R   | 6378998624|
-|leontief | 5599107521|
-|leontief | 5595068424|
-|leontief | 5595657297|
-|leontief | 5607996865|
-|leontief | 5602229149|
-|leontief | 5592193646|
-|fio      |  257383855|
-|fio      |  260349162|
-|Base R   | 6309990912|
-|fio      |  335355717|
-|fio      |  304819861|
-|leontief | 5589034708|
-|leontief | 5583054115|
-|Base R   | 6327261188|
-|leontief | 5583644897|
-|leontief | 5587827099|
-|Base R   | 6288631130|
-|Base R   | 6299091015|
-|fio      |  276874557|
-|leontief | 5573729478|
-|leontief | 5590335987|
-|Base R   | 6310865880|
-|fio      |  286411567|
-|fio      |  299440521|
-|leontief | 5603321671|
-|leontief | 5616380761|
-|Base R   | 6352970713|
-|fio      |  300202330|
-|Base R   | 6324676557|
-|leontief | 5589839729|
-|Base R   | 6338451591|
-|Base R   | 6316568709|
-|leontief | 5595402285|
-|fio      |  332153552|
-|Base R   | 6317706845|
-|fio      |  315024546|
-|Base R   | 6326983680|
-|Base R   | 6332864942|
-|Base R   | 6423463919|
-|leontief | 5623922196|
-|fio      |  255886850|
-|Base R   | 6323541631|
-|Base R   | 6316022459|
-|leontief | 5595392091|
-|Base R   | 6311999317|
-|Base R   | 6331557400|
-|Base R   | 6293381473|
-|fio      |  289850520|
-|leontief | 5588267239|
-|fio      |  323721799|
-|Base R   | 6363630752|
-|fio      |  341717283|
-|leontief | 5658115674|
-|Base R   | 6443477721|
-|leontief | 5608344866|
-|leontief | 5605213229|
-|Base R   | 6304586523|
-|leontief | 5595204858|
-|Base R   | 6304611484|
-|leontief | 5599931217|
-|fio      |  292576982|
-|fio      |  287639151|
-|leontief | 5590246614|
-|fio      |  259388126|
-|Base R   | 6320294750|
-|leontief | 5629806687|
-|fio      |  304810517|
-|fio      |  320968039|
-|fio      |  317577176|
-|Base R   | 6353292683|
-|fio      |  320681328|
-|fio      |  262662147|
-|leontief | 5596921183|
-|Base R   | 6314369245|
-|leontief | 5598638622|
-|Base R   | 6299879729|
-|fio      |  321323825|
-|fio      |  303710722|
-|Base R   | 6338239541|
-|fio      |  291049058|
-|Base R   | 6289605809|
-|fio      |  310183398|
-|Base R   | 6350022312|
-|leontief | 5690048265|
-|leontief | 5609579685|
-|leontief | 5612981907|
-|fio      |  246269452|
-|Base R   | 6310946181|
-|Base R   | 6320226627|
-|fio      |  299130388|
-|fio      |  278466969|
-|fio      |  246198544|
-|Base R   | 6342922834|
-|Base R   | 6369378236|
-|leontief | 5615655507|
-|Base R   | 6365351459|
-|fio      |  305640567|
-|Base R   | 6378288358|
-|Base R   | 6329333375|
-|fio      |  260324833|
-|leontief | 5588016927|
-|Base R   | 6302512540|
-|fio      |  261329297|
-|fio      |  277569825|
-|Base R   | 6346801029|
-|Base R   | 6311834671|
-|Base R   | 6328531114|
-|Base R   | 6332793585|
-|Base R   | 6335335375|
-|fio      |  276656150|
-|fio      |  263033831|
-|Base R   | 6324653160|
-|fio      |  279303651|
-|leontief | 5666850933|
-|Base R   | 6360469771|
-|Base R   | 6319873615|
-|leontief | 5606933565|
-|Base R   | 6340243063|
-|leontief | 5592252567|
-|leontief | 5609117354|
-|fio      |  243344667|
-
-
-
-``` r
+print(benchmark_b)
+#> Unit: milliseconds
+#>      expr       min        lq      mean    median        uq        max neval
+#>       fio  336.4356  359.0604  425.3856  369.3041  439.1001   887.2124   100
+#>    Base R 5974.8137 6417.0423 7177.0537 6740.9307 7434.9085 11547.6926   100
+#>  leontief 5276.7533 5684.3753 6467.1024 5979.7183 7139.3473  9922.3665   100
 
 # plot
 ggplot2::autoplot(benchmark_b)
 ```
 
-<div class="figure">
-<img src="figure/benchmark_b-1.png" alt="\label{fig:figs} {fio} is about 20 times faster than {leontief} and base R functions." width="100%" />
-<p class="caption">\label{fig:figs} {fio} is about 20 times faster than {leontief} and base R functions.</p>
+<div class="figure" style="text-align: center">
+<img src="figure/benchmark_b-1.png" alt="\label{fig:figs} {fio} is about 15 times faster than {leontief} and base R functions." width="100%" />
+<p class="caption">\label{fig:figs} {fio} is about 15 times faster than {leontief} and base R functions.</p>
+</div>
+
+## Sensitivity of dispersion coefficients of variation
+
+To represent linkage-based functions performance, we compute benchmark for sensitivity of dispersion coefficients of variation. All 3 implementations executes almost instantaneously, with `{fio}` being slightly slower than `{leontief}` and base R functions. 
+
+
+```r
+# data
+iom_fio$compute_leontief_inverse()
+leontief_inverse_matrix <- iom_fio$leontief_inverse_matrix
+
+# base R function
+sensitivity_r <- function(B) {
+  n <- nrow(B)
+  SL = rowSums(B)
+  ML = SL / n
+  (((1 / (n - 1)) * (colSums((B - ML) ** 2))) ** 0.5) / ML
+}
+
+# benchmark
+benchmark_c <- microbenchmark::microbenchmark(
+  fio = fio:::compute_sensitivity_dispersion_cv(leontief_inverse_matrix),
+  `Base R` = sensitivity_r(leontief_inverse_matrix),
+  leontief = leontief::sensitivity_dispersion_cv(leontief_inverse_matrix),
+  times = 100
+)
+print(benchmark_c)
+#> Unit: milliseconds
+#>      expr      min       lq     mean   median       uq      max neval
+#>       fio 30.32855 31.01540 32.90370 32.44143 33.50784 40.18426   100
+#>    Base R 26.28076 28.08561 31.80958 30.99112 33.87897 47.11353   100
+#>  leontief 21.92668 22.27473 25.30608 23.00760 28.76792 35.92875   100
+ggplot2::autoplot(benchmark_c)
+```
+
+<div class="figure" style="text-align: center">
+<img src="figure/benchmark_c-1.png" alt="\label{fig:benchmark_c} {fio} is about 15 milliseconds slower than {leontief} and 2 milliseconds slower than base R functions." width="100%" />
+<p class="caption">\label{fig:benchmark_c} {fio} is about 15 milliseconds slower than {leontief} and 2 milliseconds slower than base R functions.</p>
+</div>
+
+# Field of influence
+
+Since field of influence involves computing Leontief inverse matrix for each element of technical coefficients matrix after an increment, it can be demanding for high dimensional matrices. Here, we evaluate benchmark for base R function and {fio}, since there's no similiar function in {leontief}. For brevity, we cut dimensions to 100 and repetitions to 10.
+
+{fio} is, again, much faster than base R, even for small matrices. Note that for larger matrices, that difference would greatly increase. 
+
+```r
+# data
+matrix_dim <- 100
+intermediate_transactions <- matrix(
+  as.double(sample(1:1000, matrix_dim^2, replace = TRUE)),
+  nrow = matrix_dim,
+  ncol = matrix_dim
+)
+total_production <- matrix(
+  as.double(sample(4000000:6000000, matrix_dim, replace = TRUE)),
+  nrow = 1,
+  ncol = matrix_dim
+)
+iom_fio_reduced <- fio::iom$new(
+  "iom_reduced",
+  intermediate_transactions,
+  total_production
+)$compute_tech_coeff()$compute_leontief_inverse()
+
+# base R function
+field_influence_r <- function(A, B, ee = 0.001) {
+  n = nrow(A)
+  I = diag(n)
+  E = matrix(0, ncol = n, nrow = n)
+  SI = matrix(0, ncol = n, nrow = n)
+  for (i in 1:n) {
+    for (j in 1:n) {
+      E[i, j] = ee
+      AE = A + E
+      BE = solve(I - AE)
+      FE = (BE - B) / ee
+      FEq = FE * FE
+      S = sum(FEq)
+      SI[i, j] = S
+      E[i, j] = 0
+    }
+  }
+}
+
+# benchmark
+benchmark_d <- microbenchmark::microbenchmark(
+  fio = fio:::compute_field_influence(
+    iom_fio_reduced$technical_coefficients_matrix,
+    iom_fio_reduced$leontief_inverse_matrix,
+    0.001
+  ),
+  `Base R` = field_influence_r(iom_fio_reduced$technical_coefficients_matrix, iom_fio_reduced$leontief_inverse_matrix),
+  times = 10
+)
+print(benchmark_d)
+#> Unit: seconds
+#>    expr      min        lq      mean    median        uq       max neval
+#>     fio 3.347394  3.642878  3.722057  3.750987  3.840492  4.155258    10
+#>  Base R 9.961029 10.220498 10.760557 10.750220 11.168054 12.060539    10
+ggplot2::autoplot(benchmark_d)
+```
+
+<div class="figure" style="text-align: center">
+<img src="figure/benchmark_d-1.png" alt="\label{fig:benchmark_d} {fio} is the best option for input-output analysis when matrix inversion is needed." width="100%" />
+<p class="caption">\label{fig:benchmark_d} {fio} is the best option for input-output analysis when matrix inversion is needed.</p>
 </div>

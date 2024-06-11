@@ -145,11 +145,13 @@ ggplot2::autoplot(benchmark_c)
 
 # Field of influence
 
-Since field of influence involves computing Leontief inverse matrix for each element of technical coefficients matrix after an increment, it can be demanding for high dimensional matrices. Here, we evaluate benchmark for base R function and {fio}, since there's no similiar function in {leontief}. For brevity, we cut dimensions to half and repetitions to 10.
+Since field of influence involves computing Leontief inverse matrix for each element of technical coefficients matrix after an increment, it can be demanding for high dimensional matrices. Here, we evaluate benchmark for base R function and {fio}, since there's no similiar function in {leontief}. For brevity, we cut dimensions to 100 and repetitions to 10.
+
+{fio} is, again, much faster than base R, even for small matrices. Note that for larger matrices, that difference would greatly increase. 
 
 ```{r benchmark_d, fig.cap="\\label{fig:benchmark_d} {fio} is the best option for input-output analysis when matrix inversion is needed."}
 # data
-matrix_dim <- 1000
+matrix_dim <- 100
 intermediate_transactions <- matrix(
   as.double(sample(1:1000, matrix_dim^2, replace = TRUE)),
   nrow = matrix_dim,
