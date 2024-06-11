@@ -118,9 +118,10 @@ benchmarking analysis are dependent on the specific test datasets used
 and the hardware on which the algorithms were run. Therefore, the
 results should be interpreted in the context of these specific
 conditions.</p>
-<div class="section level3">
-<h3 id="technical-coefficients-matrix">Technical coefficients matrix<a class="anchor" aria-label="anchor" href="#technical-coefficients-matrix"></a>
-</h3>
+</div>
+<div class="section level2">
+<h2 id="technical-coefficients-matrix">Technical coefficients matrix<a class="anchor" aria-label="anchor" href="#technical-coefficients-matrix"></a>
+</h2>
 <p>The technical coefficients matrix calculation, a key and initial step
 in input-output analysis, was tested using the
 <code><a href="../reference/compute_tech_coeff.html">compute_tech_coeff()</a></code> function from the <a href="https://albersonmiranda.github.io/fio/">fio</a>
@@ -179,9 +180,9 @@ Base R is about 100 times slower than {fio} and {leontief} functions.
 </p>
 </div>
 </div>
-<div class="section level3">
-<h3 id="leontief-inverse-matrix">Leontief inverse matrix<a class="anchor" aria-label="anchor" href="#leontief-inverse-matrix"></a>
-</h3>
+<div class="section level2">
+<h2 id="leontief-inverse-matrix">Leontief inverse matrix<a class="anchor" aria-label="anchor" href="#leontief-inverse-matrix"></a>
+</h2>
 <p>When we’re talking about inverting a <span class="math inline">\(2000
 \times 2000\)</span> there’s a lot more work involved. Leontief matrix
 (<span class="math inline">\(B\)</span>) is obtained from subtracting
@@ -228,9 +229,9 @@ implementation.</p>
 </p>
 </div>
 </div>
-<div class="section level3">
-<h3 id="sensitivity-of-dispersion-coefficients-of-variation">Sensitivity of dispersion coefficients of variation<a class="anchor" aria-label="anchor" href="#sensitivity-of-dispersion-coefficients-of-variation"></a>
-</h3>
+<div class="section level2">
+<h2 id="sensitivity-of-dispersion-coefficients-of-variation">Sensitivity of dispersion coefficients of variation<a class="anchor" aria-label="anchor" href="#sensitivity-of-dispersion-coefficients-of-variation"></a>
+</h2>
 <p>To represent linkage-based functions performance, we compute
 benchmark for sensitivity of dispersion coefficients of variation. All 3
 implementations executes almost instantaneously, with <a href="https://albersonmiranda.github.io/fio/">fio</a>
@@ -268,7 +269,6 @@ functions.</p>
 {fio} is about 15 milliseconds slower than {leontief} and 2 milliseconds
 slower than base R functions.
 </p>
-</div>
 </div>
 </div>
 <div class="section level2">
