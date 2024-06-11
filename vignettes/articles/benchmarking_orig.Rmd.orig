@@ -1,5 +1,5 @@
 ---
-title: "benchmarking"
+title: "Benchmarking"
 output:
   html_document:
     toc: true
@@ -39,7 +39,7 @@ Our benchmarking tests, which involve running these functions repeatedely in sim
 
 The tests were run on a simulated $2000 \times 2000$ matrix, and each test was repeated 100 times to account for variability. Please note that the results of this benchmarking analysis are dependent on the specific test datasets used and the hardware on which the algorithms were run. Therefore, the results should be interpreted in the context of these specific conditions.
 
-## Technical coefficients matrix
+# Technical coefficients matrix
 
 The technical coefficients matrix calculation, a key and initial step in input-output analysis, was tested using the `compute_tech_coeff()` function from the `{fio}` package, equivalent functions from the `{leontief}` package, and a base R implementation. It consists on dividing each $a_{ij}$ element of intermediate transactions matrix by the correspondent $x_j$ element of total production vector^[Or in a equivalent way, multiplying intermediate transactions matrix by a diagonal matrix constructed from total production vector.]. The results show that both `{fio}` and `{leontief}` functions execute almost instantaneously, with `{fio}` slightly faster (about 5 milliseconds apart). In contrast, the base R implementation is about 150 times slower than `{fio}`.
 
@@ -82,7 +82,7 @@ print(benchmark_a)
 ggplot2::autoplot(benchmark_a)
 ```
 
-## Leontief inverse matrix
+# Leontief inverse matrix
 
 When we're talking about inverting a $2000 \times 2000$ there's a lot more work involved. Leontief matrix ($B$) is obtained from subtracting the technical coefficients matrix ($A$) from the identity matrix ($I$), therefore it has no null rows or columns. 
 
@@ -115,7 +115,7 @@ print(benchmark_b)
 ggplot2::autoplot(benchmark_b)
 ```
 
-## Sensitivity of dispersion coefficients of variation
+# Sensitivity of dispersion coefficients of variation
 
 To represent linkage-based functions performance, we compute benchmark for sensitivity of dispersion coefficients of variation. All 3 implementations executes almost instantaneously, with `{fio}` being slightly slower than `{leontief}` and base R functions. 
 
