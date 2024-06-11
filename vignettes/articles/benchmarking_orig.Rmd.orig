@@ -19,6 +19,7 @@ p.caption {
   font-size: 0.6em;
   text-align: "center";
 }
+</style>
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(

@@ -11,9 +11,11 @@ Friendly & Fast Input-Output Analysis
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/fio)](https://CRAN.R-project.org/package=fio)
 <!-- badges: end -->
-
-## Outline
 
 `{fio}` (*Friendly Input-Output*) is a R package for input-output
 analysis, focusing on two key aspects: ease of use for Excel users and
