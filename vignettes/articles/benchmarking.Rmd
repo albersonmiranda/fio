@@ -83,7 +83,7 @@ ggplot2::autoplot(benchmark_a)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_a-1.png" alt="\label{fig:benchmark_a}Base R is about 100 times slower than {fio} and {leontief} functions." width="100%" />
+<img src="figure/benchmark_a-1.png" alt="\label{fig:benchmark_a}Base R is about 100 times slower than {fio} and {leontief} functions." width="70%" />
 <p class="caption">\label{fig:benchmark_a}Base R is about 100 times slower than {fio} and {leontief} functions.</p>
 </div>
 
@@ -127,7 +127,7 @@ ggplot2::autoplot(benchmark_b)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_b-1.png" alt="\label{fig:figs} {fio} is about 20 times faster than {leontief} and base R functions." width="100%" />
+<img src="figure/benchmark_b-1.png" alt="\label{fig:figs} {fio} is about 20 times faster than {leontief} and base R functions." width="70%" />
 <p class="caption">\label{fig:figs} {fio} is about 20 times faster than {leontief} and base R functions.</p>
 </div>
 
@@ -166,7 +166,7 @@ ggplot2::autoplot(benchmark_c)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_c-1.png" alt="\label{fig:benchmark_c} {fio} is about 15 milliseconds slower than {leontief} and 2 milliseconds slower than base R functions." width="100%" />
+<img src="figure/benchmark_c-1.png" alt="\label{fig:benchmark_c} {fio} is about 15 milliseconds slower than {leontief} and 2 milliseconds slower than base R functions." width="70%" />
 <p class="caption">\label{fig:benchmark_c} {fio} is about 15 milliseconds slower than {leontief} and 2 milliseconds slower than base R functions.</p>
 </div>
 
@@ -233,6 +233,6 @@ ggplot2::autoplot(benchmark_d)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_d-1.png" alt="\label{fig:benchmark_d} {fio} is the best option for input-output analysis when matrix inversion is needed." width="100%" />
+<img src="figure/benchmark_d-1.png" alt="\label{fig:benchmark_d} {fio} is the best option for input-output analysis when matrix inversion is needed." width="70%" />
 <p class="caption">\label{fig:benchmark_d} {fio} is the best option for input-output analysis when matrix inversion is needed.</p>
 </div>
