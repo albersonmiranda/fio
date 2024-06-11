@@ -25,7 +25,6 @@ p.caption {
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  out.width = "100%",
   fig.align = "center"
 )
 ```
