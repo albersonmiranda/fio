@@ -86,9 +86,14 @@
     
     
 <style>
-<p>p.caption { font-size: 0.6em; text-align: “center”; }</p>
-<div id="introduction" class="section level1">
-<h1>Introduction</h1>
+p.caption {
+  font-size: 0.6em;
+  text-align: "center";
+}
+</style>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>This vignette presents a benchmarking analysis comparing the
 performance of functions from the <code>fio</code> package with
 equivalent base R functions. The <code>fio</code> package provides a set
@@ -113,210 +118,232 @@ benchmarking analysis are dependent on the specific test datasets used
 and the hardware on which the algorithms were run. Therefore, the
 results should be interpreted in the context of these specific
 conditions.</p>
-<div id="technical-coefficients-matrix" class="section level2">
-<h2>Technical coefficients matrix</h2>
+<div class="section level3">
+<h3 id="technical-coefficients-matrix">Technical coefficients matrix<a class="anchor" aria-label="anchor" href="#technical-coefficients-matrix"></a>
+</h3>
 <p>The technical coefficients matrix calculation, a key and initial step
 in input-output analysis, was tested using the
-<code>compute_tech_coeff()</code> function from the <code>{fio}</code>
-package, equivalent functions from the <code>{leontief}</code> package,
-and a base R implementation. It consists on dividing each <span
-class="math inline">\(a_{ij}\)</span> element of intermediate
-transactions matrix by the correspondent <span
-class="math inline">\(x_j\)</span> element of total production vector<a
-href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. The
-results show that both <code>{fio}</code> and <code>{leontief}</code>
-functions execute almost instantaneously, with <code>{fio}</code>
+<code><a href="../reference/compute_tech_coeff.html">compute_tech_coeff()</a></code> function from the <a href="https://albersonmiranda.github.io/fio/">fio</a>
+package, equivalent functions from the <a href="https://pachamaltese.github.io/leontief" class="external-link">leontief</a> package,
+and a base R implementation. It consists on dividing each <span class="math inline">\(a_{ij}\)</span> element of intermediate
+transactions matrix by the correspondent <span class="math inline">\(x_j\)</span> element of total production vector<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. The
+results show that both <a href="https://albersonmiranda.github.io/fio/">fio</a> and <a href="https://pachamaltese.github.io/leontief" class="external-link">leontief</a>
+functions execute almost instantaneously, with <a href="https://albersonmiranda.github.io/fio/">fio</a>
 slightly faster (about 5 milliseconds apart). In contrast, the base R
-implementation is about 150 times slower than <code>{fio}</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># set seed</span></span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">100</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co"># data</span></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>matrix_dim <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>intermediate_transactions <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="fu">as.double</span>(<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, matrix_dim<span class="sc">^</span><span class="dv">2</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  <span class="at">nrow =</span> matrix_dim,</span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>  <span class="at">ncol =</span> matrix_dim</span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>)</span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>total_production <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
-<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>  <span class="fu">as.double</span>(<span class="fu">sample</span>(<span class="dv">4000000</span><span class="sc">:</span><span class="dv">6000000</span>, matrix_dim, <span class="at">replace =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>  <span class="at">nrow =</span> <span class="dv">1</span>,</span>
-<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>  <span class="at">ncol =</span> matrix_dim</span>
-<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>)</span>
-<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="co"># Base R function</span></span>
-<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>tech_coeff_r <span class="ot">&lt;-</span> <span class="cf">function</span>(intermediate_transactions, total_production) {</span>
-<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>  tech_coeff_matrix <span class="ot">&lt;-</span> intermediate_transactions <span class="sc">%*%</span> <span class="fu">diag</span>(<span class="dv">1</span> <span class="sc">/</span> <span class="fu">as.vector</span>(total_production))</span>
-<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a>  <span class="fu">return</span>(tech_coeff_matrix)</span>
-<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a>}</span>
-<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a><span class="co"># {fio} setup</span></span>
-<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a>iom_fio <span class="ot">&lt;-</span> fio<span class="sc">::</span>iom<span class="sc">$</span><span class="fu">new</span>(<span class="st">&quot;iom&quot;</span>, intermediate_transactions, total_production)</span>
-<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a><span class="co">#&gt; Error in loadNamespace(x): there is no package called &#39;fio&#39;</span></span>
-<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a></span>
-<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a><span class="co"># benchmark</span></span>
-<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a>benchmark_a <span class="ot">&lt;-</span> microbenchmark<span class="sc">::</span><span class="fu">microbenchmark</span>(</span>
-<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a>  <span class="at">fio =</span> fio<span class="sc">:::</span><span class="fu">compute_tech_coeff</span>(intermediate_transactions, total_production),</span>
-<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a>  <span class="st">`</span><span class="at">Base R</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">tech_coeff_r</span>(intermediate_transactions, total_production),</span>
-<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a>  <span class="at">leontief =</span> leontief<span class="sc">::</span><span class="fu">input_requirement</span>(intermediate_transactions, total_production),</span>
-<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a>  <span class="at">times =</span> <span class="dv">100</span></span>
-<span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a>)</span>
-<span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a><span class="co">#&gt; Error in loadNamespace(x): there is no package called &#39;fio&#39;</span></span>
-<span id="cb1-35"><a href="#cb1-35" tabindex="-1"></a><span class="fu">print</span>(benchmark_a)</span>
-<span id="cb1-36"><a href="#cb1-36" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;benchmark_a&#39; not found</span></span>
-<span id="cb1-37"><a href="#cb1-37" tabindex="-1"></a></span>
-<span id="cb1-38"><a href="#cb1-38" tabindex="-1"></a><span class="co"># plot</span></span>
-<span id="cb1-39"><a href="#cb1-39" tabindex="-1"></a>ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(benchmark_a)</span>
-<span id="cb1-40"><a href="#cb1-40" tabindex="-1"></a><span class="co">#&gt; Error in loadNamespace(x): there is no package called &#39;ggplot2&#39;</span></span></code></pre></div>
+implementation is about 150 times slower than <a href="https://albersonmiranda.github.io/fio/">fio</a>.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># set seed</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># data</span></span>
+<span><span class="va">matrix_dim</span> <span class="op">&lt;-</span> <span class="fl">2000</span></span>
+<span><span class="va">intermediate_transactions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>, <span class="va">matrix_dim</span><span class="op">^</span><span class="fl">2</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  nrow <span class="op">=</span> <span class="va">matrix_dim</span>,</span>
+<span>  ncol <span class="op">=</span> <span class="va">matrix_dim</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">total_production</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">4000000</span><span class="op">:</span><span class="fl">6000000</span>, <span class="va">matrix_dim</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  nrow <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  ncol <span class="op">=</span> <span class="va">matrix_dim</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Base R function</span></span>
+<span><span class="va">tech_coeff_r</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">tech_coeff_matrix</span> <span class="op">&lt;-</span> <span class="va">intermediate_transactions</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">total_production</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">tech_coeff_matrix</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># {fio} setup</span></span>
+<span><span class="va">iom_fio</span> <span class="op">&lt;-</span> <span class="fu">fio</span><span class="fu">::</span><span class="va"><a href="../reference/iom.html">iom</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">"iom"</span>, <span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># benchmark</span></span>
+<span><span class="va">benchmark_a</span> <span class="op">&lt;-</span> <span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html" class="external-link">microbenchmark</a></span><span class="op">(</span></span>
+<span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu"><a href="../reference/compute_tech_coeff.html">compute_tech_coeff</a></span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span>,</span>
+<span>  `Base R` <span class="op">=</span> <span class="fu">tech_coeff_r</span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span>,</span>
+<span>  leontief <span class="op">=</span> <span class="fu">leontief</span><span class="fu">::</span><span class="fu"><a href="https://pachamaltese.github.io/leontief/reference/input_requirement.html" class="external-link">input_requirement</a></span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span>,</span>
+<span>  times <span class="op">=</span> <span class="fl">100</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_a</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Unit: milliseconds</span></span>
+<span><span class="co">#&gt;      expr        min         lq       mean     median         uq        max neval</span></span>
+<span><span class="co">#&gt;       fio   19.79948   27.52306   32.46416   30.59574   35.91537   89.63771   100</span></span>
+<span><span class="co">#&gt;    Base R 5397.60696 5871.49346 6400.70644 6236.49741 7004.75749 7892.10966   100</span></span>
+<span><span class="co">#&gt;  leontief   25.69267   33.26089   40.73125   38.84038   44.42781  112.25745   100</span></span>
+<span></span>
+<span><span class="co"># plot</span></span>
+<span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">benchmark_a</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="figure/benchmark_a-1.png" alt="\label{fig:benchmark_a}Base R is about 100 times slower than {fio} and {leontief} functions." width="100%"><p class="caption">
+Base R is about 100 times slower than {fio} and {leontief} functions.
+</p>
 </div>
-<div id="leontief-inverse-matrix" class="section level2">
-<h2>Leontief inverse matrix</h2>
+</div>
+<div class="section level3">
+<h3 id="leontief-inverse-matrix">Leontief inverse matrix<a class="anchor" aria-label="anchor" href="#leontief-inverse-matrix"></a>
+</h3>
 <p>When we’re talking about inverting a <span class="math inline">\(2000
 \times 2000\)</span> there’s a lot more work involved. Leontief matrix
 (<span class="math inline">\(B\)</span>) is obtained from subtracting
-the technical coefficients matrix (<span
-class="math inline">\(A\)</span>) from the identity matrix (<span
-class="math inline">\(I\)</span>), therefore it has no null rows or
+the technical coefficients matrix (<span class="math inline">\(A\)</span>) from the identity matrix (<span class="math inline">\(I\)</span>), therefore it has no null rows or
 columns.</p>
 <p><span class="math display">\[B = I - A\]</span></p>
 <p>It allows for solving the linear system through LU decomposition,
 which is a more efficient method than the direct inverse matrix
-calculation. <code>{fio}</code> takes advantage of LU decomposition and
-becomes incredibly faster, while <code>{leontief}</code> is over 10
+calculation. <a href="https://albersonmiranda.github.io/fio/">fio</a> takes advantage of LU decomposition and
+becomes incredibly faster, while <a href="https://pachamaltese.github.io/leontief" class="external-link">leontief</a> is over 10
 times slower, followed closed by the over 20 times slower base R
 implementation.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># data</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>iom_fio<span class="sc">$</span><span class="fu">compute_tech_coeff</span>()</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;iom_fio&#39; not found</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>technical_coefficients_matrix <span class="ot">&lt;-</span> iom_fio<span class="sc">$</span>technical_coefficients_matrix</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;iom_fio&#39; not found</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co"># base R function</span></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>leontief_inverse_r <span class="ot">&lt;-</span> <span class="cf">function</span>(technical_coefficients_matrix) {</span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  dim <span class="ot">&lt;-</span> <span class="fu">nrow</span>(technical_coefficients_matrix)</span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  leontief_inverse_matrix <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">diag</span>(dim) <span class="sc">-</span> technical_coefficients_matrix)</span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>  <span class="fu">return</span>(leontief_inverse_matrix)</span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>}</span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co"># benchmark</span></span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>benchmark_b <span class="ot">&lt;-</span> microbenchmark<span class="sc">::</span><span class="fu">microbenchmark</span>(</span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  <span class="at">fio =</span> fio<span class="sc">:::</span><span class="fu">compute_leontief_inverse</span>(technical_coefficients_matrix),</span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>  <span class="st">`</span><span class="at">Base R</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">leontief_inverse_r</span>(technical_coefficients_matrix),</span>
-<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>  <span class="at">leontief =</span> leontief<span class="sc">::</span><span class="fu">leontief_inverse</span>(technical_coefficients_matrix),</span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>  <span class="at">times =</span> <span class="dv">100</span></span>
-<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>)</span>
-<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="co">#&gt; Error in loadNamespace(x): there is no package called &#39;fio&#39;</span></span>
-<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="fu">print</span>(benchmark_b)</span>
-<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;benchmark_b&#39; not found</span></span>
-<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a></span>
-<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="co"># plot</span></span>
-<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a>ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(benchmark_b)</span>
-<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="co">#&gt; Error in loadNamespace(x): there is no package called &#39;ggplot2&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># data</span></span>
+<span><span class="va">iom_fio</span><span class="op">$</span><span class="fu">compute_tech_coeff</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">technical_coefficients_matrix</span> <span class="op">&lt;-</span> <span class="va">iom_fio</span><span class="op">$</span><span class="va">technical_coefficients_matrix</span></span>
+<span></span>
+<span><span class="co"># base R function</span></span>
+<span><span class="va">leontief_inverse_r</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">dim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span></span>
+<span>  <span class="va">leontief_inverse_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/solve.html" class="external-link">solve</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">dim</span><span class="op">)</span> <span class="op">-</span> <span class="va">technical_coefficients_matrix</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">leontief_inverse_matrix</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># benchmark</span></span>
+<span><span class="va">benchmark_b</span> <span class="op">&lt;-</span> <span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html" class="external-link">microbenchmark</a></span><span class="op">(</span></span>
+<span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu"><a href="../reference/compute_leontief_inverse.html">compute_leontief_inverse</a></span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span>,</span>
+<span>  `Base R` <span class="op">=</span> <span class="fu">leontief_inverse_r</span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span>,</span>
+<span>  leontief <span class="op">=</span> <span class="fu">leontief</span><span class="fu">::</span><span class="fu"><a href="https://pachamaltese.github.io/leontief/reference/leontief_inverse.html" class="external-link">leontief_inverse</a></span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span>,</span>
+<span>  times <span class="op">=</span> <span class="fl">100</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_b</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Unit: milliseconds</span></span>
+<span><span class="co">#&gt;      expr       min        lq      mean    median        uq      max neval</span></span>
+<span><span class="co">#&gt;       fio  247.3609  285.6822  312.9184  301.5624  329.7859  543.802   100</span></span>
+<span><span class="co">#&gt;    Base R 5177.8100 5531.5195 5700.7660 5596.1821 5722.3004 7489.067   100</span></span>
+<span><span class="co">#&gt;  leontief 4671.1566 4970.6219 5143.4911 5065.7830 5216.6950 6979.434   100</span></span>
+<span></span>
+<span><span class="co"># plot</span></span>
+<span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">benchmark_b</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="figure/benchmark_b-1.png" alt="\label{fig:figs} {fio} is about 20 times faster than {leontief} and base R functions." width="100%"><p class="caption">
+{fio} is about 20 times faster than {leontief} and base R functions.
+</p>
 </div>
-<div id="sensitivity-of-dispersion-coefficients-of-variation"
-class="section level2">
-<h2>Sensitivity of dispersion coefficients of variation</h2>
+</div>
+<div class="section level3">
+<h3 id="sensitivity-of-dispersion-coefficients-of-variation">Sensitivity of dispersion coefficients of variation<a class="anchor" aria-label="anchor" href="#sensitivity-of-dispersion-coefficients-of-variation"></a>
+</h3>
 <p>To represent linkage-based functions performance, we compute
 benchmark for sensitivity of dispersion coefficients of variation. All 3
-implementations executes almost instantaneously, with <code>{fio}</code>
-being slightly slower than <code>{leontief}</code> and base R
+implementations executes almost instantaneously, with <a href="https://albersonmiranda.github.io/fio/">fio</a>
+being slightly slower than <a href="https://pachamaltese.github.io/leontief" class="external-link">leontief</a> and base R
 functions.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># data</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>iom_fio<span class="sc">$</span><span class="fu">compute_leontief_inverse</span>()</span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;iom_fio&#39; not found</span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>leontief_inverse_matrix <span class="ot">&lt;-</span> iom_fio<span class="sc">$</span>leontief_inverse_matrix</span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;iom_fio&#39; not found</span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co"># base R function</span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>sensitivity_r <span class="ot">&lt;-</span> <span class="cf">function</span>(B) {</span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(B)</span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>  SL <span class="ot">=</span> <span class="fu">rowSums</span>(B)</span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>  ML <span class="ot">=</span> SL <span class="sc">/</span> n</span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>  (((<span class="dv">1</span> <span class="sc">/</span> (n <span class="sc">-</span> <span class="dv">1</span>)) <span class="sc">*</span> (<span class="fu">colSums</span>((B <span class="sc">-</span> ML) <span class="sc">**</span> <span class="dv">2</span>))) <span class="sc">**</span> <span class="fl">0.5</span>) <span class="sc">/</span> ML</span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>}</span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a></span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co"># benchmark</span></span>
-<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>benchmark_c <span class="ot">&lt;-</span> microbenchmark<span class="sc">::</span><span class="fu">microbenchmark</span>(</span>
-<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>  <span class="at">fio =</span> fio<span class="sc">:::</span><span class="fu">compute_sensitivity_dispersion_cv</span>(leontief_inverse_matrix),</span>
-<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>  <span class="st">`</span><span class="at">Base R</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sensitivity_r</span>(leontief_inverse_matrix),</span>
-<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>  <span class="at">leontief =</span> leontief<span class="sc">::</span><span class="fu">sensitivity_dispersion_cv</span>(leontief_inverse_matrix),</span>
-<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>  <span class="at">times =</span> <span class="dv">100</span></span>
-<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>)</span>
-<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;leontief_inverse_matrix&#39; not found</span></span>
-<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="fu">print</span>(benchmark_c)</span>
-<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;benchmark_c&#39; not found</span></span>
-<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a>ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(benchmark_c)</span>
-<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="co">#&gt; Error in loadNamespace(x): there is no package called &#39;ggplot2&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># data</span></span>
+<span><span class="va">iom_fio</span><span class="op">$</span><span class="fu">compute_leontief_inverse</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">leontief_inverse_matrix</span> <span class="op">&lt;-</span> <span class="va">iom_fio</span><span class="op">$</span><span class="va">leontief_inverse_matrix</span></span>
+<span></span>
+<span><span class="co"># base R function</span></span>
+<span><span class="va">sensitivity_r</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">B</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">B</span><span class="op">)</span></span>
+<span>  <span class="va">SL</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">B</span><span class="op">)</span></span>
+<span>  <span class="va">ML</span> <span class="op">=</span> <span class="va">SL</span> <span class="op">/</span> <span class="va">n</span></span>
+<span>  <span class="op">(</span><span class="op">(</span><span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="va">n</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="op">(</span><span class="va">B</span> <span class="op">-</span> <span class="va">ML</span><span class="op">)</span> <span class="op">**</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">**</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">/</span> <span class="va">ML</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># benchmark</span></span>
+<span><span class="va">benchmark_c</span> <span class="op">&lt;-</span> <span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html" class="external-link">microbenchmark</a></span><span class="op">(</span></span>
+<span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu"><a href="../reference/compute_sensitivity_dispersion_cv.html">compute_sensitivity_dispersion_cv</a></span><span class="op">(</span><span class="va">leontief_inverse_matrix</span><span class="op">)</span>,</span>
+<span>  `Base R` <span class="op">=</span> <span class="fu">sensitivity_r</span><span class="op">(</span><span class="va">leontief_inverse_matrix</span><span class="op">)</span>,</span>
+<span>  leontief <span class="op">=</span> <span class="fu">leontief</span><span class="fu">::</span><span class="fu"><a href="https://pachamaltese.github.io/leontief/reference/sensitivity_dispersion_cv.html" class="external-link">sensitivity_dispersion_cv</a></span><span class="op">(</span><span class="va">leontief_inverse_matrix</span><span class="op">)</span>,</span>
+<span>  times <span class="op">=</span> <span class="fl">100</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_c</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Unit: milliseconds</span></span>
+<span><span class="co">#&gt;      expr      min       lq     mean   median       uq      max neval</span></span>
+<span><span class="co">#&gt;       fio 18.84368 19.14402 20.55910 19.33092 21.95244 25.82193   100</span></span>
+<span><span class="co">#&gt;    Base R 20.70250 21.81017 23.14538 22.41280 24.08331 34.13879   100</span></span>
+<span><span class="co">#&gt;  leontief 14.07486 14.33243 14.60074 14.44927 14.58205 21.89314   100</span></span>
+<span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">benchmark_c</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="figure/benchmark_c-1.png" alt="\label{fig:benchmark_c} {fio} is about 15 milliseconds slower than {leontief} and 2 milliseconds slower than base R functions." width="100%"><p class="caption">
+{fio} is about 15 milliseconds slower than {leontief} and 2 milliseconds
+slower than base R functions.
+</p>
 </div>
 </div>
-<div id="field-of-influence" class="section level1">
-<h1>Field of influence</h1>
+</div>
+<div class="section level2">
+<h2 id="field-of-influence">Field of influence<a class="anchor" aria-label="anchor" href="#field-of-influence"></a>
+</h2>
 <p>Since field of influence involves computing Leontief inverse matrix
 for each element of technical coefficients matrix after an increment, it
 can be demanding for high dimensional matrices. Here, we evaluate
 benchmark for base R function and {fio}, since there’s no similiar
 function in {leontief}. For brevity, we cut dimensions to 100 and
 repetitions to 10.</p>
-<p>{fio} is, again, much faster than base R, even for small matrices.
-Note that for larger matrices, that difference would greatly
-increase.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># data</span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>matrix_dim <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>intermediate_transactions <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="fu">as.double</span>(<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, matrix_dim<span class="sc">^</span><span class="dv">2</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="at">nrow =</span> matrix_dim,</span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="at">ncol =</span> matrix_dim</span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>)</span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>total_production <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  <span class="fu">as.double</span>(<span class="fu">sample</span>(<span class="dv">4000000</span><span class="sc">:</span><span class="dv">6000000</span>, matrix_dim, <span class="at">replace =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>  <span class="at">nrow =</span> <span class="dv">1</span>,</span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>  <span class="at">ncol =</span> matrix_dim</span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>)</span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>iom_fio_reduced <span class="ot">&lt;-</span> fio<span class="sc">::</span>iom<span class="sc">$</span><span class="fu">new</span>(</span>
-<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>  <span class="st">&quot;iom_reduced&quot;</span>,</span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>  intermediate_transactions,</span>
-<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>  total_production</span>
-<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>)<span class="sc">$</span><span class="fu">compute_tech_coeff</span>()<span class="sc">$</span><span class="fu">compute_leontief_inverse</span>()</span>
-<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt; Error in loadNamespace(x): there is no package called &#39;fio&#39;</span></span>
-<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a></span>
-<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co"># base R function</span></span>
-<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>field_influence_r <span class="ot">&lt;-</span> <span class="cf">function</span>(A, B, <span class="at">ee =</span> <span class="fl">0.001</span>) {</span>
-<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>  n <span class="ot">=</span> <span class="fu">nrow</span>(A)</span>
-<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a>  I <span class="ot">=</span> <span class="fu">diag</span>(n)</span>
-<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a>  E <span class="ot">=</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">ncol =</span> n, <span class="at">nrow =</span> n)</span>
-<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a>  SI <span class="ot">=</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">ncol =</span> n, <span class="at">nrow =</span> n)</span>
-<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
-<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
-<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a>      E[i, j] <span class="ot">=</span> ee</span>
-<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a>      AE <span class="ot">=</span> A <span class="sc">+</span> E</span>
-<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a>      BE <span class="ot">=</span> <span class="fu">solve</span>(I <span class="sc">-</span> AE)</span>
-<span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a>      FE <span class="ot">=</span> (BE <span class="sc">-</span> B) <span class="sc">/</span> ee</span>
-<span id="cb4-32"><a href="#cb4-32" tabindex="-1"></a>      FEq <span class="ot">=</span> FE <span class="sc">*</span> FE</span>
-<span id="cb4-33"><a href="#cb4-33" tabindex="-1"></a>      S <span class="ot">=</span> <span class="fu">sum</span>(FEq)</span>
-<span id="cb4-34"><a href="#cb4-34" tabindex="-1"></a>      SI[i, j] <span class="ot">=</span> S</span>
-<span id="cb4-35"><a href="#cb4-35" tabindex="-1"></a>      E[i, j] <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb4-36"><a href="#cb4-36" tabindex="-1"></a>    }</span>
-<span id="cb4-37"><a href="#cb4-37" tabindex="-1"></a>  }</span>
-<span id="cb4-38"><a href="#cb4-38" tabindex="-1"></a>}</span>
-<span id="cb4-39"><a href="#cb4-39" tabindex="-1"></a></span>
-<span id="cb4-40"><a href="#cb4-40" tabindex="-1"></a><span class="co"># benchmark</span></span>
-<span id="cb4-41"><a href="#cb4-41" tabindex="-1"></a>benchmark_d <span class="ot">&lt;-</span> microbenchmark<span class="sc">::</span><span class="fu">microbenchmark</span>(</span>
-<span id="cb4-42"><a href="#cb4-42" tabindex="-1"></a>  <span class="at">fio =</span> fio<span class="sc">:::</span><span class="fu">compute_field_influence</span>(</span>
-<span id="cb4-43"><a href="#cb4-43" tabindex="-1"></a>    iom_fio_reduced<span class="sc">$</span>technical_coefficients_matrix,</span>
-<span id="cb4-44"><a href="#cb4-44" tabindex="-1"></a>    iom_fio_reduced<span class="sc">$</span>leontief_inverse_matrix,</span>
-<span id="cb4-45"><a href="#cb4-45" tabindex="-1"></a>    <span class="fl">0.001</span></span>
-<span id="cb4-46"><a href="#cb4-46" tabindex="-1"></a>  ),</span>
-<span id="cb4-47"><a href="#cb4-47" tabindex="-1"></a>  <span class="st">`</span><span class="at">Base R</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">field_influence_r</span>(iom_fio_reduced<span class="sc">$</span>technical_coefficients_matrix, iom_fio_reduced<span class="sc">$</span>leontief_inverse_matrix),</span>
-<span id="cb4-48"><a href="#cb4-48" tabindex="-1"></a>  <span class="at">times =</span> <span class="dv">10</span></span>
-<span id="cb4-49"><a href="#cb4-49" tabindex="-1"></a>)</span>
-<span id="cb4-50"><a href="#cb4-50" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;iom_fio_reduced&#39; not found</span></span>
-<span id="cb4-51"><a href="#cb4-51" tabindex="-1"></a><span class="fu">print</span>(benchmark_d)</span>
-<span id="cb4-52"><a href="#cb4-52" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;benchmark_d&#39; not found</span></span>
-<span id="cb4-53"><a href="#cb4-53" tabindex="-1"></a>ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(benchmark_d)</span>
-<span id="cb4-54"><a href="#cb4-54" tabindex="-1"></a><span class="co">#&gt; Error in loadNamespace(x): there is no package called &#39;ggplot2&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># data</span></span>
+<span><span class="va">matrix_dim</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
+<span><span class="va">intermediate_transactions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>, <span class="va">matrix_dim</span><span class="op">^</span><span class="fl">2</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  nrow <span class="op">=</span> <span class="va">matrix_dim</span>,</span>
+<span>  ncol <span class="op">=</span> <span class="va">matrix_dim</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">total_production</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">4000000</span><span class="op">:</span><span class="fl">6000000</span>, <span class="va">matrix_dim</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  nrow <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  ncol <span class="op">=</span> <span class="va">matrix_dim</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">iom_fio_reduced</span> <span class="op">&lt;-</span> <span class="fu">fio</span><span class="fu">::</span><span class="va"><a href="../reference/iom.html">iom</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  <span class="st">"iom_reduced"</span>,</span>
+<span>  <span class="va">intermediate_transactions</span>,</span>
+<span>  <span class="va">total_production</span></span>
+<span><span class="op">)</span><span class="op">$</span><span class="fu">compute_tech_coeff</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">compute_leontief_inverse</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># base R function</span></span>
+<span><span class="va">field_influence_r</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">A</span>, <span class="va">B</span>, <span class="va">ee</span> <span class="op">=</span> <span class="fl">0.001</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">n</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">A</span><span class="op">)</span></span>
+<span>  <span class="va">I</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span>  <span class="va">E</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>, ncol <span class="op">=</span> <span class="va">n</span>, nrow <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span>
+<span>  <span class="va">SI</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>, ncol <span class="op">=</span> <span class="va">n</span>, nrow <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">E</span><span class="op">[</span><span class="va">i</span>, <span class="va">j</span><span class="op">]</span> <span class="op">=</span> <span class="va">ee</span></span>
+<span>      <span class="va">AE</span> <span class="op">=</span> <span class="va">A</span> <span class="op">+</span> <span class="va">E</span></span>
+<span>      <span class="va">BE</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/solve.html" class="external-link">solve</a></span><span class="op">(</span><span class="va">I</span> <span class="op">-</span> <span class="va">AE</span><span class="op">)</span></span>
+<span>      <span class="va">FE</span> <span class="op">=</span> <span class="op">(</span><span class="va">BE</span> <span class="op">-</span> <span class="va">B</span><span class="op">)</span> <span class="op">/</span> <span class="va">ee</span></span>
+<span>      <span class="va">FEq</span> <span class="op">=</span> <span class="va">FE</span> <span class="op">*</span> <span class="va">FE</span></span>
+<span>      <span class="va">S</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">FEq</span><span class="op">)</span></span>
+<span>      <span class="va">SI</span><span class="op">[</span><span class="va">i</span>, <span class="va">j</span><span class="op">]</span> <span class="op">=</span> <span class="va">S</span></span>
+<span>      <span class="va">E</span><span class="op">[</span><span class="va">i</span>, <span class="va">j</span><span class="op">]</span> <span class="op">=</span> <span class="fl">0</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># benchmark</span></span>
+<span><span class="va">benchmark_d</span> <span class="op">&lt;-</span> <span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html" class="external-link">microbenchmark</a></span><span class="op">(</span></span>
+<span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu"><a href="../reference/compute_field_influence.html">compute_field_influence</a></span><span class="op">(</span></span>
+<span>    <span class="va">iom_fio_reduced</span><span class="op">$</span><span class="va">technical_coefficients_matrix</span>,</span>
+<span>    <span class="va">iom_fio_reduced</span><span class="op">$</span><span class="va">leontief_inverse_matrix</span>,</span>
+<span>    <span class="fl">0.001</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  `Base R` <span class="op">=</span> <span class="fu">field_influence_r</span><span class="op">(</span><span class="va">iom_fio_reduced</span><span class="op">$</span><span class="va">technical_coefficients_matrix</span>, <span class="va">iom_fio_reduced</span><span class="op">$</span><span class="va">leontief_inverse_matrix</span><span class="op">)</span>,</span>
+<span>  times <span class="op">=</span> <span class="fl">10</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_d</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Unit: seconds</span></span>
+<span><span class="co">#&gt;    expr     min       lq     mean   median       uq      max neval</span></span>
+<span><span class="co">#&gt;     fio 2.32139 2.581798 2.587570 2.630586 2.669976 2.713694    10</span></span>
+<span><span class="co">#&gt;  Base R 7.78439 7.824686 7.972608 7.847324 7.934813 8.490848    10</span></span>
+<span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">benchmark_d</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="figure/benchmark_d-1.png" alt="\label{fig:benchmark_d} {fio} is the best option for input-output analysis when matrix inversion is needed." width="100%"><p class="caption">
+{fio} is the best option for input-output analysis when matrix inversion
+is needed.
+</p>
+</div>
 </div>
 <div class="footnotes footnotes-end-of-document">
-<hr />
+<hr>
 <ol>
 <li id="fn1"><p>Or in a equivalent way, multiplying intermediate
 transactions matrix by a diagonal matrix constructed from total
@@ -329,31 +356,29 @@ production vector.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 
         <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
     </nav>
-      </div>
+</div>
 
 </div>
 
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Alberson da Silva Miranda.</p>
+  <p></p>
+<p>Developed by Alberson da Silva Miranda.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
-      </footer></div>
+      </footer>
+</div>
 
   
 
 
   
 
-  </body></html>
-</style>
-</div>
-</div>
-</div>
-</body>
+  </body>
 </html>
