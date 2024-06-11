@@ -14,4 +14,7 @@ COPY requirements.txt /tmp/pip-tmp/
 RUN python3 -m pip --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt
 
 # install Rust
+WORKDIR /home/
+COPY . .
 RUN bash ./setup_rust.sh
+ENV PATH="/root/.cargo/bin:$PATH"
