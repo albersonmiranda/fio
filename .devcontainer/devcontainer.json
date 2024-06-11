@@ -27,7 +27,8 @@
 				"REditorSupport.r",
 				"aaron-bond.better-comments",
 				"Gruntfuggly.todo-tree",
-				"analytic-signal.preview-pdf"
+				"analytic-signal.preview-pdf",
+				"matklad.rust-analyzer"
 			]
 		}
 	}
