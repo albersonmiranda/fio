@@ -126,7 +126,7 @@ class="math inline">\(x_j\)</span> element of total production vector<a
 href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. The
 results show that both <code>{fio}</code> and <code>{leontief}</code>
 functions execute almost instantaneously, with <code>{fio}</code>
-slightly faster (about 8 milliseconds apart). In contrast, the base R
+slightly faster (about 5 milliseconds apart). In contrast, the base R
 implementation is about 150 times slower than <code>{fio}</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># set seed</span></span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">100</span>)</span>
@@ -170,9 +170,9 @@ implementation is about 150 times slower than <code>{fio}</code>.</p>
 <span id="cb1-40"><a href="#cb1-40" tabindex="-1"></a><span class="co"># plot</span></span>
 <span id="cb1-41"><a href="#cb1-41" tabindex="-1"></a>ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(benchmark_a)</span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="/home/runner/work/fio/fio/vignettes/articles/figure/benchmark_a-1.png" alt="\label{fig:benchmark_a}{fio} is about 150 times faster than base R." width="100%" />
+<img src="/home/runner/work/fio/fio/vignettes/articles/figure/benchmark_a-1.png" alt="\label{fig:benchmark_a}Base R is about 100 times slower than {fio} and {leontief} functions." width="100%" />
 <p class="caption">
-is about 150 times faster than base R.
+Base R is about 100 times slower than {fio} and {leontief} functions.
 </p>
 </div>
 </div>
@@ -189,8 +189,9 @@ columns.</p>
 <p>It allows for solving the linear system through LU decomposition,
 which is a more efficient method than the direct inverse matrix
 calculation. <code>{fio}</code> takes advantage of LU decomposition and
-becomes incredibly faster, while <code>{leontief}</code> is over 15
-times slower, followed closed by the base R implementation.</p>
+becomes incredibly faster, while <code>{leontief}</code> is over 10
+times slower, followed closed by the over 20 times slower base R
+implementation.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># data</span></span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>iom_fio<span class="sc">$</span><span class="fu">compute_tech_coeff</span>()</span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>technical_coefficients_matrix <span class="ot">&lt;-</span> iom_fio<span class="sc">$</span>technical_coefficients_matrix</span>
@@ -219,9 +220,9 @@ times slower, followed closed by the base R implementation.</p>
 <span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="co"># plot</span></span>
 <span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a>ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(benchmark_b)</span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="/home/runner/work/fio/fio/vignettes/articles/figure/benchmark_b-1.png" alt="\label{fig:figs} {fio} is about 15 times faster than {leontief} and base R functions." width="100%" />
+<img src="/home/runner/work/fio/fio/vignettes/articles/figure/benchmark_b-1.png" alt="\label{fig:figs} {fio} is about 20 times faster than {leontief} and base R functions." width="100%" />
 <p class="caption">
-{fio} is about 15 times faster than {leontief} and base R functions.
+{fio} is about 20 times faster than {leontief} and base R functions.
 </p>
 </div>
 </div>
@@ -276,9 +277,6 @@ can be demanding for high dimensional matrices. Here, we evaluate
 benchmark for base R function and {fio}, since there’s no similiar
 function in {leontief}. For brevity, we cut dimensions to 100 and
 repetitions to 10.</p>
-<p>{fio} is, again, much faster than base R, even for small matrices.
-Note that for larger matrices, that difference would greatly
-increase.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># data</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>matrix_dim <span class="ot">&lt;-</span> <span class="dv">100</span></span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>intermediate_transactions <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
