@@ -6,6 +6,7 @@ mod linkages;
 use faer;
 use faer::prelude::SpSolver;
 use extendr_api::prelude::*;
+use rayon::prelude::*;
 
 #[extendr]
 /// Computes technical coefficients matrix to R.
@@ -14,25 +15,21 @@ use extendr_api::prelude::*;
 /// @return A nxn matrix of technical coefficients, known as A matrix.
 
 fn compute_tech_coeff(
-  intermediate_transactions: Vec<f64>,
-  total_production: Vec<f64>,
+  intermediate_transactions: &[f64],
+  total_production: &[f64],
 ) -> RArray<f64, [usize;2]> {
   
   // get dimensions (square root of length)
   let n = (intermediate_transactions.len() as f64).sqrt() as usize;
 
   // divide each entry of intermediate_transactions by each column of total_production
-  let mut tech_coeff = intermediate_transactions.clone();
-  for i in 0..n {
-    for j in 0..n {
-      tech_coeff[i * n + j] = tech_coeff[i * n + j] / total_production[i];
-    }
-  }
+  let tech_coeff: Vec<f64> = intermediate_transactions
+    .par_iter()
+    .enumerate()
+    .map(|(i, value)| value / total_production[i / n])
+    .collect();
 
-  // convert to R matrix
-  let tech_coeff_r = RArray::new_matrix(n, n, |r, c| tech_coeff[r + c * n]);
-
-  tech_coeff_r
+  RArray::new_matrix(n, n, |r, c| tech_coeff[r + c* n])
 }
 
 #[extendr]
@@ -40,7 +37,7 @@ fn compute_tech_coeff(
 /// @param tech_coeff A nxn matrix of technical coefficients.
 /// @return A nxn matrix of Leontief inverse.
 
-fn compute_leontief_inverse(tech_coeff: Vec<f64>) -> RArray<f64, [usize;2]> {
+fn compute_leontief_inverse(tech_coeff: &[f64]) -> RArray<f64, [usize;2]> {
 
   // get dimensions
   let n = (tech_coeff.len() as f64).sqrt() as usize;
@@ -50,15 +47,13 @@ fn compute_leontief_inverse(tech_coeff: Vec<f64>) -> RArray<f64, [usize;2]> {
 
   // calculate Leontief matrix
   let identity_matrix: faer::Mat<f64> = faer::Mat::identity(n, n);
-  let leontief_matrix = identity_matrix.clone() - tech_coeff_matrix;
+  let leontief_matrix = &identity_matrix - tech_coeff_matrix;
 
   // calculate Leontief inverse
-  let lu = leontief_matrix.partial_piv_lu();
-  let leontief_inverse = lu.solve(identity_matrix);
+  let leontief_inverse = leontief_matrix.partial_piv_lu().solve(identity_matrix);
 
   // convert to R matrix
-  let leontief_inverse_r = RArray::new_matrix(n, n, |row, col| leontief_inverse[(row, col)]);
-  leontief_inverse_r
+  RArray::new_matrix(n, n, |row, col| leontief_inverse[(row, col)])
 }
 
 // Macro to generate exports.

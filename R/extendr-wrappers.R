@@ -36,32 +36,32 @@ compute_multiplier_output <- function(leontief_inverse_matrix) .Call(wrap__compu
 #' @return Field of influence matrix.
 compute_field_influence <- function(tech_coeff_matrix, leontief_inverse_matrix, epsilon) .Call(wrap__compute_field_influence, tech_coeff_matrix, leontief_inverse_matrix, epsilon)
 
-#' Computes foward linkages
-#' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
-#' @description
-#' Computes forward linkages from a Leontief inverse matrix.
-#' @return A vector of forward linkages.
-compute_forward_linkages <- function(leontief_inverse_matrix) .Call(wrap__compute_forward_linkages, leontief_inverse_matrix)
-
-#' Computes backward linkages
-#' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
-#' @description
-#' Computes backward linkages from a Leontief inverse matrix.
-#' @return A vector of backward linkages.
-compute_backward_linkages <- function(leontief_inverse_matrix) .Call(wrap__compute_backward_linkages, leontief_inverse_matrix)
-
 #' Computes power of dispersion coefficients of variation
 #' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
 #' @description
 #' Computes power of dispersion coefficients of variation of an economy.
 #' @return A vector of power of dispersion coefficients of variation.
-compute_power_dispersion <- function(leontief_inverse_matrix) .Call(wrap__compute_power_dispersion, leontief_inverse_matrix)
+compute_power_dispersion_cv <- function(leontief_inverse_matrix) .Call(wrap__compute_power_dispersion_cv, leontief_inverse_matrix)
 
 #' Computes sensitivity of dispersion coefficients of variation
 #' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
 #' @description
 #' Computes sensitivity of dispersion coefficients of variation of an economy.
 #' @return A vector of sensitivity of dispersion coefficients of variation.
+compute_sensitivity_dispersion_cv <- function(leontief_inverse_matrix) .Call(wrap__compute_sensitivity_dispersion_cv, leontief_inverse_matrix)
+
+#' Computes power of dispersion
+#' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
+#' @description
+#' Computes power of dispersion from a Leontief inverse matrix.
+#' @return A vector of power of dispersion.
+compute_power_dispersion <- function(leontief_inverse_matrix) .Call(wrap__compute_power_dispersion, leontief_inverse_matrix)
+
+#' Computes sensitivity of dispersion
+#' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
+#' @description
+#' Computes sensitivity of dispersion from a Leontief inverse matrix.
+#' @return A vector of sensitivity of dispersion.
 compute_sensitivity_dispersion <- function(leontief_inverse_matrix) .Call(wrap__compute_sensitivity_dispersion, leontief_inverse_matrix)
 
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/extendr-wrappers.R
 \name{compute_sensitivity_dispersion}
 \alias{compute_sensitivity_dispersion}
-\title{Computes sensitivity of dispersion coefficients of variation}
+\title{Computes sensitivity of dispersion}
 \usage{
 compute_sensitivity_dispersion(leontief_inverse_matrix)
 }
@@ -10,8 +10,8 @@ compute_sensitivity_dispersion(leontief_inverse_matrix)
 \item{leontief_inverse_matrix}{A nxn matrix of Leontief inverse.}
 }
 \value{
-A vector of sensitivity of dispersion coefficients of variation.
+A vector of sensitivity of dispersion.
 }
 \description{
-Computes sensitivity of dispersion coefficients of variation of an economy.
+Computes sensitivity of dispersion from a Leontief inverse matrix.
 }

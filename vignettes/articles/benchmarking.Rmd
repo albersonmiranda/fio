@@ -1,13 +1,24 @@
 ---
 title: "benchmarking"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float:
+      collapsed: false
+      toc_levels: 2
+    number_sections: true
+    highlight: zenburn
+    code_folding: show
+    fig_caption: true
+    df_print: paged 
 ---
 
 <style>
 p.caption {
   font-size: 0.6em;
-  align: center;
+  text-align: "center";
 }
-</style>
 
 
 
@@ -23,10 +34,10 @@ The tests were run on a simulated $2000 \times 2000$ matrix, and each test was r
 
 ## Technical coefficients matrix
 
-The technical coefficients matrix calculation, a key and initial step in input-output analysis, was tested using the `compute_tech_coeff()` function from the `{fio}` package, equivalent functions from the `{leontief}` package, and a base R implementation. It consists on dividing each $a_{ij}$ element of intermediate transactions matrix by the correspondent $x_j$ element of total production vector^[Or in a equivalent way, multiplying intermediate transactions matrix by a diagonal matrix constructed from total production vector.]. The results show that both `{fio}` and `{leontief}` functions execute almost instantaneously, with `{leontief}` slightly faster (about 15 milliseconds apart). In contrast, the base R implementation is about 130 times slower than `{fio}`.
+The technical coefficients matrix calculation, a key and initial step in input-output analysis, was tested using the `compute_tech_coeff()` function from the `{fio}` package, equivalent functions from the `{leontief}` package, and a base R implementation. It consists on dividing each $a_{ij}$ element of intermediate transactions matrix by the correspondent $x_j$ element of total production vector^[Or in a equivalent way, multiplying intermediate transactions matrix by a diagonal matrix constructed from total production vector.]. The results show that both `{fio}` and `{leontief}` functions execute almost instantaneously, with `{fio}` slightly faster (about 8 milliseconds apart). In contrast, the base R implementation is about 150 times slower than `{fio}`.
 
 
-``` r
+```r
 # set seed
 set.seed(100)
 
@@ -61,21 +72,18 @@ benchmark_a <- microbenchmark::microbenchmark(
 )
 print(benchmark_a)
 #> Unit: milliseconds
-#>      expr        min         lq       mean     median         uq        max neval
-#>       fio   31.55184   36.01838   55.62917   61.18193   63.54022   80.96093   100
-#>    Base R 5994.79476 6002.31148 6018.27259 6007.66749 6019.58009 6457.69276   100
-#>  leontief   20.16732   29.22828   40.38208   43.91983   48.00528  119.85674   100
-```
-
-``` r
+#>      expr        min         lq       mean     median         uq         max neval
+#>       fio   32.24106   38.22049   42.28276   40.77030   42.92088    90.20673   100
+#>    Base R 7116.86712 7136.63368 7553.85911 7152.95092 7336.31015 11166.83317   100
+#>  leontief   41.04016   44.61389   50.98095   48.07349   53.46332   107.02680   100
 
 # plot
 ggplot2::autoplot(benchmark_a)
 ```
 
-<div class="figure">
-<img src="figure/benchmark_a-1.png" alt="Base R is about 100 times slower than {fio} and {leontief} functions." width="100%" />
-<p class="caption">Base R is about 100 times slower than {fio} and {leontief} functions.</p>
+<div class="figure" style="text-align: center">
+<img src="figure/benchmark_a-1.png" alt="\label{fig:benchmark_a}{fio} is about 150 times faster than base R." width="100%" />
+<p class="caption">\label{fig:benchmark_a}{fio} is about 150 times faster than base R.</p>
 </div>
 
 ## Leontief inverse matrix
@@ -84,10 +92,10 @@ When we're talking about inverting a $2000 \times 2000$ there's a lot more work 
 
 $$B = I - A$$
 
-It allows for solving the linear system through LU decomposition, which is a more efficient method than the direct inverse matrix calculation. `{fio}` takes advantage of LU decomposition and becomes incredibly faster, while `{leontief}` is about 18 times slower, followed closed by the 20 times slower base R implementation. 
+It allows for solving the linear system through LU decomposition, which is a more efficient method than the direct inverse matrix calculation. `{fio}` takes advantage of LU decomposition and becomes incredibly faster, while `{leontief}` is over 15 times slower, followed closed by the base R implementation. 
 
 
-``` r
+```r
 # data
 iom_fio$compute_tech_coeff()
 technical_coefficients_matrix <- iom_fio$technical_coefficients_matrix
@@ -108,19 +116,123 @@ benchmark_b <- microbenchmark::microbenchmark(
 )
 print(benchmark_b)
 #> Unit: milliseconds
-#>      expr       min        lq      mean    median        uq       max neval
-#>       fio  245.7323  294.7338  304.0091  307.7074  316.8196  347.0261   100
-#>    Base R 6291.3791 6310.4933 6338.0640 6332.1657 6358.5777 6425.6532   100
-#>  leontief 5578.0043 5591.8425 5606.2241 5604.8823 5615.9950 5670.8345   100
-```
-
-``` r
+#>      expr       min        lq      mean    median        uq        max neval
+#>       fio  336.4356  359.0604  425.3856  369.3041  439.1001   887.2124   100
+#>    Base R 5974.8137 6417.0423 7177.0537 6740.9307 7434.9085 11547.6926   100
+#>  leontief 5276.7533 5684.3753 6467.1024 5979.7183 7139.3473  9922.3665   100
 
 # plot
 ggplot2::autoplot(benchmark_b)
 ```
 
-<div class="figure">
-<img src="figure/benchmark_b-1.png" alt="{fio} is about 20 times faster than {leontief} and base R functions." width="100%" />
-<p class="caption">{fio} is about 20 times faster than {leontief} and base R functions.</p>
+<div class="figure" style="text-align: center">
+<img src="figure/benchmark_b-1.png" alt="\label{fig:figs} {fio} is about 15 times faster than {leontief} and base R functions." width="100%" />
+<p class="caption">\label{fig:figs} {fio} is about 15 times faster than {leontief} and base R functions.</p>
+</div>
+
+## Sensitivity of dispersion coefficients of variation
+
+To represent linkage-based functions performance, we compute benchmark for sensitivity of dispersion coefficients of variation. All 3 implementations executes almost instantaneously, with `{fio}` being slightly slower than `{leontief}` and base R functions. 
+
+
+```r
+# data
+iom_fio$compute_leontief_inverse()
+leontief_inverse_matrix <- iom_fio$leontief_inverse_matrix
+
+# base R function
+sensitivity_r <- function(B) {
+  n <- nrow(B)
+  SL = rowSums(B)
+  ML = SL / n
+  (((1 / (n - 1)) * (colSums((B - ML) ** 2))) ** 0.5) / ML
+}
+
+# benchmark
+benchmark_c <- microbenchmark::microbenchmark(
+  fio = fio:::compute_sensitivity_dispersion_cv(leontief_inverse_matrix),
+  `Base R` = sensitivity_r(leontief_inverse_matrix),
+  leontief = leontief::sensitivity_dispersion_cv(leontief_inverse_matrix),
+  times = 100
+)
+print(benchmark_c)
+#> Unit: milliseconds
+#>      expr      min       lq     mean   median       uq      max neval
+#>       fio 30.32855 31.01540 32.90370 32.44143 33.50784 40.18426   100
+#>    Base R 26.28076 28.08561 31.80958 30.99112 33.87897 47.11353   100
+#>  leontief 21.92668 22.27473 25.30608 23.00760 28.76792 35.92875   100
+ggplot2::autoplot(benchmark_c)
+```
+
+<div class="figure" style="text-align: center">
+<img src="figure/benchmark_c-1.png" alt="\label{fig:benchmark_c} {fio} is about 15 milliseconds slower than {leontief} and 2 milliseconds slower than base R functions." width="100%" />
+<p class="caption">\label{fig:benchmark_c} {fio} is about 15 milliseconds slower than {leontief} and 2 milliseconds slower than base R functions.</p>
+</div>
+
+# Field of influence
+
+Since field of influence involves computing Leontief inverse matrix for each element of technical coefficients matrix after an increment, it can be demanding for high dimensional matrices. Here, we evaluate benchmark for base R function and {fio}, since there's no similiar function in {leontief}. For brevity, we cut dimensions to 100 and repetitions to 10.
+
+{fio} is, again, much faster than base R, even for small matrices. Note that for larger matrices, that difference would greatly increase. 
+
+```r
+# data
+matrix_dim <- 100
+intermediate_transactions <- matrix(
+  as.double(sample(1:1000, matrix_dim^2, replace = TRUE)),
+  nrow = matrix_dim,
+  ncol = matrix_dim
+)
+total_production <- matrix(
+  as.double(sample(4000000:6000000, matrix_dim, replace = TRUE)),
+  nrow = 1,
+  ncol = matrix_dim
+)
+iom_fio_reduced <- fio::iom$new(
+  "iom_reduced",
+  intermediate_transactions,
+  total_production
+)$compute_tech_coeff()$compute_leontief_inverse()
+
+# base R function
+field_influence_r <- function(A, B, ee = 0.001) {
+  n = nrow(A)
+  I = diag(n)
+  E = matrix(0, ncol = n, nrow = n)
+  SI = matrix(0, ncol = n, nrow = n)
+  for (i in 1:n) {
+    for (j in 1:n) {
+      E[i, j] = ee
+      AE = A + E
+      BE = solve(I - AE)
+      FE = (BE - B) / ee
+      FEq = FE * FE
+      S = sum(FEq)
+      SI[i, j] = S
+      E[i, j] = 0
+    }
+  }
+}
+
+# benchmark
+benchmark_d <- microbenchmark::microbenchmark(
+  fio = fio:::compute_field_influence(
+    iom_fio_reduced$technical_coefficients_matrix,
+    iom_fio_reduced$leontief_inverse_matrix,
+    0.001
+  ),
+  `Base R` = field_influence_r(iom_fio_reduced$technical_coefficients_matrix, iom_fio_reduced$leontief_inverse_matrix),
+  times = 10
+)
+print(benchmark_d)
+#> Unit: seconds
+#>    expr      min        lq      mean    median        uq       max neval
+#>     fio 3.347394  3.642878  3.722057  3.750987  3.840492  4.155258    10
+#>  Base R 9.961029 10.220498 10.760557 10.750220 11.168054 12.060539    10
+ggplot2::autoplot(benchmark_d)
+```
+
+<div class="figure" style="text-align: center">
+<img src="figure/benchmark_d-1.png" alt="\label{fig:benchmark_d} {fio} is the best option for input-output analysis when matrix inversion is needed." width="100%" />
+<p class="caption">\label{fig:benchmark_d} {fio} is the best option for input-output analysis when matrix inversion is needed.</p>
 </div>

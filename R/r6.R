@@ -282,14 +282,6 @@ iom <- R6::R6Class(
     #' @param leontief_inverse_matrix
     #' Leontief inverse matrix.
     compute_key_sectors = function(leontief_inverse_matrix) {
-      # foward linkages
-      forward_linkages <- compute_forward_linkages(
-        leontief_inverse_matrix = self$leontief_inverse_matrix
-      )
-      # backward linkages
-      backward_linkages <- compute_backward_linkages(
-        leontief_inverse_matrix = self$leontief_inverse_matrix
-      )
       # power of dispersion
       power_dispersion <- compute_power_dispersion(
         leontief_inverse_matrix = self$leontief_inverse_matrix
@@ -298,19 +290,27 @@ iom <- R6::R6Class(
       sensitivity_dispersion <- compute_sensitivity_dispersion(
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
+      # power of dispersion coefficients of variation
+      power_dispersion_cv <- compute_power_dispersion_cv(
+        leontief_inverse_matrix = self$leontief_inverse_matrix
+      )
+      # sensitivity of dispersion coefficients of variation
+      sensitivity_dispersion_cv <- compute_sensitivity_dispersion_cv(
+        leontief_inverse_matrix = self$leontief_inverse_matrix
+      )
       # compute key sectors dataframe
       key_sectors <- data.frame(
         sector = rownames(self$leontief_inverse_matrix),
-        forward_linkages = forward_linkages,
-        backward_linkages = backward_linkages,
         power_dispersion = power_dispersion,
-        sensitivity_dispersion = sensitivity_dispersion
+        sensitivity_dispersion = sensitivity_dispersion,
+        power_dispersion_cv = power_dispersion_cv,
+        sensitivity_dispersion_cv = sensitivity_dispersion_cv
       ) |>
         within({
-          key_sectors <- ifelse(forward_linkages <= 1 & backward_linkages <= 1, "Non-Key Sector", "")
-          key_sectors <- ifelse(forward_linkages > 1 & backward_linkages > 1, "Key Sector", key_sectors)
-          key_sectors <- ifelse(forward_linkages > 1 & backward_linkages <= 1, "Strong Forward Linkage", key_sectors)
-          key_sectors <- ifelse(forward_linkages <= 1 & backward_linkages > 1, "Strong Backward Linkage", key_sectors)
+          key_sectors <- ifelse(sensitivity_dispersion <= 1 & power_dispersion <= 1, "Non-Key Sector", "")
+          key_sectors <- ifelse(sensitivity_dispersion > 1 & power_dispersion > 1, "Key Sector", key_sectors)
+          key_sectors <- ifelse(sensitivity_dispersion > 1 & power_dispersion <= 1, "Strong Forward Linkage", key_sectors) # nolint
+          key_sectors <- ifelse(sensitivity_dispersion <= 1 & power_dispersion > 1, "Strong Backward Linkage", key_sectors) # nolint
         })
       # store dataframe
       self$key_sectors <- key_sectors
