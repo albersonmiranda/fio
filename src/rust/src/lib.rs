@@ -3,8 +3,7 @@ mod multipliers;
 mod influence;
 mod linkages;
 
-use faer;
-use faer::prelude::SpSolver;
+use faer::{Mat, prelude::SpSolver};
 use extendr_api::prelude::*;
 use rayon::prelude::*;
 
@@ -29,7 +28,7 @@ fn compute_tech_coeff(
     .map(|(i, value)| value / total_production[i / n])
     .collect();
 
-  RArray::new_matrix(n, n, |r, c| tech_coeff[r + c* n])
+  RArray::new_matrix(n, n, |row, column| tech_coeff[row + column * n])
 }
 
 #[extendr]
@@ -43,10 +42,10 @@ fn compute_leontief_inverse(tech_coeff: &[f64]) -> RArray<f64, [usize;2]> {
   let n = (tech_coeff.len() as f64).sqrt() as usize;
 
   // create faer matrix
-  let tech_coeff_matrix = faer::Mat::from_fn(n, n, |row, col| tech_coeff[col * n + row]);
+  let tech_coeff_matrix = Mat::from_fn(n, n, |row, col| tech_coeff[col * n + row]);
 
   // calculate Leontief matrix
-  let identity_matrix: faer::Mat<f64> = faer::Mat::identity(n, n);
+  let identity_matrix: Mat<f64> = Mat::identity(n, n);
   let leontief_matrix = &identity_matrix - tech_coeff_matrix;
 
   // calculate Leontief inverse

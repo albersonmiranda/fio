@@ -1,4 +1,5 @@
 use extendr_api::prelude::*;
+use rayon::prelude::*;
 
 #[extendr]
 /// Calculates output multiplier.
@@ -6,22 +7,17 @@ use extendr_api::prelude::*;
 /// @return A 1xn vector of output multipliers.
 
 fn compute_multiplier_output(
-  leontief_inverse_matrix: Vec<f64>
+  leontief_inverse_matrix: &[f64]
 ) -> Vec<f64> {
   
   // get dimensions (square root of length)
   let n = (leontief_inverse_matrix.len() as f64).sqrt() as usize;
 
   // get column sums
-  let mut mult_out = vec![0.0; n];
-  for i in 0..n {
-    for j in 0..n {
-      let index = i * n + j;
-      mult_out[j] += leontief_inverse_matrix[index];
-    }
-  }
-
-  mult_out
+  leontief_inverse_matrix
+    .par_chunks(n)
+    .map(|col| col.iter().sum())
+    .collect::<Vec<f64>>()
 }
 
 // Macro to generate exports.
