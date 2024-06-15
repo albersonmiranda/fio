@@ -125,10 +125,10 @@ conditions.</p>
 <p>The technical coefficients matrix calculation, a key and initial step
 in input-output analysis, was tested using the
 <code><a href="../reference/compute_tech_coeff.html">compute_tech_coeff()</a></code> function from the <a href="https://albersonmiranda.github.io/fio/">fio</a>
-package, equivalent functions from the <a href="https://pachamaltese.github.io/leontief" class="external-link">leontief</a> package,
+package, equivalent functions from the <a href="https://github.com/pachadotdev/leontief" class="external-link">leontief</a> package,
 and a base R implementation. It consists on dividing each <span class="math inline">\(a_{ij}\)</span> element of intermediate
 transactions matrix by the correspondent <span class="math inline">\(x_j\)</span> element of total production vector<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. The
-results show that both <a href="https://albersonmiranda.github.io/fio/">fio</a> and <a href="https://pachamaltese.github.io/leontief" class="external-link">leontief</a>
+results show that both <a href="https://albersonmiranda.github.io/fio/">fio</a> and <a href="https://github.com/pachadotdev/leontief" class="external-link">leontief</a>
 functions execute almost instantaneously, with <a href="https://albersonmiranda.github.io/fio/">fio</a>
 slightly faster (about 5 milliseconds apart). In contrast, the base R
 implementation is about 150 times slower than <a href="https://albersonmiranda.github.io/fio/">fio</a>.</p>
@@ -162,7 +162,7 @@ implementation is about 150 times slower than <a href="https://albersonmiranda.g
 <span><span class="va">benchmark_a</span> <span class="op">&lt;-</span> <span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html" class="external-link">microbenchmark</a></span><span class="op">(</span></span>
 <span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu"><a href="../reference/compute_tech_coeff.html">compute_tech_coeff</a></span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span>,</span>
 <span>  `Base R` <span class="op">=</span> <span class="fu">tech_coeff_r</span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span>,</span>
-<span>  leontief <span class="op">=</span> <span class="fu">leontief</span><span class="fu">::</span><span class="fu"><a href="https://pachamaltese.github.io/leontief/reference/input_requirement.html" class="external-link">input_requirement</a></span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span>,</span>
+<span>  leontief <span class="op">=</span> <span class="fu">leontief</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/leontief/man/input_requirement.html" class="external-link">input_requirement</a></span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span>,</span>
 <span>  times <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_a</span><span class="op">)</span></span>
@@ -192,7 +192,7 @@ columns.</p>
 <p>It allows for solving the linear system through LU decomposition,
 which is a more efficient method than the direct inverse matrix
 calculation. <a href="https://albersonmiranda.github.io/fio/">fio</a> takes advantage of LU decomposition and
-becomes incredibly faster, while <a href="https://pachamaltese.github.io/leontief" class="external-link">leontief</a> is over 10
+becomes incredibly faster, while <a href="https://github.com/pachadotdev/leontief" class="external-link">leontief</a> is over 10
 times slower, followed closed by the over 20 times slower base R
 implementation.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -211,7 +211,7 @@ implementation.</p>
 <span><span class="va">benchmark_b</span> <span class="op">&lt;-</span> <span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html" class="external-link">microbenchmark</a></span><span class="op">(</span></span>
 <span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu"><a href="../reference/compute_leontief_inverse.html">compute_leontief_inverse</a></span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span>,</span>
 <span>  `Base R` <span class="op">=</span> <span class="fu">leontief_inverse_r</span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span>,</span>
-<span>  leontief <span class="op">=</span> <span class="fu">leontief</span><span class="fu">::</span><span class="fu"><a href="https://pachamaltese.github.io/leontief/reference/leontief_inverse.html" class="external-link">leontief_inverse</a></span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span>,</span>
+<span>  leontief <span class="op">=</span> <span class="fu">leontief</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/leontief/man/leontief_inverse.html" class="external-link">leontief_inverse</a></span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span>,</span>
 <span>  times <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_b</span><span class="op">)</span></span>
@@ -235,7 +235,7 @@ implementation.</p>
 <p>To represent linkage-based functions performance, we compute
 benchmark for sensitivity of dispersion coefficients of variation. All 3
 implementations executes almost instantaneously, with <a href="https://albersonmiranda.github.io/fio/">fio</a>
-being slightly slower than <a href="https://pachamaltese.github.io/leontief" class="external-link">leontief</a> and base R
+being slightly slower than <a href="https://github.com/pachadotdev/leontief" class="external-link">leontief</a> and base R
 functions.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># data</span></span>
@@ -254,7 +254,7 @@ functions.</p>
 <span><span class="va">benchmark_c</span> <span class="op">&lt;-</span> <span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html" class="external-link">microbenchmark</a></span><span class="op">(</span></span>
 <span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu"><a href="../reference/compute_sensitivity_dispersion_cv.html">compute_sensitivity_dispersion_cv</a></span><span class="op">(</span><span class="va">leontief_inverse_matrix</span><span class="op">)</span>,</span>
 <span>  `Base R` <span class="op">=</span> <span class="fu">sensitivity_r</span><span class="op">(</span><span class="va">leontief_inverse_matrix</span><span class="op">)</span>,</span>
-<span>  leontief <span class="op">=</span> <span class="fu">leontief</span><span class="fu">::</span><span class="fu"><a href="https://pachamaltese.github.io/leontief/reference/sensitivity_dispersion_cv.html" class="external-link">sensitivity_dispersion_cv</a></span><span class="op">(</span><span class="va">leontief_inverse_matrix</span><span class="op">)</span>,</span>
+<span>  leontief <span class="op">=</span> <span class="fu">leontief</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/leontief/man/sensitivity_dispersion_cv.html" class="external-link">sensitivity_dispersion_cv</a></span><span class="op">(</span><span class="va">leontief_inverse_matrix</span><span class="op">)</span>,</span>
 <span>  times <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_c</span><span class="op">)</span></span>
