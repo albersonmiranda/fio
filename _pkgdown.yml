@@ -21,7 +21,7 @@ navbar:
 home:
   links:
   - text: Ask a question
-    href: https://www.google.com/
+    href: https://github.com/albersonmiranda/fio/discussions
 
 articles:
   - title: "Getting Started"
