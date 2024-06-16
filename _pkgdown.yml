@@ -24,14 +24,14 @@ home:
     href: https://www.google.com/
 
 articles:
-#  - title: "Using {fio}"
-#    desc: >
-#      These vignettes provide an introduction to performing input-output analysis using the {fio} package.
-#    contents:
-#      - data
-#      - analysis
+  - title: "Getting Started"
+    desc: >
+      These vignettes provide an introduction to performing input-output analysis using the {fio} package.
+    contents:
+      - getting_started
   - title: "Performance"
     desc: >
       {fio} isn't only friendly, it's also fast. Here we show how it compares to base R and other packages.
     contents:
       - articles/benchmarking
+      # - articles/memory_footprint
