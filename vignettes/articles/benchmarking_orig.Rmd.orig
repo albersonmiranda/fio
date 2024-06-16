@@ -1,5 +1,6 @@
 ---
 title: "Benchmarking"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
   html_document:
     toc: true
@@ -29,6 +30,10 @@ knitr::opts_chunk$set(
   fig.output = "70%"
 )
 ```
+
+# DISCLAIMER
+
+The present benchmark was conducted on a Samsung laptop (550XCJ/550XCR, Intel i7, 8GB RAM) on Ubuntu 22.04.4 LTS x86_64, which is a pretty average machine. For similar hardware (e.g., Intel i5, 16GB RAM), the results should hold. In the other hand, for slower hardware (e.g., budget VMs like free plan on Posit Cloud, which is single core, 1GB RAM) results may vary. For faster machines (e.g., 16-core, 64GB RAM 1, Github Codespaces), differences are only marginal. That is, **for fast enough machines, performance isn't an issue** and even base R code should be fast enough for input-output analysis with big matrices.
 
 # Introduction
 
