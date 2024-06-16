@@ -1,18 +1,11 @@
 ---
 title: "Getting Started"
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
-output:
-  html_document:
-    toc: true
-    toc_depth: 2
-    toc_float:
-      collapsed: false
-      toc_levels: 2
-    number_sections: true
-    highlight: zenburn
-    code_folding: show
-    fig_caption: true
-    df_print: paged 
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{getting_started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 <style>
