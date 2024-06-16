@@ -22,7 +22,7 @@ analysis, focusing on two key aspects: ease of use for Excel users and
 performance. It provides an [RStudio
 Addin](https://rstudio.github.io/rstudioaddins/) and a set of functions
 for easy import of input-output tables from Excel, either
-programmatically or direclty from clipboard.
+programmatically or directly from clipboard.
 
 The package is designed to be fast and efficient. It embraces [R6
 class](https://r6.r-lib.org/) for a clean, memory-efficient
@@ -32,7 +32,7 @@ highly optimized performance.
 
 ## Installation
 
-Install the lastest development version from **Github**:
+Install the latest development version from **Github**:
 
 ``` r
 devtools::install_github("albersonmiranda/fio")

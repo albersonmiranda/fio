@@ -17,5 +17,5 @@ compute_field_influence(tech_coeff_matrix, leontief_inverse_matrix, epsilon)
 Field of influence matrix.
 }
 \description{
-Calculates total field of influence given a incremental change in the techincal coefficients matrix.
+Calculates total field of influence given a incremental change in the technical coefficients matrix.
 }

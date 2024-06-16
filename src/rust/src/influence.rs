@@ -8,7 +8,7 @@ use faer::prelude::SpSolver;
 /// @param leontief_inverse_matrix The open model nxn Leontief inverse matrix.
 /// @param epsilon The epsilon value.
 /// @description
-/// Calculates total field of influence given a incremental change in the techincal coefficients matrix.
+/// Calculates total field of influence given a incremental change in the technical coefficients matrix.
 /// @return Field of influence matrix.
 
 fn compute_field_influence(

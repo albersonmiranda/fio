@@ -41,7 +41,7 @@ fio_addin <- function() {
             "Taxes" = "taxes",
             "Wages" = "wages",
             "Operating Income" = "operating_income",
-            "Final Demand's Added Value" = "final_demand_added_value",
+            "Added Value's Final Demand" = "added_value_final_demand",
             "Added Value" = "added_value"
           ),
           "Occupation" = "occupation",

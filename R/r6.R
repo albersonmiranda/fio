@@ -7,23 +7,23 @@
 #' @param intermediate_transactions
 #' Intermediate transactions matrix.
 #' @param total_production
-#' Total production matrix.
+#' Total production vector.
 #' @param final_demand
 #' Final demand matrix.
 #' @param exports
-#' Exports matrix.
+#' Exports vector.
 #' @param imports
-#' Imports matrix.
+#' Imports vector.
 #' @param taxes
-#' Taxes matrix.
+#' Taxes vector.
 #' @param wages
-#' Wages matrix.
+#' Wages vector.
 #' @param operating_income
-#' Operating income matrix.
+#' Operating income vector.
 #' @param added_value_final_demand
-#' Value added final demand matrix.
+#' Added value final demand matrix.
 #' @param added_value
-#' Value added matrix.
+#' Added value vector.
 #' @param occupation
 #' Occupation matrix.
 #' @param technical_coefficients_matrix
@@ -31,8 +31,8 @@
 #' @param leontief_inverse_matrix
 #' Leontief inverse matrix.
 #' @param multiplier_output
-#' Output multipler vector.
-#' @param influence_field
+#' Output multiplier vector.
+#' @param field_influence
 #' Influence field matrix.
 #' @param key_sectors
 #' Key sectors dataframe.
@@ -52,7 +52,7 @@ iom <- R6::R6Class(
     intermediate_transactions = NULL,
 
     #' @field total_production
-    #' Total production matrix.
+    #' Total production vector.
     total_production = NULL,
 
     #' @field final_demand
@@ -60,31 +60,31 @@ iom <- R6::R6Class(
     final_demand = NULL,
 
     #' @field exports
-    #' Exports matrix.
+    #' Exports vector.
     exports = NULL,
 
     #' @field imports
-    #' Imports matrix.
+    #' Imports vector.
     imports = NULL,
 
     #' @field taxes
-    #' Taxes matrix.
+    #' Taxes vector.
     taxes = NULL,
 
     #' @field wages
-    #' Wages matrix.
+    #' Wages vector.
     wages = NULL,
 
     #' @field operating_income
-    #' Operating income matrix.
+    #' Operating income vector.
     operating_income = NULL,
 
     #' @field added_value_final_demand
-    #' Value added final demand matrix.
+    #' Added value final demand matrix.
     added_value_final_demand = NULL,
 
     #' @field added_value
-    #' Value added matrix.
+    #' Added value vector.
     added_value = NULL,
 
     #' @field occupation
@@ -103,9 +103,9 @@ iom <- R6::R6Class(
     #' Output multiplier vector.
     multiplier_output = NULL,
 
-    #' @field influence_field
+    #' @field field_influence
     #' Influence field matrix.
-    influence_field = NULL,
+    field_influence = NULL,
 
     #' @field key_sectors
     #' Key sectors dataframe.
@@ -128,7 +128,7 @@ iom <- R6::R6Class(
                           technical_coefficients_matrix = NULL,
                           leontief_inverse_matrix = NULL,
                           multiplier_output = NULL,
-                          influence_field = NULL,
+                          field_influence = NULL,
                           key_sectors = NULL) {
       self$id <- id
       self$intermediate_transactions <- intermediate_transactions
@@ -145,7 +145,7 @@ iom <- R6::R6Class(
       self$technical_coefficients_matrix <- technical_coefficients_matrix
       self$leontief_inverse_matrix <- leontief_inverse_matrix
       self$multiplier_output <- multiplier_output
-      self$influence_field <- influence_field
+      self$field_influence <- field_influence
       self$key_sectors <- key_sectors
     },
 
@@ -193,8 +193,16 @@ iom <- R6::R6Class(
     #' Computes the technical coefficients matrix.
     compute_tech_coeff = function() {
       # save row and column names
-      row_names <- rownames(self$intermediate_transactions)
-      col_names <- colnames(self$intermediate_transactions)
+      row_names <- if (is.null(rownames(self$intermediate_transactions))) {
+        seq_len(nrow(self$intermediate_transactions))
+      } else {
+        rownames(self$intermediate_transactions)
+      }
+      col_names <- if (is.null(colnames(self$intermediate_transactions))) {
+        seq_len(ncol(self$intermediate_transactions))
+      } else {
+        colnames(self$intermediate_transactions)
+      }
       # calculate technical coefficients matrix
       technical_coefficients_matrix <- compute_tech_coeff(
         intermediate_transactions = self$intermediate_transactions,
@@ -258,22 +266,22 @@ iom <- R6::R6Class(
     #' Leontief inverse matrix.
     #' @param epsilon
     #' Epsilon value. A technical change in the input-output matrix.
-    compute_influence_field = function(epsilon) {
+    compute_field_influence = function(epsilon) {
       # save row and column names
       row_names <- rownames(self$technical_coefficients_matrix)
       col_names <- colnames(self$technical_coefficients_matrix)
       # compute influence field matrix
-      influence_field <- compute_influence_field(
+      field_influence <- compute_field_influence(
         tech_coeff = self$technical_coefficients_matrix,
         leontief_inverse_matrix = self$leontief_inverse_matrix,
         epsilon = epsilon
       )
       # set row and column names
-      rownames(influence_field) <- row_names
-      colnames(influence_field) <- col_names
+      rownames(field_influence) <- row_names
+      colnames(field_influence) <- col_names
 
       # store matrix
-      self$influence_field <- influence_field
+      self$field_influence <- field_influence
       invisible(self)
     },
 
