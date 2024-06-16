@@ -1,5 +1,6 @@
 use extendr_api::prelude::*;
 use rayon::prelude::*;
+use faer::Mat;
 
 #[extendr]
 /// Computes average of elements of Leontief inverse matrix
@@ -25,7 +26,7 @@ fn compute_row_average(
   let n = (leontief_inverse_matrix.len() as f64).sqrt() as usize;
 
   // convert to faer matrix
-  let leontief_inverse_matrix_faer = faer::Mat::from_fn(n, n, |row, col| leontief_inverse_matrix[col * n + row]);
+  let leontief_inverse_matrix_faer = Mat::from_fn(n, n, |row, col| leontief_inverse_matrix[col * n + row]);
 
   // get row means
   let mut indexed_results: Vec<(usize, f64)> = leontief_inverse_matrix_faer.row_iter()

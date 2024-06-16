@@ -1,6 +1,5 @@
 use extendr_api::prelude::*;
-use faer;
-use faer::prelude::SpSolver;
+use faer::{prelude::SpSolver, Mat};
 
 #[extendr]
 /// Calculates field of influence given a technical change.
@@ -12,8 +11,8 @@ use faer::prelude::SpSolver;
 /// @return Field of influence matrix.
 
 fn compute_field_influence(
-  tech_coeff_matrix: Vec<f64>,
-  leontief_inverse_matrix: Vec<f64>,
+  tech_coeff_matrix: &[f64],
+  leontief_inverse_matrix: &[f64],
   epsilon: f64
 ) -> RArray<f64, [usize;2]> {
   
@@ -21,10 +20,10 @@ fn compute_field_influence(
   let n = (leontief_inverse_matrix.len() as f64).sqrt() as usize;
 
   // create faer matrix
-  let tech_coeff_matrix = faer::Mat::from_fn(n, n, |row, col| tech_coeff_matrix[col * n + row]);
-  let leontief_inverse_matrix = faer::Mat::from_fn(n, n, |row, col| leontief_inverse_matrix[col * n + row]);
-  let mut incremental_matrix = faer::Mat::zeros(n, n);
-  let mut influence_matrix = faer::Mat::zeros(n, n);
+  let tech_coeff_matrix = Mat::from_fn(n, n, |row, col| tech_coeff_matrix[col * n + row]);
+  let leontief_inverse_matrix = Mat::from_fn(n, n, |row, col| leontief_inverse_matrix[col * n + row]);
+  let mut incremental_matrix = Mat::zeros(n, n);
+  let mut influence_matrix = Mat::zeros(n, n);
 
   // loop to calculate influence matrix
   for i in 0..n {
@@ -32,18 +31,18 @@ fn compute_field_influence(
       // create incremental matrix
       incremental_matrix[(i, j)] = epsilon;
       // calculate new technical coefficients matrix
-      let new_tech_coeff_matrix = tech_coeff_matrix.clone() + incremental_matrix.clone();
+      let new_tech_coeff_matrix = &tech_coeff_matrix + &incremental_matrix;
       // identity matrix
-      let identity_matrix:faer::Mat<f64> = faer::Mat::identity(n, n);
+      let identity_matrix: Mat<f64> = Mat::identity(n, n);
       // calculate new Leontief matrix
-      let new_leontief_matrix = identity_matrix.clone() - new_tech_coeff_matrix;
+      let new_leontief_matrix = &identity_matrix - new_tech_coeff_matrix;
       
       // calculate new Leontief inverse
       let lu = new_leontief_matrix.partial_piv_lu();
       let new_leontief_inverse = lu.solve(identity_matrix);
 
       // calculate field of influence
-      let mut influence = new_leontief_inverse - leontief_inverse_matrix.clone();
+      let mut influence = new_leontief_inverse - &leontief_inverse_matrix;
       for x in 0..n {
         for y in 0..n {
           // calculate field of influence
