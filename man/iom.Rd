@@ -117,7 +117,7 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
 
 \item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
 
-\item{\code{multiplier_output}}{Output multipler vector.}
+\item{\code{multiplier_output}}{Output multiplier vector.}
 
 \item{\code{field_influence}}{Influence field matrix.}
 

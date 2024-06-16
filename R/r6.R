@@ -31,7 +31,7 @@
 #' @param leontief_inverse_matrix
 #' Leontief inverse matrix.
 #' @param multiplier_output
-#' Output multipler vector.
+#' Output multiplier vector.
 #' @param field_influence
 #' Influence field matrix.
 #' @param key_sectors

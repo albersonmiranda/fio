@@ -32,7 +32,7 @@ compute_multiplier_output <- function(leontief_inverse_matrix) .Call(wrap__compu
 #' @param leontief_inverse_matrix The open model nxn Leontief inverse matrix.
 #' @param epsilon The epsilon value.
 #' @description
-#' Calculates total field of influence given a incremental change in the techincal coefficients matrix.
+#' Calculates total field of influence given a incremental change in the technical coefficients matrix.
 #' @return Field of influence matrix.
 compute_field_influence <- function(tech_coeff_matrix, leontief_inverse_matrix, epsilon) .Call(wrap__compute_field_influence, tech_coeff_matrix, leontief_inverse_matrix, epsilon)
 

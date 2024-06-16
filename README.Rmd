@@ -24,13 +24,13 @@ Friendly & Fast Input-Output Analysis <img src="man/figures/leontief.jpg" align=
 [![CRAN status](https://www.r-pkg.org/badges/version/fio)](https://CRAN.R-project.org/package=fio)
 <!-- badges: end -->
 
-`{fio}` (*Friendly Input-Output*) is a R package for input-output analysis, focusing on two key aspects: ease of use for Excel users and performance. It provides an [RStudio Addin](https://rstudio.github.io/rstudioaddins/) and a set of functions for easy import of input-output tables from Excel, either programmatically or direclty from clipboard.
+`{fio}` (*Friendly Input-Output*) is a R package for input-output analysis, focusing on two key aspects: ease of use for Excel users and performance. It provides an [RStudio Addin](https://rstudio.github.io/rstudioaddins/) and a set of functions for easy import of input-output tables from Excel, either programmatically or directly from clipboard.
 
 The package is designed to be fast and efficient. It embraces [R6 class](https://r6.r-lib.org/) for a clean, memory-efficient object-oriented programming. Additionally, all linear algebra computations are written in [Rust](https://www.rust-lang.org/) for highly optimized performance. 
 
 ## Installation
 
-Install the lastest development version from **Github**:
+Install the latest development version from **Github**:
 
 ``` r
 devtools::install_github("albersonmiranda/fio")
