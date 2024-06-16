@@ -1,5 +1,5 @@
 ---
-title: "Getting Started"
+title: "Get data ready for input-output analysis"
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output: rmarkdown::html_vignette
 vignette: >
