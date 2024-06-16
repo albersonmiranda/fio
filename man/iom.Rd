@@ -13,23 +13,23 @@ R6 class for input-output matrix.
 
 \item{\code{intermediate_transactions}}{Intermediate transactions matrix.}
 
-\item{\code{total_production}}{Total production matrix.}
+\item{\code{total_production}}{Total production vector.}
 
 \item{\code{final_demand}}{Final demand matrix.}
 
-\item{\code{exports}}{Exports matrix.}
+\item{\code{exports}}{Exports vector.}
 
-\item{\code{imports}}{Imports matrix.}
+\item{\code{imports}}{Imports vector.}
 
-\item{\code{taxes}}{Taxes matrix.}
+\item{\code{taxes}}{Taxes vector.}
 
-\item{\code{wages}}{Wages matrix.}
+\item{\code{wages}}{Wages vector.}
 
-\item{\code{operating_income}}{Operating income matrix.}
+\item{\code{operating_income}}{Operating income vector.}
 
-\item{\code{added_value_final_demand}}{Value added final demand matrix.}
+\item{\code{added_value_final_demand}}{Added value final demand matrix.}
 
-\item{\code{added_value}}{Value added matrix.}
+\item{\code{added_value}}{Added value vector.}
 
 \item{\code{occupation}}{Occupation vector}
 
@@ -39,7 +39,7 @@ R6 class for input-output matrix.
 
 \item{\code{multiplier_output}}{Output multiplier vector.}
 
-\item{\code{influence_field}}{Influence field matrix.}
+\item{\code{field_influence}}{Influence field matrix.}
 
 \item{\code{key_sectors}}{Key sectors dataframe.}
 }
@@ -54,7 +54,7 @@ R6 class for input-output matrix.
 \item \href{#method-iom-compute_tech_coeff}{\code{iom$compute_tech_coeff()}}
 \item \href{#method-iom-compute_leontief_inverse}{\code{iom$compute_leontief_inverse()}}
 \item \href{#method-iom-compute_multiplier_output}{\code{iom$compute_multiplier_output()}}
-\item \href{#method-iom-compute_influence_field}{\code{iom$compute_influence_field()}}
+\item \href{#method-iom-compute_field_influence}{\code{iom$compute_field_influence()}}
 \item \href{#method-iom-compute_key_sectors}{\code{iom$compute_key_sectors()}}
 \item \href{#method-iom-clone}{\code{iom$clone()}}
 }
@@ -81,7 +81,7 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
   technical_coefficients_matrix = NULL,
   leontief_inverse_matrix = NULL,
   multiplier_output = NULL,
-  influence_field = NULL,
+  field_influence = NULL,
   key_sectors = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -93,23 +93,23 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
 
 \item{\code{intermediate_transactions}}{Intermediate transactions matrix.}
 
-\item{\code{total_production}}{Total production matrix.}
+\item{\code{total_production}}{Total production vector.}
 
 \item{\code{final_demand}}{Final demand matrix.}
 
-\item{\code{exports}}{Exports matrix.}
+\item{\code{exports}}{Exports vector.}
 
-\item{\code{imports}}{Imports matrix.}
+\item{\code{imports}}{Imports vector.}
 
-\item{\code{taxes}}{Taxes matrix.}
+\item{\code{taxes}}{Taxes vector.}
 
-\item{\code{wages}}{Wages matrix.}
+\item{\code{wages}}{Wages vector.}
 
-\item{\code{operating_income}}{Operating income matrix.}
+\item{\code{operating_income}}{Operating income vector.}
 
-\item{\code{added_value_final_demand}}{Value added final demand matrix.}
+\item{\code{added_value_final_demand}}{Added value final demand matrix.}
 
-\item{\code{added_value}}{Value added matrix.}
+\item{\code{added_value}}{Added value vector.}
 
 \item{\code{occupation}}{Occupation matrix.}
 
@@ -119,7 +119,7 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
 
 \item{\code{multiplier_output}}{Output multipler vector.}
 
-\item{\code{influence_field}}{Influence field matrix.}
+\item{\code{field_influence}}{Influence field matrix.}
 
 \item{\code{key_sectors}}{Key sectors dataframe.}
 }
@@ -209,12 +209,12 @@ Computes the output multiplier vector.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-iom-compute_influence_field"></a>}}
-\if{latex}{\out{\hypertarget{method-iom-compute_influence_field}{}}}
-\subsection{Method \code{compute_influence_field()}}{
+\if{html}{\out{<a id="method-iom-compute_field_influence"></a>}}
+\if{latex}{\out{\hypertarget{method-iom-compute_field_influence}{}}}
+\subsection{Method \code{compute_field_influence()}}{
 Computes the influence field matrix.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{iom$compute_influence_field(epsilon)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{iom$compute_field_influence(epsilon)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

@@ -1,4 +1,4 @@
 Name: Import input-output data
-Description: Run `fio::import_element()0` to conveniently import input-output data.
+Description: Run `fio::import_element()` to conveniently import input-output data.
 Binding: fio_addin
 Interactive: true
