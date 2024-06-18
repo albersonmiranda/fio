@@ -27,6 +27,20 @@ total_production <- import_element(
   col_names = col_names
 )
 
+household_consumption <- import_element(
+  file = path,
+  sheet = sheet,
+  range = "BH6:BH56",
+  row_names = row_names
+)
+
+government_consumption <- import_element(
+  file = path,
+  sheet = sheet,
+  range = "BG6:BG56",
+  row_names = row_names
+)
+
 exports <- import_element(
   file = path,
   sheet = sheet,
@@ -111,6 +125,8 @@ br_2020 <- iom$new(
   intermediate_transactions = intermediate_transactions,
   total_production = total_production,
   final_demand = final_demand,
+  household_consumption = household_consumption,
+  government_consumption = government_consumption,
   exports = exports,
   imports = imports,
   taxes = taxes,
