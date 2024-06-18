@@ -2,13 +2,14 @@
 mod multipliers;
 mod influence;
 mod linkages;
+mod ghosh;
 
 use faer::{Mat, prelude::SpSolver};
 use extendr_api::prelude::*;
 use rayon::prelude::*;
 
 #[extendr]
-/// Computes technical coefficients matrix to R.
+/// Computes technical coefficients matrix.
 /// @param intermediate_transactions A nxn matrix of intermediate transactions.
 /// @param total_production A 1xn vector of total production.
 /// @return A nxn matrix of technical coefficients, known as A matrix.
@@ -63,6 +64,7 @@ extendr_module! {
   use multipliers;
   use influence;
   use linkages;
+  use ghosh;
   fn compute_tech_coeff;
   fn compute_leontief_inverse;
 }

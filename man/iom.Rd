@@ -17,6 +17,10 @@ R6 class for input-output matrix.
 
 \item{\code{final_demand}}{Final demand matrix.}
 
+\item{\code{household_consumption}}{Household consumption vector.}
+
+\item{\code{government_consumption}}{Government consumption vector.}
+
 \item{\code{exports}}{Exports vector.}
 
 \item{\code{imports}}{Imports vector.}
@@ -42,6 +46,10 @@ R6 class for input-output matrix.
 \item{\code{field_influence}}{Influence field matrix.}
 
 \item{\code{key_sectors}}{Key sectors dataframe.}
+
+\item{\code{allocation_coefficients_matrix}}{Allocation coefficients matrix.}
+
+\item{\code{ghosh_inverse_matrix}}{Ghosh inverse matrix.}
 }
 \if{html}{\out{</div>}}
 }
@@ -56,6 +64,8 @@ R6 class for input-output matrix.
 \item \href{#method-iom-compute_multiplier_output}{\code{iom$compute_multiplier_output()}}
 \item \href{#method-iom-compute_field_influence}{\code{iom$compute_field_influence()}}
 \item \href{#method-iom-compute_key_sectors}{\code{iom$compute_key_sectors()}}
+\item \href{#method-iom-compute_allocation_coeff}{\code{iom$compute_allocation_coeff()}}
+\item \href{#method-iom-compute_ghosh_inverse}{\code{iom$compute_ghosh_inverse()}}
 \item \href{#method-iom-clone}{\code{iom$clone()}}
 }
 }
@@ -70,6 +80,8 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
   intermediate_transactions,
   total_production,
   final_demand = NULL,
+  household_consumption = NULL,
+  government_consumption = NULL,
   exports = NULL,
   imports = NULL,
   taxes = NULL,
@@ -82,7 +94,9 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
   leontief_inverse_matrix = NULL,
   multiplier_output = NULL,
   field_influence = NULL,
-  key_sectors = NULL
+  key_sectors = NULL,
+  allocation_coefficients_matrix = NULL,
+  ghosh_inverse_matrix = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -96,6 +110,10 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
 \item{\code{total_production}}{Total production vector.}
 
 \item{\code{final_demand}}{Final demand matrix.}
+
+\item{\code{household_consumption}}{Household consumption vector.}
+
+\item{\code{government_consumption}}{Government consumption vector.}
 
 \item{\code{exports}}{Exports vector.}
 
@@ -122,6 +140,10 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
 \item{\code{field_influence}}{Influence field matrix.}
 
 \item{\code{key_sectors}}{Key sectors dataframe.}
+
+\item{\code{allocation_coefficients_matrix}}{Allocation coefficients matrix.}
+
+\item{\code{ghosh_inverse_matrix}}{Ghosh inverse matrix.}
 }
 \if{html}{\out{</div>}}
 }
@@ -242,6 +264,42 @@ Computes the key sectors dataframe.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-iom-compute_allocation_coeff"></a>}}
+\if{latex}{\out{\hypertarget{method-iom-compute_allocation_coeff}{}}}
+\subsection{Method \code{compute_allocation_coeff()}}{
+Computes the allocation coefficients matrix.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{iom$compute_allocation_coeff()}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{intermediate_transactions}}{Intermediate transactions matrix.}
+
+\item{\code{total_production}}{Total production vector.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-iom-compute_ghosh_inverse"></a>}}
+\if{latex}{\out{\hypertarget{method-iom-compute_ghosh_inverse}{}}}
+\subsection{Method \code{compute_ghosh_inverse()}}{
+Computes the Ghosh inverse matrix.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{iom$compute_ghosh_inverse(allocation_coefficients_matrix)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{allocation_coefficients_matrix}}{Allocation coefficients matrix.}
 }
 \if{html}{\out{</div>}}
 }
