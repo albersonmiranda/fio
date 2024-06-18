@@ -41,7 +41,8 @@ fn compute_ghosh_inverse(allocation_coeff: &[f64]) -> RArray<f64, [usize;2]> {
 
   // calculate Ghosh inverse
   let identity_matrix: Mat<f64> = Mat::identity(n, n);
-  let ghosh_inverse = allocation_coeff_matrix.partial_piv_lu().solve(identity_matrix);
+  let ghosh_matrix = &identity_matrix - allocation_coeff_matrix;
+  let ghosh_inverse = ghosh_matrix.partial_piv_lu().solve(identity_matrix);
 
   // convert to R matrix
   RArray::new_matrix(n, n, |row, col| ghosh_inverse[(row, col)])
