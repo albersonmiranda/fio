@@ -10,6 +10,10 @@
 #' Total production vector.
 #' @param final_demand
 #' Final demand matrix.
+#' @param household_consumption
+#' Household consumption vector.
+#' @param government_consumption
+#' Government consumption vector.
 #' @param exports
 #' Exports vector.
 #' @param imports
@@ -36,6 +40,10 @@
 #' Influence field matrix.
 #' @param key_sectors
 #' Key sectors dataframe.
+#' @param allocation_coefficients_matrix
+#' Allocation coefficients matrix.
+#' @param ghosh_inverse_matrix
+#' Ghosh inverse matrix.
 #' @export
 
 # input-output matrix class
@@ -58,6 +66,14 @@ iom <- R6::R6Class(
     #' @field final_demand
     #' Final demand matrix.
     final_demand = NULL,
+
+    #' @field household_consumption
+    #' Household consumption vector.
+    household_consumption = NULL,
+
+    #' @field government_consumption
+    #' Government consumption vector.
+    government_consumption = NULL,
 
     #' @field exports
     #' Exports vector.
@@ -111,12 +127,22 @@ iom <- R6::R6Class(
     #' Key sectors dataframe.
     key_sectors = NULL,
 
+    #' @field allocation_coefficients_matrix
+    #' Allocation coefficients matrix.
+    allocation_coefficients_matrix = NULL,
+
+    #' @field ghosh_inverse_matrix
+    #' Ghosh inverse matrix.
+    ghosh_inverse_matrix = NULL,
+
     #' @description
     #' Creates a new instance of this [R6][R6::R6Class] class.
     initialize = function(id,
                           intermediate_transactions,
                           total_production,
                           final_demand = NULL,
+                          household_consumption = NULL,
+                          government_consumption = NULL,
                           exports = NULL,
                           imports = NULL,
                           taxes = NULL,
@@ -129,11 +155,15 @@ iom <- R6::R6Class(
                           leontief_inverse_matrix = NULL,
                           multiplier_output = NULL,
                           field_influence = NULL,
-                          key_sectors = NULL) {
+                          key_sectors = NULL,
+                          allocation_coefficients_matrix = NULL,
+                          ghosh_inverse_matrix = NULL) {
       self$id <- id
       self$intermediate_transactions <- intermediate_transactions
       self$total_production <- total_production
       self$final_demand <- final_demand
+      self$household_consumption <- household_consumption
+      self$government_consumption <- government_consumption
       self$exports <- exports
       self$imports <- imports
       self$taxes <- taxes
@@ -147,6 +177,8 @@ iom <- R6::R6Class(
       self$multiplier_output <- multiplier_output
       self$field_influence <- field_influence
       self$key_sectors <- key_sectors
+      self$allocation_coefficients_matrix <- allocation_coefficients_matrix
+      self$ghosh_inverse_matrix <- ghosh_inverse_matrix
     },
 
     #' @description
@@ -322,6 +354,59 @@ iom <- R6::R6Class(
         })
       # store dataframe
       self$key_sectors <- key_sectors
+      invisible(self)
+    },
+
+    #' @description
+    #' Computes the allocation coefficients matrix.
+    #' @param intermediate_transactions
+    #' Intermediate transactions matrix.
+    #' @param total_production
+    #' Total production vector.
+    compute_allocation_coeff = function() {
+      # save row and column names
+      row_names <- if (is.null(rownames(self$intermediate_transactions))) {
+        seq_len(nrow(self$intermediate_transactions))
+      } else {
+        rownames(self$intermediate_transactions)
+      }
+      col_names <- if (is.null(colnames(self$intermediate_transactions))) {
+        seq_len(ncol(self$intermediate_transactions))
+      } else {
+        colnames(self$intermediate_transactions)
+      }
+      # compute allocation coefficients matrix
+      allocation_coefficients_matrix <- compute_allocation_coeff(
+        intermediate_transactions = self$intermediate_transactions,
+        total_production = self$total_production
+      )
+      # set row and column names
+      rownames(allocation_coefficients_matrix) <- row_names
+      colnames(allocation_coefficients_matrix) <- col_names
+
+      # store matrix
+      self$allocation_coefficients_matrix <- allocation_coefficients_matrix
+      invisible(self)
+    },
+
+    #' @description
+    #' Computes the Ghosh inverse matrix.
+    #' @param allocation_coefficients_matrix
+    #' Allocation coefficients matrix.
+    compute_ghosh_inverse = function(allocation_coefficients_matrix) {
+      # save row and column names
+      row_names <- rownames(self$allocation_coefficients_matrix)
+      col_names <- colnames(self$allocation_coefficients_matrix)
+      # compute ghosh inverse matrix
+      ghosh_inverse_matrix <- compute_ghosh_inverse(
+        allocation_coeff = self$allocation_coefficients_matrix
+      )
+      # set row and column names
+      rownames(ghosh_inverse_matrix) <- row_names
+      colnames(ghosh_inverse_matrix) <- col_names
+
+      # store matrix
+      self$ghosh_inverse_matrix <- ghosh_inverse_matrix
       invisible(self)
     }
   )

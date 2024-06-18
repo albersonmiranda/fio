@@ -11,7 +11,7 @@
 #' @useDynLib fio, .registration = TRUE
 NULL
 
-#' Computes technical coefficients matrix to R.
+#' Computes technical coefficients matrix.
 #' @param intermediate_transactions A nxn matrix of intermediate transactions.
 #' @param total_production A 1xn vector of total production.
 #' @return A nxn matrix of technical coefficients, known as A matrix.
@@ -63,6 +63,17 @@ compute_power_dispersion <- function(leontief_inverse_matrix) .Call(wrap__comput
 #' Computes sensitivity of dispersion from a Leontief inverse matrix.
 #' @return A vector of sensitivity of dispersion.
 compute_sensitivity_dispersion <- function(leontief_inverse_matrix) .Call(wrap__compute_sensitivity_dispersion, leontief_inverse_matrix)
+
+#' Computes allocation coefficients matrix.
+#' @param intermediate_transactions A nxn matrix of intermediate transactions.
+#' @param total_production A 1xn vector of total production.
+#' @return A nxn matrix of allocation coefficients, known as F matrix.
+compute_allocation_coeff <- function(intermediate_transactions, total_production) .Call(wrap__compute_allocation_coeff, intermediate_transactions, total_production)
+
+#' Computes Ghosh inverse matrix.
+#' @param allocation_coeff A nxn matrix of allocation coefficients.
+#' @return A nxn matrix of Ghosh inverse.
+compute_ghosh_inverse <- function(allocation_coeff) .Call(wrap__compute_ghosh_inverse, allocation_coeff)
 
 
 # nolint end
