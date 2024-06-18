@@ -77,7 +77,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Get data ready for input-output analysis</h1>
             
-            <h4 data-toc-skip class="date">June 16, 2024</h4>
+            <h4 data-toc-skip class="date">June 18, 2024</h4>
       
       
       <div class="hidden name"><code>getting_started.Rmd</code></div>
@@ -255,8 +255,11 @@ and <code><a href="https://rdrr.io/r/base/rm.html" class="external-link">remove(
 <span><span class="co">#&gt;     add: function (matrix_name, matrix) </span></span>
 <span><span class="co">#&gt;     added_value: NULL</span></span>
 <span><span class="co">#&gt;     added_value_final_demand: NULL</span></span>
+<span><span class="co">#&gt;     allocation_coefficients_matrix: NULL</span></span>
 <span><span class="co">#&gt;     clone: function (deep = FALSE) </span></span>
+<span><span class="co">#&gt;     compute_allocation_coeff: function () </span></span>
 <span><span class="co">#&gt;     compute_field_influence: function (epsilon) </span></span>
+<span><span class="co">#&gt;     compute_ghosh_inverse: function (allocation_coefficients_matrix) </span></span>
 <span><span class="co">#&gt;     compute_key_sectors: function (leontief_inverse_matrix) </span></span>
 <span><span class="co">#&gt;     compute_leontief_inverse: function (technical_coefficients_matrix) </span></span>
 <span><span class="co">#&gt;     compute_multiplier_output: function (leontief_inverse_matrix) </span></span>
@@ -264,6 +267,9 @@ and <code><a href="https://rdrr.io/r/base/rm.html" class="external-link">remove(
 <span><span class="co">#&gt;     exports: NULL</span></span>
 <span><span class="co">#&gt;     field_influence: NULL</span></span>
 <span><span class="co">#&gt;     final_demand: NULL</span></span>
+<span><span class="co">#&gt;     ghosh_inverse_matrix: NULL</span></span>
+<span><span class="co">#&gt;     government_consumption: NULL</span></span>
+<span><span class="co">#&gt;     household_consumption: NULL</span></span>
 <span><span class="co">#&gt;     id: my_iom</span></span>
 <span><span class="co">#&gt;     imports: NULL</span></span>
 <span><span class="co">#&gt;     initialize: function (id, intermediate_transactions, total_production, final_demand = NULL, </span></span>
@@ -292,8 +298,11 @@ We can compute the technical coefficients matrix by calling the
 <span><span class="co">#&gt;     add: function (matrix_name, matrix) </span></span>
 <span><span class="co">#&gt;     added_value: NULL</span></span>
 <span><span class="co">#&gt;     added_value_final_demand: NULL</span></span>
+<span><span class="co">#&gt;     allocation_coefficients_matrix: NULL</span></span>
 <span><span class="co">#&gt;     clone: function (deep = FALSE) </span></span>
+<span><span class="co">#&gt;     compute_allocation_coeff: function () </span></span>
 <span><span class="co">#&gt;     compute_field_influence: function (epsilon) </span></span>
+<span><span class="co">#&gt;     compute_ghosh_inverse: function (allocation_coefficients_matrix) </span></span>
 <span><span class="co">#&gt;     compute_key_sectors: function (leontief_inverse_matrix) </span></span>
 <span><span class="co">#&gt;     compute_leontief_inverse: function (technical_coefficients_matrix) </span></span>
 <span><span class="co">#&gt;     compute_multiplier_output: function (leontief_inverse_matrix) </span></span>
@@ -301,6 +310,9 @@ We can compute the technical coefficients matrix by calling the
 <span><span class="co">#&gt;     exports: NULL</span></span>
 <span><span class="co">#&gt;     field_influence: NULL</span></span>
 <span><span class="co">#&gt;     final_demand: NULL</span></span>
+<span><span class="co">#&gt;     ghosh_inverse_matrix: NULL</span></span>
+<span><span class="co">#&gt;     government_consumption: NULL</span></span>
+<span><span class="co">#&gt;     household_consumption: NULL</span></span>
 <span><span class="co">#&gt;     id: my_iom</span></span>
 <span><span class="co">#&gt;     imports: NULL</span></span>
 <span><span class="co">#&gt;     initialize: function (id, intermediate_transactions, total_production, final_demand = NULL, </span></span>
@@ -327,7 +339,7 @@ You can access the slots using the <code>$</code> operator:</p>
 <span><span class="co">#&gt; 4 0.09206069 0.03524608 0.08785562 0.06759413 0.11127116</span></span>
 <span><span class="co">#&gt; 5 0.04330535 0.03685794 0.08798095 0.11311054 0.09452647</span></span></code></pre></div>
 <p>Other methods available are <code><a href="../reference/compute_leontief_inverse.html">compute_leontief_inverse()</a></code>,
-<code>compute_ghosh_inverse()</code>,
+<code><a href="../reference/compute_ghosh_inverse.html">compute_ghosh_inverse()</a></code>,
 <code><a href="../reference/compute_multiplier_output.html">compute_multiplier_output()</a></code>,
 <code>compute_influence_field()</code>, and
 <code>compute_key_sectors()</code>. Their names are clear and self
