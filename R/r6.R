@@ -399,7 +399,7 @@ iom <- R6::R6Class(
       col_names <- colnames(self$allocation_coefficients_matrix)
       # compute ghosh inverse matrix
       ghosh_inverse_matrix <- compute_ghosh_inverse(
-        allocation_coefficients_matrix = self$allocation_coefficients_matrix
+        allocation_coeff = self$allocation_coefficients_matrix
       )
       # set row and column names
       rownames(ghosh_inverse_matrix) <- row_names
