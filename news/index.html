@@ -53,7 +53,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      
+      <small>Source: <a href="https://github.com/albersonmiranda/fio/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
@@ -66,12 +66,14 @@
 <li>New <code>add</code> and <code>remove</code> methods to add and remove elements from an <code>iom</code> object</li>
 <li>New <code>br_2020</code> dataset with a 51 sector Brazilian input-output table for 2020</li>
 <li>New <code><a href="../reference/compute_tech_coeff.html">compute_tech_coeff()</a></code> and <code><a href="../reference/compute_leontief_inverse.html">compute_leontief_inverse()</a></code> methods uses the power of Rust and <code>faer</code> crate to substantially increase performance</li>
-<li>New <code>compute_multiplier_*</code> methods to compute multipliers from a given input-output table:
+<li>New <code>compute_multiplier_*()</code> methods to compute multipliers from a given input-output table:
 <ul><li>
-<code>compute_multiplier_output</code> for the output multiplier</li>
+<code><a href="../reference/compute_multiplier_output.html">compute_multiplier_output()</a></code> for the output multiplier</li>
 </ul></li>
-<li>New <code>compute_influence_field</code> method to compute the field of influence of each sector</li>
-<li>New <code>compute_key_sectors</code> method to compute the key sectors of an input-output table, based on power of dispersion and sensitivity of dispersion, and their coefficients of variations</li>
+<li>New <code>compute_influence_field()</code> method to compute the field of influence of each sector</li>
+<li>New <code>compute_key_sectors()</code> method to compute the key sectors of an input-output table, based on power of dispersion and sensitivity of dispersion, and their coefficients of variations</li>
+<li>New <code><a href="../reference/compute_allocation_coeff.html">compute_allocation_coeff()</a></code> method to compute the allocation coefficients of an input-output table</li>
+<li>New <code><a href="../reference/compute_ghosh_inverse.html">compute_ghosh_inverse()</a></code> method to compute the Ghosh inverse of an input-output table</li>
 </ul></div>
 </div>
   </div>

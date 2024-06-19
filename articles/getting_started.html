@@ -77,9 +77,9 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Get data ready for input-output analysis</h1>
             
-            <h4 data-toc-skip class="date">June 18, 2024</h4>
+            <h4 data-toc-skip class="date">June 19, 2024</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/albersonmiranda/fio/blob/HEAD/vignettes/getting_started.Rmd" class="external-link"><code>vignettes/getting_started.Rmd</code></a></small>
       <div class="hidden name"><code>getting_started.Rmd</code></div>
 
     </div>
@@ -198,6 +198,12 @@ transactions.</li>
 <li>
 <code>added_value</code>: a vector for added value.</li>
 <li>
+<code>household_consumption</code>: a vector for household
+consumption.</li>
+<li>
+<code>government_consumption</code>: a vector for government
+consumption.</li>
+<li>
 <code>exports</code>: a vector for exports.</li>
 <li>
 <code>imports</code>: a vector for imports.</li>
@@ -219,13 +225,16 @@ coefficients.</li>
 <code>leontief_inverse_matrix</code>: a matrix with the Leontief
 inverse.</li>
 <li>
+<code>allocation_coefficients_matrix</code>: a matrix with the
+allocation coefficients.</li>
+<li>
 <code>ghosh_inverse_matrix</code>: a matrix with the Ghosh
 inverse.</li>
 <li>
 <code>multiplier_output</code>: a vector with the output
 multiplier.</li>
 <li>
-<code>influence_field</code>: a matrix with the field of
+<code>field_influence</code>: a matrix with the field of
 influence.</li>
 <li>
 <code>key_sectors</code>: a dataframe with the key sectors, power of
@@ -339,10 +348,11 @@ You can access the slots using the <code>$</code> operator:</p>
 <span><span class="co">#&gt; 4 0.09206069 0.03524608 0.08785562 0.06759413 0.11127116</span></span>
 <span><span class="co">#&gt; 5 0.04330535 0.03685794 0.08798095 0.11311054 0.09452647</span></span></code></pre></div>
 <p>Other methods available are <code><a href="../reference/compute_leontief_inverse.html">compute_leontief_inverse()</a></code>,
-<code><a href="../reference/compute_ghosh_inverse.html">compute_ghosh_inverse()</a></code>,
 <code><a href="../reference/compute_multiplier_output.html">compute_multiplier_output()</a></code>,
-<code>compute_influence_field()</code>, and
-<code>compute_key_sectors()</code>. Their names are clear and self
+<code>compute_influence_field()</code>,
+<code>compute_key_sectors()</code>,
+<code><a href="../reference/compute_allocation_coeff.html">compute_allocation_coeff()</a></code> and
+<code><a href="../reference/compute_ghosh_inverse.html">compute_ghosh_inverse()</a></code>. Their names are clear and self
 explanatory. You can also chain these methods to do all at once:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Chain methods</span></span>
