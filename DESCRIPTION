@@ -45,4 +45,3 @@ Suggests:
     ggplot2
 VignetteBuilder: knitr
 Language: en-US
-URL: https://albersonmiranda.github.io/fio/

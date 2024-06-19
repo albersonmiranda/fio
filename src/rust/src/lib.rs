@@ -15,6 +15,8 @@ use rayon::prelude::*;
 /// @return A nxn matrix of technical coefficients, known as A matrix.
 
 fn compute_tech_coeff(
+  // There's an optional faer feature in extendr-api but it's not working (for the time I'm writing this)
+  // see https://github.com/extendr/extendr/discussions/804
   intermediate_transactions: &[f64],
   total_production: &[f64],
 ) -> RArray<f64, [usize;2]> {

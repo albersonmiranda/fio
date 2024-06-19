@@ -6,12 +6,13 @@
 \alias{fio-package}
 \title{fio: Friendly Input-Output Analysis}
 \description{
-A set of functions to help with input-output analysis, including international and brazilian matrices data, and a convenient addin for easy input.
+A set of functions to perform input-output analysis.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://albersonmiranda.github.io/fio/}
+  \item Report bugs at \url{https://github.com/albersonmiranda/fio/issues}
 }
 
 }
