@@ -76,12 +76,20 @@ compute_allocation_coeff <- function(intermediate_transactions, total_production
 compute_ghosh_inverse <- function(allocation_coeff) .Call(wrap__compute_ghosh_inverse, allocation_coeff)
 
 #' Calculates backward linkage extraction.
-#' @param tech_coeff_matrix A nxn matrix of technical coefficients.
+#' @param technical_coefficients_matrix A nxn matrix of technical coefficients.
 #' @param total_production A 1xn vector of total production.
-#' @param final_demand_matrix The final demanda matrix.
+#' @param final_demand_matrix The final demand matrix.
 #' @description
 #' Computes impact on demand structure after extracting a given sector.
-extraction_backward <- function(tech_coeff_matrix, total_production, final_demand_matrix) .Call(wrap__extraction_backward, tech_coeff_matrix, total_production, final_demand_matrix)
+extraction_backward <- function(technical_coefficients_matrix, total_production, final_demand_matrix) .Call(wrap__extraction_backward, technical_coefficients_matrix, total_production, final_demand_matrix)
+
+#' Calculates forward linkage extraction.
+#' @param allocation_coeff_matrix A nxn matrix of allocation coefficients.
+#' @param total_production A 1xn vector of total production.
+#' @param added_value_matrix The added value matrix.
+#' @description
+#' Computes impact on supply structure after extracting a given sector.
+extraction_forward <- function(allocation_coefficients_matrix, total_production, added_value_matrix) .Call(wrap__extraction_forward, allocation_coefficients_matrix, total_production, added_value_matrix)
 
 
 # nolint end

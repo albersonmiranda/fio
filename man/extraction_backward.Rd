@@ -4,14 +4,18 @@
 \alias{extraction_backward}
 \title{Calculates backward linkage extraction.}
 \usage{
-extraction_backward(tech_coeff_matrix, total_production, final_demand_matrix)
+extraction_backward(
+  technical_coefficients_matrix,
+  total_production,
+  final_demand_matrix
+)
 }
 \arguments{
-\item{tech_coeff_matrix}{A nxn matrix of technical coefficients.}
+\item{technical_coefficients_matrix}{A nxn matrix of technical coefficients.}
 
 \item{total_production}{A 1xn vector of total production.}
 
-\item{final_demand_matrix}{The final demanda matrix.}
+\item{final_demand_matrix}{The final demand matrix.}
 }
 \description{
 Computes impact on demand structure after extracting a given sector.
