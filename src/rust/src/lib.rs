@@ -3,6 +3,7 @@ mod multipliers;
 mod influence;
 mod linkages;
 mod ghosh;
+mod extraction;
 
 use faer::{Mat, prelude::SpSolver};
 use extendr_api::prelude::*;
@@ -67,6 +68,7 @@ extendr_module! {
   use influence;
   use linkages;
   use ghosh;
+  use extraction;
   fn compute_tech_coeff;
   fn compute_leontief_inverse;
 }

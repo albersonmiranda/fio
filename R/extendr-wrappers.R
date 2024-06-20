@@ -6,7 +6,6 @@
 # This file was created with the following call:
 #   .Call("wrap__make_fio_wrappers", use_symbols = TRUE, package_name = "fio")
 
-#' @docType package
 #' @usage NULL
 #' @useDynLib fio, .registration = TRUE
 NULL
@@ -74,6 +73,14 @@ compute_allocation_coeff <- function(intermediate_transactions, total_production
 #' @param allocation_coeff A nxn matrix of allocation coefficients.
 #' @return A nxn matrix of Ghosh inverse.
 compute_ghosh_inverse <- function(allocation_coeff) .Call(wrap__compute_ghosh_inverse, allocation_coeff)
+
+#' Calculates backward linkage extraction.
+#' @param tech_coeff_matrix A nxn matrix of technical coefficients.
+#' @param total_production A 1xn vector of total production.
+#' @param final_demand_matrix The final demanda matrix.
+#' @description
+#' Computes impact on demand structure after extracting a given sector.
+extraction_backward <- function(tech_coeff_matrix, total_production, final_demand_matrix) .Call(wrap__extraction_backward, tech_coeff_matrix, total_production, final_demand_matrix)
 
 
 # nolint end

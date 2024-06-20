@@ -1,6 +1,6 @@
 [package]
 name = 'fio'
-version = '0.1.0'
+version = '0.0.9001'
 edition = '2021'
 
 [lib]
@@ -8,6 +8,6 @@ crate-type = [ 'staticlib' ]
 name = 'fio'
 
 [dependencies]
-extendr-api = '0.6.0'
+extendr-api = {git = "https://github.com/extendr/extendr", default-features = false, features = ["faer"]}
 faer = '0.19.0'
 rayon = '1.10.0'
