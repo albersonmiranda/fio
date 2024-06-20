@@ -14,8 +14,8 @@ name: pkgdown
 permissions: read-all
 
 jobs:
-  if: '! github.event.pull_request.draft'
   pkgdown:
+    if: '! github.event.pull_request.draft'
     runs-on: ubuntu-latest
     # Only restrict concurrency for non-PR jobs
     concurrency:
