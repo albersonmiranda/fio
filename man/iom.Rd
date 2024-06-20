@@ -50,6 +50,8 @@ R6 class for input-output matrix.
 \item{\code{allocation_coefficients_matrix}}{Allocation coefficients matrix.}
 
 \item{\code{ghosh_inverse_matrix}}{Ghosh inverse matrix.}
+
+\item{\code{hypothetical_extraction}}{Absolute and relative backward and forward differences in total output after a hypothetical extraction.}
 }
 \if{html}{\out{</div>}}
 }
@@ -66,6 +68,7 @@ R6 class for input-output matrix.
 \item \href{#method-iom-compute_key_sectors}{\code{iom$compute_key_sectors()}}
 \item \href{#method-iom-compute_allocation_coeff}{\code{iom$compute_allocation_coeff()}}
 \item \href{#method-iom-compute_ghosh_inverse}{\code{iom$compute_ghosh_inverse()}}
+\item \href{#method-iom-compute_hypothetical_extraction}{\code{iom$compute_hypothetical_extraction()}}
 \item \href{#method-iom-clone}{\code{iom$clone()}}
 }
 }
@@ -96,7 +99,8 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
   field_influence = NULL,
   key_sectors = NULL,
   allocation_coefficients_matrix = NULL,
-  ghosh_inverse_matrix = NULL
+  ghosh_inverse_matrix = NULL,
+  hypothetical_extraction = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -144,6 +148,8 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
 \item{\code{allocation_coefficients_matrix}}{Allocation coefficients matrix.}
 
 \item{\code{ghosh_inverse_matrix}}{Ghosh inverse matrix.}
+
+\item{\code{hypothetical_extraction}}{Absolute and relative backward and forward differences in total output after a hypothetical extraction.}
 }
 \if{html}{\out{</div>}}
 }
@@ -300,6 +306,41 @@ Computes the Ghosh inverse matrix.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{allocation_coefficients_matrix}}{Allocation coefficients matrix.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-iom-compute_hypothetical_extraction"></a>}}
+\if{latex}{\out{\hypertarget{method-iom-compute_hypothetical_extraction}{}}}
+\subsection{Method \code{compute_hypothetical_extraction()}}{
+Computes the hypothetical extraction.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{iom$compute_hypothetical_extraction(
+  technical_coefficients_matrix,
+  allocation_coefficients_matrix,
+  final_demand,
+  added_value,
+  total_production
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{technical_coefficients_matrix}}{Technical coefficients matrix.}
+
+\item{\code{allocation_coefficients_matrix}}{Allocation coefficients matrix.}
+
+\item{\code{final_demand}}{Final demand matrix.}
+
+\item{\code{added_value}}{Added value vector.}
+
+\item{\code{total_production}}{Total production vector.}
+
+\item{\code{final_demand_matrix}}{Final demand matrix.}
+
+\item{\code{added_value_matrix}}{Added value matrix.}
 }
 \if{html}{\out{</div>}}
 }

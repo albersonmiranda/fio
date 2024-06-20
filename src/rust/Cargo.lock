@@ -249,7 +249,7 @@ dependencies = [
 
 [[package]]
 name = "fio"
-version = "0.0.9001"
+version = "0.0.9002"
 dependencies = [
  "extendr-api",
  "faer",

@@ -1,6 +1,5 @@
-# fio 0.0.0.9001
+# fio (development version)
 
-## Development version
 * New `import_element()` to programmatically import data from an Excel file
 * New data import addin makes easy to import data from clipboard or an Excel file
 * New `iom` uses the efficiency of R6 classes to store data reducing memory footprint
@@ -13,3 +12,4 @@
 * New `compute_key_sectors()` method to compute the key sectors of an input-output table, based on power of dispersion and sensitivity of dispersion, and their coefficients of variations
 * New `compute_allocation_coeff()` method to compute the allocation coefficients of an input-output table
 * New `compute_ghosh_inverse()` method to compute the Ghosh inverse of an input-output table
+* New `compute_hypothetical_extraction()` method to compute impact on demand and supply structures after hypothetical extraction of a sector

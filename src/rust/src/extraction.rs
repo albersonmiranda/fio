@@ -4,15 +4,15 @@ use faer::{prelude::SpSolver, Mat};
 #[extendr]
 /// Calculates backward linkage extraction.
 /// @param technical_coefficients_matrix A nxn matrix of technical coefficients.
-/// @param total_production A 1xn vector of total production.
 /// @param final_demand_matrix The final demand matrix.
+/// @param total_production A 1xn vector of total production.
 /// @description
 /// Computes impact on demand structure after extracting a given sector.
 
-fn extraction_backward(
+fn compute_extraction_backward(
   technical_coefficients_matrix: &[f64],
-  total_production: &[f64],
-  final_demand_matrix: RMatrix<f64>
+  final_demand_matrix: RMatrix<f64>,
+  total_production: &[f64]
 ) -> RMatrix<f64> {
 
   // get dimensions
@@ -65,15 +65,15 @@ fn extraction_backward(
 #[extendr]
 /// Calculates forward linkage extraction.
 /// @param allocation_coeff_matrix A nxn matrix of allocation coefficients.
-/// @param total_production A 1xn vector of total production.
 /// @param added_value_matrix The added value matrix.
+/// @param total_production A 1xn vector of total production.
 /// @description
 /// Computes impact on supply structure after extracting a given sector.
 
-fn extraction_forward(
+fn compute_extraction_forward(
   allocation_coefficients_matrix: &[f64],
-  total_production: &[f64],
-  added_value_matrix: RMatrix<f64>
+  added_value_matrix: RMatrix<f64>,
+  total_production: &[f64]
 ) -> RMatrix<f64> {
 
   // get dimensions
@@ -128,6 +128,6 @@ fn extraction_forward(
 // See corresponding C code in `entrypoint.c`.
 extendr_module! {
   mod extraction;
-  fn extraction_backward;
-  fn extraction_forward;
+  fn compute_extraction_backward;
+  fn compute_extraction_forward;
 }
