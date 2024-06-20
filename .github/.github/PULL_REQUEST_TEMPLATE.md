@@ -44,6 +44,7 @@ _Goal is code coverage percentage at 80% and above._
 ## Pre-merge checklist
 
 - [ ] PR title follows semantic commit guidelines (e.g., `fix:`, `feat:`, `refactor:`, `test:`, `docs:`)
+- [ ] Bump version (both Rust & R packages, accordingly)
 - [ ] Updated NEWS.md
 - [ ] Precompiled Windows binaries from [Win-Builder](https://win-builder.r-project.org/)
 - [ ] Precompiled Linux binaries
