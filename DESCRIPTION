@@ -34,7 +34,7 @@ Imports:
     readxl,
     rlang,
     shiny
-License: MIT
+License: MIT + file LICENSE
 Config/rextendr/version: 0.3.1
 Suggests: 
     knitr,
