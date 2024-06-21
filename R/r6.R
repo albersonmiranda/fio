@@ -44,6 +44,8 @@
 #' Allocation coefficients matrix.
 #' @param ghosh_inverse_matrix
 #' Ghosh inverse matrix.
+#' @param hypothetical_extraction
+#' Absolute and relative backward and forward differences in total output after a hypothetical extraction.
 #' @export
 
 # input-output matrix class
@@ -135,6 +137,10 @@ iom <- R6::R6Class(
     #' Ghosh inverse matrix.
     ghosh_inverse_matrix = NULL,
 
+    #' @field hypothetical_extraction
+    #' Absolute and relative backward and forward differences in total output after a hypothetical extraction.
+    hypothetical_extraction = NULL,
+
     #' @description
     #' Creates a new instance of this [R6][R6::R6Class] class.
     initialize = function(id,
@@ -157,7 +163,8 @@ iom <- R6::R6Class(
                           field_influence = NULL,
                           key_sectors = NULL,
                           allocation_coefficients_matrix = NULL,
-                          ghosh_inverse_matrix = NULL) {
+                          ghosh_inverse_matrix = NULL,
+                          hypothetical_extraction = NULL) {
       self$id <- id
       self$intermediate_transactions <- intermediate_transactions
       self$total_production <- total_production
@@ -179,6 +186,7 @@ iom <- R6::R6Class(
       self$key_sectors <- key_sectors
       self$allocation_coefficients_matrix <- allocation_coefficients_matrix
       self$ghosh_inverse_matrix <- ghosh_inverse_matrix
+      self$hypothetical_extraction <- hypothetical_extraction
     },
 
     #' @description
@@ -407,6 +415,51 @@ iom <- R6::R6Class(
 
       # store matrix
       self$ghosh_inverse_matrix <- ghosh_inverse_matrix
+      invisible(self)
+    },
+
+    #' @description
+    #' Computes the hypothetical extraction.
+    #' @param technical_coefficients_matrix
+    #' Technical coefficients matrix.
+    #' @param allocation_coefficients_matrix
+    #' Allocation coefficients matrix.
+    #' @param final_demand_matrix
+    #' Final demand matrix.
+    #' @param added_value_matrix
+    #' Added value matrix.
+    #' @param total_production
+    #' Total production vector.
+    compute_hypothetical_extraction = function(
+      technical_coefficients_matrix,
+      allocation_coefficients_matrix,
+      final_demand,
+      added_value,
+      total_production
+    ) {
+      # save row and column names
+      row_names <- rownames(self$technical_coefficients_matrix)
+      # compute backward extraction
+      backward_extraction <- compute_backward_extraction(
+        technical_coefficients_matrix = self$technical_coefficients_matrix,
+        final_demand_matrix = self$final_demand,
+        total_production = self$total_production
+      )
+      # compute forward extraction
+      forward_extraction <- compute_forward_extraction(
+        allocation_coeff = self$allocation_coefficients_matrix,
+        added_value_matrix = self$added_value,
+        total_production = self$total_production
+      )
+      # bind
+      hypothetical_extraction <- cbind(
+        backward_extraction,
+        forward_extraction
+      )
+      # set row and column names
+      rownames(hypothetical_extraction) <- row_names
+      # store matrix
+      self$hypothetical_extraction <- hypothetical_extraction
       invisible(self)
     }
   )

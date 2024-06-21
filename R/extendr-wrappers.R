@@ -75,5 +75,21 @@ compute_allocation_coeff <- function(intermediate_transactions, total_production
 #' @return A nxn matrix of Ghosh inverse.
 compute_ghosh_inverse <- function(allocation_coeff) .Call(wrap__compute_ghosh_inverse, allocation_coeff)
 
+#' Calculates backward linkage extraction.
+#' @param technical_coefficients_matrix A nxn matrix of technical coefficients.
+#' @param final_demand_matrix The final demand matrix.
+#' @param total_production A 1xn vector of total production.
+#' @description
+#' Computes impact on demand structure after extracting a given sector.
+compute_extraction_backward <- function(technical_coefficients_matrix, final_demand_matrix, total_production) .Call(wrap__compute_extraction_backward, technical_coefficients_matrix, final_demand_matrix, total_production)
+
+#' Calculates forward linkage extraction.
+#' @param allocation_coefficients_matrix A nxn matrix of allocation coefficients.
+#' @param added_value_matrix The added value matrix.
+#' @param total_production A 1xn vector of total production.
+#' @description
+#' Computes impact on supply structure after extracting a given sector.
+compute_extraction_forward <- function(allocation_coefficients_matrix, added_value_matrix, total_production) .Call(wrap__compute_extraction_forward, allocation_coefficients_matrix, added_value_matrix, total_production)
+
 
 # nolint end

@@ -5,6 +5,8 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+  pull_request_target:
+    types: [ready_for_review]
 
 name: R-CMD-check
 
@@ -12,6 +14,7 @@ permissions: read-all
 
 jobs:
   R-CMD-check:
+    if: '! github.event.pull_request.draft'
     runs-on: ${{ matrix.config.os }}
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})

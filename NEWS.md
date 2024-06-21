@@ -1,6 +1,9 @@
+# fio 0.0.0.9002
+
+* New `compute_hypothetical_extraction()` method to compute impact on demand and supply structures after hypothetical extraction of a sector
+
 # fio 0.0.0.9001
 
-## Development version
 * New `import_element()` to programmatically import data from an Excel file
 * New data import addin makes easy to import data from clipboard or an Excel file
 * New `iom` uses the efficiency of R6 classes to store data reducing memory footprint
