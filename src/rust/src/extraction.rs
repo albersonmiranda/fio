@@ -64,7 +64,7 @@ fn compute_extraction_backward(
 
 #[extendr]
 /// Calculates forward linkage extraction.
-/// @param allocation_coeff_matrix A nxn matrix of allocation coefficients.
+/// @param allocation_coefficients_matrix A nxn matrix of allocation coefficients.
 /// @param added_value_matrix The added value matrix.
 /// @param total_production A 1xn vector of total production.
 /// @description
