@@ -11,11 +11,11 @@ compute_extraction_forward(
 )
 }
 \arguments{
+\item{allocation_coefficients_matrix}{A nxn matrix of allocation coefficients.}
+
 \item{added_value_matrix}{The added value matrix.}
 
 \item{total_production}{A 1xn vector of total production.}
-
-\item{allocation_coeff_matrix}{A nxn matrix of allocation coefficients.}
 }
 \description{
 Computes impact on supply structure after extracting a given sector.

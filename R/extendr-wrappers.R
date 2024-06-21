@@ -84,7 +84,7 @@ compute_ghosh_inverse <- function(allocation_coeff) .Call(wrap__compute_ghosh_in
 compute_extraction_backward <- function(technical_coefficients_matrix, final_demand_matrix, total_production) .Call(wrap__compute_extraction_backward, technical_coefficients_matrix, final_demand_matrix, total_production)
 
 #' Calculates forward linkage extraction.
-#' @param allocation_coeff_matrix A nxn matrix of allocation coefficients.
+#' @param allocation_coefficients_matrix A nxn matrix of allocation coefficients.
 #' @param added_value_matrix The added value matrix.
 #' @param total_production A 1xn vector of total production.
 #' @description
