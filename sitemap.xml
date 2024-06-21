@@ -4,6 +4,9 @@
     <loc>https://albersonmiranda.github.io/fio/404.html</loc>
   </url>
   <url>
+    <loc>https://albersonmiranda.github.io/fio/LICENSE-text.html</loc>
+  </url>
+  <url>
     <loc>https://albersonmiranda.github.io/fio/LICENSE.html</loc>
   </url>
   <url>
@@ -29,6 +32,12 @@
   </url>
   <url>
     <loc>https://albersonmiranda.github.io/fio/reference/compute_allocation_coeff.html</loc>
+  </url>
+  <url>
+    <loc>https://albersonmiranda.github.io/fio/reference/compute_extraction_backward.html</loc>
+  </url>
+  <url>
+    <loc>https://albersonmiranda.github.io/fio/reference/compute_extraction_forward.html</loc>
   </url>
   <url>
     <loc>https://albersonmiranda.github.io/fio/reference/compute_field_influence.html</loc>
