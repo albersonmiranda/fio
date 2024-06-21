@@ -27,6 +27,20 @@ total_production <- import_element(
   col_names = col_names
 )
 
+exports_goods <- import_element(
+  file = path,
+  sheet = sheet,
+  range = "BD6:BD56",
+  row_names = row_names
+)
+
+exports_services <- import_element(
+  file = path,
+  sheet = sheet,
+  range = "BE6:BE56",
+  row_names = row_names
+)
+
 household_consumption <- import_element(
   file = path,
   sheet = sheet,
@@ -37,23 +51,32 @@ household_consumption <- import_element(
 government_consumption <- import_element(
   file = path,
   sheet = sheet,
+  range = "BF6:BF56",
+  row_names = row_names
+)
+
+isflsf_consumption <- import_element(
+  file = path,
+  sheet = sheet,
   range = "BG6:BG56",
-  row_names = row_names
+  row_names = row_names,
+  col_names = "BG4:BG4"
 )
 
-exports <- import_element(
+fbcf <- import_element(
   file = path,
   sheet = sheet,
-  range = "BD6:BD56",
-  row_names = row_names
+  range = "BI6:BI56",
+  row_names = row_names,
+  col_names = "BI4:BI4"
 )
 
-final_demand <- import_element(
+stock_var <- import_element(
   file = path,
   sheet = sheet,
-  range = "BE6:BJ56",
-  col_names = "BE4:BJ4",
-  row_names = row_names
+  range = "BJ6:BJ56",
+  row_names = row_names,
+  col_names = "BJ4:BJ4"
 )
 
 imports <- import_element(
@@ -84,13 +107,6 @@ operating_income <- import_element(
   col_names = col_names
 )
 
-added_value <- import_element(
-  file = path,
-  sheet = sheet,
-  range = "D78:BB78",
-  col_names = col_names
-)
-
 occupation <- import_element(
   file = path,
   sheet = sheet,
@@ -114,26 +130,27 @@ other_taxes_subsidies <- import_element(
   row_names = "A76:A77"
 )
 
-added_value_final_demand <- rbind(
-  other_margins,
-  other_taxes_subsidies
-)
-
 # create input-output matrix object
 br_2020 <- iom$new(
   id = "br_2020",
   intermediate_transactions = intermediate_transactions,
   total_production = total_production,
-  final_demand = final_demand,
   household_consumption = household_consumption,
   government_consumption = government_consumption,
-  exports = exports,
+  exports = as.matrix(rowSums(cbind(exports_goods, exports_services))),
+  final_demand_others = cbind(
+    isflsf_consumption,
+    fbcf,
+    stock_var
+  ),
   imports = imports,
   taxes = taxes,
   wages = wages,
   operating_income = operating_income,
-  added_value_final_demand = added_value_final_demand,
-  added_value = added_value,
+  added_value_others = rbind(
+    other_margins,
+    other_taxes_subsidies
+  ),
   occupation = occupation
 )
 

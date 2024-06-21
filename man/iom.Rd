@@ -15,13 +15,13 @@ R6 class for input-output matrix.
 
 \item{\code{total_production}}{Total production vector.}
 
-\item{\code{final_demand}}{Final demand matrix.}
-
 \item{\code{household_consumption}}{Household consumption vector.}
 
 \item{\code{government_consumption}}{Government consumption vector.}
 
 \item{\code{exports}}{Exports vector.}
+
+\item{\code{final_demand_others}}{Other vectors of final demand that doesn't have dedicated slots.}
 
 \item{\code{imports}}{Imports vector.}
 
@@ -31,9 +31,7 @@ R6 class for input-output matrix.
 
 \item{\code{operating_income}}{Operating income vector.}
 
-\item{\code{added_value_final_demand}}{Added value final demand matrix.}
-
-\item{\code{added_value}}{Added value vector.}
+\item{\code{added_value_others}}{Other vectors of added value that doesn't have dedicated slots.}
 
 \item{\code{occupation}}{Occupation vector}
 
@@ -52,6 +50,15 @@ R6 class for input-output matrix.
 \item{\code{ghosh_inverse_matrix}}{Ghosh inverse matrix.}
 
 \item{\code{hypothetical_extraction}}{Absolute and relative backward and forward differences in total output after a hypothetical extraction.}
+}
+\if{html}{\out{</div>}}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{final_demand_matrix}}{Final demand matrix.}
+
+\item{\code{added_value_matrix}}{Added value matrix.}
 }
 \if{html}{\out{</div>}}
 }
@@ -82,25 +89,16 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
   id,
   intermediate_transactions,
   total_production,
-  final_demand = NULL,
   household_consumption = NULL,
   government_consumption = NULL,
   exports = NULL,
+  final_demand_others = NULL,
   imports = NULL,
   taxes = NULL,
   wages = NULL,
   operating_income = NULL,
-  added_value_final_demand = NULL,
-  added_value = NULL,
-  occupation = NULL,
-  technical_coefficients_matrix = NULL,
-  leontief_inverse_matrix = NULL,
-  multiplier_output = NULL,
-  field_influence = NULL,
-  key_sectors = NULL,
-  allocation_coefficients_matrix = NULL,
-  ghosh_inverse_matrix = NULL,
-  hypothetical_extraction = NULL
+  added_value_others = NULL,
+  occupation = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -113,13 +111,14 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
 
 \item{\code{total_production}}{Total production vector.}
 
-\item{\code{final_demand}}{Final demand matrix.}
-
 \item{\code{household_consumption}}{Household consumption vector.}
 
 \item{\code{government_consumption}}{Government consumption vector.}
 
 \item{\code{exports}}{Exports vector.}
+
+\item{\code{final_demand_others}}{Other vectors of final demand that doesn't have dedicated slots.
+Setting column names is advised for better readability.}
 
 \item{\code{imports}}{Imports vector.}
 
@@ -129,27 +128,10 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
 
 \item{\code{operating_income}}{Operating income vector.}
 
-\item{\code{added_value_final_demand}}{Added value final demand matrix.}
-
-\item{\code{added_value}}{Added value vector.}
+\item{\code{added_value_others}}{Other vectors of added value that doesn't have dedicated slots.
+Setting row names is advised for better readability.}
 
 \item{\code{occupation}}{Occupation matrix.}
-
-\item{\code{technical_coefficients_matrix}}{Technical coefficients matrix.}
-
-\item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
-
-\item{\code{multiplier_output}}{Output multiplier vector.}
-
-\item{\code{field_influence}}{Influence field matrix.}
-
-\item{\code{key_sectors}}{Key sectors dataframe.}
-
-\item{\code{allocation_coefficients_matrix}}{Allocation coefficients matrix.}
-
-\item{\code{ghosh_inverse_matrix}}{Ghosh inverse matrix.}
-
-\item{\code{hypothetical_extraction}}{Absolute and relative backward and forward differences in total output after a hypothetical extraction.}
 }
 \if{html}{\out{</div>}}
 }
@@ -166,7 +148,8 @@ Adds a matrix to a previously imported IO matrix.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{matrix_name}}{One of final_demand, exports, imports, added_value_final_demand, added_value or occupation matrix to be added.}
+\item{\code{matrix_name}}{One of household_consumption, government_consumption, exports, final_demand_others,
+imports, taxes, wages, operating income, added_value_others or occupation matrix to be added.}
 
 \item{\code{matrix}}{Matrix object to be added.}
 }
@@ -185,7 +168,8 @@ Removes a matrix from a previously imported IO matrix.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{matrix_name}}{One of final_demand, exports, imports, added_value_final_demand, added_value or occupation matrix to be removed.}
+\item{\code{matrix_name}}{One of household_consumption, government_consumption, exports, final_demand_others,
+imports, taxes, wages, operating income, added_value_others or occupation matrix to be removed.}
 
 \item{\code{matrix}}{Matrix object to be removed.}
 }
@@ -319,8 +303,8 @@ Computes the hypothetical extraction.
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_hypothetical_extraction(
   technical_coefficients_matrix,
   allocation_coefficients_matrix,
-  final_demand,
-  added_value,
+  final_demand_matrix,
+  added_value_matrix,
   total_production
 )}\if{html}{\out{</div>}}
 }
@@ -332,15 +316,11 @@ Computes the hypothetical extraction.
 
 \item{\code{allocation_coefficients_matrix}}{Allocation coefficients matrix.}
 
-\item{\code{final_demand}}{Final demand matrix.}
-
-\item{\code{added_value}}{Added value vector.}
-
-\item{\code{total_production}}{Total production vector.}
-
 \item{\code{final_demand_matrix}}{Final demand matrix.}
 
 \item{\code{added_value_matrix}}{Added value matrix.}
+
+\item{\code{total_production}}{Total production vector.}
 }
 \if{html}{\out{</div>}}
 }
