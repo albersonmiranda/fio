@@ -79,20 +79,20 @@ This function allows you to specify the file path, sheet name, and cell ranges f
   - `intermediate_transactions`: A matrix of intermediate transactions.
   - `total_production`: A vector for total production.
 2. Optional fields
-  2.1 Final demand fields
+  1. Final demand fields
     - `household_consumption`: A vector for household consumption.
     - `government_consumption`: A vector for government consumption.
     - `exports`: A vector for exports.
     - `final_demand_others`: Other vectors of final demand that doesn't need dedicated slots. Setting column names is advised for better readability.
     - `final_demand_matrix`: A matrix for final demand. It's an active binding that aggregates the total final demand vectors. That means that if you add or remove a vector, the matrix will be updated automatically.
-  2.2 Added value fields
+  2. Added value fields
     - `imports`: A vector for imports.
     - `taxes`: A vector for taxes.
     - `wages`: A vector for wages.
     - `operating_income`: A vector for operating income.
     - `added_value_others`: Other vectors of added value that doesn't need dedicated slots. Setting column names is advised for better readability.
     - `added_value_matrix`: A matrix for added value. It's an active binding that aggregates the total added value vectors. That means that if you add or remove a vector, the matrix will be updated automatically.
-  2.3 Other optional fields
+  3. Other optional fields
     - `occupation`: A vector for occupation.
 3. Results slots
   - `technical_coefficients_matrix`: A matrix with technical coefficients.
