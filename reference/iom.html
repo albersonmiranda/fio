@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fio</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.9000</span>
       </span>
     </div>
 
@@ -76,10 +76,6 @@
 <dd><p>Total production vector.</p></dd>
 
 
-<dt><code>final_demand</code></dt>
-<dd><p>Final demand matrix.</p></dd>
-
-
 <dt><code>household_consumption</code></dt>
 <dd><p>Household consumption vector.</p></dd>
 
@@ -90,6 +86,10 @@
 
 <dt><code>exports</code></dt>
 <dd><p>Exports vector.</p></dd>
+
+
+<dt><code>final_demand_others</code></dt>
+<dd><p>Other vectors of final demand that doesn't have dedicated slots.</p></dd>
 
 
 <dt><code>imports</code></dt>
@@ -108,12 +108,8 @@
 <dd><p>Operating income vector.</p></dd>
 
 
-<dt><code>added_value_final_demand</code></dt>
-<dd><p>Added value final demand matrix.</p></dd>
-
-
-<dt><code>added_value</code></dt>
-<dd><p>Added value vector.</p></dd>
+<dt><code>added_value_others</code></dt>
+<dd><p>Other vectors of added value that doesn't have dedicated slots.</p></dd>
 
 
 <dt><code>occupation</code></dt>
@@ -154,6 +150,18 @@
 
 </dl><p></p></div>
     </div>
+    <div id="active-bindings">
+    <h2>Active bindings</h2>
+    <p></p><div class="r6-active-bindings"><dl><dt><code>final_demand_matrix</code></dt>
+<dd><p>Final demand matrix.</p></dd>
+
+
+<dt><code>added_value_matrix</code></dt>
+<dd><p>Added value matrix.</p></dd>
+
+
+</dl><p></p></div>
+    </div>
     <div id="methods">
     <h2>Methods</h2>
     
@@ -180,25 +188,16 @@
 <span>  <span class="va">id</span>,</span>
 <span>  <span class="va">intermediate_transactions</span>,</span>
 <span>  <span class="va">total_production</span>,</span>
-<span>  final_demand <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  household_consumption <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  government_consumption <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  exports <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  final_demand_others <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  imports <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  taxes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  wages <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  operating_income <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  added_value_final_demand <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  added_value <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  occupation <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  technical_coefficients_matrix <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  leontief_inverse_matrix <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  multiplier_output <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  field_influence <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  key_sectors <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  allocation_coefficients_matrix <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  ghosh_inverse_matrix <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  hypothetical_extraction <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  added_value_others <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  occupation <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -216,10 +215,6 @@
 <dd><p>Total production vector.</p></dd>
 
 
-<dt><code>final_demand</code></dt>
-<dd><p>Final demand matrix.</p></dd>
-
-
 <dt><code>household_consumption</code></dt>
 <dd><p>Household consumption vector.</p></dd>
 
@@ -230,6 +225,11 @@
 
 <dt><code>exports</code></dt>
 <dd><p>Exports vector.</p></dd>
+
+
+<dt><code>final_demand_others</code></dt>
+<dd><p>Other vectors of final demand that doesn't have dedicated slots.
+Setting column names is advised for better readability.</p></dd>
 
 
 <dt><code>imports</code></dt>
@@ -248,48 +248,13 @@
 <dd><p>Operating income vector.</p></dd>
 
 
-<dt><code>added_value_final_demand</code></dt>
-<dd><p>Added value final demand matrix.</p></dd>
-
-
-<dt><code>added_value</code></dt>
-<dd><p>Added value vector.</p></dd>
+<dt><code>added_value_others</code></dt>
+<dd><p>Other vectors of added value that doesn't have dedicated slots.
+Setting row names is advised for better readability.</p></dd>
 
 
 <dt><code>occupation</code></dt>
 <dd><p>Occupation matrix.</p></dd>
-
-
-<dt><code>technical_coefficients_matrix</code></dt>
-<dd><p>Technical coefficients matrix.</p></dd>
-
-
-<dt><code>leontief_inverse_matrix</code></dt>
-<dd><p>Leontief inverse matrix.</p></dd>
-
-
-<dt><code>multiplier_output</code></dt>
-<dd><p>Output multiplier vector.</p></dd>
-
-
-<dt><code>field_influence</code></dt>
-<dd><p>Influence field matrix.</p></dd>
-
-
-<dt><code>key_sectors</code></dt>
-<dd><p>Key sectors dataframe.</p></dd>
-
-
-<dt><code>allocation_coefficients_matrix</code></dt>
-<dd><p>Allocation coefficients matrix.</p></dd>
-
-
-<dt><code>ghosh_inverse_matrix</code></dt>
-<dd><p>Ghosh inverse matrix.</p></dd>
-
-
-<dt><code>hypothetical_extraction</code></dt>
-<dd><p>Absolute and relative backward and forward differences in total output after a hypothetical extraction.</p></dd>
 
 
 </dl><p></p></div>
@@ -305,7 +270,8 @@
 <div class="section">
 <h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>matrix_name</code></dt>
-<dd><p>One of final_demand, exports, imports, added_value_final_demand, added_value or occupation matrix to be added.</p></dd>
+<dd><p>One of household_consumption, government_consumption, exports, final_demand_others,
+imports, taxes, wages, operating income, added_value_others or occupation matrix to be added.</p></dd>
 
 
 <dt><code>matrix</code></dt>
@@ -325,7 +291,8 @@
 <div class="section">
 <h4 id="arguments-2">Arguments<a class="anchor" aria-label="anchor" href="#arguments-2"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>matrix_name</code></dt>
-<dd><p>One of final_demand, exports, imports, added_value_final_demand, added_value or occupation matrix to be removed.</p></dd>
+<dd><p>One of household_consumption, government_consumption, exports, final_demand_others,
+imports, taxes, wages, operating income, added_value_others or occupation matrix to be removed.</p></dd>
 
 
 <dt><code>matrix</code></dt>
@@ -458,8 +425,8 @@
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_hypothetical_extraction</span><span class="op">(</span></span>
 <span>  <span class="va">technical_coefficients_matrix</span>,</span>
 <span>  <span class="va">allocation_coefficients_matrix</span>,</span>
-<span>  <span class="va">final_demand</span>,</span>
-<span>  <span class="va">added_value</span>,</span>
+<span>  <span class="va">final_demand_matrix</span>,</span>
+<span>  <span class="va">added_value_matrix</span>,</span>
 <span>  <span class="va">total_production</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
@@ -474,24 +441,16 @@
 <dd><p>Allocation coefficients matrix.</p></dd>
 
 
-<dt><code>final_demand</code></dt>
-<dd><p>Final demand matrix.</p></dd>
-
-
-<dt><code>added_value</code></dt>
-<dd><p>Added value vector.</p></dd>
-
-
-<dt><code>total_production</code></dt>
-<dd><p>Total production vector.</p></dd>
-
-
 <dt><code>final_demand_matrix</code></dt>
 <dd><p>Final demand matrix.</p></dd>
 
 
 <dt><code>added_value_matrix</code></dt>
 <dd><p>Added value matrix.</p></dd>
+
+
+<dt><code>total_production</code></dt>
+<dd><p>Total production vector.</p></dd>
 
 
 </dl><p></p></div>

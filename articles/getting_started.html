@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fio</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.9000</span>
       </span>
     </div>
 
@@ -77,7 +77,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Get data ready for input-output analysis</h1>
             
-            <h4 data-toc-skip class="date">June 21, 2024</h4>
+            <h4 data-toc-skip class="date">June 22, 2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/albersonmiranda/fio/blob/HEAD/vignettes/getting_started.Rmd" class="external-link"><code>vignettes/getting_started.Rmd</code></a></small>
       <div class="hidden name"><code>getting_started.Rmd</code></div>
@@ -182,64 +182,98 @@ robust method for importing data programmatically.</p>
 <div class="section level2">
 <h2 id="the-iom-class">The <code>iom</code> class<a class="anchor" aria-label="anchor" href="#the-iom-class"></a>
 </h2>
-<p><code>iom</code> is a R6 class that is the main data structure used
-by {fio} to store input-output data. The <code>iom</code> class has the
-following slots:</p>
+<p><code>iom</code> is an R6 class serving as the primary data structure
+used by {fio} to store input-output data. It includes both required and
+optional fields. The required fields are necessary for computing
+technical coefficients, the Leontief inverse matrix, and output
+multipliers. To compute additional features, you can add final demand
+and added value fields, some of which have dedicated slots for computing
+specific multipliers. Additionally, there are slots for storing the
+results of various functions, such as the technical coefficients matrix,
+the Leontief inverse, key sectors, the Ghosh inverse, and more. All
+slots of the <code>iom</code> class are listed as follows:</p>
+<ol style="list-style-type: decimal">
+<li>Required fields</li>
+</ol>
 <ul>
 <li>
-<code>id</code>: an identifier for the input-output matrix.</li>
+<code>id</code>: An identifier for the input-output matrix.</li>
 <li>
-<code>intermediate_transactions</code>: a matrix of intermediate
+<code>intermediate_transactions</code>: A matrix of intermediate
 transactions.</li>
 <li>
-<code>total_production</code>: a vector for total production.</li>
+<code>total_production</code>: A vector for total production.</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Optional fields 2.1 Final demand fields
+<ul>
 <li>
-<code>final_demand</code>: a matrix for final demand.</li>
-<li>
-<code>added_value</code>: a vector for added value.</li>
-<li>
-<code>household_consumption</code>: a vector for household
+<code>household_consumption</code>: A vector for household
 consumption.</li>
 <li>
-<code>government_consumption</code>: a vector for government
+<code>government_consumption</code>: A vector for government
 consumption.</li>
 <li>
-<code>exports</code>: a vector for exports.</li>
+<code>exports</code>: A vector for exports.</li>
 <li>
-<code>imports</code>: a vector for imports.</li>
+<code>final_demand_others</code>: Other vectors of final demand that
+doesn’t need dedicated slots. Setting column names is advised for better
+readability.</li>
 <li>
-<code>taxes</code>: a vector for taxes.</li>
+<code>final_demand_matrix</code>: A matrix for final demand. It’s an
+active binding that aggregates the total final demand vectors. That
+means that if you add or remove a vector, the matrix will be updated
+automatically. 2.2 Added value fields</li>
 <li>
-<code>wages</code>: a vector for wages.</li>
+<code>imports</code>: A vector for imports.</li>
 <li>
-<code>operating_income</code>: a vector for operating income.</li>
+<code>taxes</code>: A vector for taxes.</li>
 <li>
-<code>added_value_final_demand</code>: a matrix with all others rows
-composing added value.</li>
+<code>wages</code>: A vector for wages.</li>
 <li>
-<code>occupation</code>: a vector for occupation.</li>
+<code>operating_income</code>: A vector for operating income.</li>
 <li>
-<code>technical_coefficients_matrix</code>: a matrix with technical
+<code>added_value_others</code>: Other vectors of added value that
+doesn’t need dedicated slots. Setting column names is advised for better
+readability.</li>
+<li>
+<code>added_value_matrix</code>: A matrix for added value. It’s an
+active binding that aggregates the total added value vectors. That means
+that if you add or remove a vector, the matrix will be updated
+automatically. 2.3 Other optional fields</li>
+<li>
+<code>occupation</code>: A vector for occupation.</li>
+</ul>
+</li>
+<li>Results slots</li>
+</ol>
+<ul>
+<li>
+<code>technical_coefficients_matrix</code>: A matrix with technical
 coefficients.</li>
 <li>
-<code>leontief_inverse_matrix</code>: a matrix with the Leontief
+<code>leontief_inverse_matrix</code>: A matrix with the Leontief
 inverse.</li>
 <li>
-<code>allocation_coefficients_matrix</code>: a matrix with the
+<code>allocation_coefficients_matrix</code>: A matrix with the
 allocation coefficients.</li>
 <li>
-<code>ghosh_inverse_matrix</code>: a matrix with the Ghosh
+<code>ghosh_inverse_matrix</code>: A matrix with the Ghosh
 inverse.</li>
 <li>
-<code>multiplier_output</code>: a vector with the output
+<code>multiplier_output</code>: A vector with the output
 multiplier.</li>
 <li>
-<code>field_influence</code>: a matrix with the field of
+<code>field_influence</code>: A matrix with the field of
 influence.</li>
 <li>
-<code>key_sectors</code>: a dataframe with the key sectors, power of
+<code>key_sectors</code>: A dataframe with the key sectors, power of
 dispersion and sensitivity of dispersion, and their coefficients of
 variation.</li>
+<li>
+<code>hypothetical_extraction</code>: A dataframe with absolute and
+relative backward and forward differences in total output after
+hypothetical extraction of each sector.</li>
 </ul>
 <p>In order to instantiate a new <code>iom</code> object, as every R6
 class, you need to use the <code>new()</code> method. A new
@@ -262,8 +296,8 @@ and <code><a href="https://rdrr.io/r/base/rm.html" class="external-link">remove(
 <span><span class="co">#&gt; &lt;iom&gt;</span></span>
 <span><span class="co">#&gt;   Public:</span></span>
 <span><span class="co">#&gt;     add: function (matrix_name, matrix) </span></span>
-<span><span class="co">#&gt;     added_value: NULL</span></span>
-<span><span class="co">#&gt;     added_value_final_demand: NULL</span></span>
+<span><span class="co">#&gt;     added_value_matrix: active binding</span></span>
+<span><span class="co">#&gt;     added_value_others: NULL</span></span>
 <span><span class="co">#&gt;     allocation_coefficients_matrix: NULL</span></span>
 <span><span class="co">#&gt;     clone: function (deep = FALSE) </span></span>
 <span><span class="co">#&gt;     compute_allocation_coeff: function () </span></span>
@@ -276,14 +310,15 @@ and <code><a href="https://rdrr.io/r/base/rm.html" class="external-link">remove(
 <span><span class="co">#&gt;     compute_tech_coeff: function () </span></span>
 <span><span class="co">#&gt;     exports: NULL</span></span>
 <span><span class="co">#&gt;     field_influence: NULL</span></span>
-<span><span class="co">#&gt;     final_demand: NULL</span></span>
+<span><span class="co">#&gt;     final_demand_matrix: active binding</span></span>
+<span><span class="co">#&gt;     final_demand_others: NULL</span></span>
 <span><span class="co">#&gt;     ghosh_inverse_matrix: NULL</span></span>
 <span><span class="co">#&gt;     government_consumption: NULL</span></span>
 <span><span class="co">#&gt;     household_consumption: NULL</span></span>
 <span><span class="co">#&gt;     hypothetical_extraction: NULL</span></span>
 <span><span class="co">#&gt;     id: my_iom</span></span>
 <span><span class="co">#&gt;     imports: NULL</span></span>
-<span><span class="co">#&gt;     initialize: function (id, intermediate_transactions, total_production, final_demand = NULL, </span></span>
+<span><span class="co">#&gt;     initialize: function (id, intermediate_transactions, total_production, household_consumption = NULL, </span></span>
 <span><span class="co">#&gt;     intermediate_transactions: 514 562 278 625 294 917 217 398 328 343 113 473 764 701  ...</span></span>
 <span><span class="co">#&gt;     key_sectors: NULL</span></span>
 <span><span class="co">#&gt;     leontief_inverse_matrix: NULL</span></span>
@@ -294,7 +329,9 @@ and <code><a href="https://rdrr.io/r/base/rm.html" class="external-link">remove(
 <span><span class="co">#&gt;     taxes: NULL</span></span>
 <span><span class="co">#&gt;     technical_coefficients_matrix: NULL</span></span>
 <span><span class="co">#&gt;     total_production: 6789 9306 7979 6613 5554</span></span>
-<span><span class="co">#&gt;     wages: NULL</span></span></code></pre></div>
+<span><span class="co">#&gt;     wages: NULL</span></span>
+<span><span class="co">#&gt;   Private:</span></span>
+<span><span class="co">#&gt;     iom_elements: function ()</span></span></code></pre></div>
 <p>For now, <code>intermediate_transactions</code> and
 <code>total_production</code> are the only not <code>NULL</code> slots.
 We can compute the technical coefficients matrix by calling the
@@ -307,8 +344,8 @@ We can compute the technical coefficients matrix by calling the
 <span><span class="co">#&gt; &lt;iom&gt;</span></span>
 <span><span class="co">#&gt;   Public:</span></span>
 <span><span class="co">#&gt;     add: function (matrix_name, matrix) </span></span>
-<span><span class="co">#&gt;     added_value: NULL</span></span>
-<span><span class="co">#&gt;     added_value_final_demand: NULL</span></span>
+<span><span class="co">#&gt;     added_value_matrix: active binding</span></span>
+<span><span class="co">#&gt;     added_value_others: NULL</span></span>
 <span><span class="co">#&gt;     allocation_coefficients_matrix: NULL</span></span>
 <span><span class="co">#&gt;     clone: function (deep = FALSE) </span></span>
 <span><span class="co">#&gt;     compute_allocation_coeff: function () </span></span>
@@ -321,14 +358,15 @@ We can compute the technical coefficients matrix by calling the
 <span><span class="co">#&gt;     compute_tech_coeff: function () </span></span>
 <span><span class="co">#&gt;     exports: NULL</span></span>
 <span><span class="co">#&gt;     field_influence: NULL</span></span>
-<span><span class="co">#&gt;     final_demand: NULL</span></span>
+<span><span class="co">#&gt;     final_demand_matrix: active binding</span></span>
+<span><span class="co">#&gt;     final_demand_others: NULL</span></span>
 <span><span class="co">#&gt;     ghosh_inverse_matrix: NULL</span></span>
 <span><span class="co">#&gt;     government_consumption: NULL</span></span>
 <span><span class="co">#&gt;     household_consumption: NULL</span></span>
 <span><span class="co">#&gt;     hypothetical_extraction: NULL</span></span>
 <span><span class="co">#&gt;     id: my_iom</span></span>
 <span><span class="co">#&gt;     imports: NULL</span></span>
-<span><span class="co">#&gt;     initialize: function (id, intermediate_transactions, total_production, final_demand = NULL, </span></span>
+<span><span class="co">#&gt;     initialize: function (id, intermediate_transactions, total_production, household_consumption = NULL, </span></span>
 <span><span class="co">#&gt;     intermediate_transactions: 514 562 278 625 294 917 217 398 328 343 113 473 764 701  ...</span></span>
 <span><span class="co">#&gt;     key_sectors: NULL</span></span>
 <span><span class="co">#&gt;     leontief_inverse_matrix: NULL</span></span>
@@ -339,7 +377,9 @@ We can compute the technical coefficients matrix by calling the
 <span><span class="co">#&gt;     taxes: NULL</span></span>
 <span><span class="co">#&gt;     technical_coefficients_matrix: 0.0757107084990426 0.0827809692149065 0.0409485933127117 ...</span></span>
 <span><span class="co">#&gt;     total_production: 6789 9306 7979 6613 5554</span></span>
-<span><span class="co">#&gt;     wages: NULL</span></span></code></pre></div>
+<span><span class="co">#&gt;     wages: NULL</span></span>
+<span><span class="co">#&gt;   Private:</span></span>
+<span><span class="co">#&gt;     iom_elements: function ()</span></span></code></pre></div>
 <p>Now the <code>technical_coefficients_matrix</code> slot is filled.
 You can access the slots using the <code>$</code> operator:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
