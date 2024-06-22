@@ -8,14 +8,15 @@
 #' Intermediate transactions matrix.
 #' @param total_production
 #' Total production vector.
-#' @param final_demand
-#' Final demand matrix.
 #' @param household_consumption
 #' Household consumption vector.
 #' @param government_consumption
 #' Government consumption vector.
 #' @param exports
 #' Exports vector.
+#' @param final_demand_others
+#' Other vectors of final demand that doesn't have dedicated slots.
+#' Setting column names is advised for better readability.
 #' @param imports
 #' Imports vector.
 #' @param taxes
@@ -24,28 +25,11 @@
 #' Wages vector.
 #' @param operating_income
 #' Operating income vector.
-#' @param added_value_final_demand
-#' Added value final demand matrix.
-#' @param added_value
-#' Added value vector.
+#' @param added_value_others
+#' Other vectors of added value that doesn't have dedicated slots.
+#' Setting row names is advised for better readability.
 #' @param occupation
 #' Occupation matrix.
-#' @param technical_coefficients_matrix
-#' Technical coefficients matrix.
-#' @param leontief_inverse_matrix
-#' Leontief inverse matrix.
-#' @param multiplier_output
-#' Output multiplier vector.
-#' @param field_influence
-#' Influence field matrix.
-#' @param key_sectors
-#' Key sectors dataframe.
-#' @param allocation_coefficients_matrix
-#' Allocation coefficients matrix.
-#' @param ghosh_inverse_matrix
-#' Ghosh inverse matrix.
-#' @param hypothetical_extraction
-#' Absolute and relative backward and forward differences in total output after a hypothetical extraction.
 #' @export
 
 # input-output matrix class
@@ -53,6 +37,7 @@ iom <- R6::R6Class(
   classname = "iom",
   public = list(
     # data members
+
     #' @field id
     #' Identifier of the new instance
     id = NULL,
@@ -65,10 +50,6 @@ iom <- R6::R6Class(
     #' Total production vector.
     total_production = NULL,
 
-    #' @field final_demand
-    #' Final demand matrix.
-    final_demand = NULL,
-
     #' @field household_consumption
     #' Household consumption vector.
     household_consumption = NULL,
@@ -80,6 +61,10 @@ iom <- R6::R6Class(
     #' @field exports
     #' Exports vector.
     exports = NULL,
+
+    #' @field final_demand_others
+    #' Other vectors of final demand that doesn't have dedicated slots.
+    final_demand_others = NULL,
 
     #' @field imports
     #' Imports vector.
@@ -97,13 +82,9 @@ iom <- R6::R6Class(
     #' Operating income vector.
     operating_income = NULL,
 
-    #' @field added_value_final_demand
-    #' Added value final demand matrix.
-    added_value_final_demand = NULL,
-
-    #' @field added_value
-    #' Added value vector.
-    added_value = NULL,
+    #' @field added_value_others
+    #' Other vectors of added value that doesn't have dedicated slots.
+    added_value_others = NULL,
 
     #' @field occupation
     #' Occupation vector
@@ -146,58 +127,42 @@ iom <- R6::R6Class(
     initialize = function(id,
                           intermediate_transactions,
                           total_production,
-                          final_demand = NULL,
                           household_consumption = NULL,
                           government_consumption = NULL,
                           exports = NULL,
+                          final_demand_others = NULL,
                           imports = NULL,
                           taxes = NULL,
                           wages = NULL,
                           operating_income = NULL,
-                          added_value_final_demand = NULL,
-                          added_value = NULL,
-                          occupation = NULL,
-                          technical_coefficients_matrix = NULL,
-                          leontief_inverse_matrix = NULL,
-                          multiplier_output = NULL,
-                          field_influence = NULL,
-                          key_sectors = NULL,
-                          allocation_coefficients_matrix = NULL,
-                          ghosh_inverse_matrix = NULL,
-                          hypothetical_extraction = NULL) {
+                          added_value_others = NULL,
+                          occupation = NULL) {
+      # set data members
       self$id <- id
       self$intermediate_transactions <- intermediate_transactions
       self$total_production <- total_production
-      self$final_demand <- final_demand
-      self$household_consumption <- household_consumption
-      self$government_consumption <- government_consumption
-      self$exports <- exports
-      self$imports <- imports
-      self$taxes <- taxes
-      self$wages <- wages
-      self$operating_income <- operating_income
-      self$added_value_final_demand <- added_value_final_demand
-      self$added_value <- added_value
-      self$occupation <- occupation
-      self$technical_coefficients_matrix <- technical_coefficients_matrix
-      self$leontief_inverse_matrix <- leontief_inverse_matrix
-      self$multiplier_output <- multiplier_output
-      self$field_influence <- field_influence
-      self$key_sectors <- key_sectors
-      self$allocation_coefficients_matrix <- allocation_coefficients_matrix
-      self$ghosh_inverse_matrix <- ghosh_inverse_matrix
-      self$hypothetical_extraction <- hypothetical_extraction
+      self$household_consumption <- set_colnames(household_consumption)
+      self$government_consumption <- set_colnames(government_consumption)
+      self$exports <- set_colnames(exports)
+      self$final_demand_others <- final_demand_others
+      self$imports <- set_rownames(imports)
+      self$taxes <- set_rownames(taxes)
+      self$wages <- set_rownames(wages)
+      self$operating_income <- set_rownames(operating_income)
+      self$added_value_others <- added_value_others
+      self$occupation <- set_rownames(occupation)
     },
 
     #' @description
     #' Adds a matrix to a previously imported IO matrix.
     #' @param matrix_name
-    #' One of final_demand, exports, imports, added_value_final_demand, added_value or occupation matrix to be added.
+    #' One of household_consumption, government_consumption, exports, final_demand_others,
+    #' imports, taxes, wages, operating income, added_value_others or occupation matrix to be added.
     #' @param matrix
     #' Matrix object to be added.
     add = function(matrix_name, matrix) {
       # check arg
-      choices <- iom_elements()
+      choices <- private$iom_elements
       tryCatch(
         match.arg(matrix_name, choices),
         error = function(e) {
@@ -212,12 +177,13 @@ iom <- R6::R6Class(
     #' @description
     #' Removes a matrix from a previously imported IO matrix.
     #' @param matrix_name
-    #' One of final_demand, exports, imports, added_value_final_demand, added_value or occupation matrix to be removed.
+    #' One of household_consumption, government_consumption, exports, final_demand_others,
+    #' imports, taxes, wages, operating income, added_value_others or occupation matrix to be removed.
     #' @param matrix
     #' Matrix object to be removed.
     remove = function(matrix_name) {
       # check arg
-      choices <- iom_elements()
+      choices <- private$iom_elements
       tryCatch(
         match.arg(matrix_name, choices),
         error = function(e) {
@@ -433,8 +399,8 @@ iom <- R6::R6Class(
     compute_hypothetical_extraction = function(
       technical_coefficients_matrix,
       allocation_coefficients_matrix,
-      final_demand,
-      added_value,
+      final_demand_matrix,
+      added_value_matrix,
       total_production
     ) {
       # save row and column names
@@ -461,6 +427,51 @@ iom <- R6::R6Class(
       # store matrix
       self$hypothetical_extraction <- hypothetical_extraction
       invisible(self)
+    }
+  ),
+
+  # private members
+  private = list(
+    iom_elements = function() {
+      c(
+        "household_consumption",
+        "government_consumption",
+        "exports",
+        "final_demand_others",
+        "imports",
+        "taxes",
+        "wages",
+        "operating_income",
+        "added_value_others",
+        "occupation"
+      )
+    }
+  ),
+
+  # active bindings
+  active = list(
+    #' @field final_demand_matrix
+    #' Final demand matrix.
+    final_demand_matrix = function() {
+      # bind final demand vectors
+      cbind(
+        self$household_consumption,
+        self$government_consumption,
+        self$exports,
+        self$final_demand_others
+      )
+    },
+    #' @field added_value_matrix
+    #' Added value matrix.
+    added_value_matrix = function() {
+      # bind added value vectors
+      rbind(
+        self$imports,
+        self$taxes,
+        self$wages,
+        self$operating_income,
+        self$added_value_others
+      )
     }
   )
 )
