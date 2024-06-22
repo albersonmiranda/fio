@@ -205,46 +205,27 @@ transactions.</li>
 <code>total_production</code>: A vector for total production.</li>
 </ul>
 <ol start="2" style="list-style-type: decimal">
-<li>Optional fields 2.1 Final demand fields
-<ul>
-<li>
-<code>household_consumption</code>: A vector for household
-consumption.</li>
-<li>
-<code>government_consumption</code>: A vector for government
-consumption.</li>
-<li>
-<code>exports</code>: A vector for exports.</li>
-<li>
-<code>final_demand_others</code>: Other vectors of final demand that
-doesn’t need dedicated slots. Setting column names is advised for better
-readability.</li>
-<li>
-<code>final_demand_matrix</code>: A matrix for final demand. It’s an
-active binding that aggregates the total final demand vectors. That
-means that if you add or remove a vector, the matrix will be updated
-automatically. 2.2 Added value fields</li>
-<li>
-<code>imports</code>: A vector for imports.</li>
-<li>
-<code>taxes</code>: A vector for taxes.</li>
-<li>
-<code>wages</code>: A vector for wages.</li>
-<li>
-<code>operating_income</code>: A vector for operating income.</li>
-<li>
-<code>added_value_others</code>: Other vectors of added value that
-doesn’t need dedicated slots. Setting column names is advised for better
-readability.</li>
-<li>
-<code>added_value_matrix</code>: A matrix for added value. It’s an
-active binding that aggregates the total added value vectors. That means
-that if you add or remove a vector, the matrix will be updated
-automatically. 2.3 Other optional fields</li>
-<li>
-<code>occupation</code>: A vector for occupation.</li>
-</ul>
-</li>
+<li>Optional fields</li>
+<li>Final demand fields - <code>household_consumption</code>: A vector
+for household consumption. - <code>government_consumption</code>: A
+vector for government consumption. - <code>exports</code>: A vector for
+exports. - <code>final_demand_others</code>: Other vectors of final
+demand that doesn’t need dedicated slots. Setting column names is
+advised for better readability. - <code>final_demand_matrix</code>: A
+matrix for final demand. It’s an active binding that aggregates the
+total final demand vectors. That means that if you add or remove a
+vector, the matrix will be updated automatically.</li>
+<li>Added value fields - <code>imports</code>: A vector for imports. -
+<code>taxes</code>: A vector for taxes. - <code>wages</code>: A vector
+for wages. - <code>operating_income</code>: A vector for operating
+income. - <code>added_value_others</code>: Other vectors of added value
+that doesn’t need dedicated slots. Setting column names is advised for
+better readability. - <code>added_value_matrix</code>: A matrix for
+added value. It’s an active binding that aggregates the total added
+value vectors. That means that if you add or remove a vector, the matrix
+will be updated automatically.</li>
+<li>Other optional fields - <code>occupation</code>: A vector for
+occupation.</li>
 <li>Results slots</li>
 </ol>
 <ul>
