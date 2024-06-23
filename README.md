@@ -17,22 +17,46 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 status](https://www.r-pkg.org/badges/version/fio)](https://CRAN.R-project.org/package=fio)
 <!-- badges: end -->
 
-`{fio}` (*Friendly Input-Output*) is a R package for input-output
-analysis, focusing on two key aspects: ease of use for Excel users and
-performance. It provides an [RStudio
-Addin](https://rstudio.github.io/rstudioaddins/) and a set of functions
-for easy import of input-output tables from Excel, either
-programmatically or directly from clipboard.
+`{fio}` (*Friendly Input-Output*) is a R package designed for
+input-output analysis, emphasizing usability for Excel users and
+performance. It includes an [RStudio
+Addin](https://rstudio.github.io/rstudioaddins/) and a suite of
+functions for straightforward import of input-output tables from Excel,
+either programmatically or directly from the clipboard.
 
-The package is designed to be fast and efficient. It embraces [R6
-class](https://r6.r-lib.org/) for a clean, memory-efficient
-object-oriented programming. Additionally, all linear algebra
-computations are written in [Rust](https://www.rust-lang.org/) for
-highly optimized performance.
+The package is optimized for speed and efficiency. It leverages the [R6
+class](https://r6.r-lib.org/) for clean, memory-efficient
+object-oriented programming. Furthermore, all linear algebra
+computations are implemented in [Rust](https://www.rust-lang.org/) to
+achieve highly optimized performance.
 
 ## Installation
 
-Install the latest development version from **Github**:
+To install `fio`, follow these steps:
+
+1.  Visit the [Releases
+    section](https://github.com/albersonmiranda/fio/releases) section on
+    GitHub.
+2.  Download the appropriate precompiled version for your operating
+    system:
+
+- For Windows: fio_x.x.x_R_x86_64-windows.zip
+- For Linux: fio_x.x.x_R_x86_64-pc-linux-gnu.tar.gz
+
+1.  Use the following command to install the package:
+
+``` r
+# for Windows
+install.packages("path/to/fio_x.x.x._R_x86_64-windows.zip")
+
+# for Linux
+install.packages("path/to/fio_x.x.x_R_x86_64-pc-linux-gnu.tar.gz")
+```
+
+Replace “path/to/” with the actual path where you downloaded the file.
+
+If you have [Rust](https://www.rust-lang.org/) installed and wish to
+compile the latest development version from source, use:
 
 ``` r
 devtools::install_github("albersonmiranda/fio")
@@ -60,7 +84,7 @@ iom_br$compute_tech_coeff()
 iom_br$compute_leontief_inverse()
 ```
 
-And pronto\! 🎉, you’re all good to carry on with your analysis. You can
+And pronto! 🎉, you’re all good to carry on with your analysis. You can
 evoke the Data Viewer to inspect the results with
 `iom_br$technical_coefficients_matrix |> View()` and
 `iom_br$leontief_inverse_matrix |> View()`.
