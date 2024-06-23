@@ -66,6 +66,10 @@ iom <- R6::R6Class(
     #' Other vectors of final demand that doesn't have dedicated slots.
     final_demand_others = NULL,
 
+    #' @field final_demand_matrix
+    #' Aggregates final demand vectors into a matrix.
+    final_demand_matrix = NULL,
+
     #' @field imports
     #' Imports vector.
     imports = NULL,
@@ -85,6 +89,10 @@ iom <- R6::R6Class(
     #' @field added_value_others
     #' Other vectors of added value that doesn't have dedicated slots.
     added_value_others = NULL,
+
+    #' @field added_value_matrix
+    #' Aggregates added value vectors into a matrix.
+    added_value_matrix = NULL,
 
     #' @field occupation
     #' Occupation vector
@@ -193,6 +201,31 @@ iom <- R6::R6Class(
       # remove matrix
       self[[matrix_name]] <- NULL
       invisible(self)
+    },
+
+    #' @description
+    #' Updates final demand matrix.
+    update_final_demand_matrix = function() {
+      # bind final demand vectors
+      self$final_demand_matrix <- cbind(
+        self$household_consumption,
+        self$government_consumption,
+        self$exports,
+        self$final_demand_others
+      )
+    },
+
+    #' @description
+    #' Updates added value matrix.
+    update_added_value_matrix = function() {
+      # bind added value vectors
+      self$added_value_matrix <- rbind(
+        self$imports,
+        self$taxes,
+        self$wages,
+        self$operating_income,
+        self$added_value_others
+      )
     },
 
     #' @description
@@ -406,24 +439,38 @@ iom <- R6::R6Class(
       # save row and column names
       row_names <- rownames(self$technical_coefficients_matrix)
       # compute backward extraction
-      backward_extraction <- compute_backward_extraction(
+      extraction_backward <- compute_extraction_backward(
         technical_coefficients_matrix = self$technical_coefficients_matrix,
-        final_demand_matrix = self$final_demand,
+        final_demand_matrix = self$final_demand_matrix,
         total_production = self$total_production
       )
       # compute forward extraction
-      forward_extraction <- compute_forward_extraction(
+      extraction_forward <- compute_extraction_forward(
         allocation_coeff = self$allocation_coefficients_matrix,
-        added_value_matrix = self$added_value,
+        added_value_matrix = self$added_value_matrix,
         total_production = self$total_production
+      )
+      # compute total extraction
+      extraction_total <- compute_extraction_total(
+        backward_linkage_matrix = extraction_backward,
+        forward_linkage_matrix = extraction_forward
       )
       # bind
       hypothetical_extraction <- cbind(
-        backward_extraction,
-        forward_extraction
+        extraction_backward,
+        extraction_forward,
+        extraction_total
       )
       # set row and column names
       rownames(hypothetical_extraction) <- row_names
+      colnames(hypothetical_extraction) <- c(
+        "backward_absolute",
+        "backward_relative",
+        "forward_absolute",
+        "foward_relative",
+        "total_absolute",
+        "total_relative"
+      )
       # store matrix
       self$hypothetical_extraction <- hypothetical_extraction
       invisible(self)
@@ -444,33 +491,6 @@ iom <- R6::R6Class(
         "operating_income",
         "added_value_others",
         "occupation"
-      )
-    }
-  ),
-
-  # active bindings
-  active = list(
-    #' @field final_demand_matrix
-    #' Final demand matrix.
-    final_demand_matrix = function() {
-      # bind final demand vectors
-      cbind(
-        self$household_consumption,
-        self$government_consumption,
-        self$exports,
-        self$final_demand_others
-      )
-    },
-    #' @field added_value_matrix
-    #' Added value matrix.
-    added_value_matrix = function() {
-      # bind added value vectors
-      rbind(
-        self$imports,
-        self$taxes,
-        self$wages,
-        self$operating_income,
-        self$added_value_others
       )
     }
   )

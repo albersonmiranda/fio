@@ -123,6 +123,39 @@ fn compute_extraction_forward(
 
 }
 
+#[extendr]
+/// Calculates total extraction
+/// @param backward_linkage_matrix A nx2 matrix of backward linkage.
+/// @param forward_linkage_matrix A nx2 matrix of forward linkage.
+/// @description
+/// Computes total impact after extracting a given sector.
+
+fn compute_extraction_total(
+  backward_linkage_matrix: RMatrix<f64>,
+  forward_linkage_matrix: RMatrix<f64>
+) -> RMatrix<f64> {
+
+  // get dimensions
+  let n_bl = backward_linkage_matrix.nrows();
+
+  // initialize objects
+  let mut total_linkage = Mat::zeros(n_bl, 2);
+
+  // computes absolute total linkage
+  for i in 0..n_bl {
+    total_linkage[(i, 0)] = backward_linkage_matrix[(i, 0).into()] + forward_linkage_matrix[(i, 0).into()];
+  }
+
+  // computes relative total linkage
+  for i in 0..n_bl {
+    total_linkage[(i, 1)] = backward_linkage_matrix[(i, 1).into()] + forward_linkage_matrix[(i, 1).into()];
+  }
+
+  // return total linkage
+  RArray::new_matrix(n_bl, 2, |rows, cols| total_linkage[(rows, cols)])
+
+}
+
 // Macro to generate exports.
 // This ensures exported functions are registered with R.
 // See corresponding C code in `entrypoint.c`.
@@ -130,4 +163,5 @@ extendr_module! {
   mod extraction;
   fn compute_extraction_backward;
   fn compute_extraction_forward;
+  fn compute_extraction_total;
 }

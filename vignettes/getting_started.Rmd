@@ -78,23 +78,23 @@ This function allows you to specify the file path, sheet name, and cell ranges f
   - `id`: An identifier for the input-output matrix.
   - `intermediate_transactions`: A matrix of intermediate transactions.
   - `total_production`: A vector for total production.
-2. Optional fields
+1. Optional fields
   1. Final demand fields
     - `household_consumption`: A vector for household consumption.
     - `government_consumption`: A vector for government consumption.
     - `exports`: A vector for exports.
     - `final_demand_others`: Other vectors of final demand that doesn't need dedicated slots. Setting column names is advised for better readability.
-    - `final_demand_matrix`: A matrix for final demand. It's an active binding that aggregates the total final demand vectors. That means that if you add or remove a vector, the matrix will be updated automatically.
-  2. Added value fields
+    - `final_demand_matrix`: A matrix for final demand. It aggregates all the total final demand vectors. After you add or remove a vector, update this matrix with `$update_final_demand_matrix()` method.
+  1. Added value fields
     - `imports`: A vector for imports.
     - `taxes`: A vector for taxes.
     - `wages`: A vector for wages.
     - `operating_income`: A vector for operating income.
     - `added_value_others`: Other vectors of added value that doesn't need dedicated slots. Setting column names is advised for better readability.
-    - `added_value_matrix`: A matrix for added value. It's an active binding that aggregates the total added value vectors. That means that if you add or remove a vector, the matrix will be updated automatically.
-  3. Other optional fields
+    - `added_value_matrix`: A matrix for added value. It aggregates all the total added value vectors. After you add or remove a vector, update this matrix with `$udpate_added_value_matrix()` method.
+  1. Other optional fields
     - `occupation`: A vector for occupation.
-3. Results slots
+1. Results slots
   - `technical_coefficients_matrix`: A matrix with technical coefficients.
   - `leontief_inverse_matrix`: A matrix with the Leontief inverse.
   - `allocation_coefficients_matrix`: A matrix with the allocation coefficients.
@@ -102,7 +102,7 @@ This function allows you to specify the file path, sheet name, and cell ranges f
   - `multiplier_output`: A vector with the output multiplier.
   - `field_influence`: A matrix with the field of influence.
   - `key_sectors`: A dataframe with the key sectors, power of dispersion and sensitivity of dispersion, and their coefficients of variation.
-  - `hypothetical_extraction`: A dataframe with absolute and relative backward and forward differences in total output after hypothetical extraction of each sector.
+  - `hypothetical_extraction`: A dataframe with absolute and relative backward, forward and total differences in total output after hypothetical extraction of each sector.
 
 In order to instantiate a new `iom` object, as every R6 class, you need to use the `new()` method. A new `iom` object requires an `id` to help you identify the object (especially when you have multiple `iom` objects in your environment), a `intermediate_transactions` matrix, and a `total_production` vector. The other slots are optional and can be filled (or removed) later if needed with `add()` and `remove()` methods.
 
@@ -135,7 +135,7 @@ Now the `technical_coefficients_matrix` slot is filled. You can access the slots
 print(my_iom$technical_coefficients_matrix)
 ```
 
-Other methods available are `compute_leontief_inverse()`, `compute_multiplier_output()`, `compute_influence_field()`, `compute_key_sectors()`, `compute_allocation_coeff()` and `compute_ghosh_inverse()`. Their names are clear and self explanatory. You can also chain these methods to do all at once:
+Other methods available are `compute_leontief_inverse()`, `compute_multiplier_output()`, `compute_influence_field()`, `compute_key_sectors()`, `compute_allocation_coeff()`, `compute_hypothetical_extraction()` and `compute_ghosh_inverse()`. Their names are clear and self explanatory. You can also chain these methods to do all at once:
 
 ```{r chain}
 # Chain methods

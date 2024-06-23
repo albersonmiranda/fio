@@ -91,5 +91,12 @@ compute_extraction_backward <- function(technical_coefficients_matrix, final_dem
 #' Computes impact on supply structure after extracting a given sector.
 compute_extraction_forward <- function(allocation_coefficients_matrix, added_value_matrix, total_production) .Call(wrap__compute_extraction_forward, allocation_coefficients_matrix, added_value_matrix, total_production)
 
+#' Calculates total extraction
+#' @param backward_linkage_matrix A nx2 matrix of backward linkage.
+#' @param forward_linkage_matrix A nx2 matrix of forward linkage.
+#' @description
+#' Computes total impact after extracting a given sector.
+compute_extraction_total <- function(backward_linkage_matrix, forward_linkage_matrix) .Call(wrap__compute_extraction_total, backward_linkage_matrix, forward_linkage_matrix)
+
 
 # nolint end
