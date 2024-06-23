@@ -154,4 +154,11 @@ br_2020 <- iom$new(
   occupation = occupation
 )
 
+# aggregate final demand sectors
+br_2020$update_final_demand_matrix()
+
+# aggregate added value sectors
+br_2020$update_added_value_matrix()
+
+# save data
 usethis::use_data(br_2020, overwrite = TRUE)
