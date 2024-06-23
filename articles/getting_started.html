@@ -204,7 +204,7 @@ transactions.</li>
 <li>
 <code>total_production</code>: A vector for total production.</li>
 </ul>
-<ol start="2" style="list-style-type: decimal">
+<ol style="list-style-type: decimal">
 <li>Optional fields</li>
 <li>Final demand fields - <code>household_consumption</code>: A vector
 for household consumption. - <code>government_consumption</code>: A
@@ -212,18 +212,18 @@ vector for government consumption. - <code>exports</code>: A vector for
 exports. - <code>final_demand_others</code>: Other vectors of final
 demand that doesn’t need dedicated slots. Setting column names is
 advised for better readability. - <code>final_demand_matrix</code>: A
-matrix for final demand. It’s an active binding that aggregates the
-total final demand vectors. That means that if you add or remove a
-vector, the matrix will be updated automatically.</li>
+matrix for final demand. It aggregates all the total final demand
+vectors. After you add or remove a vector, update this matrix with
+<code>$update_final_demand_matrix()</code> method.</li>
 <li>Added value fields - <code>imports</code>: A vector for imports. -
 <code>taxes</code>: A vector for taxes. - <code>wages</code>: A vector
 for wages. - <code>operating_income</code>: A vector for operating
 income. - <code>added_value_others</code>: Other vectors of added value
 that doesn’t need dedicated slots. Setting column names is advised for
 better readability. - <code>added_value_matrix</code>: A matrix for
-added value. It’s an active binding that aggregates the total added
-value vectors. That means that if you add or remove a vector, the matrix
-will be updated automatically.</li>
+added value. It aggregates all the total added value vectors. After you
+add or remove a vector, update this matrix with
+<code>$udpate_added_value_matrix()</code> method.</li>
 <li>Other optional fields - <code>occupation</code>: A vector for
 occupation.</li>
 <li>Results slots</li>
@@ -253,7 +253,7 @@ dispersion and sensitivity of dispersion, and their coefficients of
 variation.</li>
 <li>
 <code>hypothetical_extraction</code>: A dataframe with absolute and
-relative backward and forward differences in total output after
+relative backward, forward and total differences in total output after
 hypothetical extraction of each sector.</li>
 </ul>
 <p>In order to instantiate a new <code>iom</code> object, as every R6
@@ -277,7 +277,7 @@ and <code><a href="https://rdrr.io/r/base/rm.html" class="external-link">remove(
 <span><span class="co">#&gt; &lt;iom&gt;</span></span>
 <span><span class="co">#&gt;   Public:</span></span>
 <span><span class="co">#&gt;     add: function (matrix_name, matrix) </span></span>
-<span><span class="co">#&gt;     added_value_matrix: active binding</span></span>
+<span><span class="co">#&gt;     added_value_matrix: NULL</span></span>
 <span><span class="co">#&gt;     added_value_others: NULL</span></span>
 <span><span class="co">#&gt;     allocation_coefficients_matrix: NULL</span></span>
 <span><span class="co">#&gt;     clone: function (deep = FALSE) </span></span>
@@ -291,7 +291,7 @@ and <code><a href="https://rdrr.io/r/base/rm.html" class="external-link">remove(
 <span><span class="co">#&gt;     compute_tech_coeff: function () </span></span>
 <span><span class="co">#&gt;     exports: NULL</span></span>
 <span><span class="co">#&gt;     field_influence: NULL</span></span>
-<span><span class="co">#&gt;     final_demand_matrix: active binding</span></span>
+<span><span class="co">#&gt;     final_demand_matrix: NULL</span></span>
 <span><span class="co">#&gt;     final_demand_others: NULL</span></span>
 <span><span class="co">#&gt;     ghosh_inverse_matrix: NULL</span></span>
 <span><span class="co">#&gt;     government_consumption: NULL</span></span>
@@ -310,6 +310,8 @@ and <code><a href="https://rdrr.io/r/base/rm.html" class="external-link">remove(
 <span><span class="co">#&gt;     taxes: NULL</span></span>
 <span><span class="co">#&gt;     technical_coefficients_matrix: NULL</span></span>
 <span><span class="co">#&gt;     total_production: 6789 9306 7979 6613 5554</span></span>
+<span><span class="co">#&gt;     update_added_value_matrix: function () </span></span>
+<span><span class="co">#&gt;     update_final_demand_matrix: function () </span></span>
 <span><span class="co">#&gt;     wages: NULL</span></span>
 <span><span class="co">#&gt;   Private:</span></span>
 <span><span class="co">#&gt;     iom_elements: function ()</span></span></code></pre></div>
@@ -325,7 +327,7 @@ We can compute the technical coefficients matrix by calling the
 <span><span class="co">#&gt; &lt;iom&gt;</span></span>
 <span><span class="co">#&gt;   Public:</span></span>
 <span><span class="co">#&gt;     add: function (matrix_name, matrix) </span></span>
-<span><span class="co">#&gt;     added_value_matrix: active binding</span></span>
+<span><span class="co">#&gt;     added_value_matrix: NULL</span></span>
 <span><span class="co">#&gt;     added_value_others: NULL</span></span>
 <span><span class="co">#&gt;     allocation_coefficients_matrix: NULL</span></span>
 <span><span class="co">#&gt;     clone: function (deep = FALSE) </span></span>
@@ -339,7 +341,7 @@ We can compute the technical coefficients matrix by calling the
 <span><span class="co">#&gt;     compute_tech_coeff: function () </span></span>
 <span><span class="co">#&gt;     exports: NULL</span></span>
 <span><span class="co">#&gt;     field_influence: NULL</span></span>
-<span><span class="co">#&gt;     final_demand_matrix: active binding</span></span>
+<span><span class="co">#&gt;     final_demand_matrix: NULL</span></span>
 <span><span class="co">#&gt;     final_demand_others: NULL</span></span>
 <span><span class="co">#&gt;     ghosh_inverse_matrix: NULL</span></span>
 <span><span class="co">#&gt;     government_consumption: NULL</span></span>
@@ -358,6 +360,8 @@ We can compute the technical coefficients matrix by calling the
 <span><span class="co">#&gt;     taxes: NULL</span></span>
 <span><span class="co">#&gt;     technical_coefficients_matrix: 0.0757107084990426 0.0827809692149065 0.0409485933127117 ...</span></span>
 <span><span class="co">#&gt;     total_production: 6789 9306 7979 6613 5554</span></span>
+<span><span class="co">#&gt;     update_added_value_matrix: function () </span></span>
+<span><span class="co">#&gt;     update_final_demand_matrix: function () </span></span>
 <span><span class="co">#&gt;     wages: NULL</span></span>
 <span><span class="co">#&gt;   Private:</span></span>
 <span><span class="co">#&gt;     iom_elements: function ()</span></span></code></pre></div>
@@ -376,7 +380,8 @@ You can access the slots using the <code>$</code> operator:</p>
 <code><a href="../reference/compute_multiplier_output.html">compute_multiplier_output()</a></code>,
 <code>compute_influence_field()</code>,
 <code>compute_key_sectors()</code>,
-<code><a href="../reference/compute_allocation_coeff.html">compute_allocation_coeff()</a></code> and
+<code><a href="../reference/compute_allocation_coeff.html">compute_allocation_coeff()</a></code>,
+<code>compute_hypothetical_extraction()</code> and
 <code><a href="../reference/compute_ghosh_inverse.html">compute_ghosh_inverse()</a></code>. Their names are clear and self
 explanatory. You can also chain these methods to do all at once:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
