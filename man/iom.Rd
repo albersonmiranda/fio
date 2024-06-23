@@ -23,6 +23,8 @@ R6 class for input-output matrix.
 
 \item{\code{final_demand_others}}{Other vectors of final demand that doesn't have dedicated slots.}
 
+\item{\code{final_demand_matrix}}{Aggregates final demand vectors into a matrix.}
+
 \item{\code{imports}}{Imports vector.}
 
 \item{\code{taxes}}{Taxes vector.}
@@ -32,6 +34,8 @@ R6 class for input-output matrix.
 \item{\code{operating_income}}{Operating income vector.}
 
 \item{\code{added_value_others}}{Other vectors of added value that doesn't have dedicated slots.}
+
+\item{\code{added_value_matrix}}{Aggregates added value vectors into a matrix.}
 
 \item{\code{occupation}}{Occupation vector}
 
@@ -53,21 +57,14 @@ R6 class for input-output matrix.
 }
 \if{html}{\out{</div>}}
 }
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{final_demand_matrix}}{Final demand matrix.}
-
-\item{\code{added_value_matrix}}{Added value matrix.}
-}
-\if{html}{\out{</div>}}
-}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-iom-new}{\code{iom$new()}}
 \item \href{#method-iom-add}{\code{iom$add()}}
 \item \href{#method-iom-remove}{\code{iom$remove()}}
+\item \href{#method-iom-update_final_demand_matrix}{\code{iom$update_final_demand_matrix()}}
+\item \href{#method-iom-update_added_value_matrix}{\code{iom$update_added_value_matrix()}}
 \item \href{#method-iom-compute_tech_coeff}{\code{iom$compute_tech_coeff()}}
 \item \href{#method-iom-compute_leontief_inverse}{\code{iom$compute_leontief_inverse()}}
 \item \href{#method-iom-compute_multiplier_output}{\code{iom$compute_multiplier_output()}}
@@ -175,6 +172,26 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-iom-update_final_demand_matrix"></a>}}
+\if{latex}{\out{\hypertarget{method-iom-update_final_demand_matrix}{}}}
+\subsection{Method \code{update_final_demand_matrix()}}{
+Updates final demand matrix.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{iom$update_final_demand_matrix()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-iom-update_added_value_matrix"></a>}}
+\if{latex}{\out{\hypertarget{method-iom-update_added_value_matrix}{}}}
+\subsection{Method \code{update_added_value_matrix()}}{
+Updates added value matrix.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{iom$update_added_value_matrix()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-iom-compute_tech_coeff"></a>}}
