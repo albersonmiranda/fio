@@ -81,13 +81,32 @@
 <p>Friendly &amp; Fast Input-Output Analysis <img src="reference/figures/leontief.jpg" align="right" width="240px" style="margin-left: 20px;"></p>
 <!-- badges: start -->
 
-<p><a href="https://albersonmiranda.github.io/fio/">fio</a> (<em>Friendly Input-Output</em>) is a R package for input-output analysis, focusing on two key aspects: ease of use for Excel users and performance. It provides an <a href="https://rstudio.github.io/rstudioaddins/" class="external-link">RStudio Addin</a> and a set of functions for easy import of input-output tables from Excel, either programmatically or directly from clipboard.</p>
-<p>The package is designed to be fast and efficient. It embraces <a href="https://r6.r-lib.org/" class="external-link">R6 class</a> for a clean, memory-efficient object-oriented programming. Additionally, all linear algebra computations are written in <a href="https://www.rust-lang.org/" class="external-link">Rust</a> for highly optimized performance.</p>
+<p><a href="https://albersonmiranda.github.io/fio/">fio</a> (<em>Friendly Input-Output</em>) is a R package designed for input-output analysis, emphasizing usability for Excel users and performance. It includes an <a href="https://rstudio.github.io/rstudioaddins/" class="external-link">RStudio Addin</a> and a suite of functions for straightforward import of input-output tables from Excel, either programmatically or directly from the clipboard.</p>
+<p>The package is optimized for speed and efficiency. It leverages the <a href="https://r6.r-lib.org/" class="external-link">R6 class</a> for clean, memory-efficient object-oriented programming. Furthermore, all linear algebra computations are implemented in <a href="https://www.rust-lang.org/" class="external-link">Rust</a> to achieve highly optimized performance.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>Install the latest development version from <strong>Github</strong>:</p>
+<p>To install <code>fio</code>, follow these steps:</p>
+<ol style="list-style-type: decimal">
+<li>Visit the <a href="https://github.com/albersonmiranda/fio/releases" class="external-link">Releases section</a> section on GitHub.</li>
+<li>Download the appropriate precompiled version for your operating system:</li>
+</ol>
+<ul>
+<li>For Windows: fio_x.x.x_R_x86_64-windows.zip</li>
+<li>For Linux: fio_x.x.x_R_x86_64-pc-linux-gnu.tar.gz</li>
+</ul>
+<ol style="list-style-type: decimal">
+<li>Use the following command to install the package:</li>
+</ol>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># for Windows</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"path/to/fio_x.x.x._R_x86_64-windows.zip"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># for Linux</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"path/to/fio_x.x.x_R_x86_64-pc-linux-gnu.tar.gz"</span><span class="op">)</span></span></code></pre></div>
+<p>Replace “path/to/” with the actual path where you downloaded the file.</p>
+<p>If you have <a href="https://www.rust-lang.org/" class="external-link">Rust</a> installed and wish to compile the latest development version from source, use:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"albersonmiranda/fio"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -99,7 +118,7 @@
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
 <p>Calculate Leontief’s inverse from brazilian 2020 input-output matrix:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load included dataset</span></span>
 <span><span class="va">iom_br</span> <span class="op">&lt;-</span> <span class="fu">fio</span><span class="fu">::</span><span class="va"><a href="reference/br_2020.html">br_2020</a></span></span>
 <span></span>
