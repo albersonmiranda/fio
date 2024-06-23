@@ -30,7 +30,23 @@ The package is optimized for speed and efficiency. It leverages the [R6 class](h
 
 ## Installation
 
-To install a precompiled version for Windows or Linux, visit the [Releases section](https://github.com/albersonmiranda/fio/releases).
+To install `fio`, follow these steps:
+
+1. Visit the [Releases section](https://github.com/albersonmiranda/fio/releases) section on GitHub.
+1. Download the appropriate precompiled version for your operating system:
+  - For Windows: fio_x.x.x_R_x86_64-windows.zip
+  - For Linux: fio_x.x.x_R_x86_64-pc-linux-gnu.tar.gz
+1. Use the following command to install the package:
+
+```r
+# for Windows
+install.packages("path/to/fio_x.x.x._R_x86_64-windows.zip")
+
+# for Linux
+install.packages("path/to/fio_x.x.x_R_x86_64-pc-linux-gnu.tar.gz")
+```
+
+Replace "path/to/" with the actual path where you downloaded the file.
 
 If you have [Rust](https://www.rust-lang.org/) installed and wish to compile the latest development version from source, use:
 
