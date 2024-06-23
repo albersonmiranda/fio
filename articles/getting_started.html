@@ -193,8 +193,7 @@ results of various functions, such as the technical coefficients matrix,
 the Leontief inverse, key sectors, the Ghosh inverse, and more. All
 slots of the <code>iom</code> class are listed as follows:</p>
 <ol style="list-style-type: decimal">
-<li>Required fields</li>
-</ol>
+<li>Required fields
 <ul>
 <li>
 <code>id</code>: An identifier for the input-output matrix.</li>
@@ -204,30 +203,60 @@ transactions.</li>
 <li>
 <code>total_production</code>: A vector for total production.</li>
 </ul>
-<ol style="list-style-type: decimal">
-<li>Optional fields</li>
-<li>Final demand fields - <code>household_consumption</code>: A vector
-for household consumption. - <code>government_consumption</code>: A
-vector for government consumption. - <code>exports</code>: A vector for
-exports. - <code>final_demand_others</code>: Other vectors of final
-demand that doesn’t need dedicated slots. Setting column names is
-advised for better readability. - <code>final_demand_matrix</code>: A
-matrix for final demand. It aggregates all the total final demand
-vectors. After you add or remove a vector, update this matrix with
+</li>
+<li>Optional fields
+<ul>
+<li>Final demand fields
+<ul>
+<li>
+<code>household_consumption</code>: A vector for household
+consumption.</li>
+<li>
+<code>government_consumption</code>: A vector for government
+consumption.</li>
+<li>
+<code>exports</code>: A vector for exports.</li>
+<li>
+<code>final_demand_others</code>: Other vectors of final demand that
+doesn’t need dedicated slots. Setting column names is advised for better
+readability.</li>
+<li>
+<code>final_demand_matrix</code>: A matrix for final demand. It
+aggregates all the total final demand vectors. After you add or remove a
+vector, update this matrix with
 <code>$update_final_demand_matrix()</code> method.</li>
-<li>Added value fields - <code>imports</code>: A vector for imports. -
-<code>taxes</code>: A vector for taxes. - <code>wages</code>: A vector
-for wages. - <code>operating_income</code>: A vector for operating
-income. - <code>added_value_others</code>: Other vectors of added value
-that doesn’t need dedicated slots. Setting column names is advised for
-better readability. - <code>added_value_matrix</code>: A matrix for
-added value. It aggregates all the total added value vectors. After you
-add or remove a vector, update this matrix with
+</ul>
+</li>
+<li>Added value fields
+<ul>
+<li>
+<code>imports</code>: A vector for imports.</li>
+<li>
+<code>taxes</code>: A vector for taxes.</li>
+<li>
+<code>wages</code>: A vector for wages.</li>
+<li>
+<code>operating_income</code>: A vector for operating income.</li>
+<li>
+<code>added_value_others</code>: Other vectors of added value that
+doesn’t need dedicated slots. Setting column names is advised for better
+readability.</li>
+<li>
+<code>added_value_matrix</code>: A matrix for added value. It
+aggregates all the total added value vectors. After you add or remove a
+vector, update this matrix with
 <code>$udpate_added_value_matrix()</code> method.</li>
-<li>Other optional fields - <code>occupation</code>: A vector for
-occupation.</li>
-<li>Results slots</li>
-</ol>
+</ul>
+</li>
+<li>Other optional fields
+<ul>
+<li>
+<code>occupation</code>: A vector for occupation.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Results slots
 <ul>
 <li>
 <code>technical_coefficients_matrix</code>: A matrix with technical
@@ -256,6 +285,8 @@ variation.</li>
 relative backward, forward and total differences in total output after
 hypothetical extraction of each sector.</li>
 </ul>
+</li>
+</ol>
 <p>In order to instantiate a new <code>iom</code> object, as every R6
 class, you need to use the <code>new()</code> method. A new
 <code>iom</code> object requires an <code>id</code> to help you identify
