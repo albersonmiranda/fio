@@ -145,6 +145,51 @@ iom <- R6::R6Class(
                           operating_income = NULL,
                           added_value_others = NULL,
                           occupation = NULL) {
+      ### assertions ###
+      # check class
+      for (matrix in private$iom_elements()) {
+        if (!is.null(get(matrix)) && !is.matrix(get(matrix))) {
+          cli::cli_h1("Error in matrix class")
+          cli::cli_abort("`{matrix}` must be a matrix.")
+          cli::cli_alert_info("Try coerce `{matrix}` to a matrix using as.matrix() function.")
+        }
+      }
+
+      # check dimensions
+      if (nrow(intermediate_transactions) != ncol(intermediate_transactions)) {
+        cli::cli_h1("Error in matrix dimensions")
+        cli::cli_abort("intermediate_transactions must be a square matrix")
+      }
+
+      for (matrix in c(
+        "household_consumption",
+        "government_consumption",
+        "exports",
+        "final_demand_others"
+      )) {
+        if (!is.null(get(matrix)) && nrow(get(matrix)) != nrow(intermediate_transactions)) {
+          cli::cli_h1("Error in matrix dimensions")
+          cli::cli_abort("`{matrix}` must have the same number of rows than `intermediate_transactions`,
+          which is {nrow(intermediate_transactions)} rows.")
+        }
+      }
+
+      for (matrix in c(
+        "imports",
+        "taxes",
+        "wages",
+        "operating_income",
+        "added_value_others",
+        "occupation",
+        "total_production"
+      )) {
+        if (!is.null(get(matrix)) && ncol(get(matrix)) != ncol(intermediate_transactions)) {
+          cli::cli_h1("Error in matrix dimensions")
+          cli::cli_abort("`{matrix}` must ahve the same number of columns than `intermediate_transactions`,
+          which is {ncol(intermediate_transactions)} columns.")
+        }
+      }
+
       # set data members
       self$id <- id
       self$intermediate_transactions <- intermediate_transactions
@@ -174,7 +219,8 @@ iom <- R6::R6Class(
       tryCatch(
         match.arg(matrix_name, choices),
         error = function(e) {
-          stop("matrix_name must be one of ", paste(choices, collapse = ", "))
+          cli::cli_h1("Error in matrix_name")
+          cli::cli_abort("matrix_name must be one of {choices}")
         }
       )
       # import matrix
@@ -195,7 +241,8 @@ iom <- R6::R6Class(
       tryCatch(
         match.arg(matrix_name, choices),
         error = function(e) {
-          stop("matrix_name must be one of ", paste(choices, collapse = ", "))
+          cli::cli_h1("Error in matrix_name")
+          cli::cli_abort("matrix_name must be one of {choices}")
         }
       )
       # remove matrix
