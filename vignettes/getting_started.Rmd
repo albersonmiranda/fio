@@ -113,7 +113,7 @@ Let's create a new `iom` object with some random data:
 my_iom <- fio::iom$new(
   id = "my_iom",
   intermediate_transactions = matrix(as.numeric(sample(100:1000, 25)), nrow = 5),
-  total_production = as.numeric(sample(5000:10000, 5))
+  total_production = matrix(as.numeric(sample(5000:10000, 5)), nrow = 1)
 )
 
 print(my_iom)
