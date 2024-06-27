@@ -57,7 +57,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="development version" id="fio-development-version">fio (development version)<a class="anchor" aria-label="anchor" href="#fio-development-version"></a></h2>
+<h2 class="page-header" data-toc-text="0.0.0.9000" id="fio-0009000-development-version">fio 0.0.0.9000 (development version)<a class="anchor" aria-label="anchor" href="#fio-0009000-development-version"></a></h2>
+<div class="section level3">
+<h3 id="id_-enhancements-0-0-0-9000">✨ Enhancements<a class="anchor" aria-label="anchor" href="#id_-enhancements-0-0-0-9000"></a></h3>
 <ul><li>New <code><a href="../reference/import_element.html">import_element()</a></code> to programmatically import data from an Excel file</li>
 <li>New data import addin makes easy to import data from clipboard or an Excel file</li>
 <li>New <code>iom</code> uses the efficiency of R6 classes to store data reducing memory footprint</li>
@@ -74,6 +76,20 @@
 <li>New <code><a href="../reference/compute_ghosh_inverse.html">compute_ghosh_inverse()</a></code> method to compute the Ghosh inverse of an input-output table</li>
 <li>New <code>compute_hypothetical_extraction()</code> method to compute impact on demand, supply and both structures after hypothetical extraction of a sector</li>
 </ul></div>
+<div class="section level3">
+<h3 id="id_-performance-improvements-0-0-0-9000">🚀 Performance improvements<a class="anchor" aria-label="anchor" href="#id_-performance-improvements-0-0-0-9000"></a></h3>
+<ul><li>Use Rust instead of base R for <code>compute_*()</code> functions</li>
+<li>Use <code>faer</code> crate instead of <code>nalgebra</code> for faster linear algebra calculations</li>
+<li>Use R6 classes for a clean, object state-changes, memory-efficient object-oriented programming</li>
+</ul></div>
+<div class="section level3">
+<h3 id="id_️-other-improvements-0-0-0-9000">🛠️ Other improvements<a class="anchor" aria-label="anchor" href="#id_%EF%B8%8F-other-improvements-0-0-0-9000"></a></h3>
+<ul><li>Added assertions to check if elements imported into slots are matrices at initialization of <code>iom</code> object and at <code>add()</code> method</li>
+<li>Added assertions to check matrices dimensions at initialization of <code>iom</code> object and at <code>add()</code> method</li>
+<li>More informative warnings and errors messages with {cli} package</li>
+<li>Added assertions to check if number format of slots is double at initialization of <code>iom</code> object and at <code>add()</code> method</li>
+</ul></div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
