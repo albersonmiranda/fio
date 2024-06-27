@@ -150,15 +150,15 @@ iom <- R6::R6Class(
       for (matrix in private$iom_elements()) {
         if (!is.null(get(matrix)) && !is.matrix(get(matrix))) {
           cli::cli_h1("Error in matrix class")
-          cli::cli_abort("`{matrix}` must be a matrix.")
-          cli::cli_alert_info("Try coerce `{matrix}` to a matrix using as.matrix() function.")
+          alert("Try coerce `{matrix}` to a matrix using as.matrix() function.")
+          error("`{matrix}` must be a matrix.")
         }
       }
 
       # check dimensions
       if (nrow(intermediate_transactions) != ncol(intermediate_transactions)) {
         cli::cli_h1("Error in matrix dimensions")
-        cli::cli_abort("intermediate_transactions must be a square matrix")
+        error("intermediate_transactions must be a square matrix")
       }
 
       for (matrix in c(
@@ -169,8 +169,8 @@ iom <- R6::R6Class(
       )) {
         if (!is.null(get(matrix)) && nrow(get(matrix)) != nrow(intermediate_transactions)) {
           cli::cli_h1("Error in matrix dimensions")
-          cli::cli_abort("`{matrix}` must have the same number of rows than `intermediate_transactions`,
-          which is {nrow(intermediate_transactions)} rows.")
+          error("`{matrix}` must have the same number of rows than `intermediate_transactions`,
+          which is {nrow(intermediate_transactions)} rows. But `{matrix}` has {nrow(get(matrix))} rows.")
         }
       }
 
@@ -185,8 +185,20 @@ iom <- R6::R6Class(
       )) {
         if (!is.null(get(matrix)) && ncol(get(matrix)) != ncol(intermediate_transactions)) {
           cli::cli_h1("Error in matrix dimensions")
-          cli::cli_abort("`{matrix}` must ahve the same number of columns than `intermediate_transactions`,
-          which is {ncol(intermediate_transactions)} columns.")
+          error("`{matrix}` must have the same number of columns than `intermediate_transactions`,
+          which is {ncol(intermediate_transactions)} columns. But `{matrix}` has {ncol(get(matrix))} columns.")
+        }
+      }
+
+      # check number format
+      for (matrix in private$iom_elements()) {
+        if (!is.null(get(matrix))) {
+          # Check if the matrix storage mode is not double
+          if (storage.mode(get(matrix)) != "double") {
+            cli::cli_h1("Error in matrix number format")
+            alert("Try coerce {matrix} elements to double using as.numeric().")
+            error("{matrix} elements must be of type double.")
+          }
         }
       }
 
@@ -220,9 +232,29 @@ iom <- R6::R6Class(
         match.arg(matrix_name, choices),
         error = function(e) {
           cli::cli_h1("Error in matrix_name")
-          cli::cli_abort("matrix_name must be one of {choices}")
+          error("matrix_name must be one of {choices}")
         }
       )
+      # check class
+      if (!is.matrix(matrix)) {
+        cli::cli_h1("Error in matrix class")
+        alert("Try coerce `matrix` to a matrix using as.matrix() function.")
+        error("`matrix` must be a matrix.")
+      }
+      # check dimensions
+      if (matrix_name %in% c("household_consumption", "government_consumption", "exports", "final_demand_others")) {
+        if (nrow(matrix) != nrow(self$intermediate_transactions)) {
+          cli::cli_h1("Error in matrix dimensions")
+          error("`{matrix_name}` must have the same number of rows than `intermediate_transactions`,
+          which is {nrow(self$intermediate_transactions)} rows. But {matrix_name} has {nrow(matrix)} rows.")
+        }
+      } else {
+        if (ncol(matrix) != ncol(self$intermediate_transactions)) {
+          cli::cli_h1("Error in matrix dimensions")
+          error("`{matrix_name}` must have the same number of columns than `intermediate_transactions`,
+          which is {ncol(self$intermediate_transactions)} columns. But {matrix_name} has {ncol(matrix)} columns.")
+        }
+      }
       # import matrix
       self[[matrix_name]] <- matrix
       invisible(self)
@@ -242,7 +274,7 @@ iom <- R6::R6Class(
         match.arg(matrix_name, choices),
         error = function(e) {
           cli::cli_h1("Error in matrix_name")
-          cli::cli_abort("matrix_name must be one of {choices}")
+          error("matrix_name must be one of {choices}")
         }
       )
       # remove matrix
@@ -254,25 +286,25 @@ iom <- R6::R6Class(
     #' Updates final demand matrix.
     update_final_demand_matrix = function() {
       # bind final demand vectors
-      self$final_demand_matrix <- cbind(
+      self$final_demand_matrix <- as.matrix(cbind(
         self$household_consumption,
         self$government_consumption,
         self$exports,
         self$final_demand_others
-      )
+      ))
     },
 
     #' @description
     #' Updates added value matrix.
     update_added_value_matrix = function() {
       # bind added value vectors
-      self$added_value_matrix <- rbind(
+      self$added_value_matrix <- as.matrix(rbind(
         self$imports,
         self$taxes,
         self$wages,
         self$operating_income,
         self$added_value_others
-      )
+      ))
     },
 
     #' @description
@@ -308,6 +340,11 @@ iom <- R6::R6Class(
     #' @param technical_coefficients_matrix
     #' Technical coefficients matrix.
     compute_leontief_inverse = function(technical_coefficients_matrix) {
+      # check if technical coefficients matrix is available
+      if (is.null(self$technical_coefficients_matrix)) {
+        cli::cli_h1("Error in technical_coefficients_matrix")
+        error("You must compute the technical coefficients matrix first. Run compute_tech_coeff() method.")
+      }
       # save row and column names
       row_names <- rownames(self$technical_coefficients_matrix)
       col_names <- colnames(self$technical_coefficients_matrix)
@@ -329,6 +366,11 @@ iom <- R6::R6Class(
     #' @param leontief_inverse_matrix
     #' Leontief inverse matrix.
     compute_multiplier_output = function(leontief_inverse_matrix) {
+      # check if leontief inverse matrix is available
+      if (is.null(self$leontief_inverse_matrix)) {
+        cli::cli_h1("Error in leontief_inverse_matrix")
+        error("You must compute the leontief inverse matrix first. Run compute_leontief_inverse() method.")
+      }
       # save column names
       col_names <- colnames(self$leontief_inverse_matrix)
       # compute output multiplier vector
@@ -353,6 +395,16 @@ iom <- R6::R6Class(
     #' @param epsilon
     #' Epsilon value. A technical change in the input-output matrix.
     compute_field_influence = function(epsilon) {
+      # check if epsilon was set
+      if (missing(epsilon)) {
+        cli::cli_h1("Error in epsilon")
+        error("You must set the epsilon value.")
+      }
+      # check if leontief inverse matrix is available
+      if (is.null(self$leontief_inverse_matrix)) {
+        cli::cli_h1("Error in leontief_inverse_matrix")
+        error("You must compute the leontief inverse matrix first. Run compute_leontief_inverse() method.")
+      }
       # save row and column names
       row_names <- rownames(self$technical_coefficients_matrix)
       col_names <- colnames(self$technical_coefficients_matrix)
@@ -376,6 +428,11 @@ iom <- R6::R6Class(
     #' @param leontief_inverse_matrix
     #' Leontief inverse matrix.
     compute_key_sectors = function(leontief_inverse_matrix) {
+      # check if leontief inverse matrix is available
+      if (is.null(self$leontief_inverse_matrix)) {
+        cli::cli_h1("Error in leontief_inverse_matrix")
+        error("You must compute the leontief inverse matrix first. Run compute_leontief_inverse() method.")
+      }
       # power of dispersion
       power_dispersion <- compute_power_dispersion(
         leontief_inverse_matrix = self$leontief_inverse_matrix
@@ -448,6 +505,11 @@ iom <- R6::R6Class(
     #' @param allocation_coefficients_matrix
     #' Allocation coefficients matrix.
     compute_ghosh_inverse = function(allocation_coefficients_matrix) {
+      # check if allocation coefficients matrix is available
+      if (is.null(self$allocation_coefficients_matrix)) {
+        cli::cli_h1("Error in allocation_coefficients_matrix")
+        error("You must compute the allocation coefficients matrix first. Run compute_allocation_coeff() method.")
+      }
       # save row and column names
       row_names <- rownames(self$allocation_coefficients_matrix)
       col_names <- colnames(self$allocation_coefficients_matrix)
@@ -476,13 +538,30 @@ iom <- R6::R6Class(
     #' Added value matrix.
     #' @param total_production
     #' Total production vector.
-    compute_hypothetical_extraction = function(
-      technical_coefficients_matrix,
-      allocation_coefficients_matrix,
-      final_demand_matrix,
-      added_value_matrix,
-      total_production
-    ) {
+    compute_hypothetical_extraction = function(technical_coefficients_matrix,
+                                               allocation_coefficients_matrix,
+                                               final_demand_matrix,
+                                               added_value_matrix,
+                                               total_production) {
+      # check if arguments are available
+      for (matrix in c(
+        "technical_coefficients_matrix",
+        "allocation_coefficients_matrix"
+      )) {
+        if (is.null(self[[matrix]])) {
+          cli::cli_h1("Error in {matrix}")
+          error("You must compute the {matrix} first. Run respective compute_*() method.")
+        }
+      }
+      for (matrix in c(
+        "final_demand_matrix",
+        "added_value_matrix"
+      )) {
+        if (is.null(self[[matrix]])) {
+          cli::cli_h1("Error in {matrix}")
+          error("You must compute the {matrix} first. Run respective update_*() method.")
+        }
+      }
       # save row and column names
       row_names <- rownames(self$technical_coefficients_matrix)
       # compute backward extraction
@@ -528,6 +607,8 @@ iom <- R6::R6Class(
   private = list(
     iom_elements = function() {
       c(
+        "intermediate_transactions",
+        "total_production",
         "household_consumption",
         "government_consumption",
         "exports",

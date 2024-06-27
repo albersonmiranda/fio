@@ -1,4 +1,6 @@
-# fio (development version)
+# fio 0.0.0.9000 (development version)
+
+## ✨ Enhancements
 
 * New `import_element()` to programmatically import data from an Excel file
 * New data import addin makes easy to import data from clipboard or an Excel file
@@ -13,3 +15,16 @@
 * New `compute_allocation_coeff()` method to compute the allocation coefficients of an input-output table
 * New `compute_ghosh_inverse()` method to compute the Ghosh inverse of an input-output table
 * New `compute_hypothetical_extraction()` method to compute impact on demand, supply and both structures after hypothetical extraction of a sector
+
+## 🚀 Performance improvements
+
+* Use Rust instead of base R for `compute_*()` functions
+* Use `faer` crate instead of `nalgebra` for faster linear algebra calculations
+* Use R6 classes for a clean, object state-changes, memory-efficient object-oriented programming
+
+## 🛠️ Other improvements
+
+* Added assertions to check if elements imported into slots are matrices at initialization of `iom` object and at `add()` method
+* Added assertions to check matrices dimensions at initialization of `iom` object and at `add()` method
+* More informative warnings and errors messages with {cli} package
+* Added assertions to check if number format of slots is double at initialization of `iom` object and at `add()` method
