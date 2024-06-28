@@ -22,6 +22,7 @@ Friendly & Fast Input-Output Analysis <img src="man/figures/leontief.jpg" align=
 [![R-CMD-check](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN status](https://www.r-pkg.org/badges/version/fio)](https://CRAN.R-project.org/package=fio)
+[![Codecov test coverage](https://codecov.io/gh/albersonmiranda/fio/branch/main/graph/badge.svg)](https://app.codecov.io/gh/albersonmiranda/fio?branch=main)
 <!-- badges: end -->
 
 `{fio}` (*Friendly Input-Output*) is a R package designed for input-output analysis, emphasizing usability for Excel users and performance. It includes an [RStudio Addin](https://rstudio.github.io/rstudioaddins/) and a suite of functions for straightforward import of input-output tables from Excel, either programmatically or directly from the clipboard.
