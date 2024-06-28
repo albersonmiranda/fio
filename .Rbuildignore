@@ -13,3 +13,5 @@
 ^vignettes/articles$
 ^.devcontainer$
 ^codecov\.yml$
+^cran-comments\.md$
+^revdep$

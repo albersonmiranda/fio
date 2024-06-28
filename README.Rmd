@@ -79,4 +79,11 @@ And pronto! `r emoji::emoji("tada")`, you're all good to carry on with your anal
 ![](man/figures/example_leontief_inverse.png)
 *<small>Leontief's inverse from brazilian 2020 input-output matrix</small>*
 
+## Related tools
+
+Other great tools for input-output analysis in R include:
+
+- [{leontief}](https://pachamaltese.github.io/leontief/)
+- [{ioanalysis}](https://cran.r-project.org/package=ioanalysis)
+
 </div>

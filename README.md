@@ -94,4 +94,11 @@ evoke the Data Viewer to inspect the results with
 ![](man/figures/example_leontief_inverse.png) *<small>Leontief’s inverse
 from brazilian 2020 input-output matrix</small>*
 
+## Related tools
+
+Other great tools for input-output analysis in R include:
+
+- [{leontief}](https://pachamaltese.github.io/leontief/)
+- [{ioanalysis}](https://cran.r-project.org/package=ioanalysis)
+
 </div>
