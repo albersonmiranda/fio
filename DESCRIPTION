@@ -43,6 +43,8 @@ Suggests:
     spelling,
     microbenchmark,
     leontief,
-    ggplot2
+    ggplot2,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Language: en-US
+Config/testthat/edition: 3

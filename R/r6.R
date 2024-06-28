@@ -227,7 +227,7 @@ iom <- R6::R6Class(
     #' Matrix object to be added.
     add = function(matrix_name, matrix) {
       # check arg
-      choices <- private$iom_elements
+      choices <- private$iom_elements()
       tryCatch(
         match.arg(matrix_name, choices),
         error = function(e) {
@@ -269,7 +269,7 @@ iom <- R6::R6Class(
     #' Matrix object to be removed.
     remove = function(matrix_name) {
       # check arg
-      choices <- private$iom_elements
+      choices <- private$iom_elements()
       tryCatch(
         match.arg(matrix_name, choices),
         error = function(e) {
