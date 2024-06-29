@@ -49,5 +49,6 @@ _Goal is code coverage percentage at 80% and above._
 
 - [ ] Bump version (both Rust & R packages, accordingly)
 - [ ] Update NEWS.md
-- [ ] Precompiled Windows binaries
 - [ ] Precompiled Linux binaries
+- [ ] Precompiled [Windows binaries](https://win-builder.r-project.org/upload.aspx)
+- [ ] Precompiled [macOS binaries](https://mac.r-project.org/macbuilder/submit.html)
