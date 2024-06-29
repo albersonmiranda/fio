@@ -593,7 +593,7 @@ iom <- R6::R6Class(
         "backward_absolute",
         "backward_relative",
         "forward_absolute",
-        "foward_relative",
+        "forward_relative",
         "total_absolute",
         "total_relative"
       )
