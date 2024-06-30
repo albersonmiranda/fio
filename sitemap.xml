@@ -73,13 +73,13 @@
     <loc>https://albersonmiranda.github.io/fio/reference/fio-package.html</loc>
   </url>
   <url>
-    <loc>https://albersonmiranda.github.io/fio/reference/fio_addin.html</loc>
-  </url>
-  <url>
     <loc>https://albersonmiranda.github.io/fio/reference/import_element.html</loc>
   </url>
   <url>
     <loc>https://albersonmiranda.github.io/fio/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://albersonmiranda.github.io/fio/reference/input_options.html</loc>
   </url>
   <url>
     <loc>https://albersonmiranda.github.io/fio/reference/iom.html</loc>
