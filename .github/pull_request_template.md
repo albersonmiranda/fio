@@ -17,6 +17,7 @@
 - [ ] Bug Fix
 - [ ] Optimization
 - [ ] Documentation Update
+- [ ] Tests
 
 ## Description
 

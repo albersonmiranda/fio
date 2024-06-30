@@ -2,9 +2,12 @@
 
 
 # cli messages
-error <- function(say) {
-  cli::cli_abort(cli::col_red(say))
+error <- function(message) {
+  cli::cli_abort(cli::col_red(message))
+  invisible(NULL)
 }
-alert <- function(say) {
-  cli::cli_alert(cli::col_blue(say))
+
+alert <- function(message) {
+  cli::cli_alert(cli::col_blue(message))
+  invisible(NULL)
 }

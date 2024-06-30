@@ -155,12 +155,25 @@ fio_addin_create <- function(
     range = NULL,
     col_names = FALSE,
     row_names = FALSE) {
+
+  # Parameter validation
+  if (!source %in% c("clipboard", "input_file")) {
+    error("Invalid source specified")
+  }
+  if (!number_format %in% c("comma", "dot")) {
+    error("Invalid number format specified")
+  }
+  if (source == "input_file" && is.null(source_file)) {
+    error("Source file must be provided for input_file source")
+  }
+
   fio_input <- switch(source,
     clipboard = NULL,
     input_file = source_file$datapath
   )
 
   # import data
+  tryCatch({
   data <- if (source == "input_file") {
     import_element(
       file = fio_input,
@@ -185,7 +198,13 @@ fio_addin_create <- function(
     })
     temp
   }
+  }, error = function(e) {
+    stop("Failed to import data: ", e$message)
+  })
 
   # assign to environment
+  if (exists(var)) {
+    alert("Variable {var} already exists and will be overwritten.")
+  }
   assign(var, data, inherits = TRUE)
 }
