@@ -173,34 +173,37 @@ fio_addin_create <- function(
   )
 
   # import data
-  tryCatch({
-  data <- if (source == "input_file") {
-    import_element(
-      file = fio_input,
-      sheet = sheet,
-      range = range,
-      col_names = col_names,
-      row_names = row_names
-    )
-  } else {
-    temp <- clipr::read_clip_tbl(header = FALSE)
-    colnames(temp) <- seq_len(ncol(temp))
-    # parse to numeric and correct number format
-    temp <- sapply(temp, function(columns) {
-      if (number_format == "comma") {
-        temp <- gsub("\\.", "", columns)
-        temp <- as.numeric(gsub(",", ".", temp))
-        return(temp)
+  tryCatch(
+    {
+      data <- if (source == "input_file") {
+        import_element(
+          file = fio_input,
+          sheet = sheet,
+          range = range,
+          col_names = col_names,
+          row_names = row_names
+        )
       } else {
-        temp <- as.numeric(gsub(",", "", columns))
-        return(temp)
+        temp <- clipr::read_clip_tbl(header = FALSE)
+        colnames(temp) <- seq_len(ncol(temp))
+        # parse to numeric and correct number format
+        temp <- sapply(temp, function(columns) {
+          if (number_format == "comma") {
+            temp <- gsub("\\.", "", columns)
+            temp <- as.numeric(gsub(",", ".", temp))
+            return(temp)
+          } else {
+            temp <- as.numeric(gsub(",", "", columns))
+            return(temp)
+          }
+        })
+        temp
       }
-    })
-    temp
-  }
-  }, error = function(e) {
-    stop("Failed to import data: ", e$message)
-  })
+    },
+    error = function(e) {
+      stop("Failed to import data: ", e$message)
+    }
+  )
 
   # assign to environment
   if (exists(var)) {
