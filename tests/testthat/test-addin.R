@@ -51,9 +51,35 @@ test_that("Data import handles inputs correctly", {
     )
   )
 
+  # test if it import colnames correctly
+  expect_silent(
+    fio_addin_create(
+      var = "test_var2",
+      source = "input_file",
+      number_format = "comma",
+      source_file = list(datapath = "mock.xlsx"),
+      sheet = "Sheet1",
+      range = "A2:C4",
+      col_names = "A1:C1"
+    )
+  )
+
+  # test if it import rownames correctly
+  expect_silent(
+    fio_addin_create(
+      var = "test_var3",
+      source = "input_file",
+      number_format = "comma",
+      source_file = list(datapath = "mock.xlsx"),
+      sheet = "Sheet1",
+      range = "A2:C4",
+      row_names = "A2:A4"
+    )
+  )
+
   # Test for invalid source
-  expect_error(fio_addin_create(var = "test_var", source = "invalid_source", number_format = "comma"))
+  expect_error(fio_addin_create(var = "test_var4", source = "invalid_source", number_format = "comma"))
 
   # Test for invalid number format
-  expect_error(fio_addin_create(var = "test_var", source = "input_file", number_format = "invalid_format"))
+  expect_error(fio_addin_create(var = "test_var5", source = "input_file", number_format = "invalid_format"))
 })
