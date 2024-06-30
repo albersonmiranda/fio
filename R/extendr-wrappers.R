@@ -22,10 +22,46 @@ compute_tech_coeff <- function(intermediate_transactions, total_production) .Cal
 #' @return A nxn matrix of Leontief inverse.
 compute_leontief_inverse <- function(tech_coeff) .Call(wrap__compute_leontief_inverse, tech_coeff)
 
-#' Calculates output multiplier.
+#' * MARK: Output Multipliers
+#' Calculates type I output multiplier.
 #' @param leontief_inverse_matrix The open model Leontief inverse matrix.
-#' @return A 1xn vector of output multipliers.
+#' @return A 1xn vector of type I output multipliers.
 compute_multiplier_output <- function(leontief_inverse_matrix) .Call(wrap__compute_multiplier_output, leontief_inverse_matrix)
+
+#' Calculates type I direct output multiplier.
+#' @param technical_coefficients_matrix The open model technical coefficients matrix.
+#' @return A 1xn vector of type I direct output multipliers.
+compute_multiplier_output_direct <- function(technical_coefficients_matrix) .Call(wrap__compute_multiplier_output_direct, technical_coefficients_matrix)
+
+#' Calculates type I indirect output multiplier.
+#' @param technical_coefficients_matrix The open model technical coefficients matrix.
+#' @param leontief_inverse_matrix The open model Leontief inverse matrix.
+#' @return A 1xn vector of type I indirect output multipliers.
+compute_multiplier_output_indirect <- function(technical_coefficients_matrix, leontief_inverse_matrix) .Call(wrap__compute_multiplier_output_indirect, technical_coefficients_matrix, leontief_inverse_matrix)
+
+#' * MARK: Employment Multipliers
+#' Calculates employment requirements.
+#' @param employment_levels The employment levels.
+#' @param total_production The total production.
+#' @return A 1xn vector of employment requirements.
+compute_requirements_employment <- function(employment_levels, total_production) .Call(wrap__compute_requirements_employment, employment_levels, total_production)
+
+#' Calculates employment generator matrix.
+#' @param employment_requirements The employment requirements vector.
+#' @param leontief_inverse_matrix The open model Leontief inverse matrix.
+#' @return A nxn matrix of employment generator.
+compute_generator_employment <- function(employment_requirements, leontief_inverse_matrix) .Call(wrap__compute_generator_employment, employment_requirements, leontief_inverse_matrix)
+
+#' Calculates type I employment multiplier.
+#' @param employment_requirements The employment requirements.
+#' @param leontief_inverse_matrix The open model Leontief inverse matrix.
+compute_multiplier_employment <- function(employment_requirements, leontief_inverse_matrix) .Call(wrap__compute_multiplier_employment, employment_requirements, leontief_inverse_matrix)
+
+#' Calculates type I indirect employment multiplier.
+#' @param employment_requirements The employment requirements.
+#' @param leontief_inverse_matrix The open model Leontief inverse matrix.
+#' @return A 1xn vector of type I indirect employment multipliers.
+compute_multiplier_employment_indirect <- function(employment_levels, total_production, leontief_inverse_matrix) .Call(wrap__compute_multiplier_employment_indirect, employment_levels, total_production, leontief_inverse_matrix)
 
 #' Calculates field of influence given a technical change.
 #' @param tech_coeff_matrix A nxn matrix of technical coefficients.
