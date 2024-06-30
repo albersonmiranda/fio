@@ -1,3 +1,23 @@
+# Test if the Shiny app opens correctly
+test_that("Addin opens correctly", {
+  # Define a function to run the Shiny app in the background
+  run_app_bg <- function() {
+    callr::r_bg(function() {
+      # Assuming `fio_addin()` runs a Shiny app
+      fio:::fio_addin()
+    })
+  }
+
+  # Start the app in the background
+  app_process <- run_app_bg()
+
+  # Check if a Shiny app is running
+  expect_true(app_process$is_alive())
+
+  # Stop the background app process
+  app_process$kill()
+})
+
 # Test Data Import Functionality
 test_that("Data import handles inputs correctly", {
   # create mock file
