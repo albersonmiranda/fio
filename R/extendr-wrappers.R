@@ -6,7 +6,6 @@
 # This file was created with the following call:
 #   .Call("wrap__make_fio_wrappers", use_symbols = TRUE, package_name = "fio")
 
-#' @docType package
 #' @usage NULL
 #' @useDynLib fio, .registration = TRUE
 NULL
