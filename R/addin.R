@@ -7,6 +7,30 @@
 #'   other file?) and to control a few other arguments. Appears as "Import
 #'   input-output data" in the RStudio Addins menu.
 
+input_options <- shiny::selectInput(
+  inputId = "var",
+  label = "Variable name",
+  choices = list(
+    "Intermediate Transactions" = "intermediate_transactions",
+    "Total Production" = "total_production",
+    "Final Demand" = list(
+      "Household Consumption" = "household_consumption",
+      "Government Consumption" = "government_consumption",
+      "Exports" = "exports",
+      "Others" = "final_demand_others"
+    ),
+    "Added Value" = list(
+      "Imports" = "imports",
+      "Taxes" = "taxes",
+      "Wages" = "wages",
+      "Operating Income" = "operating_income",
+      "Others" = "added_value_others"
+    ),
+    "Occupation" = "occupation",
+    "Custom" = "custom"
+  )
+)
+
 fio_addin <- function() {
   rlang::check_installed(
     c("shiny", "miniUI"),
@@ -26,28 +50,7 @@ fio_addin <- function() {
       right = miniUI::miniTitleBarButton("import_but", "Import", primary = TRUE)
     ),
     miniUI::miniContentPanel(
-      shiny::selectInput(
-        inputId = "var",
-        label = "Variable name",
-        choices = list(
-          "Intermediate Transactions" = "intermediate_transactions",
-          "Total Production" = "total_production",
-          "Final Demand" = list(
-            "Final Demand" = "final_demand",
-            "Exports" = "exports"
-          ),
-          "Added Value" = list(
-            "Imports" = "imports",
-            "Taxes" = "taxes",
-            "Wages" = "wages",
-            "Operating Income" = "operating_income",
-            "Added Value's Final Demand" = "added_value_final_demand",
-            "Added Value" = "added_value"
-          ),
-          "Occupation" = "occupation",
-          "Custom" = "custom"
-        )
-      ),
+      input_options,
       shiny::conditionalPanel(
         condition = "input.var == 'custom'",
         shiny::textInput(
@@ -155,7 +158,6 @@ fio_addin_create <- function(
     range = NULL,
     col_names = FALSE,
     row_names = FALSE) {
-
   # Parameter validation
   if (!source %in% c("clipboard", "input_file")) {
     error("Invalid source specified")

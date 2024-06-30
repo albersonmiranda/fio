@@ -45,6 +45,7 @@ Suggests:
     leontief,
     ggplot2,
     writexl,
+    callr,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Language: en-US
