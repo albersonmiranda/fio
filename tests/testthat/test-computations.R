@@ -130,7 +130,7 @@ test_that("ghosh inverse matrix is calculated correctly", {
   expect_equal(obj$ghosh_inverse_matrix, g)
 })
 
-# hypothetical extraction works 
+# hypothetical extraction works
 test_that("hypothetical extraction is calculated correctly", {
   # Instantiate the class
   obj <- iom$new("test", intermediate_transactions, total_production, exports = exports, imports = imports)
