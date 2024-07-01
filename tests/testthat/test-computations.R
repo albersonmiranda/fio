@@ -6,6 +6,7 @@ intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 total_production <- matrix(c(100, 200, 300), 1, 3)
 exports <- matrix(c(10, 20, 30), 3, 1)
 imports <- matrix(c(5, 10, 15), 1, 3)
+occupation <- matrix(c(10, 12, 15), 1, 3)
 
 # technical coefficients are calculated correctly
 test_that("technical coefficients are calculated correctly", {
@@ -46,10 +47,28 @@ test_that("output multiplier is calculated correctly", {
   obj$compute_multiplier_output()
   # solution
   b <- solve(diag(1, nrow = nrow(intermediate_transactions)) - obj$technical_coefficients_matrix)
-  mult_out = matrix(colSums(b), nrow = 1)
-  colnames(mult_out) <- c(1, 2, 3)
+  mult_out = colSums(b)
   # Check if the output multiplier is calculated correctly
-  expect_equal(obj$multiplier_output, mult_out)
+  expect_equal(obj$multiplier_output[["multiplier_total"]], as.vector(mult_out))
+})
+
+# employment multiplier is calculated correctly
+test_that("employment multiplier is calculated correctly", {
+  # Instantiate the class
+  obj <- iom$new("test", intermediate_transactions, total_production, occupation = occupation)
+  # Calculate the technical coefficients
+  obj$compute_tech_coeff()
+  # Calculate the leontief matrix
+  obj$compute_leontief_inverse()
+  # Calculate the employment multiplier
+  obj$compute_multiplier_employment()
+  # solution
+  c_j = occupation / total_production
+  c_j_diag = diag(as.vector(c_j))
+  e = c_j_diag %*% obj$leontief_inverse_matrix
+  mult_emp = colSums(e)
+  # Check if the employment multiplier is calculated correctly
+  expect_equal(obj$multiplier_employment[["multiplier_total"]], as.vector(mult_emp))
 })
 
 # field of influence is calculated correctly

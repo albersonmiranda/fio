@@ -10,6 +10,11 @@ test_that("R6 class can be instantiated", {
   expect_s3_class(iom$new("test", intermediate_transactions, total_production), "iom")
 })
 
+# fails if element is not matrix
+test_that("fails if element is not matrix", {
+  expect_error(iom$new("test", as.data.frame(intermediate_transactions), total_production))
+})
+
 # add and remove methods work correctly
 test_that("add method works correctly", {
   # Instantiate the class
