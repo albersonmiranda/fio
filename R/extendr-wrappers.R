@@ -57,7 +57,8 @@ compute_generator_employment <- function(employment_requirements, leontief_inver
 compute_multiplier_employment <- function(employment_requirements, leontief_inverse_matrix) .Call(wrap__compute_multiplier_employment, employment_requirements, leontief_inverse_matrix)
 
 #' Calculates type I indirect employment multiplier.
-#' @param employment_requirements The employment requirements.
+#' @param employment_levels The employment levels.
+#' @param total_production The total production.
 #' @param leontief_inverse_matrix The open model Leontief inverse matrix.
 #' @return A 1xn vector of type I indirect employment multipliers.
 compute_multiplier_employment_indirect <- function(employment_levels, total_production, leontief_inverse_matrix) .Call(wrap__compute_multiplier_employment_indirect, employment_levels, total_production, leontief_inverse_matrix)

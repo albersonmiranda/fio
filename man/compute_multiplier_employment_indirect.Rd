@@ -11,9 +11,11 @@ compute_multiplier_employment_indirect(
 )
 }
 \arguments{
-\item{leontief_inverse_matrix}{The open model Leontief inverse matrix.}
+\item{employment_levels}{The employment levels.}
 
-\item{employment_requirements}{The employment requirements.}
+\item{total_production}{The total production.}
+
+\item{leontief_inverse_matrix}{The open model Leontief inverse matrix.}
 }
 \value{
 A 1xn vector of type I indirect employment multipliers.
