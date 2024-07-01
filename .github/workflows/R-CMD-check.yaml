@@ -6,7 +6,11 @@ on:
   pull_request:
     branches: [main, master]
   pull_request:
-    types: [ready_for_review]
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
 
 name: R-CMD-check
 
