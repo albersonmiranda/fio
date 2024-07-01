@@ -154,8 +154,8 @@ iom <- R6::R6Class(
       for (matrix in private$iom_elements()) {
         if (!is.null(get(matrix)) && !is.matrix(get(matrix))) {
           cli::cli_h1("Error in matrix class")
-          alert("Try coerce `{matrix}` to a matrix using as.matrix() function.")
-          error("`{matrix}` must be a matrix.")
+          alert("Try coerce {matrix} to a matrix using as.matrix() function.")
+          error("{matrix} must be a matrix.")
         }
       }
 
@@ -242,20 +242,20 @@ iom <- R6::R6Class(
       # check class
       if (!is.matrix(matrix)) {
         cli::cli_h1("Error in matrix class")
-        alert("Try coerce `matrix` to a matrix using as.matrix() function.")
-        error("`matrix` must be a matrix.")
+        alert("Try coerce {matrix} to a matrix using as.matrix() function.")
+        error("{matrix} must be a matrix.")
       }
       # check dimensions
       if (matrix_name %in% c("household_consumption", "government_consumption", "exports", "final_demand_others")) {
         if (nrow(matrix) != nrow(self$intermediate_transactions)) {
           cli::cli_h1("Error in matrix dimensions")
-          error("`{matrix_name}` must have the same number of rows than `intermediate_transactions`,
+          error("{matrix_name} must have the same number of rows than intermediate_transactions,
           which is {nrow(self$intermediate_transactions)} rows. But {matrix_name} has {nrow(matrix)} rows.")
         }
       } else {
         if (ncol(matrix) != ncol(self$intermediate_transactions)) {
           cli::cli_h1("Error in matrix dimensions")
-          error("`{matrix_name}` must have the same number of columns than `intermediate_transactions`,
+          error("{matrix_name} must have the same number of columns than intermediate_transactions,
           which is {ncol(self$intermediate_transactions)} columns. But {matrix_name} has {ncol(matrix)} columns.")
         }
       }
