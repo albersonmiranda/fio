@@ -39,3 +39,13 @@ test_that("set_rownames works correctly", {
   # Test with non-matrix/data frame input
   expect_error(set_rownames(list(a = 1)), "vec must be a matrix or a data frame")
 })
+
+# test if alerts works correctly
+test_that("alert works correctly", {
+  expect_message(alert("This is an alert"))
+})
+
+# test if errors works correctly
+test_that("error works correctly", {
+  expect_error(error("This is an error"))
+})
