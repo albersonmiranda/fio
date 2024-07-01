@@ -95,7 +95,7 @@ fn compute_generator_employment(
   let n = leontief_inverse_matrix.nrows();
 
   let leontief_inverse_matrix_faer = Mat::from_fn(n, n, |row, col| leontief_inverse_matrix[(row, col).into()]);
-  let employment_requirements_matrix = Mat::from_fn(n, 1, |_, col| employment_requirements[col]);
+  let employment_requirements_matrix = Mat::from_fn(n, 1, |row, _| employment_requirements[row]);
 
   // create diagonal matrix from employment requirements
   let employment_requirements_matrix_diag = Mat::column_vector_as_diagonal(&employment_requirements_matrix);
