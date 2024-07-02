@@ -133,7 +133,19 @@
 
 
 <dt><code>multiplier_output</code></dt>
-<dd><p>Output multiplier vector.</p></dd>
+<dd><p>Output multiplier dataframe.</p></dd>
+
+
+<dt><code>multiplier_employment</code></dt>
+<dd><p>Employment multiplier dataframe.</p></dd>
+
+
+<dt><code>multiplier_taxes</code></dt>
+<dd><p>Taxes multiplier dataframe.</p></dd>
+
+
+<dt><code>multiplier_wages</code></dt>
+<dd><p>Wages multiplier dataframe.</p></dd>
 
 
 <dt><code>field_influence</code></dt>
@@ -172,6 +184,9 @@
 <li><p><a href="#method-iom-compute_tech_coeff"><code>iom$compute_tech_coeff()</code></a></p></li>
 <li><p><a href="#method-iom-compute_leontief_inverse"><code>iom$compute_leontief_inverse()</code></a></p></li>
 <li><p><a href="#method-iom-compute_multiplier_output"><code>iom$compute_multiplier_output()</code></a></p></li>
+<li><p><a href="#method-iom-compute_multiplier_employment"><code>iom$compute_multiplier_employment()</code></a></p></li>
+<li><p><a href="#method-iom-compute_multiplier_wages"><code>iom$compute_multiplier_wages()</code></a></p></li>
+<li><p><a href="#method-iom-compute_multiplier_taxes"><code>iom$compute_multiplier_taxes()</code></a></p></li>
 <li><p><a href="#method-iom-compute_field_influence"><code>iom$compute_field_influence()</code></a></p></li>
 <li><p><a href="#method-iom-compute_key_sectors"><code>iom$compute_key_sectors()</code></a></p></li>
 <li><p><a href="#method-iom-compute_allocation_coeff"><code>iom$compute_allocation_coeff()</code></a></p></li>
@@ -328,7 +343,7 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 <h3 id="method-compute-leontief-inverse-">Method <code><a href="compute_leontief_inverse.html">compute_leontief_inverse()</a></code><a class="anchor" aria-label="anchor" href="#method-compute-leontief-inverse-"></a></h3>
 <p>Computes the Leontief inverse matrix.</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_leontief_inverse</span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_leontief_inverse</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -342,9 +357,9 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 
 </div><p></p><hr><a id="method-iom-compute_multiplier_output"></a><div class="section">
 <h3 id="method-compute-multiplier-output-">Method <code><a href="compute_multiplier_output.html">compute_multiplier_output()</a></code><a class="anchor" aria-label="anchor" href="#method-compute-multiplier-output-"></a></h3>
-<p>Computes the output multiplier vector.</p><div class="section">
+<p>Computes the output multiplier dataframe.</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_multiplier_output</span><span class="op">(</span><span class="va">leontief_inverse_matrix</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_multiplier_output</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -356,15 +371,63 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-iom-compute_field_influence"></a><div class="section">
-<h3 id="method-compute-field-influence-">Method <code><a href="compute_field_influence.html">compute_field_influence()</a></code><a class="anchor" aria-label="anchor" href="#method-compute-field-influence-"></a></h3>
-<p>Computes the influence field matrix.</p><div class="section">
+</div><p></p><hr><a id="method-iom-compute_multiplier_employment"></a><div class="section">
+<h3 id="method-compute-multiplier-employment-">Method <code>compute_multiplier_employment()</code><a class="anchor" aria-label="anchor" href="#method-compute-multiplier-employment-"></a></h3>
+<p>Computes the employment multiplier dataframe.</p><div class="section">
 <h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_field_influence</span><span class="op">(</span><span class="va">epsilon</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_multiplier_employment</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-5">Arguments<a class="anchor" aria-label="anchor" href="#arguments-5"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>leontief_inverse_matrix</code></dt>
+<dd><p>Leontief inverse matrix.</p></dd>
+
+
+</dl><p></p></div>
+</div>
+
+</div><p></p><hr><a id="method-iom-compute_multiplier_wages"></a><div class="section">
+<h3 id="method-compute-multiplier-wages-">Method <code>compute_multiplier_wages()</code><a class="anchor" aria-label="anchor" href="#method-compute-multiplier-wages-"></a></h3>
+<p>Computes the wages multiplier dataframe.</p><div class="section">
+<h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_multiplier_wages</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-6">Arguments<a class="anchor" aria-label="anchor" href="#arguments-6"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>leontief_inverse_matrix</code></dt>
+<dd><p>Leontief inverse matrix.</p></dd>
+
+
+</dl><p></p></div>
+</div>
+
+</div><p></p><hr><a id="method-iom-compute_multiplier_taxes"></a><div class="section">
+<h3 id="method-compute-multiplier-taxes-">Method <code>compute_multiplier_taxes()</code><a class="anchor" aria-label="anchor" href="#method-compute-multiplier-taxes-"></a></h3>
+<p>Computes the taxes multiplier dataframe.</p><div class="section">
+<h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_multiplier_taxes</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-7">Arguments<a class="anchor" aria-label="anchor" href="#arguments-7"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>leontief_inverse_matrix</code></dt>
+<dd><p>Leontief inverse matrix.</p></dd>
+
+
+</dl><p></p></div>
+</div>
+
+</div><p></p><hr><a id="method-iom-compute_field_influence"></a><div class="section">
+<h3 id="method-compute-field-influence-">Method <code><a href="compute_field_influence.html">compute_field_influence()</a></code><a class="anchor" aria-label="anchor" href="#method-compute-field-influence-"></a></h3>
+<p>Computes the influence field matrix.</p><div class="section">
+<h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_field_influence</span><span class="op">(</span><span class="va">epsilon</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-8">Arguments<a class="anchor" aria-label="anchor" href="#arguments-8"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>epsilon</code></dt>
 <dd><p>Epsilon value. A technical change in the input-output matrix.</p></dd>
 
@@ -383,12 +446,12 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 </div><p></p><hr><a id="method-iom-compute_key_sectors"></a><div class="section">
 <h3 id="method-compute-key-sectors-">Method <code>compute_key_sectors()</code><a class="anchor" aria-label="anchor" href="#method-compute-key-sectors-"></a></h3>
 <p>Computes the key sectors dataframe.</p><div class="section">
-<h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
+<h4 id="usage-12">Usage<a class="anchor" aria-label="anchor" href="#usage-12"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_key_sectors</span><span class="op">(</span><span class="va">leontief_inverse_matrix</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-6">Arguments<a class="anchor" aria-label="anchor" href="#arguments-6"></a></h4>
+<h4 id="arguments-9">Arguments<a class="anchor" aria-label="anchor" href="#arguments-9"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>leontief_inverse_matrix</code></dt>
 <dd><p>Leontief inverse matrix.</p></dd>
 
@@ -399,12 +462,12 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 </div><p></p><hr><a id="method-iom-compute_allocation_coeff"></a><div class="section">
 <h3 id="method-compute-allocation-coeff-">Method <code><a href="compute_allocation_coeff.html">compute_allocation_coeff()</a></code><a class="anchor" aria-label="anchor" href="#method-compute-allocation-coeff-"></a></h3>
 <p>Computes the allocation coefficients matrix.</p><div class="section">
-<h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
+<h4 id="usage-13">Usage<a class="anchor" aria-label="anchor" href="#usage-13"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_allocation_coeff</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-7">Arguments<a class="anchor" aria-label="anchor" href="#arguments-7"></a></h4>
+<h4 id="arguments-10">Arguments<a class="anchor" aria-label="anchor" href="#arguments-10"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>intermediate_transactions</code></dt>
 <dd><p>Intermediate transactions matrix.</p></dd>
 
@@ -419,12 +482,12 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 </div><p></p><hr><a id="method-iom-compute_ghosh_inverse"></a><div class="section">
 <h3 id="method-compute-ghosh-inverse-">Method <code><a href="compute_ghosh_inverse.html">compute_ghosh_inverse()</a></code><a class="anchor" aria-label="anchor" href="#method-compute-ghosh-inverse-"></a></h3>
 <p>Computes the Ghosh inverse matrix.</p><div class="section">
-<h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
+<h4 id="usage-14">Usage<a class="anchor" aria-label="anchor" href="#usage-14"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_ghosh_inverse</span><span class="op">(</span><span class="va">allocation_coefficients_matrix</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-8">Arguments<a class="anchor" aria-label="anchor" href="#arguments-8"></a></h4>
+<h4 id="arguments-11">Arguments<a class="anchor" aria-label="anchor" href="#arguments-11"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>allocation_coefficients_matrix</code></dt>
 <dd><p>Allocation coefficients matrix.</p></dd>
 
@@ -435,7 +498,7 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 </div><p></p><hr><a id="method-iom-compute_hypothetical_extraction"></a><div class="section">
 <h3 id="method-compute-hypothetical-extraction-">Method <code>compute_hypothetical_extraction()</code><a class="anchor" aria-label="anchor" href="#method-compute-hypothetical-extraction-"></a></h3>
 <p>Computes the hypothetical extraction.</p><div class="section">
-<h4 id="usage-12">Usage<a class="anchor" aria-label="anchor" href="#usage-12"></a></h4>
+<h4 id="usage-15">Usage<a class="anchor" aria-label="anchor" href="#usage-15"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_hypothetical_extraction</span><span class="op">(</span></span>
 <span>  <span class="va">technical_coefficients_matrix</span>,</span>
 <span>  <span class="va">allocation_coefficients_matrix</span>,</span>
@@ -446,7 +509,7 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 </div>
 
 <div class="section">
-<h4 id="arguments-9">Arguments<a class="anchor" aria-label="anchor" href="#arguments-9"></a></h4>
+<h4 id="arguments-12">Arguments<a class="anchor" aria-label="anchor" href="#arguments-12"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>technical_coefficients_matrix</code></dt>
 <dd><p>Technical coefficients matrix.</p></dd>
 
@@ -473,12 +536,12 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 </div><p></p><hr><a id="method-iom-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-13">Usage<a class="anchor" aria-label="anchor" href="#usage-13"></a></h4>
+<h4 id="usage-16">Usage<a class="anchor" aria-label="anchor" href="#usage-16"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-10">Arguments<a class="anchor" aria-label="anchor" href="#arguments-10"></a></h4>
+<h4 id="arguments-13">Arguments<a class="anchor" aria-label="anchor" href="#arguments-13"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 

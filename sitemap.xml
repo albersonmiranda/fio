@@ -46,19 +46,37 @@
     <loc>https://albersonmiranda.github.io/fio/reference/compute_field_influence.html</loc>
   </url>
   <url>
+    <loc>https://albersonmiranda.github.io/fio/reference/compute_generator_added_value.html</loc>
+  </url>
+  <url>
     <loc>https://albersonmiranda.github.io/fio/reference/compute_ghosh_inverse.html</loc>
   </url>
   <url>
     <loc>https://albersonmiranda.github.io/fio/reference/compute_leontief_inverse.html</loc>
   </url>
   <url>
+    <loc>https://albersonmiranda.github.io/fio/reference/compute_multiplier_added_value.html</loc>
+  </url>
+  <url>
+    <loc>https://albersonmiranda.github.io/fio/reference/compute_multiplier_added_value_indirect.html</loc>
+  </url>
+  <url>
     <loc>https://albersonmiranda.github.io/fio/reference/compute_multiplier_output.html</loc>
+  </url>
+  <url>
+    <loc>https://albersonmiranda.github.io/fio/reference/compute_multiplier_output_direct.html</loc>
+  </url>
+  <url>
+    <loc>https://albersonmiranda.github.io/fio/reference/compute_multiplier_output_indirect.html</loc>
   </url>
   <url>
     <loc>https://albersonmiranda.github.io/fio/reference/compute_power_dispersion.html</loc>
   </url>
   <url>
     <loc>https://albersonmiranda.github.io/fio/reference/compute_power_dispersion_cv.html</loc>
+  </url>
+  <url>
+    <loc>https://albersonmiranda.github.io/fio/reference/compute_requirements_added_value.html</loc>
   </url>
   <url>
     <loc>https://albersonmiranda.github.io/fio/reference/compute_sensitivity_dispersion.html</loc>
@@ -68,9 +86,6 @@
   </url>
   <url>
     <loc>https://albersonmiranda.github.io/fio/reference/compute_tech_coeff.html</loc>
-  </url>
-  <url>
-    <loc>https://albersonmiranda.github.io/fio/reference/fio-package.html</loc>
   </url>
   <url>
     <loc>https://albersonmiranda.github.io/fio/reference/import_element.html</loc>
