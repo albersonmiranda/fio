@@ -2,7 +2,7 @@ use extendr_api::prelude::*;
 use rayon::prelude::*;
 use faer::Mat;
 
-/// * MARK: Output Multipliers
+/// * MARK: output multipliers
 
 #[extendr]
 /// Calculates type I output multiplier.
@@ -63,91 +63,91 @@ fn compute_multiplier_output_indirect(
   .collect::<Vec<f64>>()
 }
 
-/// * MARK: Employment Multipliers
+/// * MARK: other multipliers
 
 #[extendr]
-/// Calculates employment requirements.
-/// @param employment_levels The employment levels.
-/// @param total_production The total production.
-/// @return A 1xn vector of employment requirements.
+/// Calculates requirements for a given added value vector
+/// @param added_value_element An added value vector.
+/// @param total_production The total production vector.
+/// @return A 1xn vector of a given added value coefficients.
 
-fn compute_requirements_employment(
-  employment_levels: &[f64],
+fn compute_requirements_added_value(
+  added_value_element: &[f64],
   total_production: &[f64]
 ) -> Vec<f64> {
   
-  employment_levels.iter()
+  added_value_element.iter()
   .zip(total_production.iter())
-  .map(|(employment, production)| employment / production).collect::<Vec<f64>>()
+  .map(|(added_value, production)| added_value / production).collect::<Vec<f64>>()
 }
 
 #[extendr]
-/// Calculates employment generator matrix.
-/// @param employment_requirements The employment requirements vector.
+/// Calculates generator matrix for a given added value vector.
+/// @param added_value_requirements The coefficients for a given added value vector.
 /// @param leontief_inverse_matrix The open model Leontief inverse matrix.
-/// @return A nxn matrix of employment generator.
+/// @return A nxn matrix of an added value vector generator.
 
-fn compute_generator_employment(
-  employment_requirements: Vec<f64>,
+fn compute_generator_added_value(
+  added_value_requirements: Vec<f64>,
   leontief_inverse_matrix: RMatrix<f64>
 ) -> RMatrix<f64> {
   
   let n = leontief_inverse_matrix.nrows();
 
   let leontief_inverse_matrix_faer = Mat::from_fn(n, n, |row, col| leontief_inverse_matrix[(row, col).into()]);
-  let employment_requirements_matrix = Mat::from_fn(n, 1, |row, _| employment_requirements[row]);
+  let added_value_requirements_matrix = Mat::from_fn(n, 1, |row, _| added_value_requirements[row]);
 
-  // create diagonal matrix from employment requirements
-  let employment_requirements_matrix_diag = Mat::column_vector_as_diagonal(&employment_requirements_matrix);
+  // create diagonal matrix from added_value requirements
+  let added_value_requirements_matrix_diag = Mat::column_vector_as_diagonal(&added_value_requirements_matrix);
 
-  // calculate generator employment
-  let generator_employment = employment_requirements_matrix_diag * leontief_inverse_matrix_faer;
+  // calculate generator added_value
+  let generator_added_value = added_value_requirements_matrix_diag * leontief_inverse_matrix_faer;
 
   // convert to R matrix
-  RMatrix::new_matrix(n, n, |row, col| generator_employment[(row, col)])
+  RMatrix::new_matrix(n, n, |row, col| generator_added_value[(row, col)])
 }
 
 #[extendr]
-/// Calculates type I employment multiplier.
-/// @param employment_requirements The employment requirements.
+/// Calculates multiplier for a given added value vector.
+/// @param added_value_requirements The coefficients for a given added value vector.
 /// @param leontief_inverse_matrix The open model Leontief inverse matrix.
 
-fn compute_multiplier_employment(
-  employment_requirements: Vec<f64>,
+fn compute_multiplier_added_value(
+  added_value_requirements: Vec<f64>,
   leontief_inverse_matrix: RMatrix<f64>
 ) -> Vec<f64> {
   
   // dimensions
   let n = leontief_inverse_matrix.nrows();
   
-  let generator_employment = compute_generator_employment(employment_requirements, leontief_inverse_matrix);
+  let generator_added_value = compute_generator_added_value(added_value_requirements, leontief_inverse_matrix);
 
   // convert to faer matrix
-  let generator_employment_faer = Mat::from_fn(n, n, |row, col| generator_employment[(row, col).into()]);
+  let generator_added_value_faer = Mat::from_fn(n, n, |row, col| generator_added_value[(row, col).into()]);
 
   // get column sums
-  generator_employment_faer.col_iter().map(|col| col.iter().sum()).collect::<Vec<f64>>()
+  generator_added_value_faer.col_iter().map(|col| col.iter().sum()).collect::<Vec<f64>>()
 }
 
 #[extendr]
-/// Calculates type I indirect employment multiplier.
-/// @param employment_levels The employment levels.
-/// @param total_production The total production.
+/// Calculates indirect multiplier for a given added value vector.
+/// @param added_value_element An added value vector.
+/// @param total_production The total production vector.
 /// @param leontief_inverse_matrix The open model Leontief inverse matrix.
-/// @return A 1xn vector of type I indirect employment multipliers.
+/// @return A 1xn vector of indirect multipliers for a given added value vector.
 
-fn compute_multiplier_employment_indirect(
-  employment_levels: &[f64],
+fn compute_multiplier_added_value_indirect(
+  added_value_element: &[f64],
   total_production: &[f64],
   leontief_inverse_matrix: RMatrix<f64>
 ) -> Vec<f64> {
   
-  let employment_requirements = compute_requirements_employment(employment_levels, total_production);
-  let total_effects = compute_multiplier_employment(employment_requirements.clone(), leontief_inverse_matrix);
+  let added_value_requirements = compute_requirements_added_value(added_value_element, total_production);
+  let total_effects = compute_multiplier_added_value(added_value_requirements.clone(), leontief_inverse_matrix);
 
   // compute indirect effects
   total_effects.iter()
-  .zip(employment_requirements.iter())
+  .zip(added_value_requirements.iter())
   .map(|(total, direct)| total - direct)
   .collect::<Vec<f64>>()
 }
@@ -160,8 +160,8 @@ extendr_module! {
   fn compute_multiplier_output;
   fn compute_multiplier_output_direct;
   fn compute_multiplier_output_indirect;
-  fn compute_requirements_employment;
-  fn compute_generator_employment;
-  fn compute_multiplier_employment;
-  fn compute_multiplier_employment_indirect;
+  fn compute_requirements_added_value;
+  fn compute_generator_added_value;
+  fn compute_multiplier_added_value;
+  fn compute_multiplier_added_value_indirect;
 }

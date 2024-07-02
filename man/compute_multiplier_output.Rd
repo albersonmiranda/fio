@@ -3,7 +3,7 @@
 \name{compute_multiplier_output}
 \alias{compute_multiplier_output}
 \title{\itemize{
-\item MARK: Output Multipliers
+\item MARK: output multipliers
 Calculates type I output multiplier.
 }}
 \usage{
@@ -17,7 +17,7 @@ A 1xn vector of type I output multipliers.
 }
 \description{
 \itemize{
-\item MARK: Output Multipliers
+\item MARK: output multipliers
 Calculates type I output multiplier.
 }
 }

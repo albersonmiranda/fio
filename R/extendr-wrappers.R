@@ -21,7 +21,7 @@ compute_tech_coeff <- function(intermediate_transactions, total_production) .Cal
 #' @return A nxn matrix of Leontief inverse.
 compute_leontief_inverse <- function(tech_coeff) .Call(wrap__compute_leontief_inverse, tech_coeff)
 
-#' * MARK: Output Multipliers
+#' * MARK: output multipliers
 #' Calculates type I output multiplier.
 #' @param leontief_inverse_matrix The open model Leontief inverse matrix.
 #' @return A 1xn vector of type I output multipliers.
@@ -38,30 +38,30 @@ compute_multiplier_output_direct <- function(technical_coefficients_matrix) .Cal
 #' @return A 1xn vector of type I indirect output multipliers.
 compute_multiplier_output_indirect <- function(technical_coefficients_matrix, leontief_inverse_matrix) .Call(wrap__compute_multiplier_output_indirect, technical_coefficients_matrix, leontief_inverse_matrix)
 
-#' * MARK: Employment Multipliers
-#' Calculates employment requirements.
-#' @param employment_levels The employment levels.
-#' @param total_production The total production.
-#' @return A 1xn vector of employment requirements.
-compute_requirements_employment <- function(employment_levels, total_production) .Call(wrap__compute_requirements_employment, employment_levels, total_production)
+#' * MARK: other multipliers
+#' Calculates requirements for a given added value vector
+#' @param added_value_element An added value vector.
+#' @param total_production The total production vector.
+#' @return A 1xn vector of a given added value coefficients.
+compute_requirements_added_value <- function(added_value_element, total_production) .Call(wrap__compute_requirements_added_value, added_value_element, total_production)
 
-#' Calculates employment generator matrix.
-#' @param employment_requirements The employment requirements vector.
+#' Calculates generator matrix for a given added value vector.
+#' @param added_value_requirements The coefficients for a given added value vector.
 #' @param leontief_inverse_matrix The open model Leontief inverse matrix.
-#' @return A nxn matrix of employment generator.
-compute_generator_employment <- function(employment_requirements, leontief_inverse_matrix) .Call(wrap__compute_generator_employment, employment_requirements, leontief_inverse_matrix)
+#' @return A nxn matrix of an added value vector generator.
+compute_generator_added_value <- function(added_value_requirements, leontief_inverse_matrix) .Call(wrap__compute_generator_added_value, added_value_requirements, leontief_inverse_matrix)
 
-#' Calculates type I employment multiplier.
-#' @param employment_requirements The employment requirements.
+#' Calculates multiplier for a given added value vector.
+#' @param added_value_requirements The coefficients for a given added value vector.
 #' @param leontief_inverse_matrix The open model Leontief inverse matrix.
-compute_multiplier_employment <- function(employment_requirements, leontief_inverse_matrix) .Call(wrap__compute_multiplier_employment, employment_requirements, leontief_inverse_matrix)
+compute_multiplier_added_value <- function(added_value_requirements, leontief_inverse_matrix) .Call(wrap__compute_multiplier_added_value, added_value_requirements, leontief_inverse_matrix)
 
-#' Calculates type I indirect employment multiplier.
-#' @param employment_levels The employment levels.
-#' @param total_production The total production.
+#' Calculates indirect multiplier for a given added value vector.
+#' @param added_value_element An added value vector.
+#' @param total_production The total production vector.
 #' @param leontief_inverse_matrix The open model Leontief inverse matrix.
-#' @return A 1xn vector of type I indirect employment multipliers.
-compute_multiplier_employment_indirect <- function(employment_levels, total_production, leontief_inverse_matrix) .Call(wrap__compute_multiplier_employment_indirect, employment_levels, total_production, leontief_inverse_matrix)
+#' @return A 1xn vector of indirect multipliers for a given added value vector.
+compute_multiplier_added_value_indirect <- function(added_value_element, total_production, leontief_inverse_matrix) .Call(wrap__compute_multiplier_added_value_indirect, added_value_element, total_production, leontief_inverse_matrix)
 
 #' Calculates field of influence given a technical change.
 #' @param tech_coeff_matrix A nxn matrix of technical coefficients.
