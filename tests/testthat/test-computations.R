@@ -7,6 +7,8 @@ total_production <- matrix(c(100, 200, 300), 1, 3)
 exports <- matrix(c(10, 20, 30), 3, 1)
 imports <- matrix(c(5, 10, 15), 1, 3)
 occupation <- matrix(c(10, 12, 15), 1, 3)
+taxes <- matrix(c(2, 5, 10), 1, 3)
+wages <- matrix(c(11, 12, 13), 1, 3)
 
 # technical coefficients are calculated correctly
 test_that("technical coefficients are calculated correctly", {
@@ -69,6 +71,44 @@ test_that("employment multiplier is calculated correctly", {
   mult_emp = colSums(e)
   # Check if the employment multiplier is calculated correctly
   expect_equal(obj$multiplier_employment[["multiplier_total"]], as.vector(mult_emp))
+})
+
+# wages multiplier is calculated correctly
+test_that("wages multiplier is calculated correctly", {
+  # Instantiate the class
+  obj <- iom$new("test", intermediate_transactions, total_production, wages = wages)
+  # Calculate the technical coefficients
+  obj$compute_tech_coeff()
+  # Calculate the leontief matrix
+  obj$compute_leontief_inverse()
+  # Calculate the wages multiplier
+  obj$compute_multiplier_wages()
+  # solution
+  c_j = wages / total_production
+  c_j_diag = diag(as.vector(c_j))
+  e = c_j_diag %*% obj$leontief_inverse_matrix
+  mult_wages = colSums(e)
+  # Check if the wages multiplier is calculated correctly
+  expect_equal(obj$multiplier_wages[["multiplier_total"]], as.vector(mult_wages))
+})
+
+# taxes multiplier is calculated correctly
+test_that("taxes multiplier is calculated correctly", {
+  # Instantiate the class
+  obj <- iom$new("test", intermediate_transactions, total_production, taxes = taxes)
+  # Calculate the technical coefficients
+  obj$compute_tech_coeff()
+  # Calculate the leontief matrix
+  obj$compute_leontief_inverse()
+  # Calculate the taxes multiplier
+  obj$compute_multiplier_taxes()
+  # solution
+  c_j = taxes / total_production
+  c_j_diag = diag(as.vector(c_j))
+  e = c_j_diag %*% obj$leontief_inverse_matrix
+  mult_taxes = colSums(e)
+  # Check if the taxes multiplier is calculated correctly
+  expect_equal(obj$multiplier_taxes[["multiplier_total"]], as.vector(mult_taxes))
 })
 
 # field of influence is calculated correctly

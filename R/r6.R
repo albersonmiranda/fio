@@ -114,6 +114,14 @@ iom <- R6::R6Class(
     #' Employment multiplier dataframe.
     multiplier_employment = NULL,
 
+    #' @field multiplier_taxes
+    #' Taxes multiplier dataframe.
+    multiplier_taxes = NULL,
+
+    #' @field multiplier_wages
+    #' Wages multiplier dataframe.
+    multiplier_wages = NULL,
+
     #' @field field_influence
     #' Influence field matrix.
     field_influence = NULL,
@@ -416,18 +424,18 @@ iom <- R6::R6Class(
       # save column names
       col_names <- colnames(self$leontief_inverse_matrix)
       # compute employment requirements
-      employment_requirements <- compute_requirements_employment(
-        employment_levels = self$occupation,
+      employment_requirements <- compute_requirements_added_value(
+        added_value_element = self$occupation,
         total_production = self$total_production
       )
       # compute employment multiplier vector
-      multiplier_employment_total <- compute_multiplier_employment(
-        employment_requirements = employment_requirements,
+      multiplier_employment_total <- compute_multiplier_added_value(
+        added_value_requirements = employment_requirements,
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
       # compute indirect employment multiplier
-      multiplier_employment_indirect <- compute_multiplier_employment_indirect(
-        employment_levels = self$occupation,
+      multiplier_employment_indirect <- compute_multiplier_added_value_indirect(
+        added_value_element = self$occupation,
         total_production = self$total_production,
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
@@ -441,6 +449,88 @@ iom <- R6::R6Class(
 
       # store vector
       self$multiplier_employment <- multiplier_employment
+      invisible(self)
+    },
+
+    #' @description
+    #' Computes the wages multiplier dataframe.
+    #' @param leontief_inverse_matrix
+    #' Leontief inverse matrix.
+    compute_multiplier_wages = function() {
+      # check if leontief inverse matrix is available
+      if (is.null(self$leontief_inverse_matrix)) {
+        cli::cli_h1("Error in leontief_inverse_matrix")
+        error("You must compute the leontief inverse matrix first. Run compute_leontief_inverse() method.")
+      }
+      # save column names
+      col_names <- colnames(self$leontief_inverse_matrix)
+      # compute wages requirements
+      wages_requirements <- compute_requirements_added_value(
+        added_value_element = self$wages,
+        total_production = self$total_production
+      )
+      # compute wages multiplier vector
+      multiplier_wages_total <- compute_multiplier_added_value(
+        added_value_requirements = wages_requirements,
+        leontief_inverse_matrix = self$leontief_inverse_matrix
+      )
+      # compute indirect wages multiplier
+      multiplier_wages_indirect <- compute_multiplier_added_value_indirect(
+        added_value_element = self$wages,
+        total_production = self$total_production,
+        leontief_inverse_matrix = self$leontief_inverse_matrix
+      )
+
+      multiplier_wages <- data.frame(
+        sector = col_names,
+        multiplier_total = multiplier_wages_total,
+        multiplier_direct = wages_requirements,
+        multiplier_indirect = multiplier_wages_indirect
+      )
+
+      # store vector
+      self$multiplier_wages <- multiplier_wages
+      invisible(self)
+    },
+
+    #' @description
+    #' Computes the taxes multiplier dataframe.
+    #' @param leontief_inverse_matrix
+    #' Leontief inverse matrix.
+    compute_multiplier_taxes = function() {
+      # check if leontief inverse matrix is available
+      if (is.null(self$leontief_inverse_matrix)) {
+        cli::cli_h1("Error in leontief_inverse_matrix")
+        error("You must compute the leontief inverse matrix first. Run compute_leontief_inverse() method.")
+      }
+      # save column names
+      col_names <- colnames(self$leontief_inverse_matrix)
+      # compute taxes requirements
+      taxes_requirements <- compute_requirements_added_value(
+        added_value_element = self$taxes,
+        total_production = self$total_production
+      )
+      # compute taxes multiplier vector
+      multiplier_taxes_total <- compute_multiplier_added_value(
+        added_value_requirements = taxes_requirements,
+        leontief_inverse_matrix = self$leontief_inverse_matrix
+      )
+      # compute indirect taxes multiplier
+      multiplier_taxes_indirect <- compute_multiplier_added_value_indirect(
+        added_value_element = self$taxes,
+        total_production = self$total_production,
+        leontief_inverse_matrix = self$leontief_inverse_matrix
+      )
+
+      multiplier_taxes <- data.frame(
+        sector = col_names,
+        multiplier_total = multiplier_taxes_total,
+        multiplier_direct = taxes_requirements,
+        multiplier_indirect = multiplier_taxes_indirect
+      )
+
+      # store vector
+      self$multiplier_taxes <- multiplier_taxes
       invisible(self)
     },
 

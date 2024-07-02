@@ -47,6 +47,10 @@ R6 class for input-output matrix.
 
 \item{\code{multiplier_employment}}{Employment multiplier dataframe.}
 
+\item{\code{multiplier_taxes}}{Taxes multiplier dataframe.}
+
+\item{\code{multiplier_wages}}{Wages multiplier dataframe.}
+
 \item{\code{field_influence}}{Influence field matrix.}
 
 \item{\code{key_sectors}}{Key sectors dataframe.}
@@ -71,6 +75,8 @@ R6 class for input-output matrix.
 \item \href{#method-iom-compute_leontief_inverse}{\code{iom$compute_leontief_inverse()}}
 \item \href{#method-iom-compute_multiplier_output}{\code{iom$compute_multiplier_output()}}
 \item \href{#method-iom-compute_multiplier_employment}{\code{iom$compute_multiplier_employment()}}
+\item \href{#method-iom-compute_multiplier_wages}{\code{iom$compute_multiplier_wages()}}
+\item \href{#method-iom-compute_multiplier_taxes}{\code{iom$compute_multiplier_taxes()}}
 \item \href{#method-iom-compute_field_influence}{\code{iom$compute_field_influence()}}
 \item \href{#method-iom-compute_key_sectors}{\code{iom$compute_key_sectors()}}
 \item \href{#method-iom-compute_allocation_coeff}{\code{iom$compute_allocation_coeff()}}
@@ -247,6 +253,40 @@ Computes the output multiplier dataframe.
 Computes the employment multiplier dataframe.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_multiplier_employment()}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-iom-compute_multiplier_wages"></a>}}
+\if{latex}{\out{\hypertarget{method-iom-compute_multiplier_wages}{}}}
+\subsection{Method \code{compute_multiplier_wages()}}{
+Computes the wages multiplier dataframe.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{iom$compute_multiplier_wages()}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-iom-compute_multiplier_taxes"></a>}}
+\if{latex}{\out{\hypertarget{method-iom-compute_multiplier_taxes}{}}}
+\subsection{Method \code{compute_multiplier_taxes()}}{
+Computes the taxes multiplier dataframe.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{iom$compute_multiplier_taxes()}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
