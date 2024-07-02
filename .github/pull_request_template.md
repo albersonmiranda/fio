@@ -50,6 +50,11 @@ _Goal is code coverage percentage at 80% and above._
 
 - [ ] Bump version (both Rust & R packages, accordingly)
 - [ ] Update NEWS.md
+
+### If dev release
 - [ ] Precompiled Linux binaries
-- [ ] Precompiled [Windows binaries](https://win-builder.r-project.org/upload.aspx)
-- [ ] Precompiled [macOS binaries](https://mac.r-project.org/macbuilder/submit.html)
+- [ ] Precompiled [Windows binaries](https://win-builder.r-project.org/upload.aspx) `devtools::check_win_devel()` 
+- [ ] Precompiled [macOS binaries](https://mac.r-project.org/macbuilder/submit.html) `devtools::check_mac_release()`
+- [ ] Update tag:
+  - `git tag -m "update tag to new commit" -f -a TAG COMMIT_SHA`
+  - `git push -f origin refs/tags/TAG`
