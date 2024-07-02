@@ -6,7 +6,6 @@
 # This file was created with the following call:
 #   .Call("wrap__make_fio_wrappers", use_symbols = TRUE, package_name = "fio")
 
-#' @docType package
 #' @usage NULL
 #' @useDynLib fio, .registration = TRUE
 NULL
@@ -22,10 +21,47 @@ compute_tech_coeff <- function(intermediate_transactions, total_production) .Cal
 #' @return A nxn matrix of Leontief inverse.
 compute_leontief_inverse <- function(tech_coeff) .Call(wrap__compute_leontief_inverse, tech_coeff)
 
-#' Calculates output multiplier.
+#' * MARK: output multipliers
+#' Calculates type I output multiplier.
 #' @param leontief_inverse_matrix The open model Leontief inverse matrix.
-#' @return A 1xn vector of output multipliers.
+#' @return A 1xn vector of type I output multipliers.
 compute_multiplier_output <- function(leontief_inverse_matrix) .Call(wrap__compute_multiplier_output, leontief_inverse_matrix)
+
+#' Calculates type I direct output multiplier.
+#' @param technical_coefficients_matrix The open model technical coefficients matrix.
+#' @return A 1xn vector of type I direct output multipliers.
+compute_multiplier_output_direct <- function(technical_coefficients_matrix) .Call(wrap__compute_multiplier_output_direct, technical_coefficients_matrix)
+
+#' Calculates type I indirect output multiplier.
+#' @param technical_coefficients_matrix The open model technical coefficients matrix.
+#' @param leontief_inverse_matrix The open model Leontief inverse matrix.
+#' @return A 1xn vector of type I indirect output multipliers.
+compute_multiplier_output_indirect <- function(technical_coefficients_matrix, leontief_inverse_matrix) .Call(wrap__compute_multiplier_output_indirect, technical_coefficients_matrix, leontief_inverse_matrix)
+
+#' * MARK: other multipliers
+#' Calculates requirements for a given added value vector
+#' @param added_value_element An added value vector.
+#' @param total_production The total production vector.
+#' @return A 1xn vector of a given added value coefficients.
+compute_requirements_added_value <- function(added_value_element, total_production) .Call(wrap__compute_requirements_added_value, added_value_element, total_production)
+
+#' Calculates generator matrix for a given added value vector.
+#' @param added_value_requirements The coefficients for a given added value vector.
+#' @param leontief_inverse_matrix The open model Leontief inverse matrix.
+#' @return A nxn matrix of an added value vector generator.
+compute_generator_added_value <- function(added_value_requirements, leontief_inverse_matrix) .Call(wrap__compute_generator_added_value, added_value_requirements, leontief_inverse_matrix)
+
+#' Calculates multiplier for a given added value vector.
+#' @param added_value_requirements The coefficients for a given added value vector.
+#' @param leontief_inverse_matrix The open model Leontief inverse matrix.
+compute_multiplier_added_value <- function(added_value_requirements, leontief_inverse_matrix) .Call(wrap__compute_multiplier_added_value, added_value_requirements, leontief_inverse_matrix)
+
+#' Calculates indirect multiplier for a given added value vector.
+#' @param added_value_element An added value vector.
+#' @param total_production The total production vector.
+#' @param leontief_inverse_matrix The open model Leontief inverse matrix.
+#' @return A 1xn vector of indirect multipliers for a given added value vector.
+compute_multiplier_added_value_indirect <- function(added_value_element, total_production, leontief_inverse_matrix) .Call(wrap__compute_multiplier_added_value_indirect, added_value_element, total_production, leontief_inverse_matrix)
 
 #' Calculates field of influence given a technical change.
 #' @param tech_coeff_matrix A nxn matrix of technical coefficients.

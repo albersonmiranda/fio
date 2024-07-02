@@ -107,8 +107,20 @@ iom <- R6::R6Class(
     leontief_inverse_matrix = NULL,
 
     #' @field multiplier_output
-    #' Output multiplier vector.
+    #' Output multiplier dataframe.
     multiplier_output = NULL,
+
+    #' @field multiplier_employment
+    #' Employment multiplier dataframe.
+    multiplier_employment = NULL,
+
+    #' @field multiplier_taxes
+    #' Taxes multiplier dataframe.
+    multiplier_taxes = NULL,
+
+    #' @field multiplier_wages
+    #' Wages multiplier dataframe.
+    multiplier_wages = NULL,
 
     #' @field field_influence
     #' Influence field matrix.
@@ -150,8 +162,8 @@ iom <- R6::R6Class(
       for (matrix in private$iom_elements()) {
         if (!is.null(get(matrix)) && !is.matrix(get(matrix))) {
           cli::cli_h1("Error in matrix class")
-          alert("Try coerce `{matrix}` to a matrix using as.matrix() function.")
-          error("`{matrix}` must be a matrix.")
+          alert("Try coerce {matrix} to a matrix using as.matrix() function.")
+          error("{matrix} must be a matrix.")
         }
       }
 
@@ -238,20 +250,20 @@ iom <- R6::R6Class(
       # check class
       if (!is.matrix(matrix)) {
         cli::cli_h1("Error in matrix class")
-        alert("Try coerce `matrix` to a matrix using as.matrix() function.")
-        error("`matrix` must be a matrix.")
+        alert("Try coerce {matrix} to a matrix using as.matrix() function.")
+        error("{matrix} must be a matrix.")
       }
       # check dimensions
       if (matrix_name %in% c("household_consumption", "government_consumption", "exports", "final_demand_others")) {
         if (nrow(matrix) != nrow(self$intermediate_transactions)) {
           cli::cli_h1("Error in matrix dimensions")
-          error("`{matrix_name}` must have the same number of rows than `intermediate_transactions`,
+          error("{matrix_name} must have the same number of rows than intermediate_transactions,
           which is {nrow(self$intermediate_transactions)} rows. But {matrix_name} has {nrow(matrix)} rows.")
         }
       } else {
         if (ncol(matrix) != ncol(self$intermediate_transactions)) {
           cli::cli_h1("Error in matrix dimensions")
-          error("`{matrix_name}` must have the same number of columns than `intermediate_transactions`,
+          error("{matrix_name} must have the same number of columns than intermediate_transactions,
           which is {ncol(self$intermediate_transactions)} columns. But {matrix_name} has {ncol(matrix)} columns.")
         }
       }
@@ -339,7 +351,7 @@ iom <- R6::R6Class(
     #' Computes the Leontief inverse matrix.
     #' @param technical_coefficients_matrix
     #' Technical coefficients matrix.
-    compute_leontief_inverse = function(technical_coefficients_matrix) {
+    compute_leontief_inverse = function() {
       # check if technical coefficients matrix is available
       if (is.null(self$technical_coefficients_matrix)) {
         cli::cli_h1("Error in technical_coefficients_matrix")
@@ -362,10 +374,10 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Computes the output multiplier vector.
+    #' Computes the output multiplier dataframe.
     #' @param leontief_inverse_matrix
     #' Leontief inverse matrix.
-    compute_multiplier_output = function(leontief_inverse_matrix) {
+    compute_multiplier_output = function() {
       # check if leontief inverse matrix is available
       if (is.null(self$leontief_inverse_matrix)) {
         cli::cli_h1("Error in leontief_inverse_matrix")
@@ -374,15 +386,151 @@ iom <- R6::R6Class(
       # save column names
       col_names <- colnames(self$leontief_inverse_matrix)
       # compute output multiplier vector
-      multiplier_output <- compute_multiplier_output(
+      multiplier_output_total <- compute_multiplier_output(
         leontief_inverse_matrix = self$leontief_inverse_matrix
-      ) |>
-        matrix(nrow = 1)
-      # set column names
-      colnames(multiplier_output) <- col_names
+      )
+      # compute direct output multiplier vector
+      multiplier_output_direct <- compute_multiplier_output_direct(
+        technical_coefficients_matrix = self$technical_coefficients_matrix
+      )
+      # compute indirect output multiplier vector
+      multiplier_output_indirect <- compute_multiplier_output_indirect(
+        technical_coefficients_matrix = self$technical_coefficients_matrix,
+        leontief_inverse_matrix = self$leontief_inverse_matrix
+      )
+
+      multiplier_output <- data.frame(
+        sector = col_names,
+        multiplier_total = multiplier_output_total,
+        multiplier_direct = multiplier_output_direct,
+        multiplier_indirect = multiplier_output_indirect
+      )
 
       # store vector
       self$multiplier_output <- multiplier_output
+      invisible(self)
+    },
+
+    #' @description
+    #' Computes the employment multiplier dataframe.
+    #' @param leontief_inverse_matrix
+    #' Leontief inverse matrix.
+    compute_multiplier_employment = function() {
+      # check if leontief inverse matrix is available
+      if (is.null(self$leontief_inverse_matrix)) {
+        cli::cli_h1("Error in leontief_inverse_matrix")
+        error("You must compute the leontief inverse matrix first. Run compute_leontief_inverse() method.")
+      }
+      # save column names
+      col_names <- colnames(self$leontief_inverse_matrix)
+      # compute employment requirements
+      employment_requirements <- compute_requirements_added_value(
+        added_value_element = self$occupation,
+        total_production = self$total_production
+      )
+      # compute employment multiplier vector
+      multiplier_employment_total <- compute_multiplier_added_value(
+        added_value_requirements = employment_requirements,
+        leontief_inverse_matrix = self$leontief_inverse_matrix
+      )
+      # compute indirect employment multiplier
+      multiplier_employment_indirect <- compute_multiplier_added_value_indirect(
+        added_value_element = self$occupation,
+        total_production = self$total_production,
+        leontief_inverse_matrix = self$leontief_inverse_matrix
+      )
+
+      multiplier_employment <- data.frame(
+        sector = col_names,
+        multiplier_total = multiplier_employment_total,
+        multiplier_direct = employment_requirements,
+        multiplier_indirect = multiplier_employment_indirect
+      )
+
+      # store vector
+      self$multiplier_employment <- multiplier_employment
+      invisible(self)
+    },
+
+    #' @description
+    #' Computes the wages multiplier dataframe.
+    #' @param leontief_inverse_matrix
+    #' Leontief inverse matrix.
+    compute_multiplier_wages = function() {
+      # check if leontief inverse matrix is available
+      if (is.null(self$leontief_inverse_matrix)) {
+        cli::cli_h1("Error in leontief_inverse_matrix")
+        error("You must compute the leontief inverse matrix first. Run compute_leontief_inverse() method.")
+      }
+      # save column names
+      col_names <- colnames(self$leontief_inverse_matrix)
+      # compute wages requirements
+      wages_requirements <- compute_requirements_added_value(
+        added_value_element = self$wages,
+        total_production = self$total_production
+      )
+      # compute wages multiplier vector
+      multiplier_wages_total <- compute_multiplier_added_value(
+        added_value_requirements = wages_requirements,
+        leontief_inverse_matrix = self$leontief_inverse_matrix
+      )
+      # compute indirect wages multiplier
+      multiplier_wages_indirect <- compute_multiplier_added_value_indirect(
+        added_value_element = self$wages,
+        total_production = self$total_production,
+        leontief_inverse_matrix = self$leontief_inverse_matrix
+      )
+
+      multiplier_wages <- data.frame(
+        sector = col_names,
+        multiplier_total = multiplier_wages_total,
+        multiplier_direct = wages_requirements,
+        multiplier_indirect = multiplier_wages_indirect
+      )
+
+      # store vector
+      self$multiplier_wages <- multiplier_wages
+      invisible(self)
+    },
+
+    #' @description
+    #' Computes the taxes multiplier dataframe.
+    #' @param leontief_inverse_matrix
+    #' Leontief inverse matrix.
+    compute_multiplier_taxes = function() {
+      # check if leontief inverse matrix is available
+      if (is.null(self$leontief_inverse_matrix)) {
+        cli::cli_h1("Error in leontief_inverse_matrix")
+        error("You must compute the leontief inverse matrix first. Run compute_leontief_inverse() method.")
+      }
+      # save column names
+      col_names <- colnames(self$leontief_inverse_matrix)
+      # compute taxes requirements
+      taxes_requirements <- compute_requirements_added_value(
+        added_value_element = self$taxes,
+        total_production = self$total_production
+      )
+      # compute taxes multiplier vector
+      multiplier_taxes_total <- compute_multiplier_added_value(
+        added_value_requirements = taxes_requirements,
+        leontief_inverse_matrix = self$leontief_inverse_matrix
+      )
+      # compute indirect taxes multiplier
+      multiplier_taxes_indirect <- compute_multiplier_added_value_indirect(
+        added_value_element = self$taxes,
+        total_production = self$total_production,
+        leontief_inverse_matrix = self$leontief_inverse_matrix
+      )
+
+      multiplier_taxes <- data.frame(
+        sector = col_names,
+        multiplier_total = multiplier_taxes_total,
+        multiplier_direct = taxes_requirements,
+        multiplier_indirect = multiplier_taxes_indirect
+      )
+
+      # store vector
+      self$multiplier_taxes <- multiplier_taxes
       invisible(self)
     },
 
