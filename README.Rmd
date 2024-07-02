@@ -35,16 +35,16 @@ To install `fio`, follow these steps:
 
 1. Visit the [Releases section](https://github.com/albersonmiranda/fio/releases) section on GitHub.
 1. Download the appropriate precompiled version for your operating system:
-  - For Windows: fio_x.x.x_R_x86_64-windows.zip
-  - For Linux: fio_x.x.x_R_x86_64-pc-linux-gnu.tar.gz
+  - For Windows: fio_0.0.0.9000.zip
+  - For Linux: fio_0.0.0.9000_R_x86_64-pc-linux-gnu.tar.gz
 1. Use the following command to install the package:
 
 ```r
 # for Windows
-install.packages("path/to/fio_x.x.x._R_x86_64-windows.zip")
+install.packages("path/to/fio_0.0.0.9000.zip")
 
 # for Linux
-install.packages("path/to/fio_x.x.x_R_x86_64-pc-linux-gnu.tar.gz")
+install.packages("path/to/fio_0.0.0.9000_R_x86_64-pc-linux-gnu.tar.gz")
 ```
 
 Replace "path/to/" with the actual path where you downloaded the file.
