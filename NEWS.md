@@ -10,6 +10,9 @@
 * New `compute_tech_coeff()` and `compute_leontief_inverse()` methods uses the power of Rust and `faer` crate to substantially increase performance
 * New `compute_multiplier_*()` methods to compute multipliers from a given input-output table:
   * `compute_multiplier_output()` for the output multiplier
+  * `compute_multiplier_employment()` for the employment multiplier
+  * `compute_multiplier_wages()` for the wages multiplier
+  * `compute_multiplier_taxes()` for the taxes multiplier
 * New `compute_influence_field()` method to compute the field of influence of each sector
 * New `compute_key_sectors()` method to compute the key sectors of an input-output table, based on power of dispersion and sensitivity of dispersion, and their coefficients of variations
 * New `compute_allocation_coeff()` method to compute the allocation coefficients of an input-output table
@@ -27,4 +30,4 @@
 * Added assertions to check if elements imported into slots are matrices at initialization of `iom` object and at `add()` method
 * Added assertions to check matrices dimensions at initialization of `iom` object and at `add()` method
 * More informative warnings and errors messages with {cli} package
-* Added assertions to check if number format of slots is double at initialization of `iom` object and at `add()` method
+* Added assertions to check if number format of slots is `double` at initialization of `iom` object and at `add()` method
