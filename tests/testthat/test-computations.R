@@ -54,6 +54,27 @@ test_that("output multiplier is calculated correctly", {
   expect_equal(obj$multiplier_output[["multiplier_total"]], as.vector(mult_out))
 })
 
+# multiplier generator is calculated correctly
+test_that("multiplier generator is calculated correctly", {
+  # Instantiate the class
+  obj <- iom$new("test", intermediate_transactions, total_production, occupation = occupation)
+  # Calculate the technical coefficients
+  obj$compute_tech_coeff()
+  # Calculate the leontief matrix
+  obj$compute_leontief_inverse()
+  # Calculate employment requirements
+  employment_reqs <- compute_requirements_added_value(obj$occupation, obj$total_production)
+  # Calculate employment generator
+  employment_generator <- compute_generator_added_value(employment_reqs, obj$leontief_inverse_matrix)
+  dimnames(employment_generator) <- list(NULL, c(1, 2, 3))
+  # solution
+  c_j <- occupation / total_production
+  c_j_diag <- diag(as.vector(c_j))
+  e <- c_j_diag %*% obj$leontief_inverse_matrix
+  # check if employment generator is calculated correctly
+  expect_equal(e, employment_generator)
+})
+
 # employment multiplier is calculated correctly
 test_that("employment multiplier is calculated correctly", {
   # Instantiate the class
@@ -65,10 +86,10 @@ test_that("employment multiplier is calculated correctly", {
   # Calculate the employment multiplier
   obj$compute_multiplier_employment()
   # solution
-  c_j = occupation / total_production
-  c_j_diag = diag(as.vector(c_j))
-  e = c_j_diag %*% obj$leontief_inverse_matrix
-  mult_emp = colSums(e)
+  c_j <- occupation / total_production
+  c_j_diag <- diag(as.vector(c_j))
+  e <- c_j_diag %*% obj$leontief_inverse_matrix
+  mult_emp <- colSums(e)
   # Check if the employment multiplier is calculated correctly
   expect_equal(obj$multiplier_employment[["multiplier_total"]], as.vector(mult_emp))
 })
