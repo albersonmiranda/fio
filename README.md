@@ -11,8 +11,6 @@ Friendly & Fast Input-Output Analysis
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml)
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/fio)](https://CRAN.R-project.org/package=fio)
 [![Codecov test
@@ -34,35 +32,25 @@ achieve highly optimized performance.
 
 ## Installation
 
-To install `fio`, follow these steps:
-
-1.  Visit the [Releases
-    section](https://github.com/albersonmiranda/fio/releases) section on
-    GitHub.
-2.  Download the appropriate precompiled version for your operating
-    system:
-
-- For Windows: fio_0.0.0.9000.zip
-- For Linux: fio_0.0.0.9000_R_x86_64-pc-linux-gnu.tar.gz
-
-1.  Use the following command to install the package:
+You can install the released version of `{fio}` from CRAN with:
 
 ``` r
-# for Windows
-install.packages("path/to/fio_0.0.0.9000.zip")
-
-# for Linux
-install.packages("path/to/fio_0.0.0.9000_R_x86_64-pc-linux-gnu.tar.gz")
+install.packages("fio")
 ```
 
-Replace “path/to/” with the actual path where you downloaded the file.
+For macOS and Linux, or if you wish to compile the latest development
+version from source, you will need to have
+[Rust](https://www.rust-lang.org/) installed on your system.
 
-If you have [Rust](https://www.rust-lang.org/) installed and wish to
-compile the latest development version from source, use:
+- Debian/Ubuntu: `apt-get install cargo`
+- Fedora/CentOS: `dnf install cargo`
+- macOS: `brew install rustc`
+- Windows: <https://www.rust-lang.org/tools/install>
 
-``` r
-devtools::install_github("albersonmiranda/fio")
-```
+You’ll also find previous releases of `fio` in the [Releases
+section](https://github.com/albersonmiranda/fio/releases) on GitHub, and
+precompiled binaries for Windows, macOS, and Linux at
+[R-Universe](https://albersonmiranda.r-universe.dev/fio)
 
 ## Getting Started
 
