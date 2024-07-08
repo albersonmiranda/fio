@@ -2,7 +2,7 @@ use extendr_api::prelude::*;
 use rayon::prelude::*;
 use faer::Mat;
 
-/// * MARK: output multipliers
+// * MARK: output multipliers
 
 #[extendr]
 /// Calculates type I output multiplier.
@@ -63,7 +63,7 @@ fn compute_multiplier_output_indirect(
   .collect::<Vec<f64>>()
 }
 
-/// * MARK: other multipliers
+// * MARK: other multipliers
 
 #[extendr]
 /// Calculates requirements for a given added value vector

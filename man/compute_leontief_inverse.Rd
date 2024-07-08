@@ -2,16 +2,45 @@
 % Please edit documentation in R/extendr-wrappers.R
 \name{compute_leontief_inverse}
 \alias{compute_leontief_inverse}
-\title{Computes Leontief inverse matrix to R.}
+\title{Computes Leontief inverse matrix.}
 \usage{
 compute_leontief_inverse(tech_coeff)
 }
 \arguments{
-\item{tech_coeff}{A nxn matrix of technical coefficients.}
+\item{tech_coeff}{A \eqn{n x n} matrix of technical coefficients.}
 }
 \value{
-A nxn matrix of Leontief inverse.
+A \eqn{n x n} matrix of Leontief inverse.
 }
 \description{
-Computes Leontief inverse matrix to R.
+Computes Leontief inverse matrix.
+}
+\details{
+It calculates the Leontief inverse matrix, which is the inverse of the
+Leontief matrix. The formula is:
+
+\deqn{L = I - A}
+
+where I is the identity matrix and A is the technical coefficients matrix.
+
+The Leontief inverse matrix is calculated by solving the following equation:
+
+\deqn{L^{-1} = (I - A)^{-1}}
+
+Since the Leontief matrix is a square matrix and the subtraction of the
+technical coefficients matrix from the identity matrix ganrantees that the
+Leontief matrix is invertible, this function computes the Leontief inverse
+matrix through LU decomposition.
+}
+\examples{
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom("test", intermediate_transactions, total_production)
+# Calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# Calculate the Leontief inverse
+my_iom$compute_leontief_inverse()
+# show the Leontief inverse
+my_iom$leontief_inverse_matrix
 }

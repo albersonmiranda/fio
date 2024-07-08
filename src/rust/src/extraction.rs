@@ -3,11 +3,16 @@ use faer::{prelude::SpSolver, Mat};
 
 #[extendr]
 /// Calculates backward linkage extraction.
-/// @param technical_coefficients_matrix A nxn matrix of technical coefficients.
-/// @param final_demand_matrix The final demand matrix.
-/// @param total_production A 1xn vector of total production.
+/// 
 /// @description
 /// Computes impact on demand structure after extracting a given sector.
+/// 
+/// @param technical_coefficients_matrix
+/// A nxn matrix of technical coefficients.
+/// @param final_demand_matrix
+/// The final demand matrix.
+/// @param total_production
+/// A 1xn vector of total production.
 
 fn compute_extraction_backward(
   technical_coefficients_matrix: &[f64],
@@ -129,6 +134,30 @@ fn compute_extraction_forward(
 /// @param forward_linkage_matrix A nx2 matrix of forward linkage.
 /// @description
 /// Computes total impact after extracting a given sector.
+/// @examples
+/// intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+/// total_production <- matrix(c(100, 200, 300), 1, 3)
+/// exports <- matrix(c(10, 20, 30), 3, 1)
+/// imports <- matrix(c(5, 10, 15), 1, 3)
+/// # instantiate iom object
+/// my_iom <- fio::iom(
+///   "test",
+///   intermediate_transactions,
+///   total_production,
+///   exports = exports,
+///   imports = imports
+/// )
+/// # Calculate the technical coefficients
+/// my_iom$compute_tech_coeff()
+/// # calculate the Leontief inverse
+/// my_iom$compute_allocation_coeff()
+/// # aggregate final demand and added value matrices
+/// my_iom$update_added_value_matrix()
+/// my_iom$update_final_demand_matrix()
+/// # Calculate effects on both demand and supply structures after extracting a sector
+/// my_iom$compute_hypothetical_extraction()
+/// # show results
+/// my_iom$hypothetical_extraction
 
 fn compute_extraction_total(
   backward_linkage_matrix: RMatrix<f64>,

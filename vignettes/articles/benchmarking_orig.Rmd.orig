@@ -90,9 +90,9 @@ ggplot2::autoplot(benchmark_a)
 
 # Leontief inverse matrix
 
-When we're talking about inverting a $2000 \times 2000$ there's a lot more work involved. Leontief matrix ($B$) is obtained from subtracting the technical coefficients matrix ($A$) from the identity matrix ($I$), therefore it has no null rows or columns. 
+When we're talking about inverting a $2000 \times 2000$ there's a lot more work involved. Leontief matrix ($L$) is obtained from subtracting the technical coefficients matrix ($A$) from the identity matrix ($I$), therefore it has no null rows or columns. 
 
-$$B = I - A$$
+$$L = I - A$$
 
 It allows for solving the linear system through LU decomposition, which is a more efficient method than the direct inverse matrix calculation. `{fio}` takes advantage of LU decomposition and becomes incredibly faster, while `{leontief}` is over 10 times slower, followed closed by the over 20 times slower base R implementation. 
 

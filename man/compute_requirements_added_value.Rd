@@ -2,10 +2,7 @@
 % Please edit documentation in R/extendr-wrappers.R
 \name{compute_requirements_added_value}
 \alias{compute_requirements_added_value}
-\title{\itemize{
-\item MARK: other multipliers
-Calculates requirements for a given added value vector
-}}
+\title{Calculates requirements for a given added value vector}
 \usage{
 compute_requirements_added_value(added_value_element, total_production)
 }
@@ -18,8 +15,5 @@ compute_requirements_added_value(added_value_element, total_production)
 A 1xn vector of a given added value coefficients.
 }
 \description{
-\itemize{
-\item MARK: other multipliers
 Calculates requirements for a given added value vector
-}
 }

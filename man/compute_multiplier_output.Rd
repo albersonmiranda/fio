@@ -2,10 +2,7 @@
 % Please edit documentation in R/extendr-wrappers.R
 \name{compute_multiplier_output}
 \alias{compute_multiplier_output}
-\title{\itemize{
-\item MARK: output multipliers
-Calculates type I output multiplier.
-}}
+\title{Calculates type I output multiplier.}
 \usage{
 compute_multiplier_output(leontief_inverse_matrix)
 }
@@ -16,8 +13,5 @@ compute_multiplier_output(leontief_inverse_matrix)
 A 1xn vector of type I output multipliers.
 }
 \description{
-\itemize{
-\item MARK: output multipliers
 Calculates type I output multiplier.
-}
 }

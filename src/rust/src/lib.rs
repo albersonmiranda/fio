@@ -11,9 +11,31 @@ use rayon::prelude::*;
 
 #[extendr]
 /// Computes technical coefficients matrix.
-/// @param intermediate_transactions A nxn matrix of intermediate transactions.
-/// @param total_production A 1xn vector of total production.
-/// @return A nxn matrix of technical coefficients, known as A matrix.
+/// 
+/// @param intermediate_transactions
+/// A \eqn{n x n} matrix of intermediate transactions.
+/// @param total_production
+/// A \eqn{1 x n} vector of total production.
+/// 
+/// @return
+/// A \eqn{n x n} matrix of technical coefficients, known as A matrix.
+/// 
+/// @details
+/// It calculates the technical coefficients matrix, which is the columnwise ratio of
+/// intermediate transactions to total production.
+/// 
+/// Underlined Rust code uses Rayon crate to parallelize the computation by
+/// default, so there is no need to use future or async/await to parallelize.
+/// 
+/// @examples
+/// intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+/// total_production <- matrix(c(100, 200, 300), 1, 3)
+/// # instantiate iom object
+/// my_iom <- fio::iom("test", intermediate_transactions, total_production)
+/// # Calculate the technical coefficients
+/// my_iom$compute_tech_coeff()
+/// # show the technical coefficients
+/// my_iom$technical_coefficients_matrix
 
 fn compute_tech_coeff(
   // There's an optional faer feature in extendr-api but it's not working (for the time I'm writing this)
@@ -36,9 +58,42 @@ fn compute_tech_coeff(
 }
 
 #[extendr]
-/// Computes Leontief inverse matrix to R.
-/// @param tech_coeff A nxn matrix of technical coefficients.
-/// @return A nxn matrix of Leontief inverse.
+/// Computes Leontief inverse matrix.
+/// 
+/// @param tech_coeff
+/// A \eqn{n x n} matrix of technical coefficients.
+/// 
+/// @details
+/// It calculates the Leontief inverse matrix, which is the inverse of the
+/// Leontief matrix. The formula is:
+/// 
+/// \deqn{L = I - A}
+/// 
+/// where I is the identity matrix and A is the technical coefficients matrix.
+/// 
+/// The Leontief inverse matrix is calculated by solving the following equation:
+/// 
+/// \deqn{L^{-1} = (I - A)^{-1}}
+/// 
+/// Since the Leontief matrix is a square matrix and the subtraction of the
+/// technical coefficients matrix from the identity matrix garantees that the
+/// Leontief matrix is invertible, this function computes the Leontief inverse
+/// matrix through LU decomposition.
+/// 
+/// @return
+/// A \eqn{n x n} matrix of Leontief inverse.
+/// 
+/// @examples
+/// intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+/// total_production <- matrix(c(100, 200, 300), 1, 3)
+/// # instantiate iom object
+/// my_iom <- fio::iom("test", intermediate_transactions, total_production)
+/// # Calculate the technical coefficients
+/// my_iom$compute_tech_coeff()
+/// # Calculate the Leontief inverse
+/// my_iom$compute_leontief_inverse()
+/// # show the Leontief inverse
+/// my_iom$leontief_inverse_matrix
 
 fn compute_leontief_inverse(tech_coeff: &[f64]) -> RArray<f64, [usize;2]> {
 

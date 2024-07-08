@@ -11,17 +11,76 @@
 NULL
 
 #' Computes technical coefficients matrix.
-#' @param intermediate_transactions A nxn matrix of intermediate transactions.
-#' @param total_production A 1xn vector of total production.
-#' @return A nxn matrix of technical coefficients, known as A matrix.
+#' 
+#' @param intermediate_transactions
+#' A \eqn{n x n} matrix of intermediate transactions.
+#' @param total_production
+#' A \eqn{1 x n} vector of total production.
+#' 
+#' @return
+#' A \eqn{n x n} matrix of technical coefficients, known as A matrix.
+#' 
+#' @details
+#' It calculates the technical coefficients matrix, which is the ratio of
+#' intermediate transactions to total production. The formula is:
+#' 
+#' \deqn{A = X / Y}
+#' 
+#' where X is the intermediate transactions matrix and Y is the total
+#' production vector.
+#' 
+#' Underlined Rust code uses Rayon crate to parallelize the computation by
+#' default, so there is no need to use future or async/await to parallelize.
+#' 
+#' @examples
+#' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+#' total_production <- matrix(c(100, 200, 300), 1, 3)
+#' # instantiate iom object
+#' my_iom <- fio::iom("test", intermediate_transactions, total_production)
+#' # Calculate the technical coefficients
+#' my_iom$compute_tech_coeff()
+#' # show the technical coefficients
+#' my_iom$technical_coefficients_matrix
 compute_tech_coeff <- function(intermediate_transactions, total_production) .Call(wrap__compute_tech_coeff, intermediate_transactions, total_production)
 
-#' Computes Leontief inverse matrix to R.
-#' @param tech_coeff A nxn matrix of technical coefficients.
-#' @return A nxn matrix of Leontief inverse.
+#' Computes Leontief inverse matrix.
+#' 
+#' @param tech_coeff
+#' A \eqn{n x n} matrix of technical coefficients.
+#' 
+#' @details
+#' It calculates the Leontief inverse matrix, which is the inverse of the
+#' Leontief matrix. The formula is:
+#' 
+#' \deqn{L = I - A}
+#' 
+#' where I is the identity matrix and A is the technical coefficients matrix.
+#' 
+#' The Leontief inverse matrix is calculated by solving the following equation:
+#' 
+#' \deqn{L^{-1} = (I - A)^{-1}}
+#' 
+#' Since the Leontief matrix is a square matrix and the subtraction of the
+#' technical coefficients matrix from the identity matrix ganrantees that the
+#' Leontief matrix is invertible, this function computes the Leontief inverse
+#' matrix through LU decomposition.
+#' 
+#' @return
+#' A \eqn{n x n} matrix of Leontief inverse.
+#' 
+#' @examples
+#' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+#' total_production <- matrix(c(100, 200, 300), 1, 3)
+#' # instantiate iom object
+#' my_iom <- fio::iom("test", intermediate_transactions, total_production)
+#' # Calculate the technical coefficients
+#' my_iom$compute_tech_coeff()
+#' # Calculate the Leontief inverse
+#' my_iom$compute_leontief_inverse()
+#' # show the Leontief inverse
+#' my_iom$leontief_inverse_matrix
 compute_leontief_inverse <- function(tech_coeff) .Call(wrap__compute_leontief_inverse, tech_coeff)
 
-#' * MARK: output multipliers
 #' Calculates type I output multiplier.
 #' @param leontief_inverse_matrix The open model Leontief inverse matrix.
 #' @return A 1xn vector of type I output multipliers.
@@ -38,7 +97,6 @@ compute_multiplier_output_direct <- function(technical_coefficients_matrix) .Cal
 #' @return A 1xn vector of type I indirect output multipliers.
 compute_multiplier_output_indirect <- function(technical_coefficients_matrix, leontief_inverse_matrix) .Call(wrap__compute_multiplier_output_indirect, technical_coefficients_matrix, leontief_inverse_matrix)
 
-#' * MARK: other multipliers
 #' Calculates requirements for a given added value vector
 #' @param added_value_element An added value vector.
 #' @param total_production The total production vector.

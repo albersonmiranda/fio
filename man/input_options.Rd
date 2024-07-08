@@ -13,8 +13,8 @@ input_options
 \description{
 \code{fio_addin()} opens an \href{https://shiny.rstudio.com/articles/gadgets.html}{RStudio gadget} and
 \href{https://rstudio.github.io/rstudioaddins/}{addin} that allows you to say
-where the data source is (clipboard? current selection? active file?
-other file?) and to control a few other arguments. Appears as "Import
-input-output data" in the RStudio Addins menu.
+where the data source is (either clipboard or Excel file) and import the
+data into the global environment.
+Appears as "Import input-output data" in the RStudio Addins menu.
 }
 \keyword{datasets}
