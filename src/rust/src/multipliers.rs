@@ -24,9 +24,9 @@ fn compute_multiplier_output(
 }
 
 #[extendr]
-/// Calculates type I direct output multiplier.
+/// Calculates direct output multiplier.
 /// @param technical_coefficients_matrix The open model technical coefficients matrix.
-/// @return A 1xn vector of type I direct output multipliers.
+/// @return A 1xn vector of direct output multipliers.
 
 fn compute_multiplier_output_direct(
   technical_coefficients_matrix: &[f64]
@@ -43,10 +43,10 @@ fn compute_multiplier_output_direct(
 }
 
 #[extendr]
-/// Calculates type I indirect output multiplier.
+/// Calculates indirect output multiplier.
 /// @param technical_coefficients_matrix The open model technical coefficients matrix.
 /// @param leontief_inverse_matrix The open model Leontief inverse matrix.
-/// @return A 1xn vector of type I indirect output multipliers.
+/// @return A 1xn vector of indirect output multipliers.
 
 fn compute_multiplier_output_indirect(
   technical_coefficients_matrix: &[f64],

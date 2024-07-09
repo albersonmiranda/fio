@@ -7,11 +7,31 @@
 compute_ghosh_inverse(allocation_coeff)
 }
 \arguments{
-\item{allocation_coeff}{A nxn matrix of allocation coefficients.}
+\item{allocation_coeff}{A \eqn{n x n} matrix of allocation coefficients.}
 }
 \value{
-A nxn matrix of Ghosh inverse.
+A \eqn{n x n} matrix of Ghoshian inverse.
 }
 \description{
 Computes Ghosh inverse matrix.
+}
+\details{
+It calculates the Ghosh inverse matrix, which is the inverse of the
+difference \eqn{(I - F)} where I is the identity matrix and F is the
+allocation coefficients matrix.
+}
+\examples{
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+# Calculate the allocation coefficients
+my_iom$compute_allocation_coeff()
+# Calculate the Ghosh inverse
+my_iom$compute_ghosh_inverse()
+# show the Ghosh inverse
+my_iom$ghosh_inverse_matrix
+}
+\references{
+\cite{Miller, Ronald E., and Peter D. Blair. Input-Output Analysis: Foundations and Extensions. 2nd ed. Cambridge University Press, 2009. https://doi.org/10.1017/CBO9780511626982.}
 }

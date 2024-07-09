@@ -28,7 +28,7 @@ The Leontief inverse matrix is calculated by solving the following equation:
 \deqn{L^{-1} = (I - A)^{-1}}
 
 Since the Leontief matrix is a square matrix and the subtraction of the
-technical coefficients matrix from the identity matrix ganrantees that the
+technical coefficients matrix from the identity matrix garantees that the
 Leontief matrix is invertible, this function computes the Leontief inverse
 matrix through LU decomposition.
 }
@@ -36,11 +36,14 @@ matrix through LU decomposition.
 intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 total_production <- matrix(c(100, 200, 300), 1, 3)
 # instantiate iom object
-my_iom <- fio::iom("test", intermediate_transactions, total_production)
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
 # Calculate the technical coefficients
 my_iom$compute_tech_coeff()
 # Calculate the Leontief inverse
 my_iom$compute_leontief_inverse()
 # show the Leontief inverse
 my_iom$leontief_inverse_matrix
+}
+\references{
+\cite{Leontief, Wassily. A Economia do Insumo-Produto. Os Economistas. São Paulo: Abril Cultural, 1983.}
 }

@@ -17,17 +17,14 @@ NULL
 #' @param total_production
 #' A \eqn{1 x n} vector of total production.
 #' 
+#' @details
+#' It calculates the technical coefficients matrix, which is the columnwise ratio of
+#' intermediate transactions to total production.
+#' 
 #' @return
 #' A \eqn{n x n} matrix of technical coefficients, known as A matrix.
 #' 
-#' @details
-#' It calculates the technical coefficients matrix, which is the ratio of
-#' intermediate transactions to total production. The formula is:
-#' 
-#' \deqn{A = X / Y}
-#' 
-#' where X is the intermediate transactions matrix and Y is the total
-#' production vector.
+#' @references \cite{Leontief, Wassily. A Economia do Insumo-Produto. Os Economistas. São Paulo: Abril Cultural, 1983.}
 #' 
 #' Underlined Rust code uses Rayon crate to parallelize the computation by
 #' default, so there is no need to use future or async/await to parallelize.
@@ -36,7 +33,7 @@ NULL
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
 #' # instantiate iom object
-#' my_iom <- fio::iom("test", intermediate_transactions, total_production)
+#' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
 #' # Calculate the technical coefficients
 #' my_iom$compute_tech_coeff()
 #' # show the technical coefficients
@@ -61,18 +58,20 @@ compute_tech_coeff <- function(intermediate_transactions, total_production) .Cal
 #' \deqn{L^{-1} = (I - A)^{-1}}
 #' 
 #' Since the Leontief matrix is a square matrix and the subtraction of the
-#' technical coefficients matrix from the identity matrix ganrantees that the
+#' technical coefficients matrix from the identity matrix garantees that the
 #' Leontief matrix is invertible, this function computes the Leontief inverse
 #' matrix through LU decomposition.
 #' 
 #' @return
 #' A \eqn{n x n} matrix of Leontief inverse.
 #' 
+#' @references \cite{Leontief, Wassily. A Economia do Insumo-Produto. Os Economistas. São Paulo: Abril Cultural, 1983.}
+#' 
 #' @examples
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
 #' # instantiate iom object
-#' my_iom <- fio::iom("test", intermediate_transactions, total_production)
+#' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
 #' # Calculate the technical coefficients
 #' my_iom$compute_tech_coeff()
 #' # Calculate the Leontief inverse
@@ -86,15 +85,15 @@ compute_leontief_inverse <- function(tech_coeff) .Call(wrap__compute_leontief_in
 #' @return A 1xn vector of type I output multipliers.
 compute_multiplier_output <- function(leontief_inverse_matrix) .Call(wrap__compute_multiplier_output, leontief_inverse_matrix)
 
-#' Calculates type I direct output multiplier.
+#' Calculates direct output multiplier.
 #' @param technical_coefficients_matrix The open model technical coefficients matrix.
-#' @return A 1xn vector of type I direct output multipliers.
+#' @return A 1xn vector of direct output multipliers.
 compute_multiplier_output_direct <- function(technical_coefficients_matrix) .Call(wrap__compute_multiplier_output_direct, technical_coefficients_matrix)
 
-#' Calculates type I indirect output multiplier.
+#' Calculates indirect output multiplier.
 #' @param technical_coefficients_matrix The open model technical coefficients matrix.
 #' @param leontief_inverse_matrix The open model Leontief inverse matrix.
-#' @return A 1xn vector of type I indirect output multipliers.
+#' @return A 1xn vector of indirect output multipliers.
 compute_multiplier_output_indirect <- function(technical_coefficients_matrix, leontief_inverse_matrix) .Call(wrap__compute_multiplier_output_indirect, technical_coefficients_matrix, leontief_inverse_matrix)
 
 #' Calculates requirements for a given added value vector
@@ -122,74 +121,192 @@ compute_multiplier_added_value <- function(added_value_requirements, leontief_in
 compute_multiplier_added_value_indirect <- function(added_value_element, total_production, leontief_inverse_matrix) .Call(wrap__compute_multiplier_added_value_indirect, added_value_element, total_production, leontief_inverse_matrix)
 
 #' Calculates field of influence given a technical change.
+#' 
+#' @description
+#' Calculates total field of influence given a incremental change in the technical coefficients matrix.
+#' 
 #' @param tech_coeff_matrix A nxn matrix of technical coefficients.
 #' @param leontief_inverse_matrix The open model nxn Leontief inverse matrix.
 #' @param epsilon The epsilon value.
-#' @description
-#' Calculates total field of influence given a incremental change in the technical coefficients matrix.
+#'
 #' @return Field of influence matrix.
+#' 
+#' @references \cite{Vale, Vinícius de Almeida, and Fernando Salgueiro Perobelli. Análise de Insumo-Produto: teoria e aplicações no R. Curitiba, PR: Edição Independente, 2020.}
+#' 
+#' @examples
+#' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+#' total_production <- matrix(c(100, 200, 300), 1, 3)
+#' # instantiate iom object
+#' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+#' # calculate the technical coefficients
+#' my_iom$compute_tech_coeff()
+#' # calculate the Leontief inverse
+#' my_iom$compute_leontief_inverse()
+#' # calculate field of influence
+#' my_iom$compute_field_influence(epsilon = 0.01)
+#' my_iom$field_influence
 compute_field_influence <- function(tech_coeff_matrix, leontief_inverse_matrix, epsilon) .Call(wrap__compute_field_influence, tech_coeff_matrix, leontief_inverse_matrix, epsilon)
 
 #' Computes power of dispersion coefficients of variation
-#' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
+#' 
 #' @description
 #' Computes power of dispersion coefficients of variation of an economy.
+#' 
+#' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
+#' 
 #' @return A vector of power of dispersion coefficients of variation.
 compute_power_dispersion_cv <- function(leontief_inverse_matrix) .Call(wrap__compute_power_dispersion_cv, leontief_inverse_matrix)
 
 #' Computes sensitivity of dispersion coefficients of variation
-#' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
+#' 
 #' @description
 #' Computes sensitivity of dispersion coefficients of variation of an economy.
+#' 
+#' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
+#' 
 #' @return A vector of sensitivity of dispersion coefficients of variation.
 compute_sensitivity_dispersion_cv <- function(leontief_inverse_matrix) .Call(wrap__compute_sensitivity_dispersion_cv, leontief_inverse_matrix)
 
 #' Computes power of dispersion
-#' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
+#' 
 #' @description
 #' Computes power of dispersion from a Leontief inverse matrix.
+#' 
+#' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
+#' 
 #' @return A vector of power of dispersion.
 compute_power_dispersion <- function(leontief_inverse_matrix) .Call(wrap__compute_power_dispersion, leontief_inverse_matrix)
 
 #' Computes sensitivity of dispersion
 #' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
+#'
 #' @description
 #' Computes sensitivity of dispersion from a Leontief inverse matrix.
+#'
 #' @return A vector of sensitivity of dispersion.
 compute_sensitivity_dispersion <- function(leontief_inverse_matrix) .Call(wrap__compute_sensitivity_dispersion, leontief_inverse_matrix)
 
 #' Computes allocation coefficients matrix.
-#' @param intermediate_transactions A nxn matrix of intermediate transactions.
-#' @param total_production A 1xn vector of total production.
+#' 
+#' @param intermediate_transactions
+#' A nxn matrix of intermediate transactions.
+#' @param total_production
+#' A 1xn vector of total production.
+#' 
+#' @details
+#' It calculates the allocation coefficients matrix, which is the rowwise ratio of
+#' intermediate transactions to total production.
+#' 
+#' Underlined Rust code runs in parallel by default, so there is no need to
+#' use future or async/await to parallelize.
+#' 
+#' @references \cite{Miller, Ronald E., and Peter D. Blair. Input-Output Analysis: Foundations and Extensions. 2nd ed. Cambridge University Press, 2009. https://doi.org/10.1017/CBO9780511626982.}
+#' 
+#' @examples
+#' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+#' total_production <- matrix(c(100, 200, 300), 1, 3)
+#' # instantiate iom object
+#' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+#' # Calculate the allocation coefficients
+#' my_iom$compute_allocation_coeff()
+#' # show the allocation coefficients
+#' my_iom$allocation_coefficients_matrix
+#' 
 #' @return A nxn matrix of allocation coefficients, known as F matrix.
 compute_allocation_coeff <- function(intermediate_transactions, total_production) .Call(wrap__compute_allocation_coeff, intermediate_transactions, total_production)
 
 #' Computes Ghosh inverse matrix.
-#' @param allocation_coeff A nxn matrix of allocation coefficients.
-#' @return A nxn matrix of Ghosh inverse.
+#' 
+#' @param allocation_coeff
+#' A \eqn{n x n} matrix of allocation coefficients.
+#' 
+#' @details
+#' It calculates the Ghosh inverse matrix, which is the inverse of the
+#' difference \eqn{(I - F)} where I is the identity matrix and F is the
+#' allocation coefficients matrix.
+#' 
+#' @return
+#' A \eqn{n x n} matrix of Ghoshian inverse.
+#' 
+#' @references \cite{Miller, Ronald E., and Peter D. Blair. Input-Output Analysis: Foundations and Extensions. 2nd ed. Cambridge University Press, 2009. https://doi.org/10.1017/CBO9780511626982.}
+#' 
+#' @examples
+#' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+#' total_production <- matrix(c(100, 200, 300), 1, 3)
+#' # instantiate iom object
+#' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+#' # Calculate the allocation coefficients
+#' my_iom$compute_allocation_coeff()
+#' # Calculate the Ghosh inverse
+#' my_iom$compute_ghosh_inverse()
+#' # show the Ghosh inverse
+#' my_iom$ghosh_inverse_matrix
 compute_ghosh_inverse <- function(allocation_coeff) .Call(wrap__compute_ghosh_inverse, allocation_coeff)
 
 #' Calculates backward linkage extraction.
-#' @param technical_coefficients_matrix A nxn matrix of technical coefficients.
-#' @param final_demand_matrix The final demand matrix.
-#' @param total_production A 1xn vector of total production.
+#' 
 #' @description
 #' Computes impact on demand structure after extracting a given sector.
+#' 
+#' @param technical_coefficients_matrix
+#' A nxn matrix of technical coefficients.
+#' @param final_demand_matrix
+#' The final demand matrix.
+#' @param total_production
+#' A 1xn vector of total production.
+#' 
+#' @references \cite{Vale, Vinícius de Almeida, e Fernando Salgueiro Perobelli. Análise de Insumo-Produto: teoria e aplicações no R. Curitiba, PR: Edição Independente, 2020.}
 compute_extraction_backward <- function(technical_coefficients_matrix, final_demand_matrix, total_production) .Call(wrap__compute_extraction_backward, technical_coefficients_matrix, final_demand_matrix, total_production)
 
 #' Calculates forward linkage extraction.
+#' 
+#' @description
+#' Computes impact on supply structure after extracting a given sector.
+#' 
 #' @param allocation_coefficients_matrix A nxn matrix of allocation coefficients.
 #' @param added_value_matrix The added value matrix.
 #' @param total_production A 1xn vector of total production.
-#' @description
-#' Computes impact on supply structure after extracting a given sector.
+#' 
+#' @references \cite{Vale, Vinícius de Almeida, e Fernando Salgueiro Perobelli. Análise de Insumo-Produto: teoria e aplicações no R. Curitiba, PR: Edição Independente, 2020.}
 compute_extraction_forward <- function(allocation_coefficients_matrix, added_value_matrix, total_production) .Call(wrap__compute_extraction_forward, allocation_coefficients_matrix, added_value_matrix, total_production)
 
 #' Calculates total extraction
 #' @param backward_linkage_matrix A nx2 matrix of backward linkage.
 #' @param forward_linkage_matrix A nx2 matrix of forward linkage.
+#' 
 #' @description
 #' Computes total impact after extracting a given sector.
+#' 
+#' @details
+#' Here we define total impact as the sum of impact on demand and supply structures
+#' after removal of a given sector.
+#' 
+#' @seealso `compute_extraction_backwards()` and `compute_extraction_forward()`.
+#' 
+#' @examples
+#' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+#' total_production <- matrix(c(100, 200, 300), 1, 3)
+#' exports <- matrix(c(10, 20, 30), 3, 1)
+#' imports <- matrix(c(5, 10, 15), 1, 3)
+#' # instantiate iom object
+#' my_iom <- fio::iom$new(
+#'   "test",
+#'   intermediate_transactions,
+#'   total_production,
+#'   exports = exports,
+#'   imports = imports
+#' )
+#' # Calculate the technical coefficients
+#' my_iom$compute_tech_coeff()
+#' # calculate the Leontief inverse
+#' my_iom$compute_allocation_coeff()
+#' # aggregate final demand and added value matrices
+#' my_iom$update_added_value_matrix()
+#' my_iom$update_final_demand_matrix()
+#' # Calculate effects on both demand and supply structures after extracting a sector
+#' my_iom$compute_hypothetical_extraction()
+#' # show results
+#' my_iom$hypothetical_extraction
 compute_extraction_total <- function(backward_linkage_matrix, forward_linkage_matrix) .Call(wrap__compute_extraction_total, backward_linkage_matrix, forward_linkage_matrix)
 
 

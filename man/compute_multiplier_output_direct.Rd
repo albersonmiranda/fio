@@ -2,7 +2,7 @@
 % Please edit documentation in R/extendr-wrappers.R
 \name{compute_multiplier_output_direct}
 \alias{compute_multiplier_output_direct}
-\title{Calculates type I direct output multiplier.}
+\title{Calculates direct output multiplier.}
 \usage{
 compute_multiplier_output_direct(technical_coefficients_matrix)
 }
@@ -10,8 +10,8 @@ compute_multiplier_output_direct(technical_coefficients_matrix)
 \item{technical_coefficients_matrix}{The open model technical coefficients matrix.}
 }
 \value{
-A 1xn vector of type I direct output multipliers.
+A 1xn vector of direct output multipliers.
 }
 \description{
-Calculates type I direct output multiplier.
+Calculates direct output multiplier.
 }

@@ -13,6 +13,8 @@ use faer::{prelude::SpSolver, Mat};
 /// The final demand matrix.
 /// @param total_production
 /// A 1xn vector of total production.
+/// 
+/// @references \cite{Vale, Vinícius de Almeida, e Fernando Salgueiro Perobelli. Análise de Insumo-Produto: teoria e aplicações no R. Curitiba, PR: Edição Independente, 2020.}
 
 fn compute_extraction_backward(
   technical_coefficients_matrix: &[f64],
@@ -69,11 +71,15 @@ fn compute_extraction_backward(
 
 #[extendr]
 /// Calculates forward linkage extraction.
+/// 
+/// @description
+/// Computes impact on supply structure after extracting a given sector.
+/// 
 /// @param allocation_coefficients_matrix A nxn matrix of allocation coefficients.
 /// @param added_value_matrix The added value matrix.
 /// @param total_production A 1xn vector of total production.
-/// @description
-/// Computes impact on supply structure after extracting a given sector.
+/// 
+/// @references \cite{Vale, Vinícius de Almeida, e Fernando Salgueiro Perobelli. Análise de Insumo-Produto: teoria e aplicações no R. Curitiba, PR: Edição Independente, 2020.}
 
 fn compute_extraction_forward(
   allocation_coefficients_matrix: &[f64],
@@ -132,15 +138,23 @@ fn compute_extraction_forward(
 /// Calculates total extraction
 /// @param backward_linkage_matrix A nx2 matrix of backward linkage.
 /// @param forward_linkage_matrix A nx2 matrix of forward linkage.
+/// 
 /// @description
 /// Computes total impact after extracting a given sector.
+/// 
+/// @details
+/// Here we define total impact as the sum of impact on demand and supply structures
+/// after removal of a given sector.
+/// 
+/// @seealso `compute_extraction_backwards()` and `compute_extraction_forward()`.
+/// 
 /// @examples
 /// intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 /// total_production <- matrix(c(100, 200, 300), 1, 3)
 /// exports <- matrix(c(10, 20, 30), 3, 1)
 /// imports <- matrix(c(5, 10, 15), 1, 3)
 /// # instantiate iom object
-/// my_iom <- fio::iom(
+/// my_iom <- fio::iom$new(
 ///   "test",
 ///   intermediate_transactions,
 ///   total_production,

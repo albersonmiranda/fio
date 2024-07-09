@@ -2,7 +2,7 @@
 % Please edit documentation in R/extendr-wrappers.R
 \name{compute_multiplier_output_indirect}
 \alias{compute_multiplier_output_indirect}
-\title{Calculates type I indirect output multiplier.}
+\title{Calculates indirect output multiplier.}
 \usage{
 compute_multiplier_output_indirect(
   technical_coefficients_matrix,
@@ -15,8 +15,8 @@ compute_multiplier_output_indirect(
 \item{leontief_inverse_matrix}{The open model Leontief inverse matrix.}
 }
 \value{
-A 1xn vector of type I indirect output multipliers.
+A 1xn vector of indirect output multipliers.
 }
 \description{
-Calculates type I indirect output multiplier.
+Calculates indirect output multiplier.
 }

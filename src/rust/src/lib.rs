@@ -17,12 +17,14 @@ use rayon::prelude::*;
 /// @param total_production
 /// A \eqn{1 x n} vector of total production.
 /// 
-/// @return
-/// A \eqn{n x n} matrix of technical coefficients, known as A matrix.
-/// 
 /// @details
 /// It calculates the technical coefficients matrix, which is the columnwise ratio of
 /// intermediate transactions to total production.
+/// 
+/// @return
+/// A \eqn{n x n} matrix of technical coefficients, known as A matrix.
+/// 
+/// @references \cite{Leontief, Wassily. A Economia do Insumo-Produto. Os Economistas. São Paulo: Abril Cultural, 1983.}
 /// 
 /// Underlined Rust code uses Rayon crate to parallelize the computation by
 /// default, so there is no need to use future or async/await to parallelize.
@@ -31,7 +33,7 @@ use rayon::prelude::*;
 /// intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 /// total_production <- matrix(c(100, 200, 300), 1, 3)
 /// # instantiate iom object
-/// my_iom <- fio::iom("test", intermediate_transactions, total_production)
+/// my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
 /// # Calculate the technical coefficients
 /// my_iom$compute_tech_coeff()
 /// # show the technical coefficients
@@ -83,11 +85,13 @@ fn compute_tech_coeff(
 /// @return
 /// A \eqn{n x n} matrix of Leontief inverse.
 /// 
+/// @references \cite{Leontief, Wassily. A Economia do Insumo-Produto. Os Economistas. São Paulo: Abril Cultural, 1983.}
+/// 
 /// @examples
 /// intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 /// total_production <- matrix(c(100, 200, 300), 1, 3)
 /// # instantiate iom object
-/// my_iom <- fio::iom("test", intermediate_transactions, total_production)
+/// my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
 /// # Calculate the technical coefficients
 /// my_iom$compute_tech_coeff()
 /// # Calculate the Leontief inverse

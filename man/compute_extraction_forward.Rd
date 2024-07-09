@@ -20,3 +20,6 @@ compute_extraction_forward(
 \description{
 Computes impact on supply structure after extracting a given sector.
 }
+\references{
+\cite{Vale, Vinícius de Almeida, e Fernando Salgueiro Perobelli. Análise de Insumo-Produto: teoria e aplicações no R. Curitiba, PR: Edição Independente, 2020.}
+}

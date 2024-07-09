@@ -25,12 +25,12 @@ Import data from a input-output matrix (IOM) from Excel format.
 }
 \examples{
 \dontrun{
-intermediate_transactions = import_element(
- file = "path/to/file.xlsx",
- sheet = "sheet_name",
- range = "B2:Z56",
- col_names = "B2:Z2",
- row_names = "A2:A56"
-)
+ intermediate_transactions = import_element(
+   file = "path/to/file.xlsx",
+   sheet = "sheet_name",
+   range = "B2:Z56",
+   col_names = "B2:Z2",
+   row_names = "A2:A56"
+ )
 }
 }

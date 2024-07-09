@@ -14,14 +14,16 @@ use rayon::prelude::*;
 /// It calculates the allocation coefficients matrix, which is the rowwise ratio of
 /// intermediate transactions to total production.
 /// 
-/// Underlined Rust code uses Rayon crate to parallelize the computation by
-/// default, so there is no need to use future or async/await to parallelize.
+/// Underlined Rust code runs in parallel by default, so there is no need to
+/// use future or async/await to parallelize.
+/// 
+/// @references \cite{Miller, Ronald E., and Peter D. Blair. Input-Output Analysis: Foundations and Extensions. 2nd ed. Cambridge University Press, 2009. https://doi.org/10.1017/CBO9780511626982.}
 /// 
 /// @examples
 /// intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 /// total_production <- matrix(c(100, 200, 300), 1, 3)
 /// # instantiate iom object
-/// my_iom <- fio::iom("test", intermediate_transactions, total_production)
+/// my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
 /// # Calculate the allocation coefficients
 /// my_iom$compute_allocation_coeff()
 /// # show the allocation coefficients
@@ -50,7 +52,7 @@ fn compute_allocation_coeff(
 #[extendr]
 /// Computes Ghosh inverse matrix.
 /// 
-/// @param tech_coeff
+/// @param allocation_coeff
 /// A \eqn{n x n} matrix of allocation coefficients.
 /// 
 /// @details
@@ -61,11 +63,13 @@ fn compute_allocation_coeff(
 /// @return
 /// A \eqn{n x n} matrix of Ghoshian inverse.
 /// 
+/// @references \cite{Miller, Ronald E., and Peter D. Blair. Input-Output Analysis: Foundations and Extensions. 2nd ed. Cambridge University Press, 2009. https://doi.org/10.1017/CBO9780511626982.}
+/// 
 /// @examples
 /// intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 /// total_production <- matrix(c(100, 200, 300), 1, 3)
 /// # instantiate iom object
-/// my_iom <- fio::iom("test", intermediate_transactions, total_production)
+/// my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
 /// # Calculate the allocation coefficients
 /// my_iom$compute_allocation_coeff()
 /// # Calculate the Ghosh inverse

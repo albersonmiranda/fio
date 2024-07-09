@@ -19,3 +19,19 @@ Field of influence matrix.
 \description{
 Calculates total field of influence given a incremental change in the technical coefficients matrix.
 }
+\examples{
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+# calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# calculate the Leontief inverse
+my_iom$compute_leontief_inverse()
+# calculate field of influence
+my_iom$compute_field_influence(epsilon = 0.01)
+my_iom$field_influence
+}
+\references{
+\cite{Vale, Vinícius de Almeida, and Fernando Salgueiro Perobelli. Análise de Insumo-Produto: teoria e aplicações no R. Curitiba, PR: Edição Independente, 2020.}
+}
