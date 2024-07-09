@@ -12,12 +12,13 @@
 
 ## What type of PR is this? (check all applicable)
 
-- [ ] Refactor
-- [ ] Feature
+- [ ] New Feature
 - [ ] Bug Fix
-- [ ] Optimization
 - [ ] Documentation Update
+- [ ] Style Update
+- [ ] Refactor
 - [ ] Tests
+- [ ] Other tasks
 
 ## Description
 
@@ -44,7 +45,17 @@ _Goal is code coverage percentage at 80% and above._
 
 ## Pre-merge checklist
 
-- [ ] PR title follows semantic commit guidelines (e.g., `fix:`, `feat:`, `refactor:`, `test:`, `docs:`)
+- [ ] PR title follows semantic commit guidelines (e.g., `feat:`, `fix:`, `docs:`, `style:`, `refactor:`, `test:`, `chore:`)
+
+<!--
+- feat: (new feature for the user, not a new feature for build script)
+- fix: (bug fix for the user, not a fix to a build script)
+- docs: (changes to the documentation)
+- style: (formatting, missing semi colons, etc; no production code change)
+- refactor: (refactoring production code, eg. renaming a variable)
+- test: (adding missing tests, refactoring tests; no production code change)
+- chore: (updating grunt tasks etc; no production code change)
+-->
 
 ## Release checklist
 
