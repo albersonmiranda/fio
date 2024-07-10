@@ -24,6 +24,9 @@ my_iom <- iom$new(
  total_production
 )
 
+# disable parallelization for CRAN checks
+my_iom$set_max_threads(1)
+
 # Compute technical coefficients matrix
 my_iom$compute_tech_coeff()
 print(my_iom$technical_coefficients_matrix)
@@ -128,6 +131,9 @@ print(my_iom$hypothetical_extraction)
 \item{\code{ghosh_inverse_matrix}}{Ghosh inverse matrix.}
 
 \item{\code{hypothetical_extraction}}{Absolute and relative backward and forward differences in total output after a hypothetical extraction.}
+
+\item{\code{threads}}{Number of threads available for Rust to run in parallel.
+Defaults to 0, meaning all threads available.}
 }
 \if{html}{\out{</div>}}
 }
@@ -150,6 +156,7 @@ print(my_iom$hypothetical_extraction)
 \item \href{#method-iom-compute_allocation_coeff}{\code{iom$compute_allocation_coeff()}}
 \item \href{#method-iom-compute_ghosh_inverse}{\code{iom$compute_ghosh_inverse()}}
 \item \href{#method-iom-compute_hypothetical_extraction}{\code{iom$compute_hypothetical_extraction()}}
+\item \href{#method-iom-set_max_threads}{\code{iom$set_max_threads()}}
 \item \href{#method-iom-clone}{\code{iom$clone()}}
 }
 }
@@ -421,6 +428,24 @@ Computes the hypothetical extraction.
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_hypothetical_extraction()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-iom-set_max_threads"></a>}}
+\if{latex}{\out{\hypertarget{method-iom-set_max_threads}{}}}
+\subsection{Method \code{set_max_threads()}}{
+Sets max number of threads used by fio.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{iom$set_max_threads(max_threads)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{max_threads}}{Number of threads enabled for parallel computing. Defaults to the number
+of threads available.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-iom-clone"></a>}}

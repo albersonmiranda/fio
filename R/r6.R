@@ -1,7 +1,9 @@
 #' @title
 #' R6 class for input-output matrix
+#'
 #' @description
 #' R6 class for input-output matrix.
+#'
 #' @param id
 #' Identifier for the input-output matrix.
 #' @param intermediate_transactions
@@ -30,6 +32,7 @@
 #' Setting row names is advised for better readability.
 #' @param occupation
 #' Occupation matrix.
+#'
 #' @examples
 #' # data
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
@@ -47,6 +50,9 @@
 #'  intermediate_transactions,
 #'  total_production
 #' )
+#'
+#' # disable parallelization for CRAN checks
+#' my_iom$set_max_threads(1)
 #'
 #' # Compute technical coefficients matrix
 #' my_iom$compute_tech_coeff()
@@ -208,6 +214,11 @@ iom <- R6::R6Class(
     #' @field hypothetical_extraction
     #' Absolute and relative backward and forward differences in total output after a hypothetical extraction.
     hypothetical_extraction = NULL,
+
+    #' @field threads
+    #' Number of threads available for Rust to run in parallel.
+    #' Defaults to 0, meaning all threads available.
+    threads = 0,
 
     #' @description
     #' Creates a new instance of this [R6][R6::R6Class] class.
@@ -789,6 +800,16 @@ iom <- R6::R6Class(
       # store matrix
       self$hypothetical_extraction <- hypothetical_extraction
       invisible(self)
+    },
+
+    #' @description
+    #' Sets max number of threads used by fio.
+    #' @param max_threads
+    #' Number of threads enabled for parallel computing. Defaults to the number
+    #' of threads available.
+    set_max_threads = function(max_threads) {
+      set_max_threads(max_threads)
+      self$threads <- max_threads
     }
   ),
 

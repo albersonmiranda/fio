@@ -10,6 +10,27 @@
 #' @useDynLib fio, .registration = TRUE
 NULL
 
+#' Sets max number of threads used by fio
+#' 
+#' @details
+#' Calling this function sets a global limit of threads to Rayon crate, affecting
+#' all computations that runs in parallel by default.
+#' 
+#' @param max_threads
+#' Max number of threads enable globally for fio. 0 means all threads available.
+#' 
+#' @return
+#' This functions does not return a value.
+#' 
+#' @examples
+#' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+#' total_production <- matrix(c(100, 200, 300), 1, 3)
+#' # instantiate iom object
+#' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+#' # make Rust code run in sequence (disable parallelization)
+#' my_iom$set_max_threads(1)
+set_max_threads <- function(max_threads) invisible(.Call(wrap__set_max_threads, max_threads))
+
 #' Computes technical coefficients matrix.
 #' 
 #' @param intermediate_transactions
@@ -34,6 +55,8 @@ NULL
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
 #' # instantiate iom object
 #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+#' # disable parallelization for CRAN checks
+#' my_iom$set_max_threads(1)
 #' # Calculate the technical coefficients
 #' my_iom$compute_tech_coeff()
 #' # show the technical coefficients
@@ -58,7 +81,7 @@ compute_tech_coeff <- function(intermediate_transactions, total_production) .Cal
 #' \deqn{L^{-1} = (I - A)^{-1}}
 #' 
 #' Since the Leontief matrix is a square matrix and the subtraction of the
-#' technical coefficients matrix from the identity matrix garantees that the
+#' technical coefficients matrix from the identity matrix guarantees that the
 #' Leontief matrix is invertible, this function computes the Leontief inverse
 #' matrix through LU decomposition.
 #' 
@@ -72,6 +95,8 @@ compute_tech_coeff <- function(intermediate_transactions, total_production) .Cal
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
 #' # instantiate iom object
 #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+#' # disable parallelization for CRAN checks
+#' my_iom$set_max_threads(1)
 #' # Calculate the technical coefficients
 #' my_iom$compute_tech_coeff()
 #' # Calculate the Leontief inverse
@@ -138,6 +163,8 @@ compute_multiplier_added_value_indirect <- function(added_value_element, total_p
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
 #' # instantiate iom object
 #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+#' # disable parallelization for CRAN checks
+#' my_iom$set_max_threads(1)
 #' # calculate the technical coefficients
 #' my_iom$compute_tech_coeff()
 #' # calculate the Leontief inverse
@@ -207,6 +234,8 @@ compute_sensitivity_dispersion <- function(leontief_inverse_matrix) .Call(wrap__
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
 #' # instantiate iom object
 #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+#' # disable parallelization for CRAN checks
+#' my_iom$set_max_threads(1)
 #' # Calculate the allocation coefficients
 #' my_iom$compute_allocation_coeff()
 #' # show the allocation coefficients
@@ -235,6 +264,8 @@ compute_allocation_coeff <- function(intermediate_transactions, total_production
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
 #' # instantiate iom object
 #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+#' # disable parallelization for CRAN checks
+#' my_iom$set_max_threads(1)
 #' # Calculate the allocation coefficients
 #' my_iom$compute_allocation_coeff()
 #' # Calculate the Ghosh inverse
@@ -296,6 +327,8 @@ compute_extraction_forward <- function(allocation_coefficients_matrix, added_val
 #'   exports = exports,
 #'   imports = imports
 #' )
+#' # disable parallelization for CRAN checks
+#' my_iom$set_max_threads(1)
 #' # Calculate the technical coefficients
 #' my_iom$compute_tech_coeff()
 #' # calculate the Leontief inverse
