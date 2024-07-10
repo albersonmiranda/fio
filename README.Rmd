@@ -57,6 +57,9 @@ Calculate Leontief's inverse from brazilian 2020 input-output matrix:
 # load included dataset
 iom_br <- fio::br_2020
 
+# limit threads to 1 for CRAN checks
+iom_br$set_max_threads(1)
+
 # calculate technical coefficients matrix
 iom_br$compute_tech_coeff()
 
