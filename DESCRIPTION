@@ -40,7 +40,8 @@ Imports:
     miniUI,
     readxl,
     rlang,
-    shiny
+    shiny,
+    Rdpack
 License: MIT + file LICENSE
 Config/rextendr/version: 0.3.1
 Suggests: 
@@ -56,3 +57,4 @@ Suggests:
 VignetteBuilder: knitr
 Language: en-US
 Config/testthat/edition: 3
+RdMacros: Rdpack

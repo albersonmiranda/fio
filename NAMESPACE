@@ -2,4 +2,5 @@
 
 export(import_element)
 export(iom)
+importFrom(Rdpack,reprompt)
 useDynLib(fio, .registration = TRUE)
