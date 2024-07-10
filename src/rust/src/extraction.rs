@@ -5,7 +5,7 @@ use faer::{prelude::SpSolver, Mat};
 /// Calculates backward linkage extraction.
 /// 
 /// @description
-/// Computes impact on demand structure after extracting a given sector.
+/// Computes impact on demand structure after extracting a given sector \insertCite{miller_input-output_2009}{fio}.
 /// 
 /// @param technical_coefficients_matrix
 /// A nxn matrix of technical coefficients.
@@ -14,7 +14,8 @@ use faer::{prelude::SpSolver, Mat};
 /// @param total_production
 /// A 1xn vector of total production.
 /// 
-/// @references \cite{Vale, Vinícius de Almeida, e Fernando Salgueiro Perobelli. Análise de Insumo-Produto: teoria e aplicações no R. Curitiba, PR: Edição Independente, 2020.}
+/// @references
+/// insertAllCited{}
 
 fn compute_extraction_backward(
   technical_coefficients_matrix: &[f64],
@@ -73,13 +74,14 @@ fn compute_extraction_backward(
 /// Calculates forward linkage extraction.
 /// 
 /// @description
-/// Computes impact on supply structure after extracting a given sector.
+/// Computes impact on supply structure after extracting a given sector \insertCite{miller_input-output_2009}{fio}.
 /// 
 /// @param allocation_coefficients_matrix A nxn matrix of allocation coefficients.
 /// @param added_value_matrix The added value matrix.
 /// @param total_production A 1xn vector of total production.
 /// 
-/// @references \cite{Vale, Vinícius de Almeida, e Fernando Salgueiro Perobelli. Análise de Insumo-Produto: teoria e aplicações no R. Curitiba, PR: Edição Independente, 2020.}
+/// @references
+/// insertAllCited{}
 
 fn compute_extraction_forward(
   allocation_coefficients_matrix: &[f64],
@@ -161,8 +163,10 @@ fn compute_extraction_forward(
 ///   exports = exports,
 ///   imports = imports
 /// )
-/// # disable parallelization for CRAN checks
-/// my_iom$set_max_threads(1)
+/// 
+/// # running single threaded to comply with CRAN policies. Ignore for performance.
+/// my_iom$set_max_threads(1L)
+/// 
 /// # Calculate the technical coefficients
 /// my_iom$compute_tech_coeff()
 /// # calculate the Leontief inverse

@@ -5,7 +5,7 @@ use faer::{prelude::SpSolver, Mat};
 /// Calculates field of influence given a technical change.
 /// 
 /// @description
-/// Calculates total field of influence given a incremental change in the technical coefficients matrix.
+/// Calculates total field of influence given a incremental change in the technical coefficients matrix \insertCite{vale_alise_2020}{fio}.
 /// 
 /// @param tech_coeff_matrix A nxn matrix of technical coefficients.
 /// @param leontief_inverse_matrix The open model nxn Leontief inverse matrix.
@@ -13,15 +13,16 @@ use faer::{prelude::SpSolver, Mat};
 ///
 /// @return Field of influence matrix.
 /// 
-/// @references \cite{Vale, Vinícius de Almeida, and Fernando Salgueiro Perobelli. Análise de Insumo-Produto: teoria e aplicações no R. Curitiba, PR: Edição Independente, 2020.}
+/// @references
+/// insertAllCited{}
 /// 
 /// @examples
 /// intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 /// total_production <- matrix(c(100, 200, 300), 1, 3)
 /// # instantiate iom object
 /// my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
-/// # disable parallelization for CRAN checks
-/// my_iom$set_max_threads(1)
+/// # running single threaded to comply with CRAN policies. Ignore for performance.
+/// my_iom$set_max_threads(1L)
 /// # calculate the technical coefficients
 /// my_iom$compute_tech_coeff()
 /// # calculate the Leontief inverse

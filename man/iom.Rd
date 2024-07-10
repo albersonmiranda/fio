@@ -23,8 +23,8 @@ my_iom <- iom$new(
  intermediate_transactions,
  total_production
 )
-
-# disable parallelization for CRAN checks
+# running single threaded in order to comply with CRAN policies #
+# ignore for performance #
 my_iom$set_max_threads(1)
 
 # Compute technical coefficients matrix
@@ -133,7 +133,7 @@ print(my_iom$hypothetical_extraction)
 \item{\code{hypothetical_extraction}}{Absolute and relative backward and forward differences in total output after a hypothetical extraction.}
 
 \item{\code{threads}}{Number of threads available for Rust to run in parallel.
-Defaults to 0, meaning all threads available.}
+Defaults to 0, meaning running in parallel with all available threads.}
 }
 \if{html}{\out{</div>}}
 }

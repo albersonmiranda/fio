@@ -7,7 +7,8 @@
 set_max_threads(max_threads)
 }
 \arguments{
-\item{max_threads}{Max number of threads enable globally for fio. 0 means all threads available.}
+\item{max_threads}{Int.
+Default is 0 (all threads available). 1 means single threaded.}
 }
 \value{
 This functions does not return a value.
@@ -18,12 +19,20 @@ Sets max number of threads used by fio
 \details{
 Calling this function sets a global limit of threads to Rayon crate, affecting
 all computations that runs in parallel by default.
+
+Default behaviour of Rayon is to use all available threads (including logical).
+Setting to 1 will result in single threaded (sequencial) computations.
+
+Initialization of the global thread pool happens exactly once.
+Once started, the configuration cannot be changed in the current session.
+If \code{set_max_threads()} is called again in the same session, it'll result
+in an error.
 }
 \examples{
 intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 total_production <- matrix(c(100, 200, 300), 1, 3)
 # instantiate iom object
 my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
-# make Rust code run in sequence (disable parallelization)
-my_iom$set_max_threads(1)
+# runs on only 2 threads
+my_iom$set_max_threads(2)
 }

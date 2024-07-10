@@ -123,7 +123,7 @@ For now, `intermediate_transactions` and `total_production` are the only not `NU
 
 ```{r tech_coeff}
 # disable parallelization for CRAN checks
-my_iom$set_max_threads(1)
+my_iom$set_max_threads(1L)
 # Compute technical coefficients matrix
 my_iom$compute_tech_coeff()
 

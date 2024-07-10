@@ -17,14 +17,14 @@ compute_field_influence(tech_coeff_matrix, leontief_inverse_matrix, epsilon)
 Field of influence matrix.
 }
 \description{
-Calculates total field of influence given a incremental change in the technical coefficients matrix.
+Calculates total field of influence given a incremental change in the technical coefficients matrix \insertCite{vale_alise_2020}{fio}.
 }
 \examples{
 intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 total_production <- matrix(c(100, 200, 300), 1, 3)
 # instantiate iom object
 my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
-# disable parallelization for CRAN checks
+# running single threaded to comply with CRAN policies. Ignore for performance.
 my_iom$set_max_threads(1)
 # calculate the technical coefficients
 my_iom$compute_tech_coeff()
@@ -35,5 +35,5 @@ my_iom$compute_field_influence(epsilon = 0.01)
 my_iom$field_influence
 }
 \references{
-\cite{Vale, Vinícius de Almeida, and Fernando Salgueiro Perobelli. Análise de Insumo-Produto: teoria e aplicações no R. Curitiba, PR: Edição Independente, 2020.}
+insertAllCited{}
 }

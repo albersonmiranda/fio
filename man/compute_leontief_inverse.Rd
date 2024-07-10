@@ -16,7 +16,7 @@ A \eqn{n x n} matrix of Leontief inverse.
 Computes Leontief inverse matrix.
 }
 \details{
-It calculates the Leontief inverse matrix, which is the inverse of the
+It calculates the Leontief inverse matrix \insertCite{leontief_economia_1983}{fio}, which is the inverse of the
 Leontief matrix. The formula is:
 
 \deqn{L = I - A}
@@ -37,7 +37,7 @@ intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 total_production <- matrix(c(100, 200, 300), 1, 3)
 # instantiate iom object
 my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
-# disable parallelization for CRAN checks
+# running single threaded to comply with CRAN policies. Ignore for performance.
 my_iom$set_max_threads(1)
 # Calculate the technical coefficients
 my_iom$compute_tech_coeff()
@@ -47,5 +47,5 @@ my_iom$compute_leontief_inverse()
 my_iom$leontief_inverse_matrix
 }
 \references{
-\cite{Leontief, Wassily. A Economia do Insumo-Produto. Os Economistas. São Paulo: Abril Cultural, 1983.}
+insertAllCited{}
 }

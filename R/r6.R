@@ -50,8 +50,8 @@
 #'  intermediate_transactions,
 #'  total_production
 #' )
-#'
-#' # disable parallelization for CRAN checks
+#' # running single threaded in order to comply with CRAN policies #
+#' # ignore for performance #
 #' my_iom$set_max_threads(1)
 #'
 #' # Compute technical coefficients matrix
@@ -103,6 +103,7 @@
 #' my_iom$compute_hypothetical_extraction()
 #' print(my_iom$hypothetical_extraction)
 #'
+#' @importFrom Rdpack reprompt
 #' @export
 
 # input-output matrix class
@@ -217,7 +218,7 @@ iom <- R6::R6Class(
 
     #' @field threads
     #' Number of threads available for Rust to run in parallel.
-    #' Defaults to 0, meaning all threads available.
+    #' Defaults to 0, meaning running in parallel with all available threads.
     threads = 0,
 
     #' @description
@@ -235,6 +236,9 @@ iom <- R6::R6Class(
                           operating_income = NULL,
                           added_value_others = NULL,
                           occupation = NULL) {
+      # set default
+      self$threads <- 0
+
       ### assertions ###
       # check class
       for (matrix in private$iom_elements()) {
@@ -808,8 +812,21 @@ iom <- R6::R6Class(
     #' Number of threads enabled for parallel computing. Defaults to the number
     #' of threads available.
     set_max_threads = function(max_threads) {
-      set_max_threads(max_threads)
-      self$threads <- max_threads
+      # assert type
+      if (!(is.integer(max_threads) && max_threads >= 0)) {
+        error("max_threads must be a positive integer.")
+      }
+
+      if (self$threads == 0 && max_threads == 0) {
+        alert("0 means all available threads, which is default behaviour. Nothing changed")
+      }
+
+      if (self$threads > 0) {
+        error("Max threads already been set in this session.")
+      } else {
+        set_max_threads(max_threads)
+        self$threads <- max_threads
+      }
     }
   ),
 

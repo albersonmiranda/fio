@@ -19,14 +19,14 @@ Computes technical coefficients matrix.
 }
 \details{
 It calculates the technical coefficients matrix, which is the columnwise ratio of
-intermediate transactions to total production.
+intermediate transactions to total production \insertCite{leontief_economia_1983}{fio}.
 }
 \examples{
 intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 total_production <- matrix(c(100, 200, 300), 1, 3)
 # instantiate iom object
 my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
-# disable parallelization for CRAN checks
+# running single threaded to comply with CRAN policies. Ignore for performance.
 my_iom$set_max_threads(1)
 # Calculate the technical coefficients
 my_iom$compute_tech_coeff()
@@ -34,7 +34,7 @@ my_iom$compute_tech_coeff()
 my_iom$technical_coefficients_matrix
 }
 \references{
-\cite{Leontief, Wassily. A Economia do Insumo-Produto. Os Economistas. São Paulo: Abril Cultural, 1983.}
+insertAllCited{}
 
 Underlined Rust code uses Rayon crate to parallelize the computation by
 default, so there is no need to use future or async/await to parallelize.
