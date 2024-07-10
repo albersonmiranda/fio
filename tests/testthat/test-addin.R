@@ -90,13 +90,13 @@ test_that("Has dependencies", {
       c("shiny", "miniUI"),
       "in order to use the fio addin"
     )
-    resource_path <- fs::path_package("fio", "addins")
-    shiny::addResourcePath("addins", resource_path)
   })
 })
 
 # ui
 test_that("ui been generated", {
+  resource_path <- fs::path_package("fio", "addins")
+  shiny::addResourcePath("addins", resource_path)
   ui <- miniUI::miniPage(
     shiny::tags$head(shiny::includeCSS(fs::path(resource_path, "fio.css"))),
     miniUI::gadgetTitleBar(
