@@ -1,3 +1,14 @@
+# fio 0.1.1
+
+## ✨ Enhancements
+
+* New `set_max_threads()` method to allow the user to control number of threads used by {fio} (required by CRAN).
+
+## 🛠️ Other improvements
+
+* Added tests to several methods.
+* Added examples.
+
 # fio 0.1.0
 
 ## ✨ Enhancements

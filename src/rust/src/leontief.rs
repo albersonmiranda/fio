@@ -27,6 +27,8 @@ use rayon::prelude::*;
 /// total_production <- matrix(c(100, 200, 300), 1, 3)
 /// # instantiate iom object
 /// my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+/// # disable parallelization for CRAN checks
+/// my_iom$set_max_threads(1)
 /// # Calculate the technical coefficients
 /// my_iom$compute_tech_coeff()
 /// # show the technical coefficients
@@ -71,7 +73,7 @@ fn compute_tech_coeff(
 /// \deqn{L^{-1} = (I - A)^{-1}}
 /// 
 /// Since the Leontief matrix is a square matrix and the subtraction of the
-/// technical coefficients matrix from the identity matrix garantees that the
+/// technical coefficients matrix from the identity matrix guarantees that the
 /// Leontief matrix is invertible, this function computes the Leontief inverse
 /// matrix through LU decomposition.
 /// 
@@ -85,6 +87,8 @@ fn compute_tech_coeff(
 /// total_production <- matrix(c(100, 200, 300), 1, 3)
 /// # instantiate iom object
 /// my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+/// # disable parallelization for CRAN checks
+/// my_iom$set_max_threads(1)
 /// # Calculate the technical coefficients
 /// my_iom$compute_tech_coeff()
 /// # Calculate the Leontief inverse
