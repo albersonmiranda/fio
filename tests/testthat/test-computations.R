@@ -23,6 +23,7 @@ test_that("parallelization can be disabled", {
 test_that("technical coefficients are calculated correctly", {
   # Instantiate the class
   obj <- iom$new("test", intermediate_transactions, total_production)
+  obj$set_max_threads(1)
   # Calculate the technical coefficients
   obj$compute_tech_coeff()
   # solution
@@ -36,6 +37,7 @@ test_that("technical coefficients are calculated correctly", {
 test_that("leontief matrix is calculated correctly", {
   # Instantiate the class
   obj <- iom$new("test", intermediate_transactions, total_production)
+  obj$set_max_threads(1)
   # fails if technical coefficients aren't available
   expect_error(obj$compute_leontief_inverse())
   # Calculate the technical coefficients
@@ -52,6 +54,7 @@ test_that("leontief matrix is calculated correctly", {
 test_that("output multiplier is calculated correctly", {
   # Instantiate the class
   obj <- iom$new("test", intermediate_transactions, total_production)
+  obj$set_max_threads(1)
   # Calculate the technical coefficients
   obj$compute_tech_coeff()
   # fails if leontief matrix isn't available
@@ -71,6 +74,7 @@ test_that("output multiplier is calculated correctly", {
 test_that("multiplier generator is calculated correctly", {
   # Instantiate the class
   obj <- iom$new("test", intermediate_transactions, total_production, occupation = occupation)
+  obj$set_max_threads(1)
   # Calculate the technical coefficients
   obj$compute_tech_coeff()
   # Calculate the leontief matrix
@@ -92,6 +96,7 @@ test_that("multiplier generator is calculated correctly", {
 test_that("employment multiplier is calculated correctly", {
   # Instantiate the class
   obj <- iom$new("test", intermediate_transactions, total_production, occupation = occupation)
+  obj$set_max_threads(1)
   # Calculate the technical coefficients
   obj$compute_tech_coeff()
   # fails if leontief matrix isn't available
@@ -113,6 +118,7 @@ test_that("employment multiplier is calculated correctly", {
 test_that("wages multiplier is calculated correctly", {
   # Instantiate the class
   obj <- iom$new("test", intermediate_transactions, total_production, wages = wages)
+  obj$set_max_threads(1)
   # Calculate the technical coefficients
   obj$compute_tech_coeff()
   # fails if leontief matrix isn't available
@@ -134,6 +140,7 @@ test_that("wages multiplier is calculated correctly", {
 test_that("taxes multiplier is calculated correctly", {
   # Instantiate the class
   obj <- iom$new("test", intermediate_transactions, total_production, taxes = taxes)
+  obj$set_max_threads(1)
   # Calculate the technical coefficients
   obj$compute_tech_coeff()
   # fails if leontief matrix isn't available
@@ -155,6 +162,7 @@ test_that("taxes multiplier is calculated correctly", {
 test_that("field of influence is calculated correctly", {
   # Instantiate the class
   obj <- iom$new("test", intermediate_transactions, total_production)
+  obj$set_max_threads(1)
   # Calculate the technical coefficients
   obj$compute_tech_coeff()
   # fails if leontief matrix isn't available
@@ -194,6 +202,7 @@ test_that("field of influence is calculated correctly", {
 test_that("key sectors are calculated correctly", {
   # Instantiate the class
   obj <- iom$new("test", intermediate_transactions, total_production)
+  obj$set_max_threads(1)
   # Calculate the technical coefficients
   obj$compute_tech_coeff()
   # fails if leontief matrix isn't available
@@ -212,6 +221,7 @@ test_that("key sectors are calculated correctly", {
 test_that("allocation coefficients are calculated correctly", {
   # Instantiate the class
   obj <- iom$new("test", intermediate_transactions, total_production)
+  obj$set_max_threads(1)
   # Calculate the technical coefficients
   obj$compute_allocation_coeff()
   # solution
@@ -225,6 +235,7 @@ test_that("allocation coefficients are calculated correctly", {
 test_that("ghosh inverse matrix is calculated correctly", {
   # Instantiate the class
   obj <- iom$new("test", intermediate_transactions, total_production)
+  obj$set_max_threads(1)
   # fails if allocation coefficients aren't available
   expect_error(obj$compute_ghosh_inverse())
   # Calculate the technical coefficients
@@ -241,6 +252,7 @@ test_that("ghosh inverse matrix is calculated correctly", {
 test_that("hypothetical extraction is calculated correctly", {
   # Instantiate the class
   obj <- iom$new("test", intermediate_transactions, total_production, exports = exports, imports = imports)
+  obj$set_max_threads(1)
   # fails if tech coeff matrix isn't available
   expect_error(obj$compute_hypothetical_extraction())
   # Calculate prerequisites
