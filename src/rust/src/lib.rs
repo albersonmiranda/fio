@@ -17,8 +17,8 @@ use rayon::ThreadPoolBuilder;
 /// Calling this function sets a global limit of threads to Rayon crate, affecting
 /// all computations that runs in parallel by default.
 /// 
-/// Default behaviour of Rayon is to use all available threads (including logical).
-/// Setting to 1 will result in single threaded (sequencial) computations.
+/// Default behavior of Rayon is to use all available threads (including logical).
+/// Setting to 1 will result in single threaded (sequential) computations.
 /// 
 /// Initialization of the global thread pool happens exactly once.
 /// Once started, the configuration cannot be changed in the current session.
