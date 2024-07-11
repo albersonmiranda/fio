@@ -12,9 +12,6 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "man/figures/README-"
 )
-
-# running single threaded to comply with CRAN policies. Ignore for performance.
-fio:::set_max_threads(1L)
 ```
 
 # {fio}

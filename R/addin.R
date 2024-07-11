@@ -7,6 +7,7 @@
 #'  data into the global environment.
 #'  Appears as "Import input-output data" in the RStudio Addins menu.
 
+# nocov start
 input_options <- shiny::selectInput(
   inputId = "var",
   label = "Variable name",
@@ -213,3 +214,4 @@ fio_addin_create <- function(
   }
   assign(var, data, inherits = TRUE)
 }
+# nocov end

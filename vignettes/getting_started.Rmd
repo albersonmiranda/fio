@@ -23,9 +23,6 @@ knitr::opts_chunk$set(
   out.width = "70%"
 )
 
-# running single threaded to comply with CRAN policies. Ignore for performance.
-fio:::set_max_threads(1L)
-
 set.seed(123)
 ```
 

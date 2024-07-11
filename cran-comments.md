@@ -1,10 +1,9 @@
 ## Ressubmission
 
-This is a resubmission. In this version I have:
-
-* Previous submission failed due to parallelization by default
+This is a resubmission. Previous submission failed due to parallelization by default.
+In this version I have:
+ 
 * Added `$set_max_threads()` method to provide control to the user.
-* Set `$max_threads(1)` for examples, tests and vignettes.
 * Added tests.
 
 ## R CMD check results

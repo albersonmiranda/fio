@@ -60,8 +60,6 @@ set_max_threads <- function(max_threads) invisible(.Call(wrap__set_max_threads, 
 #' default, so there is no need to use future or async/await to parallelize.
 #' 
 #' @examples
-#' # running single threaded to comply with CRAN policies. Ignore for performance.
-#' fio:::set_max_threads(1L)
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
 #' # instantiate iom object
@@ -170,8 +168,6 @@ compute_multiplier_added_value_indirect <- function(added_value_element, total_p
 #' insertAllCited{}
 #' 
 #' @examples
-#' # running single threaded to comply with CRAN policies. Ignore for performance.
-#' fio:::set_max_threads(1L)
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
 #' # instantiate iom object
@@ -242,8 +238,6 @@ compute_sensitivity_dispersion <- function(leontief_inverse_matrix) .Call(wrap__
 #' insertAllCited{}
 #' 
 #' @examples
-#' # running single threaded to comply with CRAN policies. Ignore for performance.
-#' fio:::set_max_threads(1L)
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
 #' # instantiate iom object
@@ -273,8 +267,6 @@ compute_allocation_coeff <- function(intermediate_transactions, total_production
 #' insertAllCited{}
 #' 
 #' @examples
-#' # running single threaded to comply with CRAN policies. Ignore for performance.
-#' fio:::set_max_threads(1L)
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
 #' # instantiate iom object
@@ -330,8 +322,6 @@ compute_extraction_forward <- function(allocation_coefficients_matrix, added_val
 #' @seealso `compute_extraction_backwards()` and `compute_extraction_forward()`.
 #' 
 #' @examples
-#' # running single threaded to comply with CRAN policies. Ignore for performance.
-#' fio:::set_max_threads(1L)
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
 #' exports <- matrix(c(10, 20, 30), 3, 1)
