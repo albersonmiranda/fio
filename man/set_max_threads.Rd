@@ -29,12 +29,10 @@ If \code{set_max_threads()} is called again in the same session, it'll result
 in an error.
 }
 \examples{
-\dontrun{
-  intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
-  total_production <- matrix(c(100, 200, 300), 1, 3)
-  # instantiate iom object
-  my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
-  # runs on only 2 threads
-  my_iom$set_max_threads(2L)
-}
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+# to use only 2 threads
+my_iom$set_max_threads(2L)
 }

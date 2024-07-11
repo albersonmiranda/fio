@@ -31,14 +31,12 @@ NULL
 #' This functions does not return a value.
 #' 
 #' @examples
-#' \dontrun{
-#'   intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
-#'   total_production <- matrix(c(100, 200, 300), 1, 3)
-#'   # instantiate iom object
-#'   my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
-#'   # runs on only 2 threads
-#'   my_iom$set_max_threads(2L)
-#' }
+#' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+#' total_production <- matrix(c(100, 200, 300), 1, 3)
+#' # instantiate iom object
+#' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+#' # to use only 2 threads
+#' my_iom$set_max_threads(2L)
 set_max_threads <- function(max_threads) invisible(.Call(wrap__set_max_threads, max_threads))
 
 #' Computes technical coefficients matrix.
@@ -62,6 +60,8 @@ set_max_threads <- function(max_threads) invisible(.Call(wrap__set_max_threads, 
 #' default, so there is no need to use future or async/await to parallelize.
 #' 
 #' @examples
+#' # running single threaded to comply with CRAN policies. Ignore for performance.
+#' fio:::set_max_threads(1L)
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
 #' # instantiate iom object
@@ -101,6 +101,8 @@ compute_tech_coeff <- function(intermediate_transactions, total_production) .Cal
 #' insertAllCited{}
 #' 
 #' @examples
+#' # running single threaded to comply with CRAN policies. Ignore for performance.
+#' fio:::set_max_threads(1L)
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
 #' # instantiate iom object
@@ -168,6 +170,8 @@ compute_multiplier_added_value_indirect <- function(added_value_element, total_p
 #' insertAllCited{}
 #' 
 #' @examples
+#' # running single threaded to comply with CRAN policies. Ignore for performance.
+#' fio:::set_max_threads(1L)
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
 #' # instantiate iom object
@@ -238,12 +242,12 @@ compute_sensitivity_dispersion <- function(leontief_inverse_matrix) .Call(wrap__
 #' insertAllCited{}
 #' 
 #' @examples
+#' # running single threaded to comply with CRAN policies. Ignore for performance.
+#' fio:::set_max_threads(1L)
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
 #' # instantiate iom object
 #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
-#' # running single threaded to comply with CRAN policies. Ignore for performance.
-#' my_iom$set_max_threads(1L)
 #' # Calculate the allocation coefficients
 #' my_iom$compute_allocation_coeff()
 #' # show the allocation coefficients
@@ -269,6 +273,8 @@ compute_allocation_coeff <- function(intermediate_transactions, total_production
 #' insertAllCited{}
 #' 
 #' @examples
+#' # running single threaded to comply with CRAN policies. Ignore for performance.
+#' fio:::set_max_threads(1L)
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
 #' # instantiate iom object
@@ -324,6 +330,8 @@ compute_extraction_forward <- function(allocation_coefficients_matrix, added_val
 #' @seealso `compute_extraction_backwards()` and `compute_extraction_forward()`.
 #' 
 #' @examples
+#' # running single threaded to comply with CRAN policies. Ignore for performance.
+#' fio:::set_max_threads(1L)
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
 #' exports <- matrix(c(10, 20, 30), 3, 1)

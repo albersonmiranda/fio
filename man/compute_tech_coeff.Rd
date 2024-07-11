@@ -22,6 +22,8 @@ It calculates the technical coefficients matrix, which is the columnwise ratio o
 intermediate transactions to total production \insertCite{leontief_economia_1983}{fio}.
 }
 \examples{
+# running single threaded to comply with CRAN policies. Ignore for performance.
+fio:::set_max_threads(1L)
 intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 total_production <- matrix(c(100, 200, 300), 1, 3)
 # instantiate iom object

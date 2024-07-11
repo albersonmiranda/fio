@@ -9,6 +9,9 @@ mod extraction;
 use extendr_api::prelude::*;
 use num_cpus;
 use rayon::ThreadPoolBuilder;
+use std::sync::atomic::{AtomicBool, Ordering};
+
+static THREADPOOL_INITIALIZED: AtomicBool = AtomicBool::new(false);
 
 #[extendr]
 /// Sets max number of threads used by fio
@@ -32,16 +35,19 @@ use rayon::ThreadPoolBuilder;
 /// This functions does not return a value.
 /// 
 /// @examples
-/// \dontrun{
-///   intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
-///   total_production <- matrix(c(100, 200, 300), 1, 3)
-///   # instantiate iom object
-///   my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
-///   # runs on only 2 threads
-///   my_iom$set_max_threads(2L)
-/// }
+/// intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+/// total_production <- matrix(c(100, 200, 300), 1, 3)
+/// # instantiate iom object
+/// my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+/// # to use only 2 threads
+/// my_iom$set_max_threads(2L)
 
 fn set_max_threads(max_threads: usize) {
+  // Check if ThreadPoolBuilder has already been initialized
+  if THREADPOOL_INITIALIZED.load(Ordering::SeqCst) {
+      println!("ThreadPoolBuilder has already been initialized.");
+      return;
+  }
 
   // If max_threads is 0, use the maximum number of available threads
   let num_threads = if max_threads == 0 {
@@ -49,11 +55,14 @@ fn set_max_threads(max_threads: usize) {
   } else {
       max_threads
   };
-  
+
   ThreadPoolBuilder::new()
-  .num_threads(num_threads)
-  .build_global()
-  .unwrap();
+      .num_threads(num_threads)
+      .build_global()
+      .unwrap();
+
+  // Mark ThreadPoolBuilder as initialized
+  THREADPOOL_INITIALIZED.store(true, Ordering::SeqCst);
 }
 
 // Macro to generate exports.
