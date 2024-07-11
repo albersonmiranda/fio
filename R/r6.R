@@ -50,9 +50,6 @@
 #'  intermediate_transactions,
 #'  total_production
 #' )
-#' # running single threaded in order to comply with CRAN policies #
-#' # ignore for performance #
-#' my_iom$set_max_threads(1)
 #'
 #' # Compute technical coefficients matrix
 #' my_iom$compute_tech_coeff()

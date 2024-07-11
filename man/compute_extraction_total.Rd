@@ -32,9 +32,6 @@ my_iom <- fio::iom$new(
   imports = imports
 )
 
-# running single threaded to comply with CRAN policies. Ignore for performance.
-my_iom$set_max_threads(1)
-
 # Calculate the technical coefficients
 my_iom$compute_tech_coeff()
 # calculate the Leontief inverse

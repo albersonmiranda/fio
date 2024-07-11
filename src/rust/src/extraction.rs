@@ -164,9 +164,6 @@ fn compute_extraction_forward(
 ///   imports = imports
 /// )
 /// 
-/// # running single threaded to comply with CRAN policies. Ignore for performance.
-/// my_iom$set_max_threads(1L)
-/// 
 /// # Calculate the technical coefficients
 /// my_iom$compute_tech_coeff()
 /// # calculate the Leontief inverse
