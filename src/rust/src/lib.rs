@@ -56,6 +56,10 @@ fn set_max_threads(max_threads: usize) {
       max_threads
   };
 
+  // control faer thread pool
+  faer::set_global_parallelism(faer::Parallelism::Rayon(num_threads));
+
+  // contorl other rayon thread pool
   ThreadPoolBuilder::new()
       .num_threads(num_threads)
       .build_global()
