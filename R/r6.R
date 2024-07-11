@@ -34,6 +34,8 @@
 #' Occupation matrix.
 #'
 #' @examples
+#' # running single threaded to comply with CRAN policies. Ignore for performance.
+#' fio:::set_max_threads(1L)
 #' # data
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
@@ -815,7 +817,7 @@ iom <- R6::R6Class(
       }
 
       if (self$threads == 0 && max_threads == 0) {
-        alert("0 means all available threads, which is default behaviour. Nothing changed")
+        alert("0 means all available threads, which is default behavior. Nothing changed")
       }
 
       if (self$threads > 0) {
