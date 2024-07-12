@@ -31,12 +31,14 @@ NULL
 #' This functions does not return a value.
 #' 
 #' @examples
-#' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
-#' total_production <- matrix(c(100, 200, 300), 1, 3)
-#' # instantiate iom object
-#' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
-#' # to use only 2 threads
-#' my_iom$set_max_threads(2L)
+#' \dontrun{
+#'   intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+#'   total_production <- matrix(c(100, 200, 300), 1, 3)
+#'   # instantiate iom object
+#'   my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+#'   # to use only 2 threads
+#'   my_iom$set_max_threads(2L)
+#' }
 set_max_threads <- function(max_threads) invisible(.Call(wrap__set_max_threads, max_threads))
 
 #' Computes technical coefficients matrix.
@@ -99,8 +101,6 @@ compute_tech_coeff <- function(intermediate_transactions, total_production) .Cal
 #' insertAllCited{}
 #' 
 #' @examples
-#' # running single threaded to comply with CRAN policies. Ignore for performance.
-#' fio:::set_max_threads(1L)
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
 #' # instantiate iom object
