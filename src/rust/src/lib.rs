@@ -7,7 +7,6 @@ mod ghosh;
 mod extraction;
 
 use extendr_api::prelude::*;
-use num_cpus;
 use rayon::ThreadPoolBuilder;
 use std::sync::atomic::{AtomicBool, Ordering};
 
@@ -57,9 +56,6 @@ fn set_max_threads(max_threads: usize) {
   } else {
       max_threads
   };
-
-  // control faer thread pool
-  faer::set_global_parallelism(faer::Parallelism::Rayon(num_threads));
 
   // contorl other rayon thread pool
   ThreadPoolBuilder::new()
