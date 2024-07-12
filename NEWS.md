@@ -1,14 +1,3 @@
-# fio 0.1.1
-
-## ✨ Enhancements
-
-* New `set_max_threads()` method to allow the user to control number of threads used by {fio} (required by CRAN).
-
-## 🛠️ Other improvements
-
-* Added tests to several methods.
-* Added examples.
-
 # fio 0.1.0
 
 ## ✨ Enhancements
@@ -29,6 +18,7 @@
 * New `compute_allocation_coeff()` method to compute the allocation coefficients of an input-output table
 * New `compute_ghosh_inverse()` method to compute the Ghosh inverse of an input-output table
 * New `compute_hypothetical_extraction()` method to compute impact on demand, supply and both structures after hypothetical extraction of a sector
+* New `set_max_threads()` method to allow the user to control number of threads used by {fio} (required by CRAN).
 
 ## 🚀 Performance improvements
 
