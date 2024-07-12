@@ -4,8 +4,32 @@ use rayon::prelude::*;
 
 #[extendr]
 /// Computes allocation coefficients matrix.
-/// @param intermediate_transactions A nxn matrix of intermediate transactions.
-/// @param total_production A 1xn vector of total production.
+/// 
+/// @param intermediate_transactions
+/// A nxn matrix of intermediate transactions.
+/// @param total_production
+/// A 1xn vector of total production.
+/// 
+/// @details
+/// It calculates the allocation coefficients matrix, which is the rowwise ratio of
+/// intermediate transactions to total production \insertCite{miller_input-output_2009}{fio}.
+/// 
+/// Underlined Rust code runs in parallel by default, so there is no need to
+/// use future or async/await to parallelize.
+/// 
+/// @references
+/// insertAllCited{}
+/// 
+/// @examples
+/// intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+/// total_production <- matrix(c(100, 200, 300), 1, 3)
+/// # instantiate iom object
+/// my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+/// # Calculate the allocation coefficients
+/// my_iom$compute_allocation_coeff()
+/// # show the allocation coefficients
+/// my_iom$allocation_coefficients_matrix
+/// 
 /// @return A nxn matrix of allocation coefficients, known as F matrix.
 
 fn compute_allocation_coeff(
@@ -28,8 +52,32 @@ fn compute_allocation_coeff(
 
 #[extendr]
 /// Computes Ghosh inverse matrix.
-/// @param allocation_coeff A nxn matrix of allocation coefficients.
-/// @return A nxn matrix of Ghosh inverse.
+/// 
+/// @param allocation_coeff
+/// A \eqn{n x n} matrix of allocation coefficients.
+/// 
+/// @details
+/// It calculates the Ghosh inverse matrix, which is the inverse of the
+/// difference \eqn{(I - F)} where I is the identity matrix and F is the
+/// allocation coefficients matrix \insertCite{miller_input-output_2009}{fio}.
+/// 
+/// @return
+/// A \eqn{n x n} matrix of Ghoshian inverse.
+/// 
+/// @references
+/// insertAllCited{}
+/// 
+/// @examples
+/// intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+/// total_production <- matrix(c(100, 200, 300), 1, 3)
+/// # instantiate iom object
+/// my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+/// # Calculate the allocation coefficients
+/// my_iom$compute_allocation_coeff()
+/// # Calculate the Ghosh inverse
+/// my_iom$compute_ghosh_inverse()
+/// # show the Ghosh inverse
+/// my_iom$ghosh_inverse_matrix
 
 fn compute_ghosh_inverse(allocation_coeff: &[f64]) -> RArray<f64, [usize;2]> {
 

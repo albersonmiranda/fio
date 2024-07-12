@@ -6,6 +6,74 @@
 \description{
 R6 class for input-output matrix.
 }
+\examples{
+# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+exports <- matrix(c(10, 20, 30), 3, 1)
+households <- matrix(4:6, 3, 1)
+imports <- matrix(c(5, 10, 15), 1, 3)
+jobs <- matrix(c(10, 12, 15), 1, 3)
+taxes <- matrix(c(2, 5, 10), 1, 3)
+wages <- matrix(c(11, 12, 13), 1, 3)
+
+# a new iom instance can be created by passing just intermediate transactions and total production
+my_iom <- iom$new(
+ "example",
+ intermediate_transactions,
+ total_production
+)
+
+# Compute technical coefficients matrix
+my_iom$compute_tech_coeff()
+print(my_iom$technical_coefficients_matrix)
+
+# Compute leontief inverse matrix
+my_iom$compute_leontief_inverse()
+print(my_iom$leontief_inverse_matrix)
+
+# compute output multiplier
+my_iom$compute_multiplier_output()
+print(my_iom$multiplier_output)
+
+# `add` or `remove` other elements to IO matrix
+my_iom$add("exports", exports)
+my_iom$add("household_consumption", households)
+my_iom$add("occupation", jobs)
+my_iom$add("taxes", taxes)
+my_iom$add("wages", wages)
+
+# compute multipliers for added elements
+my_iom$compute_multiplier_employment()
+my_iom$compute_multiplier_taxes()
+my_iom$compute_multiplier_wages()
+print(my_iom$multiplier_wages)
+
+# compute field of influence
+my_iom$compute_field_influence(epsilon = 0.001)
+
+# compute power and sensitivity of dispersion, it's coefficients of variation
+# and identify key sectors
+my_iom$compute_key_sectors()
+print(my_iom$key_sectors)
+
+# supply-wise model
+my_iom$compute_allocation_coeff()
+my_iom$compute_ghosh_inverse()
+print(my_iom$ghosh_inverse_matrix)
+
+# aggregates final demand and added value vectors
+my_iom$update_final_demand_matrix()
+print(my_iom$final_demand_matrix)
+
+my_iom$update_added_value_matrix()
+print(my_iom$added_value_matrix)
+
+# perform hypothetical extraction of a given sector
+my_iom$compute_hypothetical_extraction()
+print(my_iom$hypothetical_extraction)
+
+}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
@@ -60,6 +128,9 @@ R6 class for input-output matrix.
 \item{\code{ghosh_inverse_matrix}}{Ghosh inverse matrix.}
 
 \item{\code{hypothetical_extraction}}{Absolute and relative backward and forward differences in total output after a hypothetical extraction.}
+
+\item{\code{threads}}{Number of threads available for Rust to run in parallel.
+Defaults to 0, meaning running in parallel with all available threads.}
 }
 \if{html}{\out{</div>}}
 }
@@ -82,6 +153,7 @@ R6 class for input-output matrix.
 \item \href{#method-iom-compute_allocation_coeff}{\code{iom$compute_allocation_coeff()}}
 \item \href{#method-iom-compute_ghosh_inverse}{\code{iom$compute_ghosh_inverse()}}
 \item \href{#method-iom-compute_hypothetical_extraction}{\code{iom$compute_hypothetical_extraction()}}
+\item \href{#method-iom-set_max_threads}{\code{iom$set_max_threads()}}
 \item \href{#method-iom-clone}{\code{iom$clone()}}
 }
 }
@@ -310,10 +382,6 @@ Computes the influence field matrix.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{epsilon}}{Epsilon value. A technical change in the input-output matrix.}
-
-\item{\code{technical_coefficients_matrix}}{Technical coefficients matrix.}
-
-\item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
 }
 \if{html}{\out{</div>}}
 }
@@ -324,16 +392,9 @@ Computes the influence field matrix.
 \subsection{Method \code{compute_key_sectors()}}{
 Computes the key sectors dataframe.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{iom$compute_key_sectors(leontief_inverse_matrix)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{iom$compute_key_sectors()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-iom-compute_allocation_coeff"></a>}}
@@ -344,15 +405,6 @@ Computes the allocation coefficients matrix.
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_allocation_coeff()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{intermediate_transactions}}{Intermediate transactions matrix.}
-
-\item{\code{total_production}}{Total production vector.}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-iom-compute_ghosh_inverse"></a>}}
@@ -360,16 +412,9 @@ Computes the allocation coefficients matrix.
 \subsection{Method \code{compute_ghosh_inverse()}}{
 Computes the Ghosh inverse matrix.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{iom$compute_ghosh_inverse(allocation_coefficients_matrix)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{iom$compute_ghosh_inverse()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{allocation_coefficients_matrix}}{Allocation coefficients matrix.}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-iom-compute_hypothetical_extraction"></a>}}
@@ -377,27 +422,24 @@ Computes the Ghosh inverse matrix.
 \subsection{Method \code{compute_hypothetical_extraction()}}{
 Computes the hypothetical extraction.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{iom$compute_hypothetical_extraction(
-  technical_coefficients_matrix,
-  allocation_coefficients_matrix,
-  final_demand_matrix,
-  added_value_matrix,
-  total_production
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{iom$compute_hypothetical_extraction()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-iom-set_max_threads"></a>}}
+\if{latex}{\out{\hypertarget{method-iom-set_max_threads}{}}}
+\subsection{Method \code{set_max_threads()}}{
+Sets max number of threads used by fio.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{iom$set_max_threads(max_threads)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{technical_coefficients_matrix}}{Technical coefficients matrix.}
-
-\item{\code{allocation_coefficients_matrix}}{Allocation coefficients matrix.}
-
-\item{\code{final_demand_matrix}}{Final demand matrix.}
-
-\item{\code{added_value_matrix}}{Added value matrix.}
-
-\item{\code{total_production}}{Total production vector.}
+\item{\code{max_threads}}{Number of threads enabled for parallel computing. Defaults to the number
+of threads available.}
 }
 \if{html}{\out{</div>}}
 }

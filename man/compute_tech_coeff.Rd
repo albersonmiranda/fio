@@ -7,13 +7,33 @@
 compute_tech_coeff(intermediate_transactions, total_production)
 }
 \arguments{
-\item{intermediate_transactions}{A nxn matrix of intermediate transactions.}
+\item{intermediate_transactions}{A \eqn{n x n} matrix of intermediate transactions.}
 
-\item{total_production}{A 1xn vector of total production.}
+\item{total_production}{A \eqn{1 x n} vector of total production.}
 }
 \value{
-A nxn matrix of technical coefficients, known as A matrix.
+A \eqn{n x n} matrix of technical coefficients, known as A matrix.
 }
 \description{
 Computes technical coefficients matrix.
+}
+\details{
+It calculates the technical coefficients matrix, which is the columnwise ratio of
+intermediate transactions to total production \insertCite{leontief_economia_1983}{fio}.
+}
+\examples{
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+# Calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# show the technical coefficients
+my_iom$technical_coefficients_matrix
+}
+\references{
+insertAllCited{}
+
+Underlined Rust code uses Rayon crate to parallelize the computation by
+default, so there is no need to use future or async/await to parallelize.
 }

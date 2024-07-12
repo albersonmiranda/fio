@@ -1,10 +1,10 @@
-# fio 0.0.0.9000 (development version)
+# fio 0.1.0
 
 ## ✨ Enhancements
 
 * New `import_element()` to programmatically import data from an Excel file
 * New data import addin makes easy to import data from clipboard or an Excel file
-* New `iom` uses the efficiency of R6 classes to store data reducing memory footprint
+* New `iom` uses the efficiency of R6 classes
 * New `add` and `remove` methods to add and remove elements from an `iom` object
 * New `br_2020` dataset with a 51 sector Brazilian input-output table for 2020
 * New `compute_tech_coeff()` and `compute_leontief_inverse()` methods uses the power of Rust and `faer` crate to substantially increase performance
@@ -18,6 +18,7 @@
 * New `compute_allocation_coeff()` method to compute the allocation coefficients of an input-output table
 * New `compute_ghosh_inverse()` method to compute the Ghosh inverse of an input-output table
 * New `compute_hypothetical_extraction()` method to compute impact on demand, supply and both structures after hypothetical extraction of a sector
+* New `set_max_threads()` method to allow the user to control number of threads used by {fio} (required by CRAN).
 
 ## 🚀 Performance improvements
 

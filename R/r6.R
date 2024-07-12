@@ -1,7 +1,9 @@
 #' @title
 #' R6 class for input-output matrix
+#'
 #' @description
 #' R6 class for input-output matrix.
+#'
 #' @param id
 #' Identifier for the input-output matrix.
 #' @param intermediate_transactions
@@ -30,6 +32,75 @@
 #' Setting row names is advised for better readability.
 #' @param occupation
 #' Occupation matrix.
+#'
+#' @examples
+#' # data
+#' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+#' total_production <- matrix(c(100, 200, 300), 1, 3)
+#' exports <- matrix(c(10, 20, 30), 3, 1)
+#' households <- matrix(4:6, 3, 1)
+#' imports <- matrix(c(5, 10, 15), 1, 3)
+#' jobs <- matrix(c(10, 12, 15), 1, 3)
+#' taxes <- matrix(c(2, 5, 10), 1, 3)
+#' wages <- matrix(c(11, 12, 13), 1, 3)
+#'
+#' # a new iom instance can be created by passing just intermediate transactions and total production
+#' my_iom <- iom$new(
+#'  "example",
+#'  intermediate_transactions,
+#'  total_production
+#' )
+#'
+#' # Compute technical coefficients matrix
+#' my_iom$compute_tech_coeff()
+#' print(my_iom$technical_coefficients_matrix)
+#'
+#' # Compute leontief inverse matrix
+#' my_iom$compute_leontief_inverse()
+#' print(my_iom$leontief_inverse_matrix)
+#'
+#' # compute output multiplier
+#' my_iom$compute_multiplier_output()
+#' print(my_iom$multiplier_output)
+#'
+#' # `add` or `remove` other elements to IO matrix
+#' my_iom$add("exports", exports)
+#' my_iom$add("household_consumption", households)
+#' my_iom$add("occupation", jobs)
+#' my_iom$add("taxes", taxes)
+#' my_iom$add("wages", wages)
+#'
+#' # compute multipliers for added elements
+#' my_iom$compute_multiplier_employment()
+#' my_iom$compute_multiplier_taxes()
+#' my_iom$compute_multiplier_wages()
+#' print(my_iom$multiplier_wages)
+#'
+#' # compute field of influence
+#' my_iom$compute_field_influence(epsilon = 0.001)
+#'
+#' # compute power and sensitivity of dispersion, it's coefficients of variation
+#' # and identify key sectors
+#' my_iom$compute_key_sectors()
+#' print(my_iom$key_sectors)
+#'
+#' # supply-wise model
+#' my_iom$compute_allocation_coeff()
+#' my_iom$compute_ghosh_inverse()
+#' print(my_iom$ghosh_inverse_matrix)
+#'
+#' # aggregates final demand and added value vectors
+#' my_iom$update_final_demand_matrix()
+#' print(my_iom$final_demand_matrix)
+#'
+#' my_iom$update_added_value_matrix()
+#' print(my_iom$added_value_matrix)
+#'
+#' # perform hypothetical extraction of a given sector
+#' my_iom$compute_hypothetical_extraction()
+#' print(my_iom$hypothetical_extraction)
+#'
+#' @importFrom Rdpack reprompt
 #' @export
 
 # input-output matrix class
@@ -142,6 +213,11 @@ iom <- R6::R6Class(
     #' Absolute and relative backward and forward differences in total output after a hypothetical extraction.
     hypothetical_extraction = NULL,
 
+    #' @field threads
+    #' Number of threads available for Rust to run in parallel.
+    #' Defaults to 0, meaning running in parallel with all available threads.
+    threads = 0,
+
     #' @description
     #' Creates a new instance of this [R6][R6::R6Class] class.
     initialize = function(id,
@@ -157,6 +233,9 @@ iom <- R6::R6Class(
                           operating_income = NULL,
                           added_value_others = NULL,
                           occupation = NULL) {
+      # set default
+      self$threads <- 0
+
       ### assertions ###
       # check class
       for (matrix in private$iom_elements()) {
@@ -536,10 +615,6 @@ iom <- R6::R6Class(
 
     #' @description
     #' Computes the influence field matrix.
-    #' @param technical_coefficients_matrix
-    #' Technical coefficients matrix.
-    #' @param leontief_inverse_matrix
-    #' Leontief inverse matrix.
     #' @param epsilon
     #' Epsilon value. A technical change in the input-output matrix.
     compute_field_influence = function(epsilon) {
@@ -573,9 +648,7 @@ iom <- R6::R6Class(
 
     #' @description
     #' Computes the key sectors dataframe.
-    #' @param leontief_inverse_matrix
-    #' Leontief inverse matrix.
-    compute_key_sectors = function(leontief_inverse_matrix) {
+    compute_key_sectors = function() {
       # check if leontief inverse matrix is available
       if (is.null(self$leontief_inverse_matrix)) {
         cli::cli_h1("Error in leontief_inverse_matrix")
@@ -618,10 +691,6 @@ iom <- R6::R6Class(
 
     #' @description
     #' Computes the allocation coefficients matrix.
-    #' @param intermediate_transactions
-    #' Intermediate transactions matrix.
-    #' @param total_production
-    #' Total production vector.
     compute_allocation_coeff = function() {
       # save row and column names
       row_names <- if (is.null(rownames(self$intermediate_transactions))) {
@@ -650,9 +719,7 @@ iom <- R6::R6Class(
 
     #' @description
     #' Computes the Ghosh inverse matrix.
-    #' @param allocation_coefficients_matrix
-    #' Allocation coefficients matrix.
-    compute_ghosh_inverse = function(allocation_coefficients_matrix) {
+    compute_ghosh_inverse = function() {
       # check if allocation coefficients matrix is available
       if (is.null(self$allocation_coefficients_matrix)) {
         cli::cli_h1("Error in allocation_coefficients_matrix")
@@ -676,21 +743,7 @@ iom <- R6::R6Class(
 
     #' @description
     #' Computes the hypothetical extraction.
-    #' @param technical_coefficients_matrix
-    #' Technical coefficients matrix.
-    #' @param allocation_coefficients_matrix
-    #' Allocation coefficients matrix.
-    #' @param final_demand_matrix
-    #' Final demand matrix.
-    #' @param added_value_matrix
-    #' Added value matrix.
-    #' @param total_production
-    #' Total production vector.
-    compute_hypothetical_extraction = function(technical_coefficients_matrix,
-                                               allocation_coefficients_matrix,
-                                               final_demand_matrix,
-                                               added_value_matrix,
-                                               total_production) {
+    compute_hypothetical_extraction = function() {
       # check if arguments are available
       for (matrix in c(
         "technical_coefficients_matrix",
@@ -748,6 +801,29 @@ iom <- R6::R6Class(
       # store matrix
       self$hypothetical_extraction <- hypothetical_extraction
       invisible(self)
+    },
+
+    #' @description
+    #' Sets max number of threads used by fio.
+    #' @param max_threads
+    #' Number of threads enabled for parallel computing. Defaults to the number
+    #' of threads available.
+    set_max_threads = function(max_threads) {
+      # assert type
+      if (!(is.integer(max_threads) && max_threads >= 0)) {
+        error("max_threads must be a positive integer.")
+      }
+
+      if (self$threads == 0 && max_threads == 0) {
+        alert("0 means all available threads, which is default behavior. Nothing changed")
+      }
+
+      if (self$threads > 0) {
+        error("Max threads already been set in this session.")
+      } else {
+        set_max_threads(max_threads)
+        self$threads <- max_threads
+      }
     }
   ),
 
