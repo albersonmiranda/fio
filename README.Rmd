@@ -20,7 +20,7 @@ Friendly & Fast Input-Output Analysis <img src="man/figures/leontief.jpg" align=
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml)
-[![CRAN status](https://www.r-pkg.org/badges/version/fio)](https://CRAN.R-project.org/package=fio)
+[![R-universe](https://albersonmiranda.r-universe.dev/badges/fio)](https://albersonmiranda.r-universe.dev/fio)
 [![Codecov test coverage](https://codecov.io/gh/albersonmiranda/fio/branch/main/graph/badge.svg)](https://app.codecov.io/gh/albersonmiranda/fio?branch=main)
 <!-- badges: end -->
 
@@ -30,20 +30,20 @@ The package is optimized for speed and efficiency. It leverages the [R6 class](h
 
 ## Installation
 
-You can install the released version of `{fio}` from CRAN with:
+You can install the released version of `{fio}` from [R-universe](https://r-universe.dev/) with:
 
 ```r
-install.packages("fio")
+install.packages("fio", repos = c("https://albersonmiranda.r-universe.dev", "https://cloud.r-project.org"))
 ```
 
-For macOS and Linux, or if you wish to compile the latest development version from source, you will need to have [Rust](https://www.rust-lang.org/) installed on your system.
+For macOS and Linux, or if you wish to compile the latest development version from source, you'll need [Rust](https://www.rust-lang.org/) installed on your system.
 
 - Debian/Ubuntu: `apt-get install cargo`
 - Fedora/CentOS: `dnf install cargo`
 - macOS: `brew install rustc`
 - Windows: https://www.rust-lang.org/tools/install
 
-You'll also find previous releases of `fio` in the [Releases section](https://github.com/albersonmiranda/fio/releases) on GitHub, and precompiled binaries for Windows, macOS, and Linux at [R-Universe](https://albersonmiranda.r-universe.dev/fio)
+You'll also find previous releases of `fio` in the [Releases section](https://github.com/albersonmiranda/fio/releases) on GitHub, and precompiled binaries for Windows, macOS, and Linux at [R-universe](https://albersonmiranda.r-universe.dev/fio)
 
 ## Getting Started
 
