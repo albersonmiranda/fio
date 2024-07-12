@@ -12,14 +12,13 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Benchmarking">
-<meta property="og:description" content="fio">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -33,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fio</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
       </span>
     </div>
 
@@ -42,7 +41,7 @@
 <li>
   <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
-     
+
   </a>
 </li>
 <li>
@@ -59,7 +58,7 @@
 <li>
   <a href="https://github.com/albersonmiranda/fio" class="external-link">
     <span class="fa fa-github"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -70,7 +69,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -78,7 +77,7 @@
       <h1 data-toc-skip>Benchmarking</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/albersonmiranda/fio/blob/HEAD/vignettes/articles/benchmarking.Rmd" class="external-link"><code>vignettes/articles/benchmarking.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/albersonmiranda/fio/blob/main/vignettes/articles/benchmarking.Rmd" class="external-link"><code>vignettes/articles/benchmarking.Rmd</code></a></small>
       <div class="hidden name"><code>benchmarking.Rmd</code></div>
 
     </div>
@@ -125,13 +124,13 @@ package functions are faster than the equivalent base R functions. This
 improved performance can make a substantial difference in larger
 analyses, making the <code>fio</code> package a valuable tool for
 input-output analysis in R.</p>
-<p>The tests were run on a simulated <span class="math inline">\(2000
-\times 2000\)</span> matrix, and each test was repeated 100 times to
-account for variability. Please note that the results of this
-benchmarking analysis are dependent on the specific test datasets used
-and the hardware on which the algorithms were run. Therefore, the
-results should be interpreted in the context of these specific
-conditions.</p>
+<p>The tests were run on a simulated
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2000</mn><mo>×</mo><mn>2000</mn></mrow><annotation encoding="application/x-tex">2000 \times 2000</annotation></semantics></math>
+matrix, and each test was repeated 100 times to account for variability.
+Please note that the results of this benchmarking analysis are dependent
+on the specific test datasets used and the hardware on which the
+algorithms were run. Therefore, the results should be interpreted in the
+context of these specific conditions.</p>
 </div>
 <div class="section level2">
 <h2 id="technical-coefficients-matrix">Technical coefficients matrix<a class="anchor" aria-label="anchor" href="#technical-coefficients-matrix"></a>
@@ -140,12 +139,15 @@ conditions.</p>
 in input-output analysis, was tested using the
 <code><a href="../reference/compute_tech_coeff.html">compute_tech_coeff()</a></code> function from the <a href="https://albersonmiranda.github.io/fio/">fio</a>
 package, equivalent functions from the <a href="https://github.com/pachadotdev/leontief" class="external-link">leontief</a> package,
-and a base R implementation. It consists on dividing each <span class="math inline">\(a_{ij}\)</span> element of intermediate
-transactions matrix by the correspondent <span class="math inline">\(x_j\)</span> element of total production vector<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. The
-results show that both <a href="https://albersonmiranda.github.io/fio/">fio</a> and <a href="https://github.com/pachadotdev/leontief" class="external-link">leontief</a>
-functions execute almost instantaneously, with <a href="https://albersonmiranda.github.io/fio/">fio</a>
-slightly faster (about 5 milliseconds apart). In contrast, the base R
-implementation is about 150 times slower than <a href="https://albersonmiranda.github.io/fio/">fio</a>.</p>
+and a base R implementation. It consists on dividing each
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">a_{ij}</annotation></semantics></math>
+element of intermediate transactions matrix by the correspondent
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mi>j</mi></msub><annotation encoding="application/x-tex">x_j</annotation></semantics></math>
+element of total production vector<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. The results show that both
+<a href="https://albersonmiranda.github.io/fio/">fio</a> and <a href="https://github.com/pachadotdev/leontief" class="external-link">leontief</a> functions execute almost
+instantaneously, with <a href="https://albersonmiranda.github.io/fio/">fio</a> slightly faster (about 5
+milliseconds apart). In contrast, the base R implementation is about 150
+times slower than <a href="https://albersonmiranda.github.io/fio/">fio</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># set seed</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
@@ -197,12 +199,16 @@ Base R is about 100 times slower than {fio} and {leontief} functions.
 <div class="section level2">
 <h2 id="leontief-inverse-matrix">Leontief inverse matrix<a class="anchor" aria-label="anchor" href="#leontief-inverse-matrix"></a>
 </h2>
-<p>When we’re talking about inverting a <span class="math inline">\(2000
-\times 2000\)</span> there’s a lot more work involved. Leontief matrix
-(<span class="math inline">\(B\)</span>) is obtained from subtracting
-the technical coefficients matrix (<span class="math inline">\(A\)</span>) from the identity matrix (<span class="math inline">\(I\)</span>), therefore it has no null rows or
-columns.</p>
-<p><span class="math display">\[B = I - A\]</span></p>
+<p>When we’re talking about inverting a
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2000</mn><mo>×</mo><mn>2000</mn></mrow><annotation encoding="application/x-tex">2000 \times 2000</annotation></semantics></math>
+there’s a lot more work involved. Leontief matrix
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>)
+is obtained from subtracting the technical coefficients matrix
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>)
+from the identity matrix
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>I</mi><annotation encoding="application/x-tex">I</annotation></semantics></math>),
+therefore it has no null rows or columns.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mi>I</mi><mo>−</mo><mi>A</mi></mrow><annotation encoding="application/x-tex">L = I - A</annotation></semantics></math></p>
 <p>It allows for solving the linear system through LU decomposition,
 which is a more efficient method than the direct inverse matrix
 calculation. <a href="https://albersonmiranda.github.io/fio/">fio</a> takes advantage of LU decomposition and
@@ -368,9 +374,7 @@ production vector.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -383,16 +387,16 @@ production vector.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>

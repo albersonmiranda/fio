@@ -3,7 +3,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fio</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
       </span>
     </div>
 
@@ -25,7 +25,7 @@
       <ul class="nav navbar-nav"><li>
   <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
-     
+
   </a>
 </li>
 <li>
@@ -40,20 +40,20 @@
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/albersonmiranda/fio" class="external-link">
     <span class="fa fa-github"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Computes technical coefficients matrix.</h1>
-    <small class="dont-index">Source: <a href="https://github.com/albersonmiranda/fio/blob/HEAD/R/extendr-wrappers.R" class="external-link"><code>R/extendr-wrappers.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/albersonmiranda/fio/blob/main/R/extendr-wrappers.R" class="external-link"><code>R/extendr-wrappers.R</code></a></small>
     <div class="hidden name"><code>compute_tech_coeff.Rd</code></div>
     </div>
 
@@ -67,21 +67,49 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>intermediate_transactions</dt>
-<dd><p>A nxn matrix of intermediate transactions.</p></dd>
 
 
-<dt>total_production</dt>
-<dd><p>A 1xn vector of total production.</p></dd>
+<dl><dt id="arg-intermediate-transactions">intermediate_transactions<a class="anchor" aria-label="anchor" href="#arg-intermediate-transactions"></a></dt>
+<dd><p>A \(n x n\) matrix of intermediate transactions.</p></dd>
+
+
+<dt id="arg-total-production">total_production<a class="anchor" aria-label="anchor" href="#arg-total-production"></a></dt>
+<dd><p>A \(1 x n\) vector of total production.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>A nxn matrix of technical coefficients, known as A matrix.</p>
+    <p>A \(n x n\) matrix of technical coefficients, known as A matrix.</p>
+    </div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>It calculates the technical coefficients matrix, which is the columnwise ratio of
+intermediate transactions to total production (Leontief 1983)
+.</p>
+    </div>
+    <div id="references">
+    <h2>References</h2>
+    <p>insertAllCited</p>
+<p>Underlined Rust code uses Rayon crate to parallelize the computation by
+default, so there is no need to use future or async/await to parallelize.</p>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">intermediate_transactions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">8</span>, <span class="fl">9</span><span class="op">)</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">total_production</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">300</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># instantiate iom object</span></span></span>
+<span class="r-in"><span><span class="va">my_iom</span> <span class="op">&lt;-</span> <span class="fu">fio</span><span class="fu">::</span><span class="va"><a href="iom.html">iom</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">"test"</span>, <span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Calculate the technical coefficients</span></span></span>
+<span class="r-in"><span><span class="va">my_iom</span><span class="op">$</span><span class="fu">compute_tech_coeff</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># show the technical coefficients</span></span></span>
+<span class="r-in"><span><span class="va">my_iom</span><span class="op">$</span><span class="va">technical_coefficients_matrix</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      1     2          3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.01 0.020 0.02333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.02 0.025 0.02666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.03 0.030 0.03000000</span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
@@ -94,15 +122,15 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 
