@@ -33,5 +33,5 @@ my_iom$compute_ghosh_inverse()
 my_iom$ghosh_inverse_matrix
 }
 \references{
-insertAllCited{}
+\insertAllCited{}
 }

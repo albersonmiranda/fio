@@ -18,7 +18,7 @@ use rayon::prelude::*;
 /// A \eqn{n x n} matrix of technical coefficients, known as A matrix.
 /// 
 /// @references
-/// insertAllCited{}
+/// \insertAllCited{}
 /// 
 /// Underlined Rust code uses Rayon crate to parallelize the computation by
 /// default, so there is no need to use future or async/await to parallelize.
@@ -80,7 +80,7 @@ fn compute_tech_coeff(
 /// A \eqn{n x n} matrix of Leontief inverse.
 /// 
 /// @references
-/// insertAllCited{}
+/// \insertAllCited{}
 /// 
 /// @examples
 /// intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)

@@ -32,7 +32,7 @@ my_iom$compute_tech_coeff()
 my_iom$technical_coefficients_matrix
 }
 \references{
-insertAllCited{}
+\insertAllCited{}
 
 Underlined Rust code uses Rayon crate to parallelize the computation by
 default, so there is no need to use future or async/await to parallelize.

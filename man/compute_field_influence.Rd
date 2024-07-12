@@ -33,5 +33,5 @@ my_iom$compute_field_influence(epsilon = 0.01)
 my_iom$field_influence
 }
 \references{
-insertAllCited{}
+\insertAllCited{}
 }
