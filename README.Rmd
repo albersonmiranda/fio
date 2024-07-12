@@ -43,7 +43,7 @@ For macOS and Linux, or if you wish to compile the latest development version fr
 - macOS: `brew install rustc`
 - Windows: https://www.rust-lang.org/tools/install
 
-You'll also find previous releases of `fio` in the [Releases section](https://github.com/albersonmiranda/fio/releases) on GitHub, and precompiled binaries for Windows, macOS, and Linux at [R-universe](https://albersonmiranda.r-universe.dev/fio)
+You'll also find previous releases of `fio` in the [Releases section](https://github.com/albersonmiranda/fio/releases) on GitHub, and precompiled binaries for Windows, macOS, and Linux at [R-universe](https://albersonmiranda.r-universe.dev/fio).
 
 ## Getting Started
 
