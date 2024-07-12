@@ -15,7 +15,7 @@ use faer::{prelude::SpSolver, Mat};
 /// A 1xn vector of total production.
 /// 
 /// @references
-/// insertAllCited{}
+/// \insertAllCited{}
 
 fn compute_extraction_backward(
   technical_coefficients_matrix: &[f64],
@@ -81,7 +81,7 @@ fn compute_extraction_backward(
 /// @param total_production A 1xn vector of total production.
 /// 
 /// @references
-/// insertAllCited{}
+/// \insertAllCited{}
 
 fn compute_extraction_forward(
   allocation_coefficients_matrix: &[f64],

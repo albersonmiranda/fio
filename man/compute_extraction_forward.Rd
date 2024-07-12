@@ -21,5 +21,5 @@ compute_extraction_forward(
 Computes impact on supply structure after extracting a given sector \insertCite{miller_input-output_2009}{fio}.
 }
 \references{
-insertAllCited{}
+\insertAllCited{}
 }

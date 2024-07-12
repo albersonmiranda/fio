@@ -36,5 +36,5 @@ my_iom$allocation_coefficients_matrix
 
 }
 \references{
-insertAllCited{}
+\insertAllCited{}
 }

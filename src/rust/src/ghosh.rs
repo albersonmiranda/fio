@@ -18,7 +18,7 @@ use rayon::prelude::*;
 /// use future or async/await to parallelize.
 /// 
 /// @references
-/// insertAllCited{}
+/// \insertAllCited{}
 /// 
 /// @examples
 /// intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
@@ -65,7 +65,7 @@ fn compute_allocation_coeff(
 /// A \eqn{n x n} matrix of Ghoshian inverse.
 /// 
 /// @references
-/// insertAllCited{}
+/// \insertAllCited{}
 /// 
 /// @examples
 /// intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)

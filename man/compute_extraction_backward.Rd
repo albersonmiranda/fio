@@ -21,5 +21,5 @@ compute_extraction_backward(
 Computes impact on demand structure after extracting a given sector \insertCite{miller_input-output_2009}{fio}.
 }
 \references{
-insertAllCited{}
+\insertAllCited{}
 }

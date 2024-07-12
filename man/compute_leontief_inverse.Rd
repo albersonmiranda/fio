@@ -45,5 +45,5 @@ my_iom$compute_leontief_inverse()
 my_iom$leontief_inverse_matrix
 }
 \references{
-insertAllCited{}
+\insertAllCited{}
 }

@@ -56,7 +56,7 @@ set_max_threads <- function(max_threads) invisible(.Call(wrap__set_max_threads, 
 #' A \eqn{n x n} matrix of technical coefficients, known as A matrix.
 #' 
 #' @references
-#' insertAllCited{}
+#' \insertAllCited{}
 #' 
 #' Underlined Rust code uses Rayon crate to parallelize the computation by
 #' default, so there is no need to use future or async/await to parallelize.
@@ -98,7 +98,7 @@ compute_tech_coeff <- function(intermediate_transactions, total_production) .Cal
 #' A \eqn{n x n} matrix of Leontief inverse.
 #' 
 #' @references
-#' insertAllCited{}
+#' \insertAllCited{}
 #' 
 #' @examples
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
@@ -165,7 +165,7 @@ compute_multiplier_added_value_indirect <- function(added_value_element, total_p
 #' @return Field of influence matrix.
 #' 
 #' @references
-#' insertAllCited{}
+#' \insertAllCited{}
 #' 
 #' @examples
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
@@ -235,7 +235,7 @@ compute_sensitivity_dispersion <- function(leontief_inverse_matrix) .Call(wrap__
 #' use future or async/await to parallelize.
 #' 
 #' @references
-#' insertAllCited{}
+#' \insertAllCited{}
 #' 
 #' @examples
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
@@ -264,7 +264,7 @@ compute_allocation_coeff <- function(intermediate_transactions, total_production
 #' A \eqn{n x n} matrix of Ghoshian inverse.
 #' 
 #' @references
-#' insertAllCited{}
+#' \insertAllCited{}
 #' 
 #' @examples
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
@@ -292,7 +292,7 @@ compute_ghosh_inverse <- function(allocation_coeff) .Call(wrap__compute_ghosh_in
 #' A 1xn vector of total production.
 #' 
 #' @references
-#' insertAllCited{}
+#' \insertAllCited{}
 compute_extraction_backward <- function(technical_coefficients_matrix, final_demand_matrix, total_production) .Call(wrap__compute_extraction_backward, technical_coefficients_matrix, final_demand_matrix, total_production)
 
 #' Calculates forward linkage extraction.
@@ -305,7 +305,7 @@ compute_extraction_backward <- function(technical_coefficients_matrix, final_dem
 #' @param total_production A 1xn vector of total production.
 #' 
 #' @references
-#' insertAllCited{}
+#' \insertAllCited{}
 compute_extraction_forward <- function(allocation_coefficients_matrix, added_value_matrix, total_production) .Call(wrap__compute_extraction_forward, allocation_coefficients_matrix, added_value_matrix, total_production)
 
 #' Calculates total extraction
