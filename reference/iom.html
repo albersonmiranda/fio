@@ -69,39 +69,39 @@
 
 
 <dt><code>intermediate_transactions</code></dt>
-<dd><p>Intermediate transactions matrix.</p></dd>
+<dd><p>Intermediate transactions matrix</p></dd>
 
 
 <dt><code>total_production</code></dt>
-<dd><p>Total production vector.</p></dd>
+<dd><p>Total production vector</p></dd>
 
 
 <dt><code>household_consumption</code></dt>
-<dd><p>Household consumption vector.</p></dd>
+<dd><p>Household consumption vector</p></dd>
 
 
 <dt><code>government_consumption</code></dt>
-<dd><p>Government consumption vector.</p></dd>
+<dd><p>Government consumption vector</p></dd>
 
 
 <dt><code>exports</code></dt>
-<dd><p>Exports vector.</p></dd>
+<dd><p>Exports vector</p></dd>
 
 
 <dt><code>final_demand_others</code></dt>
-<dd><p>Other vectors of final demand that doesn't have dedicated slots.</p></dd>
+<dd><p>Other vectors of final demand that doesn't have dedicated slots</p></dd>
 
 
 <dt><code>final_demand_matrix</code></dt>
-<dd><p>Aggregates final demand vectors into a matrix.</p></dd>
+<dd><p>Aggregates final demand vectors into a matrix</p></dd>
 
 
 <dt><code>imports</code></dt>
-<dd><p>Imports vector.</p></dd>
+<dd><p>Imports vector</p></dd>
 
 
 <dt><code>taxes</code></dt>
-<dd><p>Taxes vector.</p></dd>
+<dd><p>Taxes vector</p></dd>
 
 
 <dt><code>wages</code></dt>
@@ -109,15 +109,15 @@
 
 
 <dt><code>operating_income</code></dt>
-<dd><p>Operating income vector.</p></dd>
+<dd><p>Operating income vector</p></dd>
 
 
 <dt><code>added_value_others</code></dt>
-<dd><p>Other vectors of added value that doesn't have dedicated slots.</p></dd>
+<dd><p>Other vectors of added value that doesn't have dedicated slots</p></dd>
 
 
 <dt><code>added_value_matrix</code></dt>
-<dd><p>Aggregates added value vectors into a matrix.</p></dd>
+<dd><p>Aggregates added value vectors into a matrix</p></dd>
 
 
 <dt><code>occupation</code></dt>
@@ -125,52 +125,51 @@
 
 
 <dt><code>technical_coefficients_matrix</code></dt>
-<dd><p>Technical coefficients matrix.</p></dd>
+<dd><p>Technical coefficients matrix</p></dd>
 
 
 <dt><code>leontief_inverse_matrix</code></dt>
-<dd><p>Leontief inverse matrix.</p></dd>
+<dd><p>Leontief inverse matrix</p></dd>
 
 
 <dt><code>multiplier_output</code></dt>
-<dd><p>Output multiplier dataframe.</p></dd>
+<dd><p>Output multiplier dataframe</p></dd>
 
 
 <dt><code>multiplier_employment</code></dt>
-<dd><p>Employment multiplier dataframe.</p></dd>
+<dd><p>Employment multiplier dataframe</p></dd>
 
 
 <dt><code>multiplier_taxes</code></dt>
-<dd><p>Taxes multiplier dataframe.</p></dd>
+<dd><p>Taxes multiplier dataframe</p></dd>
 
 
 <dt><code>multiplier_wages</code></dt>
-<dd><p>Wages multiplier dataframe.</p></dd>
+<dd><p>Wages multiplier dataframe</p></dd>
 
 
 <dt><code>field_influence</code></dt>
-<dd><p>Influence field matrix.</p></dd>
+<dd><p>Influence field matrix</p></dd>
 
 
 <dt><code>key_sectors</code></dt>
-<dd><p>Key sectors dataframe.</p></dd>
+<dd><p>Key sectors dataframe</p></dd>
 
 
 <dt><code>allocation_coefficients_matrix</code></dt>
-<dd><p>Allocation coefficients matrix.</p></dd>
+<dd><p>Allocation coefficients matrix</p></dd>
 
 
 <dt><code>ghosh_inverse_matrix</code></dt>
-<dd><p>Ghosh inverse matrix.</p></dd>
+<dd><p>Ghosh inverse matrix</p></dd>
 
 
 <dt><code>hypothetical_extraction</code></dt>
-<dd><p>Absolute and relative backward and forward differences in total output after a hypothetical extraction.</p></dd>
+<dd><p>Absolute and relative backward and forward differences in total output after a hypothetical extraction</p></dd>
 
 
 <dt><code>threads</code></dt>
-<dd><p>Number of threads available for Rust to run in parallel.
-Defaults to 0, meaning running in parallel with all available threads.</p></dd>
+<dd><p>Number of threads available for Rust to run in parallel</p></dd>
 
 
 </dl><p></p></div>
@@ -314,16 +313,12 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 imports, taxes, wages, operating income, added_value_others or occupation matrix to be removed.</p></dd>
 
 
-<dt><code>matrix</code></dt>
-<dd><p>Matrix object to be removed.</p></dd>
-
-
 </dl><p></p></div>
 </div>
 
 </div><p></p><hr><a id="method-iom-update_final_demand_matrix"></a><div class="section">
 <h3 id="method-update-final-demand-matrix-">Method <code>update_final_demand_matrix()</code><a class="anchor" aria-label="anchor" href="#method-update-final-demand-matrix-"></a></h3>
-<p>Updates final demand matrix.</p><div class="section">
+<p>Aggregates final demand vectors into a matrix.</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">update_final_demand_matrix</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
@@ -331,7 +326,7 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 
 </div><p></p><hr><a id="method-iom-update_added_value_matrix"></a><div class="section">
 <h3 id="method-update-added-value-matrix-">Method <code>update_added_value_matrix()</code><a class="anchor" aria-label="anchor" href="#method-update-added-value-matrix-"></a></h3>
-<p>Updates added value matrix.</p><div class="section">
+<p>Aggregates added value vectors into a matrix.</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">update_added_value_matrix</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
@@ -352,14 +347,6 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_leontief_inverse</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
-<div class="section">
-<h4 id="arguments-3">Arguments<a class="anchor" aria-label="anchor" href="#arguments-3"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>technical_coefficients_matrix</code></dt>
-<dd><p>Technical coefficients matrix.</p></dd>
-
-
-</dl><p></p></div>
-</div>
 
 </div><p></p><hr><a id="method-iom-compute_multiplier_output"></a><div class="section">
 <h3 id="method-compute-multiplier-output-">Method <code><a href="compute_multiplier_output.html">compute_multiplier_output()</a></code><a class="anchor" aria-label="anchor" href="#method-compute-multiplier-output-"></a></h3>
@@ -368,14 +355,6 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_multiplier_output</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
-<div class="section">
-<h4 id="arguments-4">Arguments<a class="anchor" aria-label="anchor" href="#arguments-4"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>leontief_inverse_matrix</code></dt>
-<dd><p>Leontief inverse matrix.</p></dd>
-
-
-</dl><p></p></div>
-</div>
 
 </div><p></p><hr><a id="method-iom-compute_multiplier_employment"></a><div class="section">
 <h3 id="method-compute-multiplier-employment-">Method <code>compute_multiplier_employment()</code><a class="anchor" aria-label="anchor" href="#method-compute-multiplier-employment-"></a></h3>
@@ -384,14 +363,6 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_multiplier_employment</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
-<div class="section">
-<h4 id="arguments-5">Arguments<a class="anchor" aria-label="anchor" href="#arguments-5"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>leontief_inverse_matrix</code></dt>
-<dd><p>Leontief inverse matrix.</p></dd>
-
-
-</dl><p></p></div>
-</div>
 
 </div><p></p><hr><a id="method-iom-compute_multiplier_wages"></a><div class="section">
 <h3 id="method-compute-multiplier-wages-">Method <code>compute_multiplier_wages()</code><a class="anchor" aria-label="anchor" href="#method-compute-multiplier-wages-"></a></h3>
@@ -400,14 +371,6 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_multiplier_wages</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
-<div class="section">
-<h4 id="arguments-6">Arguments<a class="anchor" aria-label="anchor" href="#arguments-6"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>leontief_inverse_matrix</code></dt>
-<dd><p>Leontief inverse matrix.</p></dd>
-
-
-</dl><p></p></div>
-</div>
 
 </div><p></p><hr><a id="method-iom-compute_multiplier_taxes"></a><div class="section">
 <h3 id="method-compute-multiplier-taxes-">Method <code>compute_multiplier_taxes()</code><a class="anchor" aria-label="anchor" href="#method-compute-multiplier-taxes-"></a></h3>
@@ -416,14 +379,6 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_multiplier_taxes</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
-<div class="section">
-<h4 id="arguments-7">Arguments<a class="anchor" aria-label="anchor" href="#arguments-7"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>leontief_inverse_matrix</code></dt>
-<dd><p>Leontief inverse matrix.</p></dd>
-
-
-</dl><p></p></div>
-</div>
 
 </div><p></p><hr><a id="method-iom-compute_field_influence"></a><div class="section">
 <h3 id="method-compute-field-influence-">Method <code><a href="compute_field_influence.html">compute_field_influence()</a></code><a class="anchor" aria-label="anchor" href="#method-compute-field-influence-"></a></h3>
@@ -433,9 +388,10 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 </div>
 
 <div class="section">
-<h4 id="arguments-8">Arguments<a class="anchor" aria-label="anchor" href="#arguments-8"></a></h4>
+<h4 id="arguments-3">Arguments<a class="anchor" aria-label="anchor" href="#arguments-3"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>epsilon</code></dt>
-<dd><p>Epsilon value. A technical change in the input-output matrix.</p></dd>
+<dd><p>Epsilon value. A technical change in the input-output matrix, caused by a variation of size <code>epsilon</code> into each
+element of technical coefficients matrix.</p></dd>
 
 
 </dl><p></p></div>
@@ -443,7 +399,7 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 
 </div><p></p><hr><a id="method-iom-compute_key_sectors"></a><div class="section">
 <h3 id="method-compute-key-sectors-">Method <code>compute_key_sectors()</code><a class="anchor" aria-label="anchor" href="#method-compute-key-sectors-"></a></h3>
-<p>Computes the key sectors dataframe.</p><div class="section">
+<p>Computes the key sectors dataframe, based on it's backward and forward linkages.</p><div class="section">
 <h4 id="usage-12">Usage<a class="anchor" aria-label="anchor" href="#usage-12"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">iom</span><span class="op">$</span><span class="fu">compute_key_sectors</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
@@ -481,7 +437,7 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 </div>
 
 <div class="section">
-<h4 id="arguments-9">Arguments<a class="anchor" aria-label="anchor" href="#arguments-9"></a></h4>
+<h4 id="arguments-4">Arguments<a class="anchor" aria-label="anchor" href="#arguments-4"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>max_threads</code></dt>
 <dd><p>Number of threads enabled for parallel computing. Defaults to the number
 of threads available.</p></dd>
@@ -498,7 +454,7 @@ of threads available.</p></dd>
 </div>
 
 <div class="section">
-<h4 id="arguments-10">Arguments<a class="anchor" aria-label="anchor" href="#arguments-10"></a></h4>
+<h4 id="arguments-5">Arguments<a class="anchor" aria-label="anchor" href="#arguments-5"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 

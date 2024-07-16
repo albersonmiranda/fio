@@ -76,7 +76,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Get data ready for input-output analysis</h1>
             
-            <h4 data-toc-skip class="date">July 12, 2024</h4>
+            <h4 data-toc-skip class="date">July 16, 2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/albersonmiranda/fio/blob/main/vignettes/getting_started.Rmd" class="external-link"><code>vignettes/getting_started.Rmd</code></a></small>
       <div class="hidden name"><code>getting_started.Rmd</code></div>
@@ -189,111 +189,19 @@ multipliers. To compute additional features, you can add final demand
 and added value fields, some of which have dedicated slots for computing
 specific multipliers. Additionally, there are slots for storing the
 results of various functions, such as the technical coefficients matrix,
-the Leontief inverse, key sectors, the Ghosh inverse, and more. All
-slots of the <code>iom</code> class are listed as follows:</p>
-<ol style="list-style-type: decimal">
-<li>Required fields
-<ul>
-<li>
-<code>id</code>: An identifier for the input-output matrix.</li>
-<li>
-<code>intermediate_transactions</code>: A matrix of intermediate
-transactions.</li>
-<li>
-<code>total_production</code>: A vector for total production.</li>
-</ul>
-</li>
-<li>Optional fields
-<ul>
-<li>Final demand fields
-<ul>
-<li>
-<code>household_consumption</code>: A vector for household
-consumption.</li>
-<li>
-<code>government_consumption</code>: A vector for government
-consumption.</li>
-<li>
-<code>exports</code>: A vector for exports.</li>
-<li>
-<code>final_demand_others</code>: Other vectors of final demand that
-doesn’t need dedicated slots. Setting column names is advised for better
-readability.</li>
-<li>
-<code>final_demand_matrix</code>: A matrix for final demand. It
-aggregates all the total final demand vectors. After you add or remove a
-vector, update this matrix with
-<code>$update_final_demand_matrix()</code> method.</li>
-</ul>
-</li>
-<li>Added value fields
-<ul>
-<li>
-<code>imports</code>: A vector for imports.</li>
-<li>
-<code>taxes</code>: A vector for taxes.</li>
-<li>
-<code>wages</code>: A vector for wages.</li>
-<li>
-<code>operating_income</code>: A vector for operating income.</li>
-<li>
-<code>added_value_others</code>: Other vectors of added value that
-doesn’t need dedicated slots. Setting column names is advised for better
-readability.</li>
-<li>
-<code>added_value_matrix</code>: A matrix for added value. It
-aggregates all the total added value vectors. After you add or remove a
-vector, update this matrix with
-<code>$udpate_added_value_matrix()</code> method.</li>
-</ul>
-</li>
-<li>Other optional fields
-<ul>
-<li>
-<code>occupation</code>: A vector for occupation.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Results slots
-<ul>
-<li>
-<code>technical_coefficients_matrix</code>: A matrix with technical
-coefficients.</li>
-<li>
-<code>leontief_inverse_matrix</code>: A matrix with the Leontief
-inverse.</li>
-<li>
-<code>allocation_coefficients_matrix</code>: A matrix with the
-allocation coefficients.</li>
-<li>
-<code>ghosh_inverse_matrix</code>: A matrix with the Ghosh
-inverse.</li>
-<li>
-<code>multiplier_output</code>: A vector with the output
-multiplier.</li>
-<li>
-<code>field_influence</code>: A matrix with the field of
-influence.</li>
-<li>
-<code>key_sectors</code>: A dataframe with the key sectors, power of
-dispersion and sensitivity of dispersion, and their coefficients of
-variation.</li>
-<li>
-<code>hypothetical_extraction</code>: A dataframe with absolute and
-relative backward, forward and total differences in total output after
-hypothetical extraction of each sector.</li>
-</ul>
-</li>
-</ol>
+the Leontief inverse, key sectors, the Ghosh inverse, and more. You can
+check all available slots and methods of the <code>iom</code> class in
+the <a href="https://albersonmiranda.github.io/fio/reference/iom.html">package
+documentation</a>.</p>
 <p>In order to instantiate a new <code>iom</code> object, as every R6
-class, you need to use the <code>new()</code> method. A new
-<code>iom</code> object requires an <code>id</code> to help you identify
-the object (especially when you have multiple <code>iom</code> objects
-in your environment), a <code>intermediate_transactions</code> matrix,
-and a <code>total_production</code> vector. The other slots are optional
-and can be filled (or removed) later if needed with <code>add()</code>
-and <code><a href="https://rdrr.io/r/base/rm.html" class="external-link">remove()</a></code> methods.</p>
+class<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>,
+you need to use the <code>new()</code> method. A new <code>iom</code>
+object requires an <code>id</code> to help you identify the object
+(especially when you have multiple <code>iom</code> objects in your
+environment), a <code>intermediate_transactions</code> matrix, and a
+<code>total_production</code> vector. The other slots are optional and
+can be filled (or removed) later if needed with <code>add()</code> and
+<code><a href="https://rdrr.io/r/base/rm.html" class="external-link">remove()</a></code> methods.</p>
 <p>Let’s create a new <code>iom</code> object with some random data:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create a new iom object</span></span>
@@ -447,6 +355,19 @@ explanatory. You can also chain these methods to do all at once:</p>
 <span><span class="co">#&gt; 3                  1.774139          Non-Key Sector</span></span>
 <span><span class="co">#&gt; 4                  1.340143              Key Sector</span></span>
 <span><span class="co">#&gt; 5                  1.413387 Strong Backward Linkage</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p>Bernd Bischl, Raphael Sonabend, Lars Kotthoff, &amp; Michel Lang
+(2024). Applied Machine Learning Using mlr3 in R. CRC Press.</p>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr>
+<ol>
+<li id="fn1"><p>For a gentle introduction to R6, see <a href="https://mlr3book.mlr-org.com/chapters/chapter1/introduction_and_overview.html#sec-r6" class="external-link">R6
+for beginners</a> (Bishl et al., 2024).<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
   </div>
 
