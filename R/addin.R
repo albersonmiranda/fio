@@ -1,3 +1,30 @@
+#' @noRd
+
+# nocov start
+input_options <- shiny::selectInput(
+  inputId = "var",
+  label = "Variable name",
+  choices = list(
+    "Intermediate Transactions" = "intermediate_transactions",
+    "Total Production" = "total_production",
+    "Final Demand" = list(
+      "Household Consumption" = "household_consumption",
+      "Government Consumption" = "government_consumption",
+      "Exports" = "exports",
+      "Others" = "final_demand_others"
+    ),
+    "Added Value" = list(
+      "Imports" = "imports",
+      "Taxes" = "taxes",
+      "Wages" = "wages",
+      "Operating Income" = "operating_income",
+      "Others" = "added_value_others"
+    ),
+    "Occupation" = "occupation",
+    "Custom" = "custom"
+  )
+)
+
 #' Conveniently import data from an Excel file
 #'
 #' @description `fio_addin()` opens an [RStudio
@@ -7,7 +34,6 @@
 #'  data into the global environment.
 #'  Appears as "Import input-output data" in the RStudio Addins menu.
 
-# nocov start
 fio_addin <- function() {
   rlang::check_installed(
     c("shiny", "miniUI"),
@@ -15,30 +41,6 @@ fio_addin <- function() {
   )
   resource_path <- fs::path_package("fio", "addins")
   shiny::addResourcePath("addins", resource_path)
-
-  input_options <- shiny::selectInput(
-    inputId = "var",
-    label = "Variable name",
-    choices = list(
-      "Intermediate Transactions" = "intermediate_transactions",
-      "Total Production" = "total_production",
-      "Final Demand" = list(
-        "Household Consumption" = "household_consumption",
-        "Government Consumption" = "government_consumption",
-        "Exports" = "exports",
-        "Others" = "final_demand_others"
-      ),
-      "Added Value" = list(
-        "Imports" = "imports",
-        "Taxes" = "taxes",
-        "Wages" = "wages",
-        "Operating Income" = "operating_income",
-        "Others" = "added_value_others"
-      ),
-      "Occupation" = "occupation",
-      "Custom" = "custom"
-    )
-  )
 
   ui <- miniUI::miniPage(
     shiny::tags$head(shiny::includeCSS(fs::path(resource_path, "fio.css"))),
