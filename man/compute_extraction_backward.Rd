@@ -2,7 +2,7 @@
 % Please edit documentation in R/extendr-wrappers.R
 \name{compute_extraction_backward}
 \alias{compute_extraction_backward}
-\title{Calculates backward linkage extraction.}
+\title{Computes backward linkage extraction.}
 \usage{
 compute_extraction_backward(
   technical_coefficients_matrix,

@@ -79,58 +79,57 @@ print(my_iom$hypothetical_extraction)
 \describe{
 \item{\code{id}}{Identifier of the new instance}
 
-\item{\code{intermediate_transactions}}{Intermediate transactions matrix.}
+\item{\code{intermediate_transactions}}{Intermediate transactions matrix}
 
-\item{\code{total_production}}{Total production vector.}
+\item{\code{total_production}}{Total production vector}
 
-\item{\code{household_consumption}}{Household consumption vector.}
+\item{\code{household_consumption}}{Household consumption vector}
 
-\item{\code{government_consumption}}{Government consumption vector.}
+\item{\code{government_consumption}}{Government consumption vector}
 
-\item{\code{exports}}{Exports vector.}
+\item{\code{exports}}{Exports vector}
 
-\item{\code{final_demand_others}}{Other vectors of final demand that doesn't have dedicated slots.}
+\item{\code{final_demand_others}}{Other vectors of final demand that doesn't have dedicated slots}
 
-\item{\code{final_demand_matrix}}{Aggregates final demand vectors into a matrix.}
+\item{\code{final_demand_matrix}}{Aggregates final demand vectors into a matrix}
 
-\item{\code{imports}}{Imports vector.}
+\item{\code{imports}}{Imports vector}
 
-\item{\code{taxes}}{Taxes vector.}
+\item{\code{taxes}}{Taxes vector}
 
 \item{\code{wages}}{Wages vector.}
 
-\item{\code{operating_income}}{Operating income vector.}
+\item{\code{operating_income}}{Operating income vector}
 
-\item{\code{added_value_others}}{Other vectors of added value that doesn't have dedicated slots.}
+\item{\code{added_value_others}}{Other vectors of added value that doesn't have dedicated slots}
 
-\item{\code{added_value_matrix}}{Aggregates added value vectors into a matrix.}
+\item{\code{added_value_matrix}}{Aggregates added value vectors into a matrix}
 
 \item{\code{occupation}}{Occupation vector}
 
-\item{\code{technical_coefficients_matrix}}{Technical coefficients matrix.}
+\item{\code{technical_coefficients_matrix}}{Technical coefficients matrix}
 
-\item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
+\item{\code{leontief_inverse_matrix}}{Leontief inverse matrix}
 
-\item{\code{multiplier_output}}{Output multiplier dataframe.}
+\item{\code{multiplier_output}}{Output multiplier dataframe}
 
-\item{\code{multiplier_employment}}{Employment multiplier dataframe.}
+\item{\code{multiplier_employment}}{Employment multiplier dataframe}
 
-\item{\code{multiplier_taxes}}{Taxes multiplier dataframe.}
+\item{\code{multiplier_taxes}}{Taxes multiplier dataframe}
 
-\item{\code{multiplier_wages}}{Wages multiplier dataframe.}
+\item{\code{multiplier_wages}}{Wages multiplier dataframe}
 
-\item{\code{field_influence}}{Influence field matrix.}
+\item{\code{field_influence}}{Influence field matrix}
 
-\item{\code{key_sectors}}{Key sectors dataframe.}
+\item{\code{key_sectors}}{Key sectors dataframe}
 
-\item{\code{allocation_coefficients_matrix}}{Allocation coefficients matrix.}
+\item{\code{allocation_coefficients_matrix}}{Allocation coefficients matrix}
 
-\item{\code{ghosh_inverse_matrix}}{Ghosh inverse matrix.}
+\item{\code{ghosh_inverse_matrix}}{Ghosh inverse matrix}
 
-\item{\code{hypothetical_extraction}}{Absolute and relative backward and forward differences in total output after a hypothetical extraction.}
+\item{\code{hypothetical_extraction}}{Absolute and relative backward and forward differences in total output after a hypothetical extraction}
 
-\item{\code{threads}}{Number of threads available for Rust to run in parallel.
-Defaults to 0, meaning running in parallel with all available threads.}
+\item{\code{threads}}{Number of threads available for Rust to run in parallel}
 }
 \if{html}{\out{</div>}}
 }
@@ -248,8 +247,6 @@ Removes a matrix from a previously imported IO matrix.
 \describe{
 \item{\code{matrix_name}}{One of household_consumption, government_consumption, exports, final_demand_others,
 imports, taxes, wages, operating income, added_value_others or occupation matrix to be removed.}
-
-\item{\code{matrix}}{Matrix object to be removed.}
 }
 \if{html}{\out{</div>}}
 }
@@ -258,7 +255,7 @@ imports, taxes, wages, operating income, added_value_others or occupation matrix
 \if{html}{\out{<a id="method-iom-update_final_demand_matrix"></a>}}
 \if{latex}{\out{\hypertarget{method-iom-update_final_demand_matrix}{}}}
 \subsection{Method \code{update_final_demand_matrix()}}{
-Updates final demand matrix.
+Aggregates final demand vectors into a matrix.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$update_final_demand_matrix()}\if{html}{\out{</div>}}
 }
@@ -268,7 +265,7 @@ Updates final demand matrix.
 \if{html}{\out{<a id="method-iom-update_added_value_matrix"></a>}}
 \if{latex}{\out{\hypertarget{method-iom-update_added_value_matrix}{}}}
 \subsection{Method \code{update_added_value_matrix()}}{
-Updates added value matrix.
+Aggregates added value vectors into a matrix.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$update_added_value_matrix()}\if{html}{\out{</div>}}
 }
@@ -293,13 +290,6 @@ Computes the Leontief inverse matrix.
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_leontief_inverse()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{technical_coefficients_matrix}}{Technical coefficients matrix.}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-iom-compute_multiplier_output"></a>}}
@@ -310,13 +300,6 @@ Computes the output multiplier dataframe.
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_multiplier_output()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-iom-compute_multiplier_employment"></a>}}
@@ -327,13 +310,6 @@ Computes the employment multiplier dataframe.
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_multiplier_employment()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-iom-compute_multiplier_wages"></a>}}
@@ -344,13 +320,6 @@ Computes the wages multiplier dataframe.
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_multiplier_wages()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-iom-compute_multiplier_taxes"></a>}}
@@ -361,13 +330,6 @@ Computes the taxes multiplier dataframe.
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_multiplier_taxes()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{leontief_inverse_matrix}}{Leontief inverse matrix.}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-iom-compute_field_influence"></a>}}
@@ -381,7 +343,8 @@ Computes the influence field matrix.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{epsilon}}{Epsilon value. A technical change in the input-output matrix.}
+\item{\code{epsilon}}{Epsilon value. A technical change in the input-output matrix, caused by a variation of size \code{epsilon} into each
+element of technical coefficients matrix.}
 }
 \if{html}{\out{</div>}}
 }
@@ -390,7 +353,7 @@ Computes the influence field matrix.
 \if{html}{\out{<a id="method-iom-compute_key_sectors"></a>}}
 \if{latex}{\out{\hypertarget{method-iom-compute_key_sectors}{}}}
 \subsection{Method \code{compute_key_sectors()}}{
-Computes the key sectors dataframe.
+Computes the key sectors dataframe, based on it's backward and forward linkages.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_key_sectors()}\if{html}{\out{</div>}}
 }

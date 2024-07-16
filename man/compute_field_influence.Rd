@@ -2,7 +2,7 @@
 % Please edit documentation in R/extendr-wrappers.R
 \name{compute_field_influence}
 \alias{compute_field_influence}
-\title{Calculates field of influence given a technical change.}
+\title{Computes field of influence given a technical change.}
 \usage{
 compute_field_influence(tech_coeff_matrix, leontief_inverse_matrix, epsilon)
 }
@@ -17,7 +17,7 @@ compute_field_influence(tech_coeff_matrix, leontief_inverse_matrix, epsilon)
 Field of influence matrix.
 }
 \description{
-Calculates total field of influence given a incremental change in the technical coefficients matrix \insertCite{vale_alise_2020}{fio}.
+Computes total field of influence given a incremental change in the technical coefficients matrix \insertCite{vale_alise_2020}{fio}.
 }
 \examples{
 intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)

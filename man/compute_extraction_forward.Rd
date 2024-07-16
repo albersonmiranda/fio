@@ -2,7 +2,7 @@
 % Please edit documentation in R/extendr-wrappers.R
 \name{compute_extraction_forward}
 \alias{compute_extraction_forward}
-\title{Calculates forward linkage extraction.}
+\title{Computes forward linkage extraction.}
 \usage{
 compute_extraction_forward(
   allocation_coefficients_matrix,

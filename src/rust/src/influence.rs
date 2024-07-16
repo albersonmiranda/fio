@@ -2,10 +2,10 @@ use extendr_api::prelude::*;
 use faer::{prelude::SpSolver, Mat};
 
 #[extendr]
-/// Calculates field of influence given a technical change.
+/// Computes field of influence given a technical change.
 /// 
 /// @description
-/// Calculates total field of influence given a incremental change in the technical coefficients matrix \insertCite{vale_alise_2020}{fio}.
+/// Computes total field of influence given a incremental change in the technical coefficients matrix \insertCite{vale_alise_2020}{fio}.
 /// 
 /// @param tech_coeff_matrix A nxn matrix of technical coefficients.
 /// @param leontief_inverse_matrix The open model nxn Leontief inverse matrix.

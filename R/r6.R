@@ -114,39 +114,39 @@ iom <- R6::R6Class(
     id = NULL,
 
     #' @field intermediate_transactions
-    #' Intermediate transactions matrix.
+    #' Intermediate transactions matrix
     intermediate_transactions = NULL,
 
     #' @field total_production
-    #' Total production vector.
+    #' Total production vector
     total_production = NULL,
 
     #' @field household_consumption
-    #' Household consumption vector.
+    #' Household consumption vector
     household_consumption = NULL,
 
     #' @field government_consumption
-    #' Government consumption vector.
+    #' Government consumption vector
     government_consumption = NULL,
 
     #' @field exports
-    #' Exports vector.
+    #' Exports vector
     exports = NULL,
 
     #' @field final_demand_others
-    #' Other vectors of final demand that doesn't have dedicated slots.
+    #' Other vectors of final demand that doesn't have dedicated slots
     final_demand_others = NULL,
 
     #' @field final_demand_matrix
-    #' Aggregates final demand vectors into a matrix.
+    #' Aggregates final demand vectors into a matrix
     final_demand_matrix = NULL,
 
     #' @field imports
-    #' Imports vector.
+    #' Imports vector
     imports = NULL,
 
     #' @field taxes
-    #' Taxes vector.
+    #' Taxes vector
     taxes = NULL,
 
     #' @field wages
@@ -154,15 +154,15 @@ iom <- R6::R6Class(
     wages = NULL,
 
     #' @field operating_income
-    #' Operating income vector.
+    #' Operating income vector
     operating_income = NULL,
 
     #' @field added_value_others
-    #' Other vectors of added value that doesn't have dedicated slots.
+    #' Other vectors of added value that doesn't have dedicated slots
     added_value_others = NULL,
 
     #' @field added_value_matrix
-    #' Aggregates added value vectors into a matrix.
+    #' Aggregates added value vectors into a matrix
     added_value_matrix = NULL,
 
     #' @field occupation
@@ -170,52 +170,51 @@ iom <- R6::R6Class(
     occupation = NULL,
 
     #' @field technical_coefficients_matrix
-    #' Technical coefficients matrix.
+    #' Technical coefficients matrix
     technical_coefficients_matrix = NULL,
 
     #' @field leontief_inverse_matrix
-    #' Leontief inverse matrix.
+    #' Leontief inverse matrix
     leontief_inverse_matrix = NULL,
 
     #' @field multiplier_output
-    #' Output multiplier dataframe.
+    #' Output multiplier dataframe
     multiplier_output = NULL,
 
     #' @field multiplier_employment
-    #' Employment multiplier dataframe.
+    #' Employment multiplier dataframe
     multiplier_employment = NULL,
 
     #' @field multiplier_taxes
-    #' Taxes multiplier dataframe.
+    #' Taxes multiplier dataframe
     multiplier_taxes = NULL,
 
     #' @field multiplier_wages
-    #' Wages multiplier dataframe.
+    #' Wages multiplier dataframe
     multiplier_wages = NULL,
 
     #' @field field_influence
-    #' Influence field matrix.
+    #' Influence field matrix
     field_influence = NULL,
 
     #' @field key_sectors
-    #' Key sectors dataframe.
+    #' Key sectors dataframe
     key_sectors = NULL,
 
     #' @field allocation_coefficients_matrix
-    #' Allocation coefficients matrix.
+    #' Allocation coefficients matrix
     allocation_coefficients_matrix = NULL,
 
     #' @field ghosh_inverse_matrix
-    #' Ghosh inverse matrix.
+    #' Ghosh inverse matrix
     ghosh_inverse_matrix = NULL,
 
     #' @field hypothetical_extraction
-    #' Absolute and relative backward and forward differences in total output after a hypothetical extraction.
+    #' Absolute and relative backward and forward differences in total output after a hypothetical extraction
     hypothetical_extraction = NULL,
 
     #' @field threads
-    #' Number of threads available for Rust to run in parallel.
-    #' Defaults to 0, meaning running in parallel with all available threads.
+    #' Number of threads available for Rust to run in parallel
     threads = 0,
 
     #' @description
@@ -356,8 +355,6 @@ iom <- R6::R6Class(
     #' @param matrix_name
     #' One of household_consumption, government_consumption, exports, final_demand_others,
     #' imports, taxes, wages, operating income, added_value_others or occupation matrix to be removed.
-    #' @param matrix
-    #' Matrix object to be removed.
     remove = function(matrix_name) {
       # check arg
       choices <- private$iom_elements()
@@ -374,7 +371,7 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Updates final demand matrix.
+    #' Aggregates final demand vectors into a matrix.
     update_final_demand_matrix = function() {
       # bind final demand vectors
       self$final_demand_matrix <- as.matrix(cbind(
@@ -386,7 +383,7 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Updates added value matrix.
+    #' Aggregates added value vectors into a matrix.
     update_added_value_matrix = function() {
       # bind added value vectors
       self$added_value_matrix <- as.matrix(rbind(
@@ -428,8 +425,6 @@ iom <- R6::R6Class(
 
     #' @description
     #' Computes the Leontief inverse matrix.
-    #' @param technical_coefficients_matrix
-    #' Technical coefficients matrix.
     compute_leontief_inverse = function() {
       # check if technical coefficients matrix is available
       if (is.null(self$technical_coefficients_matrix)) {
@@ -454,8 +449,6 @@ iom <- R6::R6Class(
 
     #' @description
     #' Computes the output multiplier dataframe.
-    #' @param leontief_inverse_matrix
-    #' Leontief inverse matrix.
     compute_multiplier_output = function() {
       # check if leontief inverse matrix is available
       if (is.null(self$leontief_inverse_matrix)) {
@@ -492,8 +485,6 @@ iom <- R6::R6Class(
 
     #' @description
     #' Computes the employment multiplier dataframe.
-    #' @param leontief_inverse_matrix
-    #' Leontief inverse matrix.
     compute_multiplier_employment = function() {
       # check if leontief inverse matrix is available
       if (is.null(self$leontief_inverse_matrix)) {
@@ -533,8 +524,6 @@ iom <- R6::R6Class(
 
     #' @description
     #' Computes the wages multiplier dataframe.
-    #' @param leontief_inverse_matrix
-    #' Leontief inverse matrix.
     compute_multiplier_wages = function() {
       # check if leontief inverse matrix is available
       if (is.null(self$leontief_inverse_matrix)) {
@@ -574,8 +563,6 @@ iom <- R6::R6Class(
 
     #' @description
     #' Computes the taxes multiplier dataframe.
-    #' @param leontief_inverse_matrix
-    #' Leontief inverse matrix.
     compute_multiplier_taxes = function() {
       # check if leontief inverse matrix is available
       if (is.null(self$leontief_inverse_matrix)) {
@@ -616,7 +603,8 @@ iom <- R6::R6Class(
     #' @description
     #' Computes the influence field matrix.
     #' @param epsilon
-    #' Epsilon value. A technical change in the input-output matrix.
+    #' Epsilon value. A technical change in the input-output matrix, caused by a variation of size `epsilon` into each
+    #' element of technical coefficients matrix.
     compute_field_influence = function(epsilon) {
       # check if epsilon was set
       if (missing(epsilon)) {
@@ -647,7 +635,7 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Computes the key sectors dataframe.
+    #' Computes the key sectors dataframe, based on it's backward and forward linkages.
     compute_key_sectors = function() {
       # check if leontief inverse matrix is available
       if (is.null(self$leontief_inverse_matrix)) {

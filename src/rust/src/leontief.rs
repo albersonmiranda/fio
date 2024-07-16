@@ -11,7 +11,7 @@ use rayon::prelude::*;
 /// A \eqn{1 x n} vector of total production.
 /// 
 /// @details
-/// It calculates the technical coefficients matrix, which is the columnwise ratio of
+/// It computes the technical coefficients matrix, which is the columnwise ratio of
 /// intermediate transactions to total production \insertCite{leontief_economia_1983}{fio}.
 /// 
 /// @return
@@ -60,7 +60,7 @@ fn compute_tech_coeff(
 /// A \eqn{n x n} matrix of technical coefficients.
 /// 
 /// @details
-/// It calculates the Leontief inverse matrix \insertCite{leontief_economia_1983}{fio}, which is the inverse of the
+/// It computes the Leontief inverse matrix \insertCite{leontief_economia_1983}{fio}, which is the inverse of the
 /// Leontief matrix. The formula is:
 /// 
 /// \deqn{L = I - A}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/extendr-wrappers.R
 \name{compute_multiplier_output_indirect}
 \alias{compute_multiplier_output_indirect}
-\title{Calculates indirect output multiplier.}
+\title{Computes indirect output multiplier.}
 \usage{
 compute_multiplier_output_indirect(
   technical_coefficients_matrix,
@@ -18,5 +18,5 @@ compute_multiplier_output_indirect(
 A 1xn vector of indirect output multipliers.
 }
 \description{
-Calculates indirect output multiplier.
+Computes indirect output multiplier.
 }

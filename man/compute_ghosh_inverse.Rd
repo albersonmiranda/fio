@@ -16,7 +16,7 @@ A \eqn{n x n} matrix of Ghoshian inverse.
 Computes Ghosh inverse matrix.
 }
 \details{
-It calculates the Ghosh inverse matrix, which is the inverse of the
+The Ghosh inverse matrix is the inverse of the
 difference \eqn{(I - F)} where I is the identity matrix and F is the
 allocation coefficients matrix \insertCite{miller_input-output_2009}{fio}.
 }

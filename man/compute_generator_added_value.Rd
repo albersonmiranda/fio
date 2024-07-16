@@ -2,7 +2,7 @@
 % Please edit documentation in R/extendr-wrappers.R
 \name{compute_generator_added_value}
 \alias{compute_generator_added_value}
-\title{Calculates generator matrix for a given added value vector.}
+\title{Computes generator matrix for a given added value vector.}
 \usage{
 compute_generator_added_value(
   added_value_requirements,
@@ -18,5 +18,5 @@ compute_generator_added_value(
 A nxn matrix of an added value vector generator.
 }
 \description{
-Calculates generator matrix for a given added value vector.
+Computes generator matrix for a given added value vector.
 }
