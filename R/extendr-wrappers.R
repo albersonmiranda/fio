@@ -49,7 +49,7 @@ set_max_threads <- function(max_threads) invisible(.Call(wrap__set_max_threads, 
 #' A \eqn{1 x n} vector of total production.
 #' 
 #' @details
-#' It calculates the technical coefficients matrix, which is the columnwise ratio of
+#' It computes the technical coefficients matrix, which is the columnwise ratio of
 #' intermediate transactions to total production \insertCite{leontief_economia_1983}{fio}.
 #' 
 #' @return
@@ -78,7 +78,7 @@ compute_tech_coeff <- function(intermediate_transactions, total_production) .Cal
 #' A \eqn{n x n} matrix of technical coefficients.
 #' 
 #' @details
-#' It calculates the Leontief inverse matrix \insertCite{leontief_economia_1983}{fio}, which is the inverse of the
+#' It computes the Leontief inverse matrix \insertCite{leontief_economia_1983}{fio}, which is the inverse of the
 #' Leontief matrix. The formula is:
 #' 
 #' \deqn{L = I - A}
@@ -113,50 +113,50 @@ compute_tech_coeff <- function(intermediate_transactions, total_production) .Cal
 #' my_iom$leontief_inverse_matrix
 compute_leontief_inverse <- function(tech_coeff) .Call(wrap__compute_leontief_inverse, tech_coeff)
 
-#' Calculates type I output multiplier.
+#' Computes type I output multiplier.
 #' @param leontief_inverse_matrix The open model Leontief inverse matrix.
 #' @return A 1xn vector of type I output multipliers.
 compute_multiplier_output <- function(leontief_inverse_matrix) .Call(wrap__compute_multiplier_output, leontief_inverse_matrix)
 
-#' Calculates direct output multiplier.
+#' Computes direct output multiplier.
 #' @param technical_coefficients_matrix The open model technical coefficients matrix.
 #' @return A 1xn vector of direct output multipliers.
 compute_multiplier_output_direct <- function(technical_coefficients_matrix) .Call(wrap__compute_multiplier_output_direct, technical_coefficients_matrix)
 
-#' Calculates indirect output multiplier.
+#' Computes indirect output multiplier.
 #' @param technical_coefficients_matrix The open model technical coefficients matrix.
 #' @param leontief_inverse_matrix The open model Leontief inverse matrix.
 #' @return A 1xn vector of indirect output multipliers.
 compute_multiplier_output_indirect <- function(technical_coefficients_matrix, leontief_inverse_matrix) .Call(wrap__compute_multiplier_output_indirect, technical_coefficients_matrix, leontief_inverse_matrix)
 
-#' Calculates requirements for a given added value vector
+#' Computes requirements for a given added value vector
 #' @param added_value_element An added value vector.
 #' @param total_production The total production vector.
 #' @return A 1xn vector of a given added value coefficients.
 compute_requirements_added_value <- function(added_value_element, total_production) .Call(wrap__compute_requirements_added_value, added_value_element, total_production)
 
-#' Calculates generator matrix for a given added value vector.
+#' Computes generator matrix for a given added value vector.
 #' @param added_value_requirements The coefficients for a given added value vector.
 #' @param leontief_inverse_matrix The open model Leontief inverse matrix.
 #' @return A nxn matrix of an added value vector generator.
 compute_generator_added_value <- function(added_value_requirements, leontief_inverse_matrix) .Call(wrap__compute_generator_added_value, added_value_requirements, leontief_inverse_matrix)
 
-#' Calculates multiplier for a given added value vector.
+#' Computes multiplier for a given added value vector.
 #' @param added_value_requirements The coefficients for a given added value vector.
 #' @param leontief_inverse_matrix The open model Leontief inverse matrix.
 compute_multiplier_added_value <- function(added_value_requirements, leontief_inverse_matrix) .Call(wrap__compute_multiplier_added_value, added_value_requirements, leontief_inverse_matrix)
 
-#' Calculates indirect multiplier for a given added value vector.
+#' Computes indirect multiplier for a given added value vector.
 #' @param added_value_element An added value vector.
 #' @param total_production The total production vector.
 #' @param leontief_inverse_matrix The open model Leontief inverse matrix.
 #' @return A 1xn vector of indirect multipliers for a given added value vector.
 compute_multiplier_added_value_indirect <- function(added_value_element, total_production, leontief_inverse_matrix) .Call(wrap__compute_multiplier_added_value_indirect, added_value_element, total_production, leontief_inverse_matrix)
 
-#' Calculates field of influence given a technical change.
+#' Computes field of influence given a technical change.
 #' 
 #' @description
-#' Calculates total field of influence given a incremental change in the technical coefficients matrix \insertCite{vale_alise_2020}{fio}.
+#' Computes total field of influence given a incremental change in the technical coefficients matrix \insertCite{vale_alise_2020}{fio}.
 #' 
 #' @param tech_coeff_matrix A nxn matrix of technical coefficients.
 #' @param leontief_inverse_matrix The open model nxn Leontief inverse matrix.
@@ -228,11 +228,8 @@ compute_sensitivity_dispersion <- function(leontief_inverse_matrix) .Call(wrap__
 #' A 1xn vector of total production.
 #' 
 #' @details
-#' It calculates the allocation coefficients matrix, which is the rowwise ratio of
+#' Allocation coefficients matrix is the rowwise ratio of
 #' intermediate transactions to total production \insertCite{miller_input-output_2009}{fio}.
-#' 
-#' Underlined Rust code runs in parallel by default, so there is no need to
-#' use future or async/await to parallelize.
 #' 
 #' @references
 #' \insertAllCited{}
@@ -256,7 +253,7 @@ compute_allocation_coeff <- function(intermediate_transactions, total_production
 #' A \eqn{n x n} matrix of allocation coefficients.
 #' 
 #' @details
-#' It calculates the Ghosh inverse matrix, which is the inverse of the
+#' The Ghosh inverse matrix is the inverse of the
 #' difference \eqn{(I - F)} where I is the identity matrix and F is the
 #' allocation coefficients matrix \insertCite{miller_input-output_2009}{fio}.
 #' 
@@ -279,7 +276,7 @@ compute_allocation_coeff <- function(intermediate_transactions, total_production
 #' my_iom$ghosh_inverse_matrix
 compute_ghosh_inverse <- function(allocation_coeff) .Call(wrap__compute_ghosh_inverse, allocation_coeff)
 
-#' Calculates backward linkage extraction.
+#' Computes backward linkage extraction.
 #' 
 #' @description
 #' Computes impact on demand structure after extracting a given sector \insertCite{miller_input-output_2009}{fio}.
@@ -295,7 +292,7 @@ compute_ghosh_inverse <- function(allocation_coeff) .Call(wrap__compute_ghosh_in
 #' \insertAllCited{}
 compute_extraction_backward <- function(technical_coefficients_matrix, final_demand_matrix, total_production) .Call(wrap__compute_extraction_backward, technical_coefficients_matrix, final_demand_matrix, total_production)
 
-#' Calculates forward linkage extraction.
+#' Computes forward linkage extraction.
 #' 
 #' @description
 #' Computes impact on supply structure after extracting a given sector \insertCite{miller_input-output_2009}{fio}.
@@ -308,7 +305,7 @@ compute_extraction_backward <- function(technical_coefficients_matrix, final_dem
 #' \insertAllCited{}
 compute_extraction_forward <- function(allocation_coefficients_matrix, added_value_matrix, total_production) .Call(wrap__compute_extraction_forward, allocation_coefficients_matrix, added_value_matrix, total_production)
 
-#' Calculates total extraction
+#' Computes total extraction
 #' @param backward_linkage_matrix A nx2 matrix of backward linkage.
 #' @param forward_linkage_matrix A nx2 matrix of forward linkage.
 #' 

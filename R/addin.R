@@ -1,11 +1,4 @@
-#' Conveniently import data from an Excel file
-#'
-#' @description `fio_addin()` opens an [RStudio
-#'  gadget](https://shiny.rstudio.com/articles/gadgets.html) and
-#'  [addin](https://rstudio.github.io/rstudioaddins/) that allows you to say
-#'  where the data source is (either clipboard or Excel file) and import the
-#'  data into the global environment.
-#'  Appears as "Import input-output data" in the RStudio Addins menu.
+#' @noRd
 
 # nocov start
 input_options <- shiny::selectInput(
@@ -31,6 +24,15 @@ input_options <- shiny::selectInput(
     "Custom" = "custom"
   )
 )
+
+#' Conveniently import data from an Excel file
+#'
+#' @description `fio_addin()` opens an [RStudio
+#'  gadget](https://shiny.rstudio.com/articles/gadgets.html) and
+#'  [addin](https://rstudio.github.io/rstudioaddins/) that allows you to say
+#'  where the data source is (either clipboard or Excel file) and import the
+#'  data into the global environment.
+#'  Appears as "Import input-output data" in the RStudio Addins menu.
 
 fio_addin <- function() {
   rlang::check_installed(

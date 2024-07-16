@@ -11,11 +11,8 @@ use rayon::prelude::*;
 /// A 1xn vector of total production.
 /// 
 /// @details
-/// It calculates the allocation coefficients matrix, which is the rowwise ratio of
+/// Allocation coefficients matrix is the rowwise ratio of
 /// intermediate transactions to total production \insertCite{miller_input-output_2009}{fio}.
-/// 
-/// Underlined Rust code runs in parallel by default, so there is no need to
-/// use future or async/await to parallelize.
 /// 
 /// @references
 /// \insertAllCited{}
@@ -57,7 +54,7 @@ fn compute_allocation_coeff(
 /// A \eqn{n x n} matrix of allocation coefficients.
 /// 
 /// @details
-/// It calculates the Ghosh inverse matrix, which is the inverse of the
+/// The Ghosh inverse matrix is the inverse of the
 /// difference \eqn{(I - F)} where I is the identity matrix and F is the
 /// allocation coefficients matrix \insertCite{miller_input-output_2009}{fio}.
 /// 

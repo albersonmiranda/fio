@@ -18,11 +18,8 @@ A nxn matrix of allocation coefficients, known as F matrix.
 Computes allocation coefficients matrix.
 }
 \details{
-It calculates the allocation coefficients matrix, which is the rowwise ratio of
+Allocation coefficients matrix is the rowwise ratio of
 intermediate transactions to total production \insertCite{miller_input-output_2009}{fio}.
-
-Underlined Rust code runs in parallel by default, so there is no need to
-use future or async/await to parallelize.
 }
 \examples{
 intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)

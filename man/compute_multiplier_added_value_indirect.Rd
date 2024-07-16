@@ -2,7 +2,7 @@
 % Please edit documentation in R/extendr-wrappers.R
 \name{compute_multiplier_added_value_indirect}
 \alias{compute_multiplier_added_value_indirect}
-\title{Calculates indirect multiplier for a given added value vector.}
+\title{Computes indirect multiplier for a given added value vector.}
 \usage{
 compute_multiplier_added_value_indirect(
   added_value_element,
@@ -21,5 +21,5 @@ compute_multiplier_added_value_indirect(
 A 1xn vector of indirect multipliers for a given added value vector.
 }
 \description{
-Calculates indirect multiplier for a given added value vector.
+Computes indirect multiplier for a given added value vector.
 }

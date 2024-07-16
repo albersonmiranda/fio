@@ -18,7 +18,7 @@ A \eqn{n x n} matrix of technical coefficients, known as A matrix.
 Computes technical coefficients matrix.
 }
 \details{
-It calculates the technical coefficients matrix, which is the columnwise ratio of
+It computes the technical coefficients matrix, which is the columnwise ratio of
 intermediate transactions to total production \insertCite{leontief_economia_1983}{fio}.
 }
 \examples{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/extendr-wrappers.R
 \name{compute_multiplier_added_value}
 \alias{compute_multiplier_added_value}
-\title{Calculates multiplier for a given added value vector.}
+\title{Computes multiplier for a given added value vector.}
 \usage{
 compute_multiplier_added_value(
   added_value_requirements,
@@ -15,5 +15,5 @@ compute_multiplier_added_value(
 \item{leontief_inverse_matrix}{The open model Leontief inverse matrix.}
 }
 \description{
-Calculates multiplier for a given added value vector.
+Computes multiplier for a given added value vector.
 }

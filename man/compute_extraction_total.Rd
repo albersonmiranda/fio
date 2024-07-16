@@ -2,7 +2,7 @@
 % Please edit documentation in R/extendr-wrappers.R
 \name{compute_extraction_total}
 \alias{compute_extraction_total}
-\title{Calculates total extraction}
+\title{Computes total extraction}
 \usage{
 compute_extraction_total(backward_linkage_matrix, forward_linkage_matrix)
 }

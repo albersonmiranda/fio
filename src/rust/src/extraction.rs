@@ -2,7 +2,7 @@ use extendr_api::prelude::*;
 use faer::{prelude::SpSolver, Mat};
 
 #[extendr]
-/// Calculates backward linkage extraction.
+/// Computes backward linkage extraction.
 /// 
 /// @description
 /// Computes impact on demand structure after extracting a given sector \insertCite{miller_input-output_2009}{fio}.
@@ -71,7 +71,7 @@ fn compute_extraction_backward(
 }
 
 #[extendr]
-/// Calculates forward linkage extraction.
+/// Computes forward linkage extraction.
 /// 
 /// @description
 /// Computes impact on supply structure after extracting a given sector \insertCite{miller_input-output_2009}{fio}.
@@ -137,7 +137,7 @@ fn compute_extraction_forward(
 }
 
 #[extendr]
-/// Calculates total extraction
+/// Computes total extraction
 /// @param backward_linkage_matrix A nx2 matrix of backward linkage.
 /// @param forward_linkage_matrix A nx2 matrix of forward linkage.
 /// 

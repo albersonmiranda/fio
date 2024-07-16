@@ -16,7 +16,7 @@ A \eqn{n x n} matrix of Leontief inverse.
 Computes Leontief inverse matrix.
 }
 \details{
-It calculates the Leontief inverse matrix \insertCite{leontief_economia_1983}{fio}, which is the inverse of the
+It computes the Leontief inverse matrix \insertCite{leontief_economia_1983}{fio}, which is the inverse of the
 Leontief matrix. The formula is:
 
 \deqn{L = I - A}

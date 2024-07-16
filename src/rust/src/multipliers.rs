@@ -5,7 +5,7 @@ use faer::Mat;
 // * MARK: output multipliers
 
 #[extendr]
-/// Calculates type I output multiplier.
+/// Computes type I output multiplier.
 /// @param leontief_inverse_matrix The open model Leontief inverse matrix.
 /// @return A 1xn vector of type I output multipliers.
 
@@ -24,7 +24,7 @@ fn compute_multiplier_output(
 }
 
 #[extendr]
-/// Calculates direct output multiplier.
+/// Computes direct output multiplier.
 /// @param technical_coefficients_matrix The open model technical coefficients matrix.
 /// @return A 1xn vector of direct output multipliers.
 
@@ -43,7 +43,7 @@ fn compute_multiplier_output_direct(
 }
 
 #[extendr]
-/// Calculates indirect output multiplier.
+/// Computes indirect output multiplier.
 /// @param technical_coefficients_matrix The open model technical coefficients matrix.
 /// @param leontief_inverse_matrix The open model Leontief inverse matrix.
 /// @return A 1xn vector of indirect output multipliers.
@@ -66,7 +66,7 @@ fn compute_multiplier_output_indirect(
 // * MARK: other multipliers
 
 #[extendr]
-/// Calculates requirements for a given added value vector
+/// Computes requirements for a given added value vector
 /// @param added_value_element An added value vector.
 /// @param total_production The total production vector.
 /// @return A 1xn vector of a given added value coefficients.
@@ -82,7 +82,7 @@ fn compute_requirements_added_value(
 }
 
 #[extendr]
-/// Calculates generator matrix for a given added value vector.
+/// Computes generator matrix for a given added value vector.
 /// @param added_value_requirements The coefficients for a given added value vector.
 /// @param leontief_inverse_matrix The open model Leontief inverse matrix.
 /// @return A nxn matrix of an added value vector generator.
@@ -108,7 +108,7 @@ fn compute_generator_added_value(
 }
 
 #[extendr]
-/// Calculates multiplier for a given added value vector.
+/// Computes multiplier for a given added value vector.
 /// @param added_value_requirements The coefficients for a given added value vector.
 /// @param leontief_inverse_matrix The open model Leontief inverse matrix.
 
@@ -130,7 +130,7 @@ fn compute_multiplier_added_value(
 }
 
 #[extendr]
-/// Calculates indirect multiplier for a given added value vector.
+/// Computes indirect multiplier for a given added value vector.
 /// @param added_value_element An added value vector.
 /// @param total_production The total production vector.
 /// @param leontief_inverse_matrix The open model Leontief inverse matrix.
