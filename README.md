@@ -31,26 +31,27 @@ achieve highly optimized performance.
 
 ## Installation
 
-You can install the released version of `{fio}` from
-[R-universe](https://albersonmiranda.r-universe.dev/fio) with:
+You can install the released version of `{fio}` from CRAN with:
+
+``` r
+install.packages("fio")
+```
+
+For the latest development version, you’ll find precompiled binaries at
+[R-universe](https://albersonmiranda.r-universe.dev/fio):
 
 ``` r
 install.packages("fio", repos = c("https://albersonmiranda.r-universe.dev", "https://cloud.r-project.org"))
 ```
 
-For Linux, or if you wish to compile the latest development version from
-source, you’ll need [Rust](https://www.rust-lang.org/) installed on your
-system.
+If you wish to compile the latest development version from source,
+you’ll need [Rust](https://www.rust-lang.org/) installed on your system.
+You can install Rust with the following commands:
 
 - Debian/Ubuntu: `apt-get install cargo`
 - Fedora/CentOS: `dnf install cargo`
 - macOS: `brew install rustc`
 - Windows: <https://www.rust-lang.org/tools/install>
-
-You’ll also find previous releases of `fio` and precompiled binaries for
-Windows, macOS, and Linux in the [Releases
-section](https://github.com/albersonmiranda/fio/releases) on GitHub or
-at [R-universe](https://albersonmiranda.r-universe.dev/fio).
 
 ## Getting Started
 

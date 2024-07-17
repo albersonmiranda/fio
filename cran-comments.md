@@ -3,6 +3,7 @@
 This is a resubmission. Previous submission failed due to parallelization by default.
 In this version I have:
  
+* Added "-j 2" flag to `cargo build` to avoid parallelization (`makevars` and `makevars.win`).
 * Added `$set_max_threads()` method to provide control to the user.
 * Added tests.
 
