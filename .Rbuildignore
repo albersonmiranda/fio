@@ -5,6 +5,7 @@
 ^input_addin\.r$
 ^data-raw$
 ^\.github$
+^\.vscode$
 ^.lintr$
 ^src/\.cargo$
 ^_pkgdown\.yml$
