@@ -1,10 +1,17 @@
+## Second Ressubmission
+
+In this version I have:
+ 
+* Pass "--offline" flag to `cargo build` to avoid online compilation.
+* Included compressed Rust dependencies in order to compile offline.
+
 ## Ressubmission
 
 This is a resubmission. Previous submission failed due to parallelization by default.
 In this version I have:
  
-* Added "-j 2" flag to `cargo build` to avoid parallelization (`makevars` and `makevars.win`).
-* Added `$set_max_threads()` method to provide control to the user.
+* Added "-j 2" flag to `cargo build` to avoid parallelism during building (`makevars` and `makevars.win`).
+* Added `$set_max_threads()` method to provide parallelism control to the user.
 * Added tests.
 
 ## R CMD check results

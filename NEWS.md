@@ -1,3 +1,7 @@
+# fio 0.1.1
+
+* Fix build configuration to comply with CRAN policies
+
 # fio 0.1.0
 
 ## ✨ Enhancements
