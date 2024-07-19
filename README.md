@@ -10,8 +10,10 @@ Friendly & Fast Input-Output Analysis
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/fio)](https://CRAN.R-project.org/package=fio)
 [![R-universe](https://albersonmiranda.r-universe.dev/badges/fio)](https://albersonmiranda.r-universe.dev/fio)
+[![R-CMD-check](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/albersonmiranda/fio/branch/main/graph/badge.svg)](https://app.codecov.io/gh/albersonmiranda/fio?branch=main)
 <!-- badges: end -->
