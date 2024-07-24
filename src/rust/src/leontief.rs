@@ -14,14 +14,13 @@ use rayon::prelude::*;
 /// It computes the technical coefficients matrix, which is the columnwise ratio of
 /// intermediate transactions to total production \insertCite{leontief_economia_1983}{fio}.
 /// 
+/// Underlined Rust code uses Rayon crate to parallelize the computation by
+/// default, so there is no need to use future or async/await to parallelize.
 /// @return
 /// A \eqn{n x n} matrix of technical coefficients, known as A matrix.
 /// 
 /// @references
 /// \insertAllCited{}
-/// 
-/// Underlined Rust code uses Rayon crate to parallelize the computation by
-/// default, so there is no need to use future or async/await to parallelize.
 /// 
 /// @examples
 /// intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
@@ -32,6 +31,8 @@ use rayon::prelude::*;
 /// my_iom$compute_tech_coeff()
 /// # show the technical coefficients
 /// my_iom$technical_coefficients_matrix
+/// 
+/// @noRd
 
 fn compute_tech_coeff(
   // There's an optional faer feature in extendr-api but it's not working (for the time I'm writing this)
@@ -93,6 +94,8 @@ fn compute_tech_coeff(
 /// my_iom$compute_leontief_inverse()
 /// # show the Leontief inverse
 /// my_iom$leontief_inverse_matrix
+/// 
+/// @noRd
 
 fn compute_leontief_inverse(tech_coeff: &[f64]) -> RArray<f64, [usize;2]> {
 

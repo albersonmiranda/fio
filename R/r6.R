@@ -5,33 +5,35 @@
 #' R6 class for input-output matrix.
 #'
 #' @param id (`character`)\cr
-#'  Identifier for the input-output matrix.
+#' Identifier for the input-output matrix.
 #' @param intermediate_transactions (`matrix`)\cr
-#'  Intermediate transactions matrix.
+#' Intermediate transactions matrix.
 #' @param total_production (`matrix`)\cr
-#'  Total production vector.
+#' Total production vector.
 #' @param household_consumption (`matrix`)\cr
-#'  Household consumption vector.
+#' Household consumption vector.
 #' @param government_consumption (`matrix`)\cr
-#'  Government consumption vector.
+#' Government consumption vector.
 #' @param exports (`matrix`)\cr
-#'  Exports vector.
+#' Exports vector.
 #' @param final_demand_others (`matrix`)\cr
-#'  Other vectors of final demand that doesn't have dedicated slots.
-#'  Setting column names is advised for better readability.
+#' Other vectors of final demand that doesn't have dedicated slots.
+#' Setting column names is advised for better readability.
 #' @param imports (`matrix`)\cr
-#'  Imports vector.
+#' Imports vector.
 #' @param taxes (`matrix`)\cr
-#'  Taxes vector.
+#' Taxes vector.
 #' @param wages (`matrix`)\cr
-#'  Wages vector.
+#' Wages vector.
 #' @param operating_income (`matrix`)\cr
-#'  Operating income vector.
+#' Operating income vector.
 #' @param added_value_others (`matrix`)\cr
-#'  Other vectors of added value that doesn't have dedicated slots.
-#'  Setting row names is advised for better readability.
+#' Other vectors of added value that doesn't have dedicated slots.
+#' Setting row names is advised for better readability.
 #' @param occupation (`matrix`)\cr
-#'  Occupation matrix.
+#' Occupation matrix.
+#' @param threads (`integer`)\cr
+#' Number of threads available for Rust to run in parallel.
 #'
 #' @examples
 #' # data
@@ -193,14 +195,12 @@ iom <- R6::R6Class(
                           wages = NULL,
                           operating_income = NULL,
                           added_value_others = NULL,
-                          occupation = NULL) {
-      # set default
-      self$threads <- 0
-
+                          occupation = NULL,
+                          threads = 0) {
       ### assertions ###
       # check class
       for (matrix in private$iom_elements()) {
-        if (!is.null(get(matrix)) && !is.matrix(get(matrix))) {
+        if (!is.null(get_var(matrix)) && !is.matrix(get_var(matrix))) {
           cli::cli_h1("Error in matrix class")
           alert(paste("Try coerce", matrix, "to a matrix using as.matrix() function."))
           error(paste(matrix, "must be a matrix."))
@@ -219,10 +219,22 @@ iom <- R6::R6Class(
         "exports",
         "final_demand_others"
       )) {
-        if (!is.null(get(matrix)) && nrow(get(matrix)) != nrow(intermediate_transactions)) {
+        if (
+          !is.null(get_var(matrix))
+          && nrow(get_var(matrix)) != nrow(intermediate_transactions)
+        ) {
           cli::cli_h1("Error in matrix dimensions")
-          error("`{matrix}` must have the same number of rows than `intermediate_transactions`,
-          which is {nrow(intermediate_transactions)} rows. But `{matrix}` has {nrow(get(matrix))} rows.")
+          error(
+            paste(
+              matrix,
+              "must have the same number of rows than `intermediate_transactions`,
+              which is",
+              nrow(intermediate_transactions),
+              "rows. But has",
+              nrow(get_var(matrix)),
+              "rows."
+            )
+          )
         }
       }
 
@@ -235,21 +247,37 @@ iom <- R6::R6Class(
         "occupation",
         "total_production"
       )) {
-        if (!is.null(get(matrix)) && ncol(get(matrix)) != ncol(intermediate_transactions)) {
+        if (!is.null(get_var(matrix)) && ncol(get_var(matrix)) != ncol(intermediate_transactions)) {
           cli::cli_h1("Error in matrix dimensions")
-          error("`{matrix}` must have the same number of columns than `intermediate_transactions`,
-          which is {ncol(intermediate_transactions)} columns. But `{matrix}` has {ncol(get(matrix))} columns.")
+          error(
+            paste(
+              matrix,
+              "must have the same number of columns than `intermediate_transactions`, which is",
+              ncol(intermediate_transactions),
+              "columns. But",
+              matrix,
+              "has",
+              ncol(get_var(matrix)),
+              "columns."
+            )
+          )
         }
       }
 
       # check number format
       for (matrix in private$iom_elements()) {
-        if (!is.null(get(matrix))) {
+        if (!is.null(get_var(matrix))) {
           # Check if the matrix storage mode is not double
-          if (storage.mode(get(matrix)) != "double") {
+          if (storage.mode(get_var(matrix)) != "double") {
             cli::cli_h1("Error in matrix number format")
-            alert("Try coerce {matrix} elements to double using as.numeric().")
-            error("{matrix} elements must be of type double.")
+            alert(
+              paste(
+                "Try coerce",
+                matrix,
+                "elements to double using as.numeric()."
+              )
+            )
+            error(paste(matrix, "elements must be of type double."))
           }
         }
       }
@@ -271,40 +299,67 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Adds a matrix to a previously imported IO matrix.
-    #' @param matrix_name
+    #' Adds a `matrix` to the `iom` object.
+    #' @param matrix_name (`character`)\cr
     #' One of household_consumption, government_consumption, exports, final_demand_others,
     #' imports, taxes, wages, operating income, added_value_others or occupation matrix to be added.
-    #' @param matrix
+    #' @param matrix (`matrix`)\cr
     #' Matrix object to be added.
+    #' @return
+    #' Self (invisibly).
+    #' @example
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- iom$new("mock", intermediate_transactions, total_production)
+    #' # Create a dummy matrix
+    #' exports_data <- matrix(1:3, 3, 1)
+    #' # Add the matrix
+    #' my_iom$add("exports", exports_data)
     add = function(matrix_name, matrix) {
       # check arg
       choices <- private$iom_elements()
-      tryCatch(
-        match.arg(matrix_name, choices),
-        error = function(e) {
-          cli::cli_h1("Error in matrix_name")
-          error("matrix_name must be one of {choices}")
-        }
-      )
+      if (!matrix_name %in% choices) {
+        cli::cli_h1("Error in matrix_name")
+        error(paste("matrix_name must be one of", paste(choices, collapse = ", ")))
+      }
+
       # check class
       if (!is.matrix(matrix)) {
         cli::cli_h1("Error in matrix class")
-        alert("Try coerce {matrix} to a matrix using as.matrix() function.")
-        error("{matrix} must be a matrix.")
+        alert(paste("Try coerce", matrix_name, "to a matrix using as.matrix() function."))
+        error(paste(matrix_name, "must be a matrix."))
       }
+
       # check dimensions
       if (matrix_name %in% c("household_consumption", "government_consumption", "exports", "final_demand_others")) {
         if (nrow(matrix) != nrow(self$intermediate_transactions)) {
           cli::cli_h1("Error in matrix dimensions")
-          error("{matrix_name} must have the same number of rows than intermediate_transactions,
-          which is {nrow(self$intermediate_transactions)} rows. But {matrix_name} has {nrow(matrix)} rows.")
+          error(
+            paste(
+              matrix_name,
+              "must have the same number of rows than intermediate_transactions, which is",
+              nrow(self$intermediate_transactions),
+              "rows. But",
+              matrix_name,
+              "has",
+              nrow(matrix),
+              "rows."
+            )
+          )
         }
       } else {
         if (ncol(matrix) != ncol(self$intermediate_transactions)) {
           cli::cli_h1("Error in matrix dimensions")
-          error("{matrix_name} must have the same number of columns than intermediate_transactions,
-          which is {ncol(self$intermediate_transactions)} columns. But {matrix_name} has {ncol(matrix)} columns.")
+          error(
+            paste(
+              matrix_name,
+              "must have the same number of columns than intermediate_transactions, which is",
+              ncol(self$intermediate_transactions),
+              "columns. But", matrix_name, "has", ncol(matrix), "columns."
+            )
+          )
         }
       }
       # import matrix
@@ -313,20 +368,27 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Removes a matrix from a previously imported IO matrix.
-    #' @param matrix_name
+    #' Removes a `matrix` from the `iom` object.
+    #' @param matrix_name (`character`)\cr
     #' One of household_consumption, government_consumption, exports, final_demand_others,
     #' imports, taxes, wages, operating income, added_value_others or occupation matrix to be removed.
+    #' @return Self (invisibly).
+    #' @example
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #'  exports_data <- matrix(1:3, 3, 1)
+    #' # instantiate iom object
+    #' my_iom <- iom$new("mock", intermediate_transactions, total_production, exports = exports_data)
+    #' # Remove the matrix
+    #' my_iom$remove("exports")
     remove = function(matrix_name) {
       # check arg
       choices <- private$iom_elements()
-      tryCatch(
-        match.arg(matrix_name, choices),
-        error = function(e) {
-          cli::cli_h1("Error in matrix_name")
-          error("matrix_name must be one of {choices}")
-        }
-      )
+      if (!matrix_name %in% choices) {
+        cli::cli_h1("Error in matrix_name")
+        error(paste("matrix_name must be one of", paste(choices, collapse = ", ")))
+      }
       # remove matrix
       self[[matrix_name]] <- NULL
       invisible(self)
@@ -334,6 +396,30 @@ iom <- R6::R6Class(
 
     #' @description
     #' Aggregates final demand vectors into a matrix.
+    #' @details
+    #' Some methods, as `$compute_hypothetical_extraction()`, require the final demand and added value vectors
+    #' to be aggregated into a matrix. This method does this aggregation, binding the vectors into
+    #' `$final_demand_matrix`.
+    #' @return
+    #' It doesn't return anything, but updates the `final_demand_matrix` field.
+    #' @examples
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' exports_data <- matrix(c(10, 20, 30), 3, 1)
+    #' households <- matrix(4:6, 3, 1)
+    #' # instantiate iom object
+    #' my_iom <- iom$new(
+    #'  "mock",
+    #'  intermediate_transactions,
+    #'  total_production,
+    #'  exports = exports_data,
+    #'  household_consumption = households
+    #' )
+    #' # aggregate all final demand vectors
+    #' my_iom$update_final_demand_matrix()
+    #' # check final demand matrix
+    #' my_iom$final_demand_matrix
     update_final_demand_matrix = function() {
       # bind final demand vectors
       self$final_demand_matrix <- as.matrix(cbind(
@@ -346,6 +432,30 @@ iom <- R6::R6Class(
 
     #' @description
     #' Aggregates added value vectors into a matrix.
+    #' @details
+    #' Some methods, as `$compute_hypothetical_extraction()`, require the final demand and added value vectors
+    #' to be aggregated into a matrix. This method does this aggregation, binding the vectors into
+    #' `$added_value_matrix`.
+    #' @return
+    #' It doesn't return anything, but updates the `added_value_matrix` field.
+    #' @examples
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' imports_data <- matrix(c(5, 10, 15), 1, 3)
+    #' taxes_data <- matrix(c(2, 5, 10), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- iom$new(
+    #' "mock",
+    #' intermediate_transactions,
+    #' total_production,
+    #' imports = imports_data,
+    #' taxes = taxes_data
+    #' )
+    #' # aggregate all added value vectors
+    #' my_iom$update_added_value_matrix()
+    #' # check added value matrix
+    #' my_iom$added_value_matrix
     update_added_value_matrix = function() {
       # bind added value vectors
       self$added_value_matrix <- as.matrix(rbind(
@@ -359,6 +469,29 @@ iom <- R6::R6Class(
 
     #' @description
     #' Computes the technical coefficients matrix.
+    #' @details
+    #' It computes the technical coefficients matrix, a \eqn{n x n} matrix known as `A` matrix which is the column-wise
+    #' ratio of intermediate transactions to total production \insertCite{leontief_economia_1983}{fio}.
+    #'
+    #' It takes a \eqn{n x n} matrix of intermediate transactions and a \eqn{1 x n} vector of total production,
+    #' and populates the `technical_coefficients_matrix` field with the result.
+    #'
+    #' Underlined Rust code uses Rayon crate to parallelize the computation. So there is no need to use future or
+    #' async/await to parallelize.
+    #' @return
+    #' Self (invisibly).
+    #' @references
+    #' \insertAllCited{}
+    #' @seealso [set_threads()] for controlling parallelism.
+    #' @examples
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- iom$new("test", intermediate_transactions, total_production)
+    #' # Calculate the technical coefficients
+    #' my_iom$compute_tech_coeff()
+    #' # show the technical coefficients
+    #' my_iom$technical_coefficients_matrix
     compute_tech_coeff = function() {
       # save row and column names
       row_names <- if (is.null(rownames(self$intermediate_transactions))) {
