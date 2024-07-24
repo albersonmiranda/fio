@@ -19,109 +19,110 @@ wages <- matrix(c(11, 12, 13), 1, 3)
 
 # a new iom instance can be created by passing just intermediate transactions and total production
 my_iom <- iom$new(
- "example",
+ "example_1",
  intermediate_transactions,
  total_production
 )
 
-# Compute technical coefficients matrix
-my_iom$compute_tech_coeff()
-print(my_iom$technical_coefficients_matrix)
+# or by passing optional arguments
+my_iom <- iom$new(
+"example_2",
+intermediate_transactions,
+total_production,
+household_consumption = households,
+exports = exports,
+imports = imports,
+taxes = taxes,
+wages = wages,
+occupation = jobs
+)
 
-# Compute leontief inverse matrix
-my_iom$compute_leontief_inverse()
-print(my_iom$leontief_inverse_matrix)
 
-# compute output multiplier
-my_iom$compute_multiplier_output()
-print(my_iom$multiplier_output)
+## ------------------------------------------------
+## Method `iom$compute_ghosh_inverse`
+## ------------------------------------------------
 
-# `add` or `remove` other elements to IO matrix
-my_iom$add("exports", exports)
-my_iom$add("household_consumption", households)
-my_iom$add("occupation", jobs)
-my_iom$add("taxes", taxes)
-my_iom$add("wages", wages)
-
-# compute multipliers for added elements
-my_iom$compute_multiplier_employment()
-my_iom$compute_multiplier_taxes()
-my_iom$compute_multiplier_wages()
-print(my_iom$multiplier_wages)
-
-# compute field of influence
-my_iom$compute_field_influence(epsilon = 0.001)
-
-# compute power and sensitivity of dispersion, it's coefficients of variation
-# and identify key sectors
-my_iom$compute_key_sectors()
-print(my_iom$key_sectors)
-
-# supply-wise model
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+# Calculate the allocation coefficients
 my_iom$compute_allocation_coeff()
+# Calculate the Ghosh inverse
 my_iom$compute_ghosh_inverse()
-print(my_iom$ghosh_inverse_matrix)
-
-# aggregates final demand and added value vectors
-my_iom$update_final_demand_matrix()
-print(my_iom$final_demand_matrix)
-
-my_iom$update_added_value_matrix()
-print(my_iom$added_value_matrix)
-
-# perform hypothetical extraction of a given sector
-my_iom$compute_hypothetical_extraction()
-print(my_iom$hypothetical_extraction)
-
+# show the Ghosh inverse
+my_iom$ghosh_inverse_matrix
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{id}}{Identifier of the new instance}
+\item{\code{id}}{(\code{character})\cr
+Identifier of the new instance.}
 
-\item{\code{intermediate_transactions}}{Intermediate transactions matrix}
+\item{\code{intermediate_transactions}}{(\code{matrix})\cr
+Intermediate transactions matrix.}
 
-\item{\code{total_production}}{Total production vector}
+\item{\code{total_production}}{(\code{matrix})\cr
+Total production vector.}
 
-\item{\code{household_consumption}}{Household consumption vector}
+\item{\code{household_consumption}}{(\code{matrix})\cr
+Household consumption vector.}
 
-\item{\code{government_consumption}}{Government consumption vector}
+\item{\code{government_consumption}}{(\code{matrix})\cr
+Government consumption vector.}
 
-\item{\code{exports}}{Exports vector}
+\item{\code{exports}}{(\code{matrix})\cr
+Exports vector.}
 
-\item{\code{final_demand_others}}{Other vectors of final demand that doesn't have dedicated slots}
+\item{\code{final_demand_others}}{(\code{matrix})\cr
+Other vectors of final demand that doesn't have dedicated slots.}
 
-\item{\code{final_demand_matrix}}{Aggregates final demand vectors into a matrix}
+\item{\code{final_demand_matrix}}{(\code{matrix})\cr
+Aggregates final demand vectors into a matrix.}
 
-\item{\code{imports}}{Imports vector}
+\item{\code{imports}}{(\code{matrix})\cr
+Imports vector.}
 
-\item{\code{taxes}}{Taxes vector}
+\item{\code{taxes}}{(\code{matrix})\cr
+Taxes vector.}
 
-\item{\code{wages}}{Wages vector.}
+\item{\code{wages}}{(\code{matrix})\cr
+Wages vector.}
 
-\item{\code{operating_income}}{Operating income vector}
+\item{\code{operating_income}}{(\code{matrix})\cr
+Operating income vector.}
 
-\item{\code{added_value_others}}{Other vectors of added value that doesn't have dedicated slots}
+\item{\code{added_value_others}}{(\code{matrix})\cr
+Other vectors of added value that doesn't have dedicated slots.}
 
-\item{\code{added_value_matrix}}{Aggregates added value vectors into a matrix}
+\item{\code{added_value_matrix}}{(\code{matrix})\cr
+Aggregates added value vectors into a matrix.}
 
-\item{\code{occupation}}{Occupation vector}
+\item{\code{occupation}}{(\code{matrix})\cr
+Occupation vector.}
 
-\item{\code{technical_coefficients_matrix}}{Technical coefficients matrix}
+\item{\code{technical_coefficients_matrix}}{(\code{matrix})\cr
+Technical coefficients matrix.}
 
-\item{\code{leontief_inverse_matrix}}{Leontief inverse matrix}
+\item{\code{leontief_inverse_matrix}}{(\code{matrix})\cr
+Leontief inverse matrix.}
 
-\item{\code{multiplier_output}}{Output multiplier dataframe}
+\item{\code{multiplier_output}}{(\code{data.frame})\cr
+Output multiplier dataframe.}
 
-\item{\code{multiplier_employment}}{Employment multiplier dataframe}
+\item{\code{multiplier_employment}}{(\code{data.frame})\cr
+Employment multiplier dataframe.}
 
-\item{\code{multiplier_taxes}}{Taxes multiplier dataframe}
+\item{\code{multiplier_taxes}}{(\code{data.frame})\cr
+Taxes multiplier dataframe.}
 
-\item{\code{multiplier_wages}}{Wages multiplier dataframe}
+\item{\code{multiplier_wages}}{(\code{data.frame})\cr
+Wages multiplier dataframe.}
 
 \item{\code{field_influence}}{Influence field matrix}
 
-\item{\code{key_sectors}}{Key sectors dataframe}
+\item{\code{key_sectors}}{(\code{data.frame})\cr
+Key sectors dataframe}
 
 \item{\code{allocation_coefficients_matrix}}{Allocation coefficients matrix}
 
@@ -182,33 +183,46 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{id}}{Identifier for the input-output matrix.}
+\item{\code{id}}{(\code{character})\cr
+Identifier for the input-output matrix.}
 
-\item{\code{intermediate_transactions}}{Intermediate transactions matrix.}
+\item{\code{intermediate_transactions}}{(\code{matrix})\cr
+Intermediate transactions matrix.}
 
-\item{\code{total_production}}{Total production vector.}
+\item{\code{total_production}}{(\code{matrix})\cr
+Total production vector.}
 
-\item{\code{household_consumption}}{Household consumption vector.}
+\item{\code{household_consumption}}{(\code{matrix})\cr
+Household consumption vector.}
 
-\item{\code{government_consumption}}{Government consumption vector.}
+\item{\code{government_consumption}}{(\code{matrix})\cr
+Government consumption vector.}
 
-\item{\code{exports}}{Exports vector.}
+\item{\code{exports}}{(\code{matrix})\cr
+Exports vector.}
 
-\item{\code{final_demand_others}}{Other vectors of final demand that doesn't have dedicated slots.
+\item{\code{final_demand_others}}{(\code{matrix})\cr
+Other vectors of final demand that doesn't have dedicated slots.
 Setting column names is advised for better readability.}
 
-\item{\code{imports}}{Imports vector.}
+\item{\code{imports}}{(\code{matrix})\cr
+Imports vector.}
 
-\item{\code{taxes}}{Taxes vector.}
+\item{\code{taxes}}{(\code{matrix})\cr
+Taxes vector.}
 
-\item{\code{wages}}{Wages vector.}
+\item{\code{wages}}{(\code{matrix})\cr
+Wages vector.}
 
-\item{\code{operating_income}}{Operating income vector.}
+\item{\code{operating_income}}{(\code{matrix})\cr
+Operating income vector.}
 
-\item{\code{added_value_others}}{Other vectors of added value that doesn't have dedicated slots.
+\item{\code{added_value_others}}{(\code{matrix})\cr
+Other vectors of added value that doesn't have dedicated slots.
 Setting row names is advised for better readability.}
 
-\item{\code{occupation}}{Occupation matrix.}
+\item{\code{occupation}}{(\code{matrix})\cr
+Occupation matrix.}
 }
 \if{html}{\out{</div>}}
 }
@@ -376,6 +390,23 @@ Computes the allocation coefficients matrix.
 Computes the Ghosh inverse matrix.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_ghosh_inverse()}\if{html}{\out{</div>}}
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+# Calculate the allocation coefficients
+my_iom$compute_allocation_coeff()
+# Calculate the Ghosh inverse
+my_iom$compute_ghosh_inverse()
+# show the Ghosh inverse
+my_iom$ghosh_inverse_matrix
+}
+\if{html}{\out{</div>}}
+
 }
 
 }

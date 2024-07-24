@@ -17,12 +17,11 @@ Authors@R: c(
     comment = c(ORCID = "0000-0001-7616-0244")
     )
   )
-Description: A friendly and fast tool for input-output analysis. It simplifies the
-  process of importing and managing input-output matrices from 'Microsoft Excel' into R, and
-  provides a suite of functions for analysis. It leverages the 'R6'
-  class for clean, memory-efficient object-oriented programming. Furthermore,
-  all linear algebra computations are implemented in 'Rust' to achieve highly
-  optimized performance.
+Description: Simplifies the process of importing and managing input-output
+  matrices from 'Microsoft Excel' into R, and provides a suite of functions for
+  analysis. It leverages the 'R6' class for clean, memory-efficient
+  object-oriented programming. Furthermore, all linear algebra computations are
+  implemented in 'Rust' to achieve highly optimized performance.
 URL: https://albersonmiranda.github.io/fio/, https://github.com/albersonmiranda/fio
 BugReports: https://github.com/albersonmiranda/fio/issues
 Encoding: UTF-8

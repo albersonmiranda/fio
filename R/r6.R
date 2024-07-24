@@ -4,34 +4,34 @@
 #' @description
 #' R6 class for input-output matrix.
 #'
-#' @param id
-#' Identifier for the input-output matrix.
-#' @param intermediate_transactions
-#' Intermediate transactions matrix.
-#' @param total_production
-#' Total production vector.
-#' @param household_consumption
-#' Household consumption vector.
-#' @param government_consumption
-#' Government consumption vector.
-#' @param exports
-#' Exports vector.
-#' @param final_demand_others
-#' Other vectors of final demand that doesn't have dedicated slots.
-#' Setting column names is advised for better readability.
-#' @param imports
-#' Imports vector.
-#' @param taxes
-#' Taxes vector.
-#' @param wages
-#' Wages vector.
-#' @param operating_income
-#' Operating income vector.
-#' @param added_value_others
-#' Other vectors of added value that doesn't have dedicated slots.
-#' Setting row names is advised for better readability.
-#' @param occupation
-#' Occupation matrix.
+#' @param id (`character`)\cr
+#'  Identifier for the input-output matrix.
+#' @param intermediate_transactions (`matrix`)\cr
+#'  Intermediate transactions matrix.
+#' @param total_production (`matrix`)\cr
+#'  Total production vector.
+#' @param household_consumption (`matrix`)\cr
+#'  Household consumption vector.
+#' @param government_consumption (`matrix`)\cr
+#'  Government consumption vector.
+#' @param exports (`matrix`)\cr
+#'  Exports vector.
+#' @param final_demand_others (`matrix`)\cr
+#'  Other vectors of final demand that doesn't have dedicated slots.
+#'  Setting column names is advised for better readability.
+#' @param imports (`matrix`)\cr
+#'  Imports vector.
+#' @param taxes (`matrix`)\cr
+#'  Taxes vector.
+#' @param wages (`matrix`)\cr
+#'  Wages vector.
+#' @param operating_income (`matrix`)\cr
+#'  Operating income vector.
+#' @param added_value_others (`matrix`)\cr
+#'  Other vectors of added value that doesn't have dedicated slots.
+#'  Setting row names is advised for better readability.
+#' @param occupation (`matrix`)\cr
+#'  Occupation matrix.
 #'
 #' @examples
 #' # data
@@ -46,59 +46,23 @@
 #'
 #' # a new iom instance can be created by passing just intermediate transactions and total production
 #' my_iom <- iom$new(
-#'  "example",
+#'  "example_1",
 #'  intermediate_transactions,
 #'  total_production
 #' )
 #'
-#' # Compute technical coefficients matrix
-#' my_iom$compute_tech_coeff()
-#' print(my_iom$technical_coefficients_matrix)
-#'
-#' # Compute leontief inverse matrix
-#' my_iom$compute_leontief_inverse()
-#' print(my_iom$leontief_inverse_matrix)
-#'
-#' # compute output multiplier
-#' my_iom$compute_multiplier_output()
-#' print(my_iom$multiplier_output)
-#'
-#' # `add` or `remove` other elements to IO matrix
-#' my_iom$add("exports", exports)
-#' my_iom$add("household_consumption", households)
-#' my_iom$add("occupation", jobs)
-#' my_iom$add("taxes", taxes)
-#' my_iom$add("wages", wages)
-#'
-#' # compute multipliers for added elements
-#' my_iom$compute_multiplier_employment()
-#' my_iom$compute_multiplier_taxes()
-#' my_iom$compute_multiplier_wages()
-#' print(my_iom$multiplier_wages)
-#'
-#' # compute field of influence
-#' my_iom$compute_field_influence(epsilon = 0.001)
-#'
-#' # compute power and sensitivity of dispersion, it's coefficients of variation
-#' # and identify key sectors
-#' my_iom$compute_key_sectors()
-#' print(my_iom$key_sectors)
-#'
-#' # supply-wise model
-#' my_iom$compute_allocation_coeff()
-#' my_iom$compute_ghosh_inverse()
-#' print(my_iom$ghosh_inverse_matrix)
-#'
-#' # aggregates final demand and added value vectors
-#' my_iom$update_final_demand_matrix()
-#' print(my_iom$final_demand_matrix)
-#'
-#' my_iom$update_added_value_matrix()
-#' print(my_iom$added_value_matrix)
-#'
-#' # perform hypothetical extraction of a given sector
-#' my_iom$compute_hypothetical_extraction()
-#' print(my_iom$hypothetical_extraction)
+#' # or by passing optional arguments
+#' my_iom <- iom$new(
+#' "example_2",
+#' intermediate_transactions,
+#' total_production,
+#' household_consumption = households,
+#' exports = exports,
+#' imports = imports,
+#' taxes = taxes,
+#' wages = wages,
+#' occupation = jobs
+#' )
 #'
 #' @importFrom Rdpack reprompt
 #' @export
@@ -107,113 +71,111 @@
 iom <- R6::R6Class(
   classname = "iom",
   public = list(
-    # data members
-
-    #' @field id
-    #' Identifier of the new instance
+    #' @field id (`character`)\cr
+    #' Identifier of the new instance.
     id = NULL,
 
-    #' @field intermediate_transactions
-    #' Intermediate transactions matrix
+    #' @field intermediate_transactions (`matrix`)\cr
+    #' Intermediate transactions matrix.
     intermediate_transactions = NULL,
 
-    #' @field total_production
-    #' Total production vector
+    #' @field total_production (`matrix`)\cr
+    #' Total production vector.
     total_production = NULL,
 
-    #' @field household_consumption
-    #' Household consumption vector
+    #' @field household_consumption (`matrix`)\cr
+    #' Household consumption vector.
     household_consumption = NULL,
 
-    #' @field government_consumption
-    #' Government consumption vector
+    #' @field government_consumption (`matrix`)\cr
+    #' Government consumption vector.
     government_consumption = NULL,
 
-    #' @field exports
-    #' Exports vector
+    #' @field exports (`matrix`)\cr
+    #' Exports vector.
     exports = NULL,
 
-    #' @field final_demand_others
-    #' Other vectors of final demand that doesn't have dedicated slots
+    #' @field final_demand_others (`matrix`)\cr
+    #' Other vectors of final demand that doesn't have dedicated slots.
     final_demand_others = NULL,
 
-    #' @field final_demand_matrix
-    #' Aggregates final demand vectors into a matrix
+    #' @field final_demand_matrix (`matrix`)\cr
+    #' Aggregates final demand vectors into a matrix.
     final_demand_matrix = NULL,
 
-    #' @field imports
-    #' Imports vector
+    #' @field imports (`matrix`)\cr
+    #' Imports vector.
     imports = NULL,
 
-    #' @field taxes
-    #' Taxes vector
+    #' @field taxes (`matrix`)\cr
+    #' Taxes vector.
     taxes = NULL,
 
-    #' @field wages
+    #' @field wages (`matrix`)\cr
     #' Wages vector.
     wages = NULL,
 
-    #' @field operating_income
-    #' Operating income vector
+    #' @field operating_income (`matrix`)\cr
+    #' Operating income vector.
     operating_income = NULL,
 
-    #' @field added_value_others
-    #' Other vectors of added value that doesn't have dedicated slots
+    #' @field added_value_others (`matrix`)\cr
+    #' Other vectors of added value that doesn't have dedicated slots.
     added_value_others = NULL,
 
-    #' @field added_value_matrix
-    #' Aggregates added value vectors into a matrix
+    #' @field added_value_matrix (`matrix`)\cr
+    #' Aggregates added value vectors into a matrix.
     added_value_matrix = NULL,
 
-    #' @field occupation
-    #' Occupation vector
+    #' @field occupation (`matrix`)\cr
+    #' Occupation vector.
     occupation = NULL,
 
-    #' @field technical_coefficients_matrix
-    #' Technical coefficients matrix
+    #' @field technical_coefficients_matrix (`matrix`)\cr
+    #' Technical coefficients matrix.
     technical_coefficients_matrix = NULL,
 
-    #' @field leontief_inverse_matrix
-    #' Leontief inverse matrix
+    #' @field leontief_inverse_matrix (`matrix`)\cr
+    #' Leontief inverse matrix.
     leontief_inverse_matrix = NULL,
 
-    #' @field multiplier_output
-    #' Output multiplier dataframe
+    #' @field multiplier_output (`data.frame`)\cr
+    #' Output multiplier dataframe.
     multiplier_output = NULL,
 
-    #' @field multiplier_employment
-    #' Employment multiplier dataframe
+    #' @field multiplier_employment (`data.frame`)\cr
+    #' Employment multiplier dataframe.
     multiplier_employment = NULL,
 
-    #' @field multiplier_taxes
-    #' Taxes multiplier dataframe
+    #' @field multiplier_taxes (`data.frame`)\cr
+    #' Taxes multiplier dataframe.
     multiplier_taxes = NULL,
 
-    #' @field multiplier_wages
-    #' Wages multiplier dataframe
+    #' @field multiplier_wages (`data.frame`)\cr
+    #' Wages multiplier dataframe.
     multiplier_wages = NULL,
 
-    #' @field field_influence
-    #' Influence field matrix
+    #' @field field_influence (`matrix`)\cr
+    #' Influence field matrix.
     field_influence = NULL,
 
-    #' @field key_sectors
-    #' Key sectors dataframe
+    #' @field key_sectors (`data.frame`)\cr
+    #' Key sectors dataframe.
     key_sectors = NULL,
 
-    #' @field allocation_coefficients_matrix
-    #' Allocation coefficients matrix
+    #' @field allocation_coefficients_matrix (`matrix`)\cr
+    #' Allocation coefficients matrix.
     allocation_coefficients_matrix = NULL,
 
-    #' @field ghosh_inverse_matrix
-    #' Ghosh inverse matrix
+    #' @field ghosh_inverse_matrix (`matrix`)\cr
+    #' Ghosh inverse matrix.
     ghosh_inverse_matrix = NULL,
 
-    #' @field hypothetical_extraction
+    #' @field hypothetical_extraction (`matrix`)\cr
     #' Absolute and relative backward and forward differences in total output after a hypothetical extraction
     hypothetical_extraction = NULL,
 
-    #' @field threads
+    #' @field threads (`integer`)\cr
     #' Number of threads available for Rust to run in parallel
     threads = 0,
 
@@ -240,8 +202,8 @@ iom <- R6::R6Class(
       for (matrix in private$iom_elements()) {
         if (!is.null(get(matrix)) && !is.matrix(get(matrix))) {
           cli::cli_h1("Error in matrix class")
-          alert("Try coerce {matrix} to a matrix using as.matrix() function.")
-          error("{matrix} must be a matrix.")
+          alert(paste("Try coerce", matrix, "to a matrix using as.matrix() function."))
+          error(paste(matrix, "must be a matrix."))
         }
       }
 
@@ -707,6 +669,17 @@ iom <- R6::R6Class(
 
     #' @description
     #' Computes the Ghosh inverse matrix.
+    #' @examples
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+    #' # Calculate the allocation coefficients
+    #' my_iom$compute_allocation_coeff()
+    #' # Calculate the Ghosh inverse
+    #' my_iom$compute_ghosh_inverse()
+    #' # show the Ghosh inverse
+    #' my_iom$ghosh_inverse_matrix
     compute_ghosh_inverse = function() {
       # check if allocation coefficients matrix is available
       if (is.null(self$allocation_coefficients_matrix)) {
@@ -733,22 +706,22 @@ iom <- R6::R6Class(
     #' Computes the hypothetical extraction.
     compute_hypothetical_extraction = function() {
       # check if arguments are available
-      for (matrix in c(
+      for (matrix_name in c(
         "technical_coefficients_matrix",
         "allocation_coefficients_matrix"
       )) {
-        if (is.null(self[[matrix]])) {
-          cli::cli_h1("Error in {matrix}")
-          error("You must compute the {matrix} first. Run respective compute_*() method.")
+        if (is.null(self[[matrix_name]])) {
+          cli::cli_h1("Error in {matrix_name}")
+          error(paste("You must compute the", matrix_name, "first. Run respective compute_*() method."))
         }
       }
       for (matrix in c(
         "final_demand_matrix",
         "added_value_matrix"
       )) {
-        if (is.null(self[[matrix]])) {
-          cli::cli_h1("Error in {matrix}")
-          error("You must compute the {matrix} first. Run respective update_*() method.")
+        if (is.null(self[[matrix_name]])) {
+          cli::cli_h1("Error in {matrix_name}")
+          error("You must compute the {matrix_name} first. Run respective update_*() method.")
         }
       }
       # save row and column names

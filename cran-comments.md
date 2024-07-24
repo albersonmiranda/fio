@@ -4,6 +4,8 @@ In this version I have:
  
 * Pass "--offline" flag to `cargo build` to avoid online compilation.
 * Included compressed Rust dependencies in order to compile offline.
+* Rewrite `R6.R` documentation:
+  * Added types for all params
 
 ## Ressubmission
 
