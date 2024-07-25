@@ -5,7 +5,7 @@ use faer::Mat;
 // * MARK: output multipliers
 
 #[extendr]
-/// Computes type I output multiplier.
+/// Computes output multiplier.
 /// @param leontief_inverse_matrix The open model Leontief inverse matrix.
 /// @return A 1xn vector of type I output multipliers.
 

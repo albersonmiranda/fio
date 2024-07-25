@@ -62,7 +62,7 @@ fn compute_tech_coeff(
 /// 
 /// @details
 /// It computes the Leontief inverse matrix \insertCite{leontief_economia_1983}{fio}, which is the inverse of the
-/// Leontief matrix. The formula is:
+/// Leontief matrix. Defined as:
 /// 
 /// \deqn{L = I - A}
 /// 

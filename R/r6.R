@@ -520,6 +520,39 @@ iom <- R6::R6Class(
 
     #' @description
     #' Computes the Leontief inverse matrix.
+    #' @details
+    #' It computes the Leontief inverse matrix \insertCite{leontief_economia_1983}{fio}, which is the inverse of the
+    #' Leontief matrix, defined as:
+    #'
+    #' \deqn{L = I - A}
+    #'
+    #' where I is the identity matrix and A is the technical coefficients matrix.
+    #' The Leontief inverse matrix is calculated by solving the following equation:
+    #'
+    #' \deqn{L^{-1} = (I - A)^{-1}}
+    #'
+    #' It takes a \eqn{n x n} technical coefficients matrix as input and populates the `leontief_inverse_matrix` field
+    #' with the result.
+    #'
+    #' Since the Leontief matrix is a square matrix and the subtraction of the technical coefficients matrix from the
+    #' identity matrix guarantees that the Leontief matrix is invertible, underlined Rust function uses LU decomposition
+    #' to solve the equation.
+    #' @return
+    #' Self (invisibly).
+    #' @seealso [compute_tech_coeff()] for computing the required technical coefficients matrix.
+    #' @references
+    #' \insertAllCited{}
+    #' @examples
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+    #' # calculate the technical coefficients
+    #' my_iom$compute_tech_coeff()
+    #' # calculate the Leontief inverse
+    #' my_iom$compute_leontief_inverse()
+    #' # show the Leontief inverse
+    #' my_iom$leontief_inverse_matrix
     compute_leontief_inverse = function() {
       # check if technical coefficients matrix is available
       if (is.null(self$technical_coefficients_matrix)) {
@@ -543,7 +576,36 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Computes the output multiplier dataframe.
+    #' Computes the output multiplier.
+    #' @details
+    #' An output multiplier for sector *j* is defined as the total value of production in all sectors of the economy
+    #' that is necessary in order to satisfy a monetary unit (e.g., a dollar) worth of final demand for sector *j*'s
+    #' output \insertCite{miller_input-output_2009}{fio}.
+    #'
+    #' This method computes the simple output multiplier, defined as the column sums of the Leontief inverse matrix,
+    #' the direct and indirect output multipliers, which are the column sums of the technical
+    #' coefficients matrix and the difference between total and direct output multipliers, respectively
+    #' \insertCite{vale_alise_2020}{fio}.
+    #'
+    #' It populate the `multiplier_output` field with the resulting `(data.frame)`.
+    #' @return
+    #' Self (invisibly).
+    #' @seealso [compute_leontief_inverse()] for computing the required Leontief inverse matrix.
+    #' @references \insertAllCited{}
+    #' @examples
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+    #' # calculate the technical coefficients
+    #' my_iom$compute_tech_coeff()
+    #' # calculate the Leontief inverse
+    #' my_iom$compute_leontief_inverse()
+    #' # calculate the output multiplier
+    #' my_iom$compute_multiplier_output()
+    #' # show the output multiplier
+    #' my_iom$multiplier_output
     compute_multiplier_output = function() {
       # check if leontief inverse matrix is available
       if (is.null(self$leontief_inverse_matrix)) {
@@ -553,7 +615,7 @@ iom <- R6::R6Class(
       # save column names
       col_names <- colnames(self$leontief_inverse_matrix)
       # compute output multiplier vector
-      multiplier_output_total <- compute_multiplier_output(
+      multiplier_output_simple <- compute_multiplier_output(
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
       # compute direct output multiplier vector
@@ -568,7 +630,7 @@ iom <- R6::R6Class(
 
       multiplier_output <- data.frame(
         sector = col_names,
-        multiplier_total = multiplier_output_total,
+        multiplier_simple = multiplier_output_simple,
         multiplier_direct = multiplier_output_direct,
         multiplier_indirect = multiplier_output_indirect
       )
@@ -579,7 +641,9 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Computes the employment multiplier dataframe.
+    #' Computes the employment multiplier.
+    #' @details
+    #' # * MARK: parei aqui
     compute_multiplier_employment = function() {
       # check if leontief inverse matrix is available
       if (is.null(self$leontief_inverse_matrix)) {
@@ -594,7 +658,7 @@ iom <- R6::R6Class(
         total_production = self$total_production
       )
       # compute employment multiplier vector
-      multiplier_employment_total <- compute_multiplier_added_value(
+      multiplier_employment_simple <- compute_multiplier_added_value(
         added_value_requirements = employment_requirements,
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
@@ -607,7 +671,7 @@ iom <- R6::R6Class(
 
       multiplier_employment <- data.frame(
         sector = col_names,
-        multiplier_total = multiplier_employment_total,
+        multiplier_simple = multiplier_employment_simple,
         multiplier_direct = employment_requirements,
         multiplier_indirect = multiplier_employment_indirect
       )
@@ -633,7 +697,7 @@ iom <- R6::R6Class(
         total_production = self$total_production
       )
       # compute wages multiplier vector
-      multiplier_wages_total <- compute_multiplier_added_value(
+      multiplier_wages_simple <- compute_multiplier_added_value(
         added_value_requirements = wages_requirements,
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
@@ -646,7 +710,7 @@ iom <- R6::R6Class(
 
       multiplier_wages <- data.frame(
         sector = col_names,
-        multiplier_total = multiplier_wages_total,
+        multiplier_simple = multiplier_wages_simple,
         multiplier_direct = wages_requirements,
         multiplier_indirect = multiplier_wages_indirect
       )
@@ -672,7 +736,7 @@ iom <- R6::R6Class(
         total_production = self$total_production
       )
       # compute taxes multiplier vector
-      multiplier_taxes_total <- compute_multiplier_added_value(
+      multiplier_taxes_simple <- compute_multiplier_added_value(
         added_value_requirements = taxes_requirements,
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
@@ -685,7 +749,7 @@ iom <- R6::R6Class(
 
       multiplier_taxes <- data.frame(
         sector = col_names,
-        multiplier_total = multiplier_taxes_total,
+        multiplier_simple = multiplier_taxes_simple,
         multiplier_direct = taxes_requirements,
         multiplier_indirect = multiplier_taxes_indirect
       )
