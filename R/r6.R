@@ -27,8 +27,8 @@
 #' Wages vector.
 #' @param operating_income (`matrix`)\cr
 #' Operating income vector.
-#' @param added_value_others (`matrix`)\cr
-#' Other vectors of added value that doesn't have dedicated slots.
+#' @param value_added_others (`matrix`)\cr
+#' Other vectors of value-added that doesn't have dedicated slots.
 #' Setting row names is advised for better readability.
 #' @param occupation (`matrix`)\cr
 #' Occupation matrix.
@@ -121,13 +121,13 @@ iom <- R6::R6Class(
     #' Operating income vector.
     operating_income = NULL,
 
-    #' @field added_value_others (`matrix`)\cr
-    #' Other vectors of added value that doesn't have dedicated slots.
-    added_value_others = NULL,
+    #' @field value_added_others (`matrix`)\cr
+    #' Other vectors of value-added that doesn't have dedicated slots.
+    value_added_others = NULL,
 
-    #' @field added_value_matrix (`matrix`)\cr
-    #' Aggregates added value vectors into a matrix.
-    added_value_matrix = NULL,
+    #' @field value_added_matrix (`matrix`)\cr
+    #' Aggregates value-added vectors into a matrix.
+    value_added_matrix = NULL,
 
     #' @field occupation (`matrix`)\cr
     #' Occupation vector.
@@ -194,7 +194,7 @@ iom <- R6::R6Class(
                           taxes = NULL,
                           wages = NULL,
                           operating_income = NULL,
-                          added_value_others = NULL,
+                          value_added_others = NULL,
                           occupation = NULL,
                           threads = 0) {
       ### assertions ###
@@ -243,7 +243,7 @@ iom <- R6::R6Class(
         "taxes",
         "wages",
         "operating_income",
-        "added_value_others",
+        "value_added_others",
         "occupation",
         "total_production"
       )) {
@@ -294,7 +294,7 @@ iom <- R6::R6Class(
       self$taxes <- set_rownames(taxes)
       self$wages <- set_rownames(wages)
       self$operating_income <- set_rownames(operating_income)
-      self$added_value_others <- added_value_others
+      self$value_added_others <- value_added_others
       self$occupation <- set_rownames(occupation)
     },
 
@@ -302,7 +302,7 @@ iom <- R6::R6Class(
     #' Adds a `matrix` to the `iom` object.
     #' @param matrix_name (`character`)\cr
     #' One of household_consumption, government_consumption, exports, final_demand_others,
-    #' imports, taxes, wages, operating income, added_value_others or occupation matrix to be added.
+    #' imports, taxes, wages, operating income, value_added_others or occupation matrix to be added.
     #' @param matrix (`matrix`)\cr
     #' Matrix object to be added.
     #' @return
@@ -371,7 +371,7 @@ iom <- R6::R6Class(
     #' Removes a `matrix` from the `iom` object.
     #' @param matrix_name (`character`)\cr
     #' One of household_consumption, government_consumption, exports, final_demand_others,
-    #' imports, taxes, wages, operating income, added_value_others or occupation matrix to be removed.
+    #' imports, taxes, wages, operating_income, value_added_others or occupation matrix to be removed.
     #' @return Self (invisibly).
     #' @example
     #' # data
@@ -395,13 +395,13 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Aggregates final demand vectors into a matrix.
+    #' Aggregates final demand vectors into the `final_demand_matrix` field.
     #' @details
-    #' Some methods, as `$compute_hypothetical_extraction()`, require the final demand and added value vectors
+    #' Some methods, as `$compute_hypothetical_extraction()`, require the final demand and value-added vectors
     #' to be aggregated into a matrix. This method does this aggregation, binding the vectors into
     #' `$final_demand_matrix`.
     #' @return
-    #' It doesn't return anything, but updates the `final_demand_matrix` field.
+    #' This functions doesn't returns a value.
     #' @examples
     #' # data
     #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
@@ -431,13 +431,13 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Aggregates added value vectors into a matrix.
+    #' Aggregates value-added vectors into the `value_added_matrix` field.
     #' @details
-    #' Some methods, as `$compute_hypothetical_extraction()`, require the final demand and added value vectors
+    #' Some methods, as `$compute_hypothetical_extraction()`, require the final demand and value-added vectors
     #' to be aggregated into a matrix. This method does this aggregation, binding the vectors into
-    #' `$added_value_matrix`.
+    #' `$value_added_matrix`.
     #' @return
-    #' It doesn't return anything, but updates the `added_value_matrix` field.
+    #' This functions doesn't returns a value.
     #' @examples
     #' # data
     #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
@@ -452,18 +452,18 @@ iom <- R6::R6Class(
     #' imports = imports_data,
     #' taxes = taxes_data
     #' )
-    #' # aggregate all added value vectors
-    #' my_iom$update_added_value_matrix()
-    #' # check added value matrix
-    #' my_iom$added_value_matrix
-    update_added_value_matrix = function() {
-      # bind added value vectors
-      self$added_value_matrix <- as.matrix(rbind(
+    #' # aggregate all value-added vectors
+    #' my_iom$update_value_added_matrix()
+    #' # check value-added matrix
+    #' my_iom$value_added_matrix
+    update_value_added_matrix = function() {
+      # bind value-added vectors
+      self$value_added_matrix <- as.matrix(rbind(
         self$imports,
         self$taxes,
         self$wages,
         self$operating_income,
-        self$added_value_others
+        self$value_added_others
       ))
     },
 
@@ -576,7 +576,7 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Computes the output multiplier.
+    #' Computes the output multiplier and populate the `multiplier_output` field with the resulting `(data.frame)`.
     #' @details
     #' An output multiplier for sector *j* is defined as the total value of production in all sectors of the economy
     #' that is necessary in order to satisfy a monetary unit (e.g., a dollar) worth of final demand for sector *j*'s
@@ -586,8 +586,6 @@ iom <- R6::R6Class(
     #' the direct and indirect output multipliers, which are the column sums of the technical
     #' coefficients matrix and the difference between total and direct output multipliers, respectively
     #' \insertCite{vale_alise_2020}{fio}.
-    #'
-    #' It populate the `multiplier_output` field with the resulting `(data.frame)`.
     #' @return
     #' Self (invisibly).
     #' @seealso [compute_leontief_inverse()] for computing the required Leontief inverse matrix.
@@ -641,9 +639,32 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Computes the employment multiplier.
+    #' Computes the employment multiplier and populate the `multiplier_employment` field with the resulting
+    #' `(data.frame)`.
     #' @details
-    #' # * MARK: parei aqui
+    #' The employment multiplier for sector *j* relates the jobs created in each sector in response to a
+    #' initial exogenous shock \insertCite{miller_input-output_2009}{fio}.
+    #'
+    #' Current implementation follows \insertCite{vale_alise_2020}{fio}.
+    #' @return
+    #' Self (invisibly).
+    #' @references
+    #' \insertAllCited{}
+    #' @examples
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' jobs_data <- matrix(c(10, 12, 15), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production, occupation = jobs_data)
+    #' # calculate the technical coefficients
+    #' my_iom$compute_tech_coeff()
+    #' # calculate the Leontief inverse
+    #' my_iom$compute_leontief_inverse()
+    #' # calculate the employment multiplier
+    #' my_iom$compute_multiplier_employment()
+    #' # show the employment multiplier
+    #' my_iom$multiplier_employment
     compute_multiplier_employment = function() {
       # check if leontief inverse matrix is available
       if (is.null(self$leontief_inverse_matrix)) {
@@ -653,18 +674,18 @@ iom <- R6::R6Class(
       # save column names
       col_names <- colnames(self$leontief_inverse_matrix)
       # compute employment requirements
-      employment_requirements <- compute_requirements_added_value(
-        added_value_element = self$occupation,
+      employment_requirements <- compute_requirements_value_added(
+        value_added_element = self$occupation,
         total_production = self$total_production
       )
       # compute employment multiplier vector
-      multiplier_employment_simple <- compute_multiplier_added_value(
-        added_value_requirements = employment_requirements,
+      multiplier_employment_simple <- compute_multiplier_value_added(
+        value_added_requirements = employment_requirements,
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
       # compute indirect employment multiplier
-      multiplier_employment_indirect <- compute_multiplier_added_value_indirect(
-        added_value_element = self$occupation,
+      multiplier_employment_indirect <- compute_multiplier_value_added_indirect(
+        value_added_element = self$occupation,
         total_production = self$total_production,
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
@@ -682,7 +703,33 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Computes the wages multiplier dataframe.
+    #' Computes the wages multiplier dataframe and populate the `multiplier_wages` field with the resulting
+    #' `(data.frame)`.
+    #' @details
+    #' The wages multiplier for sector *j* relates increases in wages for each
+    #' sector in response to a initial exogenous shock
+    #' \insertCite{miller_input-output_2009}{fio}.
+    #'
+    #' Current implementation follows \insertCite{vale_alise_2020}{fio}.
+    #' @return
+    #' Self (invisibly).
+    #' @references
+    #' \insertAllCited{}
+    #' @examples
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' wages_data <- matrix(c(10, 12, 15), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production, wages = wages_data)
+    #' # calculate the technical coefficients
+    #' my_iom$compute_tech_coeff()
+    #' # calculate the Leontief inverse
+    #' my_iom$compute_leontief_inverse()
+    #' # calculate the wages multiplier
+    #' my_iom$compute_multiplier_wages()
+    #' # show the wages multiplier
+    #' my_iom$multiplier_wages
     compute_multiplier_wages = function() {
       # check if leontief inverse matrix is available
       if (is.null(self$leontief_inverse_matrix)) {
@@ -692,18 +739,18 @@ iom <- R6::R6Class(
       # save column names
       col_names <- colnames(self$leontief_inverse_matrix)
       # compute wages requirements
-      wages_requirements <- compute_requirements_added_value(
-        added_value_element = self$wages,
+      wages_requirements <- compute_requirements_value_added(
+        value_added_element = self$wages,
         total_production = self$total_production
       )
       # compute wages multiplier vector
-      multiplier_wages_simple <- compute_multiplier_added_value(
-        added_value_requirements = wages_requirements,
+      multiplier_wages_simple <- compute_multiplier_value_added(
+        value_added_requirements = wages_requirements,
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
       # compute indirect wages multiplier
-      multiplier_wages_indirect <- compute_multiplier_added_value_indirect(
-        added_value_element = self$wages,
+      multiplier_wages_indirect <- compute_multiplier_value_added_indirect(
+        value_added_element = self$wages,
         total_production = self$total_production,
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
@@ -721,7 +768,33 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Computes the taxes multiplier dataframe.
+    #' Computes the taxes multiplier and populate the `multiplier_taxes` field with
+    #' the resulting `(data.frame)`.
+    #' @details
+    #' The taxes multiplier for sector *j* relates the increases on tax revenue from
+    #' each sector in response to a initial exogenous shock
+    #' \insertCite{miller_input-output_2009}{fio}.
+    #'
+    #' Current implementation follows \insertCite{vale_alise_2020}{fio}.
+    #' @return
+    #' Self (invisibly).
+    #' @references
+    #' \insertAllCited{}
+    #' @examples
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' tax_data <- matrix(c(10, 12, 15), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production, taxes = tax_data)
+    #' # calculate the technical coefficients
+    #' my_iom$compute_tech_coeff()
+    #' # calculate the Leontief inverse
+    #' my_iom$compute_leontief_inverse()
+    #' # calculate the tax multiplier
+    #' my_iom$compute_multiplier_taxes()
+    #' # show the taxes multiplier
+    #' my_iom$multiplier_taxes
     compute_multiplier_taxes = function() {
       # check if leontief inverse matrix is available
       if (is.null(self$leontief_inverse_matrix)) {
@@ -731,18 +804,18 @@ iom <- R6::R6Class(
       # save column names
       col_names <- colnames(self$leontief_inverse_matrix)
       # compute taxes requirements
-      taxes_requirements <- compute_requirements_added_value(
-        added_value_element = self$taxes,
+      taxes_requirements <- compute_requirements_value_added(
+        value_added_element = self$taxes,
         total_production = self$total_production
       )
       # compute taxes multiplier vector
-      multiplier_taxes_simple <- compute_multiplier_added_value(
-        added_value_requirements = taxes_requirements,
+      multiplier_taxes_simple <- compute_multiplier_value_added(
+        value_added_requirements = taxes_requirements,
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
       # compute indirect taxes multiplier
-      multiplier_taxes_indirect <- compute_multiplier_added_value_indirect(
-        added_value_element = self$taxes,
+      multiplier_taxes_indirect <- compute_multiplier_value_added_indirect(
+        value_added_element = self$taxes,
         total_production = self$total_production,
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
@@ -760,10 +833,38 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Computes the influence field matrix.
+    #' Computes the field of influence for all sectors and populate the
+    #' `field_influence` field with the resulting `(matrix)`.
+    #' @details
+    #' The field of influence shows how changes in direct coefficients are
+    #' distributed throughout the entire economic system, allowing for the
+    #' determination of which relationships between sectors are most important
+    #' within the production process.
+    #'
+    #' It determines which sectors have the greatest influence over others,
+    #' specifically, which coefficients, when altered, would have the greatest
+    #' impact on the system as a whole \insertCite{vale_alise_2020}{fio}.
     #' @param epsilon
     #' Epsilon value. A technical change in the input-output matrix, caused by a variation of size `epsilon` into each
     #' element of technical coefficients matrix.
+    #' @return
+    #' Self (invisibly).
+    #' @references
+    #' \insertAllCited{}
+    #' @examples
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+    #' # calculate the technical coefficients
+    #' my_iom$compute_tech_coeff()
+    #' # calculate the Leontief inverse
+    #' my_iom$compute_leontief_inverse()
+    #' # calculate field of influence
+    #' my_iom$compute_field_influence(epsilon = 0.01)
+    #' # show the field of influence
+    #' my_iom$field_influence
     compute_field_influence = function(epsilon) {
       # check if epsilon was set
       if (missing(epsilon)) {
@@ -794,7 +895,34 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Computes the key sectors dataframe, based on it's backward and forward linkages.
+    #' Computes the key sectors dataframe, based on it's power and sensitivity of dispersion,
+    #' and populate the `key_sectors` field with the resulting `(data.frame)`.
+    #' @details
+    #' Increased production from a sector *j* means that the sector *j* will need to
+    #' purchase more goods from other sectors. At the same time, it means that more goods from sector *j* will be
+    #' available for other sectors to purchase. Sectors that are above average in the demand sense (stronger backward
+    #' linkage) have power of dispersion indices greater than 1. Sectors that are above average in the supply sense
+    #' (stronger forward linkage) have sensitivity of dispersion indices greater than 1
+    #' \insertCite{miller_input-output_2009}{fio}.
+    #'
+    #' As both power and sensitivity of dispersion are related to average values on the economy, coefficients of
+    #' variation are also calculated for both indices. The lesser the coefficient of variation, greater the number of
+    #' sectors on the demand or supply structure of that sector \insertCite{vale_alise_2020}{fio}.
+    #' @return
+    #' Self (invisibly).
+    #' @references
+    #' \insertAllCited{}
+    #' @examples
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+    #' # calculate the technical coefficients
+    #' my_iom$compute_tech_coeff()
+    #' # calculate the Leontief inverse
+    #' my_iom$compute_leontief_inverse()
+    #' 
     compute_key_sectors = function() {
       # check if leontief inverse matrix is available
       if (is.null(self$leontief_inverse_matrix)) {
@@ -914,7 +1042,7 @@ iom <- R6::R6Class(
       }
       for (matrix in c(
         "final_demand_matrix",
-        "added_value_matrix"
+        "value_added_matrix"
       )) {
         if (is.null(self[[matrix_name]])) {
           cli::cli_h1("Error in {matrix_name}")
@@ -932,7 +1060,7 @@ iom <- R6::R6Class(
       # compute forward extraction
       extraction_forward <- compute_extraction_forward(
         allocation_coeff = self$allocation_coefficients_matrix,
-        added_value_matrix = self$added_value_matrix,
+        value_added_matrix = self$value_added_matrix,
         total_production = self$total_production
       )
       # compute total extraction
@@ -999,7 +1127,7 @@ iom <- R6::R6Class(
         "taxes",
         "wages",
         "operating_income",
-        "added_value_others",
+        "value_added_others",
         "occupation"
       )
     }

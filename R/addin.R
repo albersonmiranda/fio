@@ -13,12 +13,12 @@ input_options <- shiny::selectInput(
       "Exports" = "exports",
       "Others" = "final_demand_others"
     ),
-    "Added Value" = list(
+    "Value-Added" = list(
       "Imports" = "imports",
       "Taxes" = "taxes",
       "Wages" = "wages",
       "Operating Income" = "operating_income",
-      "Others" = "added_value_others"
+      "Others" = "value_added_others"
     ),
     "Occupation" = "occupation",
     "Custom" = "custom"

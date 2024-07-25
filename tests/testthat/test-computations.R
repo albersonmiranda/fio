@@ -76,9 +76,9 @@ test_that("multiplier generator is calculated correctly", {
   # Calculate the leontief matrix
   obj$compute_leontief_inverse()
   # Calculate employment requirements
-  employment_reqs <- compute_requirements_added_value(obj$occupation, obj$total_production)
+  employment_reqs <- compute_requirements_value_added(obj$occupation, obj$total_production)
   # Calculate employment generator
-  employment_generator <- compute_generator_added_value(employment_reqs, obj$leontief_inverse_matrix)
+  employment_generator <- compute_generator_value_added(employment_reqs, obj$leontief_inverse_matrix)
   dimnames(employment_generator) <- list(NULL, c(1, 2, 3))
   # solution
   c_j <- occupation / total_production
@@ -249,7 +249,7 @@ test_that("hypothetical extraction is calculated correctly", {
   # fails if aggregated matrices isn't available
   expect_error(obj$compute_hypothetical_extraction())
   # set aggregated matrices
-  obj$update_added_value_matrix()
+  obj$update_value_added_matrix()
   obj$update_final_demand_matrix()
   # Calculate the hypothetical extraction
   obj$compute_hypothetical_extraction()
@@ -271,7 +271,7 @@ test_that("hypothetical extraction is calculated correctly", {
       ffl = obj$allocation_coefficients_matrix
       ffl[i, ] = 0
       gfl = solve(im - ffl)
-      xfl = obj$added_value_matrix %*% gfl
+      xfl = obj$value_added_matrix %*% gfl
       tfl = sum(xfl) - sum(obj$total_production)
       flextrac[i] = tfl
       flextracp = flextrac / sum(obj$total_production)
