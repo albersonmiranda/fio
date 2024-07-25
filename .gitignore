@@ -3,3 +3,4 @@ inst/doc
 docs
 revdep/
 src/rust/vendor
+.vscode/
