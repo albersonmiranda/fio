@@ -2,9 +2,11 @@
 
 In this version I have:
  
-* Pass "--offline" flag to `cargo build` to avoid online compilation.
-* Included compressed Rust dependencies in order to compile offline.
 * Rewrite `r6.R` documentation to address Konstanze's instructions.
+* Refactor `$set_max_threads()` method for better parallelism control and error handling.
+* Comply with CRAN's policies by building offline:
+  * Pass "--offline" flag to `cargo build` to avoid online compilation.
+  * Included compressed Rust dependencies in order to compile offline.
 * Added `configure` and `configure.win` files with 'Cargo' installation instructions when needed but not found.
 
 ## Ressubmission
