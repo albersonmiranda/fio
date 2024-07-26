@@ -1164,9 +1164,14 @@ iom <- R6::R6Class(
     #' single threaded (sequential) computations.
     #'
     #' Initialization of the global thread pool happens exactly once. Once started, the configuration cannot be changed
-    #' in the current session. If `set_max_threads()` is called again in the same session, it'll result in an error.
+    #' in the current session. If `$set_max_threads()` is called again in the same session, it'll result in an error.
+    #'
+    #' Methods that deals with linear algebra computations, like `$compute_leontief_inverse()` and
+    #' `$compute_ghosh_inverse()`, will try to use all available threads by default, so they also initializes global
+    #' thread pool. In order to choose a maximum number of threads other than default, `$set_max_threads()` must be
+    #' called before any computation, preferably right after `iom$new()`.
     #' @return
-    #' This functions does not return a value.
+    #' This function does not return a value.
     #' @examples
     #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
     #' total_production <- matrix(c(100, 200, 300), 1, 3)

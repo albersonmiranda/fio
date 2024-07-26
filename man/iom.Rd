@@ -1207,11 +1207,16 @@ Default behavior of Rayon is to use all available threads (including logical). S
 single threaded (sequential) computations.
 
 Initialization of the global thread pool happens exactly once. Once started, the configuration cannot be changed
-in the current session. If \code{set_max_threads()} is called again in the same session, it'll result in an error.
+in the current session. If \verb{$set_max_threads()} is called again in the same session, it'll result in an error.
+
+Methods that deals with linear algebra computations, like \verb{$compute_leontief_inverse()} and
+\verb{$compute_ghosh_inverse()}, will try to use all available threads by default, so they also initializes global
+thread pool. In order to choose a maximum number of threads other than default, \verb{$set_max_threads()} must be
+called before any computation, preferably right after \code{iom$new()}.
 }
 
 \subsection{Returns}{
-This functions does not return a value.
+This function does not return a value.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
