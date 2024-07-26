@@ -16,7 +16,8 @@ use faer::{prelude::SpSolver, Mat};
 /// 
 /// @references
 /// \insertAllCited{}
-
+/// 
+/// @noRd
 fn compute_extraction_backward(
   technical_coefficients_matrix: &[f64],
   final_demand_matrix: RMatrix<f64>,
@@ -82,7 +83,8 @@ fn compute_extraction_backward(
 /// 
 /// @references
 /// \insertAllCited{}
-
+/// 
+/// @noRd
 fn compute_extraction_forward(
   allocation_coefficients_matrix: &[f64],
   value_added_matrix: RMatrix<f64>,
@@ -137,13 +139,9 @@ fn compute_extraction_forward(
 }
 
 #[extendr]
-/// Computes total extraction
+/// Computes total impact after extracting a given sector.
 /// @param backward_linkage_matrix A nx2 matrix of backward linkage.
 /// @param forward_linkage_matrix A nx2 matrix of forward linkage.
-/// 
-/// @description
-/// Computes total impact after extracting a given sector.
-/// 
 /// @details
 /// Here we define total impact as the sum of impact on demand and supply structures
 /// after removal of a given sector.
@@ -175,7 +173,8 @@ fn compute_extraction_forward(
 /// my_iom$compute_hypothetical_extraction()
 /// # show results
 /// my_iom$hypothetical_extraction
-
+/// 
+/// @noRd
 fn compute_extraction_total(
   backward_linkage_matrix: RMatrix<f64>,
   forward_linkage_matrix: RMatrix<f64>

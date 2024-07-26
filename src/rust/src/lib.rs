@@ -8,9 +8,7 @@ mod extraction;
 
 use extendr_api::prelude::*;
 use rayon::ThreadPoolBuilder;
-use std::sync::atomic::{AtomicBool, Ordering};
-
-static THREADPOOL_INITIALIZED: AtomicBool = AtomicBool::new(false);
+use std::env;
 
 #[extendr]
 /// Sets max number of threads used by fio
@@ -34,22 +32,21 @@ static THREADPOOL_INITIALIZED: AtomicBool = AtomicBool::new(false);
 /// This functions does not return a value.
 /// 
 /// @examples
-/// \dontrun{
-///   intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
-///   total_production <- matrix(c(100, 200, 300), 1, 3)
-///   # instantiate iom object
-///   my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
-///   # to use only 2 threads
-///   my_iom$set_max_threads(2L)
-/// }
-
+/// intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+/// total_production <- matrix(c(100, 200, 300), 1, 3)
+/// # instantiate iom object
+/// my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+/// # to run single threaded (sequential)
+/// my_iom$set_max_threads(1L)
+/// my_iom$threads
+/// 
+/// @noRd
 fn set_max_threads(max_threads: usize) {
-  // Check if ThreadPoolBuilder has already been initialized
-  if THREADPOOL_INITIALIZED.load(Ordering::SeqCst) {
-      println!("ThreadPoolBuilder has already been initialized.");
-      return;
+  // Check if RAYON_NUM_THREADS environment variable is set
+  if env::var("RAYON_NUM_THREADS").is_ok() {
+    println!("Warning: RAYON_NUM_THREADS environment variable is set. Aborting set_max_threads.");
+    return;
   }
-
   // If max_threads is 0, use the maximum number of available threads
   let num_threads = if max_threads == 0 {
       num_cpus::get()
@@ -57,14 +54,11 @@ fn set_max_threads(max_threads: usize) {
       max_threads
   };
 
-  // contorl other rayon thread pool
+  // set the global thread pool
   ThreadPoolBuilder::new()
       .num_threads(num_threads)
       .build_global()
       .unwrap();
-
-  // Mark ThreadPoolBuilder as initialized
-  THREADPOOL_INITIALIZED.store(true, Ordering::SeqCst);
 }
 
 // Macro to generate exports.

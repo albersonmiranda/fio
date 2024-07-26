@@ -92,7 +92,7 @@ fn compute_multiplier_output_indirect(
 /// reqs <- compute_requirements_value_added(transporation_revenue, total_production)
 /// reqs
 /// 
-/// @export
+/// @noRd
 fn compute_requirements_value_added(
   value_added_element: &[f64],
   total_production: &[f64]
@@ -168,7 +168,7 @@ fn compute_generator_value_added(
 /// multipliers <- compute_multiplier_value_added(reqs, leontief_inverse)
 /// multipliers
 /// 
-/// @export
+/// @noRd
 fn compute_multiplier_value_added(
   value_added_requirements: Vec<f64>,
   leontief_inverse_matrix: RMatrix<f64>

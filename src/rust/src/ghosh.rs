@@ -28,7 +28,8 @@ use rayon::prelude::*;
 /// my_iom$allocation_coefficients_matrix
 /// 
 /// @return A nxn matrix of allocation coefficients, known as F matrix.
-
+/// 
+/// @noRd
 fn compute_allocation_coeff(
   intermediate_transactions: &[f64],
   total_production: &[f64],
@@ -63,7 +64,8 @@ fn compute_allocation_coeff(
 /// 
 /// @references
 /// \insertAllCited{}
-
+/// 
+/// @noRd
 fn compute_ghosh_inverse(allocation_coeff: &[f64]) -> RArray<f64, [usize;2]> {
 
   // get dimensions
