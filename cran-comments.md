@@ -1,3 +1,10 @@
+## Third ressubmission
+
+In this version I have:
+
+* Updated `import_iom()` example so it does not require `dontrun` nor `donttest` tag.
+* Added missing `return` tag to `iom` class (previously only on methods).
+
 ## Second Ressubmission
 
 In this version I have:

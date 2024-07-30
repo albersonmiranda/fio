@@ -3,6 +3,9 @@
 \name{iom}
 \alias{iom}
 \title{R6 class for input-output matrix}
+\value{
+A new instance of the \code{iom} class.
+}
 \description{
 R6 class for input-output matrix.
 }

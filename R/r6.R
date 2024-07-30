@@ -35,6 +35,8 @@
 #' @param threads (`integer`)\cr
 #' Number of threads available for Rust to run in parallel.
 #'
+#' @return A new instance of the `iom` class.
+#'
 #' @examples
 #' # data
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
