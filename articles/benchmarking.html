@@ -137,7 +137,7 @@ context of these specific conditions.</p>
 </h2>
 <p>The technical coefficients matrix calculation, a key and initial step
 in input-output analysis, was tested using the
-<code><a href="../reference/compute_tech_coeff.html">compute_tech_coeff()</a></code> function from the <a href="https://albersonmiranda.github.io/fio/">fio</a>
+<code>compute_tech_coeff()</code> function from the <a href="https://albersonmiranda.github.io/fio/">fio</a>
 package, equivalent functions from the <a href="https://github.com/pachadotdev/leontief" class="external-link">leontief</a> package,
 and a base R implementation. It consists on dividing each
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">a_{ij}</annotation></semantics></math>
@@ -176,7 +176,7 @@ times slower than <a href="https://albersonmiranda.github.io/fio/">fio</a>.</p>
 <span></span>
 <span><span class="co"># benchmark</span></span>
 <span><span class="va">benchmark_a</span> <span class="op">&lt;-</span> <span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html" class="external-link">microbenchmark</a></span><span class="op">(</span></span>
-<span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu"><a href="../reference/compute_tech_coeff.html">compute_tech_coeff</a></span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span>,</span>
+<span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu">compute_tech_coeff</span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span>,</span>
 <span>  `Base R` <span class="op">=</span> <span class="fu">tech_coeff_r</span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span>,</span>
 <span>  leontief <span class="op">=</span> <span class="fu">leontief</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/leontief/man/input_requirement.html" class="external-link">input_requirement</a></span><span class="op">(</span><span class="va">intermediate_transactions</span>, <span class="va">total_production</span><span class="op">)</span>,</span>
 <span>  times <span class="op">=</span> <span class="fl">100</span></span>
@@ -229,7 +229,7 @@ implementation.</p>
 <span></span>
 <span><span class="co"># benchmark</span></span>
 <span><span class="va">benchmark_b</span> <span class="op">&lt;-</span> <span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html" class="external-link">microbenchmark</a></span><span class="op">(</span></span>
-<span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu"><a href="../reference/compute_leontief_inverse.html">compute_leontief_inverse</a></span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span>,</span>
+<span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu">compute_leontief_inverse</span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span>,</span>
 <span>  `Base R` <span class="op">=</span> <span class="fu">leontief_inverse_r</span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span>,</span>
 <span>  leontief <span class="op">=</span> <span class="fu">leontief</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/leontief/man/leontief_inverse.html" class="external-link">leontief_inverse</a></span><span class="op">(</span><span class="va">technical_coefficients_matrix</span><span class="op">)</span>,</span>
 <span>  times <span class="op">=</span> <span class="fl">100</span></span>
@@ -272,7 +272,7 @@ functions.</p>
 <span></span>
 <span><span class="co"># benchmark</span></span>
 <span><span class="va">benchmark_c</span> <span class="op">&lt;-</span> <span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html" class="external-link">microbenchmark</a></span><span class="op">(</span></span>
-<span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu"><a href="../reference/compute_sensitivity_dispersion_cv.html">compute_sensitivity_dispersion_cv</a></span><span class="op">(</span><span class="va">leontief_inverse_matrix</span><span class="op">)</span>,</span>
+<span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu">compute_sensitivity_dispersion_cv</span><span class="op">(</span><span class="va">leontief_inverse_matrix</span><span class="op">)</span>,</span>
 <span>  `Base R` <span class="op">=</span> <span class="fu">sensitivity_r</span><span class="op">(</span><span class="va">leontief_inverse_matrix</span><span class="op">)</span>,</span>
 <span>  leontief <span class="op">=</span> <span class="fu">leontief</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/leontief/man/sensitivity_dispersion_cv.html" class="external-link">sensitivity_dispersion_cv</a></span><span class="op">(</span><span class="va">leontief_inverse_matrix</span><span class="op">)</span>,</span>
 <span>  times <span class="op">=</span> <span class="fl">100</span></span>
@@ -341,7 +341,7 @@ repetitions to 10.</p>
 <span></span>
 <span><span class="co"># benchmark</span></span>
 <span><span class="va">benchmark_d</span> <span class="op">&lt;-</span> <span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html" class="external-link">microbenchmark</a></span><span class="op">(</span></span>
-<span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu"><a href="../reference/compute_field_influence.html">compute_field_influence</a></span><span class="op">(</span></span>
+<span>  fio <span class="op">=</span> <span class="fu">fio</span><span class="fu">:::</span><span class="fu">compute_field_influence</span><span class="op">(</span></span>
 <span>    <span class="va">iom_fio_reduced</span><span class="op">$</span><span class="va">technical_coefficients_matrix</span>,</span>
 <span>    <span class="va">iom_fio_reduced</span><span class="op">$</span><span class="va">leontief_inverse_matrix</span>,</span>
 <span>    <span class="fl">0.001</span></span>

@@ -76,7 +76,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Get data ready for input-output analysis</h1>
             
-            <h4 data-toc-skip class="date">July 17, 2024</h4>
+            <h4 data-toc-skip class="date">August 01, 2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/albersonmiranda/fio/blob/main/vignettes/getting_started.Rmd" class="external-link"><code>vignettes/getting_started.Rmd</code></a></small>
       <div class="hidden name"><code>getting_started.Rmd</code></div>
@@ -186,7 +186,7 @@ used by {fio} to store input-output data. It includes both required and
 optional fields. The required fields are necessary for computing
 technical coefficients, the Leontief inverse matrix, and output
 multipliers. To compute additional features, you can add final demand
-and added value fields, some of which have dedicated slots for computing
+and value-added fields, some of which have dedicated slots for computing
 specific multipliers. Additionally, there are slots for storing the
 results of various functions, such as the technical coefficients matrix,
 the Leontief inverse, key sectors, the Ghosh inverse, and more. You can
@@ -215,8 +215,6 @@ can be filled (or removed) later if needed with <code>add()</code> and
 <span><span class="co">#&gt; &lt;iom&gt;</span></span>
 <span><span class="co">#&gt;   Public:</span></span>
 <span><span class="co">#&gt;     add: function (matrix_name, matrix) </span></span>
-<span><span class="co">#&gt;     added_value_matrix: NULL</span></span>
-<span><span class="co">#&gt;     added_value_others: NULL</span></span>
 <span><span class="co">#&gt;     allocation_coefficients_matrix: NULL</span></span>
 <span><span class="co">#&gt;     clone: function (deep = FALSE) </span></span>
 <span><span class="co">#&gt;     compute_allocation_coeff: function () </span></span>
@@ -256,15 +254,17 @@ can be filled (or removed) later if needed with <code>add()</code> and
 <span><span class="co">#&gt;     technical_coefficients_matrix: NULL</span></span>
 <span><span class="co">#&gt;     threads: 0</span></span>
 <span><span class="co">#&gt;     total_production: 6789 9306 7979 6613 5554</span></span>
-<span><span class="co">#&gt;     update_added_value_matrix: function () </span></span>
 <span><span class="co">#&gt;     update_final_demand_matrix: function () </span></span>
+<span><span class="co">#&gt;     update_value_added_matrix: function () </span></span>
+<span><span class="co">#&gt;     value_added_matrix: NULL</span></span>
+<span><span class="co">#&gt;     value_added_others: NULL</span></span>
 <span><span class="co">#&gt;     wages: NULL</span></span>
 <span><span class="co">#&gt;   Private:</span></span>
 <span><span class="co">#&gt;     iom_elements: function ()</span></span></code></pre></div>
 <p>For now, <code>intermediate_transactions</code> and
 <code>total_production</code> are the only not <code>NULL</code> slots.
 We can compute the technical coefficients matrix by calling the
-<code><a href="../reference/compute_tech_coeff.html">compute_tech_coeff()</a></code> method:</p>
+<code>compute_tech_coeff()</code> method:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute technical coefficients matrix</span></span>
 <span><span class="va">my_iom</span><span class="op">$</span><span class="fu">compute_tech_coeff</span><span class="op">(</span><span class="op">)</span></span>
@@ -273,8 +273,6 @@ We can compute the technical coefficients matrix by calling the
 <span><span class="co">#&gt; &lt;iom&gt;</span></span>
 <span><span class="co">#&gt;   Public:</span></span>
 <span><span class="co">#&gt;     add: function (matrix_name, matrix) </span></span>
-<span><span class="co">#&gt;     added_value_matrix: NULL</span></span>
-<span><span class="co">#&gt;     added_value_others: NULL</span></span>
 <span><span class="co">#&gt;     allocation_coefficients_matrix: NULL</span></span>
 <span><span class="co">#&gt;     clone: function (deep = FALSE) </span></span>
 <span><span class="co">#&gt;     compute_allocation_coeff: function () </span></span>
@@ -314,8 +312,10 @@ We can compute the technical coefficients matrix by calling the
 <span><span class="co">#&gt;     technical_coefficients_matrix: 0.0757107084990426 0.0827809692149065 0.0409485933127117 ...</span></span>
 <span><span class="co">#&gt;     threads: 0</span></span>
 <span><span class="co">#&gt;     total_production: 6789 9306 7979 6613 5554</span></span>
-<span><span class="co">#&gt;     update_added_value_matrix: function () </span></span>
 <span><span class="co">#&gt;     update_final_demand_matrix: function () </span></span>
+<span><span class="co">#&gt;     update_value_added_matrix: function () </span></span>
+<span><span class="co">#&gt;     value_added_matrix: NULL</span></span>
+<span><span class="co">#&gt;     value_added_others: NULL</span></span>
 <span><span class="co">#&gt;     wages: NULL</span></span>
 <span><span class="co">#&gt;   Private:</span></span>
 <span><span class="co">#&gt;     iom_elements: function ()</span></span></code></pre></div>
@@ -330,13 +330,13 @@ You can access the slots using the <code>$</code> operator:</p>
 <span><span class="co">#&gt; 3 0.04094859 0.04276811 0.09575135 0.02873129 0.02250630</span></span>
 <span><span class="co">#&gt; 4 0.09206069 0.03524608 0.08785562 0.06759413 0.11127116</span></span>
 <span><span class="co">#&gt; 5 0.04330535 0.03685794 0.08798095 0.11311054 0.09452647</span></span></code></pre></div>
-<p>Other methods available are <code><a href="../reference/compute_leontief_inverse.html">compute_leontief_inverse()</a></code>,
-<code><a href="../reference/compute_multiplier_output.html">compute_multiplier_output()</a></code>,
+<p>Other methods available are <code>compute_leontief_inverse()</code>,
+<code>compute_multiplier_output()</code>,
 <code>compute_influence_field()</code>,
 <code>compute_key_sectors()</code>,
-<code><a href="../reference/compute_allocation_coeff.html">compute_allocation_coeff()</a></code>,
+<code>compute_allocation_coeff()</code>,
 <code>compute_hypothetical_extraction()</code> and
-<code><a href="../reference/compute_ghosh_inverse.html">compute_ghosh_inverse()</a></code>. Their names are clear and self
+<code>compute_ghosh_inverse()</code>. Their names are clear and self
 explanatory. You can also chain these methods to do all at once:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Chain methods</span></span>

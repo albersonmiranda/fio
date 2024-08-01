@@ -57,7 +57,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.1.0" id="fio-010">fio 0.1.0<a class="anchor" aria-label="anchor" href="#fio-010"></a></h2>
+<h2 class="page-header" data-toc-text="0.1.0" id="fio-010">fio 0.1.0<small>2024-08-01</small><a class="anchor" aria-label="anchor" href="#fio-010"></a></h2>
 <div class="section level3">
 <h3 id="id_-enhancements-0-1-0">✨ Enhancements<a class="anchor" aria-label="anchor" href="#id_-enhancements-0-1-0"></a></h3>
 <ul><li>New <code><a href="../reference/import_element.html">import_element()</a></code> to programmatically import data from an Excel file</li>
@@ -65,10 +65,10 @@
 <li>New <code>iom</code> uses the efficiency of R6 classes</li>
 <li>New <code>add</code> and <code>remove</code> methods to add and remove elements from an <code>iom</code> object</li>
 <li>New <code>br_2020</code> dataset with a 51 sector Brazilian input-output table for 2020</li>
-<li>New <code><a href="../reference/compute_tech_coeff.html">compute_tech_coeff()</a></code> and <code><a href="../reference/compute_leontief_inverse.html">compute_leontief_inverse()</a></code> methods uses the power of Rust and <code>faer</code> crate to substantially increase performance</li>
+<li>New <code>compute_tech_coeff()</code> and <code>compute_leontief_inverse()</code> methods uses the power of Rust and <code>faer</code> crate to substantially increase performance</li>
 <li>New <code>compute_multiplier_*()</code> methods to compute multipliers from a given input-output table:
 <ul><li>
-<code><a href="../reference/compute_multiplier_output.html">compute_multiplier_output()</a></code> for the output multiplier</li>
+<code>compute_multiplier_output()</code> for the output multiplier</li>
 <li>
 <code>compute_multiplier_employment()</code> for the employment multiplier</li>
 <li>
@@ -78,10 +78,10 @@
 </ul></li>
 <li>New <code>compute_influence_field()</code> method to compute the field of influence of each sector</li>
 <li>New <code>compute_key_sectors()</code> method to compute the key sectors of an input-output table, based on power of dispersion and sensitivity of dispersion, and their coefficients of variations</li>
-<li>New <code><a href="../reference/compute_allocation_coeff.html">compute_allocation_coeff()</a></code> method to compute the allocation coefficients of an input-output table</li>
-<li>New <code><a href="../reference/compute_ghosh_inverse.html">compute_ghosh_inverse()</a></code> method to compute the Ghosh inverse of an input-output table</li>
+<li>New <code>compute_allocation_coeff()</code> method to compute the allocation coefficients of an input-output table</li>
+<li>New <code>compute_ghosh_inverse()</code> method to compute the Ghosh inverse of an input-output table</li>
 <li>New <code>compute_hypothetical_extraction()</code> method to compute impact on demand, supply and both structures after hypothetical extraction of a sector</li>
-<li>New <code><a href="../reference/set_max_threads.html">set_max_threads()</a></code> method to allow the user to control number of threads used by {fio} (required by CRAN).</li>
+<li>New <code>set_max_threads()</code> method to allow the user to control number of threads used by {fio} (required by CRAN).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="id_-performance-improvements-0-1-0">🚀 Performance improvements<a class="anchor" aria-label="anchor" href="#id_-performance-improvements-0-1-0"></a></h3>
@@ -95,6 +95,7 @@
 <li>Added assertions to check matrices dimensions at initialization of <code>iom</code> object and at <code>add()</code> method</li>
 <li>More informative warnings and errors messages with {cli} package</li>
 <li>Added assertions to check if number format of slots is <code>double</code> at initialization of <code>iom</code> object and at <code>add()</code> method</li>
+<li>Fix build configuration to comply with CRAN policies</li>
 </ul></div>
 </div>
   </div>

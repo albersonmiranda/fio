@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Friendly Input-Output Analysis">
-<meta property="og:description" content="A friendly and fast tool for input-output analysis. It simplifies the process of importing and managing input-output matrices from Microsoft Excel into R, and provides a suite of functions for analysis. It leverages the R6 class for clean, memory-efficient object-oriented programming. Furthermore, all linear algebra computations are implemented in Rust to achieve highly optimized performance.">
+<meta property="og:description" content="Simplifies the process of importing and managing input-output matrices from Microsoft Excel into R, and provides a suite of functions for analysis. It leverages the R6 class for clean, memory-efficient object-oriented programming. Furthermore, all linear algebra computations are implemented in Rust to achieve highly optimized performance.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -86,10 +86,13 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the released version of <a href="https://albersonmiranda.github.io/fio/">fio</a> from <a href="https://albersonmiranda.r-universe.dev/fio" class="external-link">R-universe</a> with:</p>
+<p>You can install the released version of <a href="https://albersonmiranda.github.io/fio/">fio</a> from CRAN with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"fio"</span><span class="op">)</span></span></code></pre></div>
+<p>For the latest development version, you’ll find precompiled binaries at <a href="https://albersonmiranda.r-universe.dev/fio" class="external-link">R-universe</a>:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"fio"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"https://albersonmiranda.r-universe.dev"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>For Linux, or if you wish to compile the latest development version from source, you’ll need <a href="https://www.rust-lang.org/" class="external-link">Rust</a> installed on your system.</p>
+<p>If you wish to compile the latest development version from source, you’ll need <a href="https://www.rust-lang.org/" class="external-link">Rust</a> installed on your system. You can install Rust with the following commands:</p>
 <ul>
 <li>Debian/Ubuntu: <code>apt-get install cargo</code>
 </li>
@@ -100,7 +103,6 @@
 <li>Windows: <a href="https://www.rust-lang.org/tools/install" class="external-link uri">https://www.rust-lang.org/tools/install</a>
 </li>
 </ul>
-<p>You’ll also find previous releases of <code>fio</code> and precompiled binaries for Windows, macOS, and Linux in the <a href="https://github.com/albersonmiranda/fio/releases" class="external-link">Releases section</a> on GitHub or at <a href="https://albersonmiranda.r-universe.dev/fio" class="external-link">R-universe</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="getting-started">Getting Started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
@@ -111,7 +113,7 @@
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
 <p>Calculate Leontief’s inverse from brazilian 2020 input-output matrix:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load included dataset</span></span>
 <span><span class="va">iom_br</span> <span class="op">&lt;-</span> <span class="fu">fio</span><span class="fu">::</span><span class="va"><a href="reference/br_2020.html">br_2020</a></span></span>
 <span></span>
@@ -140,6 +142,7 @@
     <div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=fio" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/albersonmiranda/fio/" class="external-link">Browse source code</a></li>
 <li><a href="https://github.com/albersonmiranda/fio/issues" class="external-link">Report a bug</a></li>
 <li><a href="https://github.com/albersonmiranda/fio/discussions" class="external-link">Ask a question</a></li>
@@ -173,8 +176,9 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://CRAN.R-project.org/package=fio" class="external-link"><img src="https://www.r-pkg.org/badges/version/fio" alt="CRAN status"></a></li>
 <li><a href="https://albersonmiranda.r-universe.dev/fio" class="external-link"><img src="https://albersonmiranda.r-universe.dev/badges/fio" alt="R-universe"></a></li>
+<li><a href="https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/albersonmiranda/fio?branch=main" class="external-link"><img src="https://codecov.io/gh/albersonmiranda/fio/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>

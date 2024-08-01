@@ -91,20 +91,65 @@
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A matrix with row and column names.</p>
+    <p>A (<code>matrix</code>).</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span> <span class="va">intermediate_transactions</span> <span class="op">=</span> <span class="fu">import_element</span><span class="op">(</span></span></span>
-<span class="r-in"><span>   file <span class="op">=</span> <span class="st">"path/to/file.xlsx"</span>,</span></span>
-<span class="r-in"><span>   sheet <span class="op">=</span> <span class="st">"sheet_name"</span>,</span></span>
-<span class="r-in"><span>   range <span class="op">=</span> <span class="st">"B2:Z56"</span>,</span></span>
-<span class="r-in"><span>   col_names <span class="op">=</span> <span class="st">"B2:Z2"</span>,</span></span>
-<span class="r-in"><span>   row_names <span class="op">=</span> <span class="st">"A2:A56"</span></span></span>
-<span class="r-in"><span> <span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Excel file with IOM data</span></span></span>
+<span class="r-in"><span><span class="va">path_to_xlsx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"iom/br/2020.xlsx"</span>, package <span class="op">=</span> <span class="st">"fio"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Import IOM data</span></span></span>
+<span class="r-in"><span><span class="va">intermediate_transactions</span> <span class="op">=</span> <span class="fu">import_element</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  file <span class="op">=</span> <span class="va">path_to_xlsx</span>,</span></span>
+<span class="r-in"><span>  sheet <span class="op">=</span> <span class="st">"MIP"</span>,</span></span>
+<span class="r-in"><span>  range <span class="op">=</span> <span class="st">"D6:BB56"</span>,</span></span>
+<span class="r-in"><span>  col_names <span class="op">=</span> <span class="st">"D4:BB4"</span>,</span></span>
+<span class="r-in"><span>  row_names <span class="op">=</span> <span class="st">"B6:B56"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Show the first 6 rows and 6 columns</span></span></span>
+<span class="r-in"><span><span class="va">intermediate_transactions</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                               Agricultura silvicultura exploração florestal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Agricultura silvicultura exploração florestal                                   15729.02613</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pecuária e pesca                                                                 1642.35645</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petróleo e gás natural                                                             70.89870</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Minério de ferro                                                                    1.21006</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Outros da indústria extrativa                                                     180.24666</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Alimentos e Bebidas                                                              2497.73033</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                               Pecuária e pesca</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Agricultura silvicultura exploração florestal     1.061966e+04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pecuária e pesca                                  9.535874e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petróleo e gás natural                            8.020926e+01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Minério de ferro                                  9.055116e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Outros da indústria extrativa                     5.160716e+02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Alimentos e Bebidas                               2.195603e+04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                               Petróleo e gás natural</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Agricultura silvicultura exploração florestal               10.34312</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pecuária e pesca                                            21.79848</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petróleo e gás natural                                    7047.29897</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Minério de ferro                                            47.32121</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Outros da indústria extrativa                              763.78770</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Alimentos e Bebidas                                        602.43626</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                               Minério de ferro</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Agricultura silvicultura exploração florestal         19.44415</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pecuária e pesca                                      33.71232</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petróleo e gás natural                               344.44456</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Minério de ferro                                    3821.34527</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Outros da indústria extrativa                         19.24599</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Alimentos e Bebidas                                  145.23811</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                               Outros da indústria extrativa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Agricultura silvicultura exploração florestal                      4.343077</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pecuária e pesca                                                   6.937231</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petróleo e gás natural                                            43.813661</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Minério de ferro                                                 101.653985</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Outros da indústria extrativa                                   1896.366168</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Alimentos e Bebidas                                              256.198553</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                               Alimentos e Bebidas</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Agricultura silvicultura exploração florestal        157978.22476</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pecuária e pesca                                     127236.57743</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petróleo e gás natural                                  627.54015</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Minério de ferro                                         17.38346</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Outros da indústria extrativa                           416.92205</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Alimentos e Bebidas                                  130104.95245</span>
 </code></pre></div>
     </div>
   </div>
