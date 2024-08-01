@@ -17,17 +17,16 @@ Authors@R: c(
     comment = c(ORCID = "0000-0001-7616-0244")
     )
   )
-Description: A friendly and fast tool for input-output analysis. It simplifies the
-  process of importing and managing input-output matrices from 'Microsoft Excel' into R, and
-  provides a suite of functions for analysis. It leverages the 'R6'
-  class for clean, memory-efficient object-oriented programming. Furthermore,
-  all linear algebra computations are implemented in 'Rust' to achieve highly
-  optimized performance.
+Description: Simplifies the process of importing and managing input-output
+  matrices from 'Microsoft Excel' into R, and provides a suite of functions for
+  analysis. It leverages the 'R6' class for clean, memory-efficient
+  object-oriented programming. Furthermore, all linear algebra computations are
+  implemented in 'Rust' to achieve highly optimized performance.
 URL: https://albersonmiranda.github.io/fio/, https://github.com/albersonmiranda/fio
 BugReports: https://github.com/albersonmiranda/fio/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE, r6 = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Depends: 
     R (>= 4.0)
 SystemRequirements: Cargo (Rust's package manager), rustc (Rust's compiler)

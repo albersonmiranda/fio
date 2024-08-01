@@ -18,19 +18,22 @@ import_element(file, sheet, range, col_names = FALSE, row_names = FALSE)
 \item{row_names}{Range of cells with row names.}
 }
 \value{
-A matrix with row and column names.
+A (\code{matrix}).
 }
 \description{
 Import data from a input-output matrix (IOM) from Excel format.
 }
 \examples{
-\dontrun{
- intermediate_transactions = import_element(
-   file = "path/to/file.xlsx",
-   sheet = "sheet_name",
-   range = "B2:Z56",
-   col_names = "B2:Z2",
-   row_names = "A2:A56"
- )
-}
+# Excel file with IOM data
+path_to_xlsx <- system.file("extdata", "iom/br/2020.xlsx", package = "fio")
+# Import IOM data
+intermediate_transactions = import_element(
+  file = path_to_xlsx,
+  sheet = "MIP",
+  range = "D6:BB56",
+  col_names = "D4:BB4",
+  row_names = "B6:B56"
+)
+# Show the first 6 rows and 6 columns
+intermediate_transactions[1:6, 1:6]
 }

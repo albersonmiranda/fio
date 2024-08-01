@@ -32,3 +32,4 @@
 * Added assertions to check matrices dimensions at initialization of `iom` object and at `add()` method
 * More informative warnings and errors messages with {cli} package
 * Added assertions to check if number format of slots is `double` at initialization of `iom` object and at `add()` method
+* Fix build configuration to comply with CRAN policies

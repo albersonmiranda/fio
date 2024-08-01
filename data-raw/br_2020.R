@@ -147,7 +147,7 @@ br_2020 <- iom$new(
   taxes = taxes,
   wages = wages,
   operating_income = operating_income,
-  added_value_others = rbind(
+  value_added_others = rbind(
     other_margins,
     other_taxes_subsidies
   ),
@@ -157,8 +157,8 @@ br_2020 <- iom$new(
 # aggregate final demand sectors
 br_2020$update_final_demand_matrix()
 
-# aggregate added value sectors
-br_2020$update_added_value_matrix()
+# aggregate value-added sectors
+br_2020$update_value_added_matrix()
 
 # save data
 usethis::use_data(br_2020, overwrite = TRUE)

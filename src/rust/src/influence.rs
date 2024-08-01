@@ -2,10 +2,18 @@ use extendr_api::prelude::*;
 use faer::{prelude::SpSolver, Mat};
 
 #[extendr]
-/// Computes field of influence given a technical change.
-/// 
 /// @description
-/// Computes total field of influence given a incremental change in the technical coefficients matrix \insertCite{vale_alise_2020}{fio}.
+/// Computes the field of influence for all sectors.
+/// 
+/// @details
+/// The field of influence shows how changes in direct coefficients are
+/// distributed throughout the entire economic system, allowing for the
+/// determination of which relationships between sectors are most important
+/// within the production process.
+/// 
+/// It determines which sectors have the greatest influence over others,
+/// specifically, which coefficients, when altered, would have the greatest
+/// impact on the system as a whole \insertCite{vale_alise_2020}{fio}.
 /// 
 /// @param tech_coeff_matrix A nxn matrix of technical coefficients.
 /// @param leontief_inverse_matrix The open model nxn Leontief inverse matrix.
@@ -28,6 +36,8 @@ use faer::{prelude::SpSolver, Mat};
 /// # calculate field of influence
 /// my_iom$compute_field_influence(epsilon = 0.01)
 /// my_iom$field_influence
+/// 
+/// @noRd
 
 fn compute_field_influence(
   tech_coeff_matrix: &[f64],

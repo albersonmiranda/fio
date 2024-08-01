@@ -3,6 +3,9 @@
 \name{iom}
 \alias{iom}
 \title{R6 class for input-output matrix}
+\value{
+A new instance of the \code{iom} class.
+}
 \description{
 R6 class for input-output matrix.
 }
@@ -11,7 +14,7 @@ R6 class for input-output matrix.
 intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 total_production <- matrix(c(100, 200, 300), 1, 3)
 exports <- matrix(c(10, 20, 30), 3, 1)
-households <- matrix(4:6, 3, 1)
+households <- matrix(as.numeric(4:6), 3, 1)
 imports <- matrix(c(5, 10, 15), 1, 3)
 jobs <- matrix(c(10, 12, 15), 1, 3)
 taxes <- matrix(c(2, 5, 10), 1, 3)
@@ -19,117 +22,419 @@ wages <- matrix(c(11, 12, 13), 1, 3)
 
 # a new iom instance can be created by passing just intermediate transactions and total production
 my_iom <- iom$new(
- "example",
+ "example_1",
  intermediate_transactions,
  total_production
 )
 
-# Compute technical coefficients matrix
-my_iom$compute_tech_coeff()
-print(my_iom$technical_coefficients_matrix)
+# or by passing optional arguments
+my_iom <- iom$new(
+"example_2",
+intermediate_transactions,
+total_production,
+household_consumption = households,
+exports = exports,
+imports = imports,
+taxes = taxes,
+wages = wages,
+occupation = jobs
+)
 
-# Compute leontief inverse matrix
-my_iom$compute_leontief_inverse()
-print(my_iom$leontief_inverse_matrix)
 
-# compute output multiplier
-my_iom$compute_multiplier_output()
-print(my_iom$multiplier_output)
+## ------------------------------------------------
+## Method `iom$add`
+## ------------------------------------------------
 
-# `add` or `remove` other elements to IO matrix
-my_iom$add("exports", exports)
-my_iom$add("household_consumption", households)
-my_iom$add("occupation", jobs)
-my_iom$add("taxes", taxes)
-my_iom$add("wages", wages)
+# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- iom$new("mock", intermediate_transactions, total_production)
+# Create a dummy matrix
+exports_data <- matrix(as.numeric(1:3), 3, 1)
+# Add the matrix
+my_iom$add("exports", exports_data)
 
-# compute multipliers for added elements
-my_iom$compute_multiplier_employment()
-my_iom$compute_multiplier_taxes()
-my_iom$compute_multiplier_wages()
-print(my_iom$multiplier_wages)
+## ------------------------------------------------
+## Method `iom$remove`
+## ------------------------------------------------
 
-# compute field of influence
-my_iom$compute_field_influence(epsilon = 0.001)
+# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+ exports_data <- matrix(as.numeric(1:3), 3, 1)
+# instantiate iom object
+my_iom <- iom$new("mock", intermediate_transactions, total_production, exports = exports_data)
+# Remove the matrix
+my_iom$remove("exports")
 
-# compute power and sensitivity of dispersion, it's coefficients of variation
-# and identify key sectors
-my_iom$compute_key_sectors()
-print(my_iom$key_sectors)
+## ------------------------------------------------
+## Method `iom$update_final_demand_matrix`
+## ------------------------------------------------
 
-# supply-wise model
-my_iom$compute_allocation_coeff()
-my_iom$compute_ghosh_inverse()
-print(my_iom$ghosh_inverse_matrix)
-
-# aggregates final demand and added value vectors
+# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+exports_data <- matrix(c(10, 20, 30), 3, 1)
+households <- matrix(as.numeric(4:6), 3, 1)
+# instantiate iom object
+my_iom <- iom$new(
+ "mock",
+ intermediate_transactions,
+ total_production,
+ exports = exports_data,
+ household_consumption = households
+)
+# aggregate all final demand vectors
 my_iom$update_final_demand_matrix()
-print(my_iom$final_demand_matrix)
+# check final demand matrix
+my_iom$final_demand_matrix
 
-my_iom$update_added_value_matrix()
-print(my_iom$added_value_matrix)
+## ------------------------------------------------
+## Method `iom$update_value_added_matrix`
+## ------------------------------------------------
 
-# perform hypothetical extraction of a given sector
+# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+imports_data <- matrix(c(5, 10, 15), 1, 3)
+taxes_data <- matrix(c(2, 5, 10), 1, 3)
+# instantiate iom object
+my_iom <- iom$new(
+"mock",
+intermediate_transactions,
+total_production,
+imports = imports_data,
+taxes = taxes_data
+)
+# aggregate all value-added vectors
+my_iom$update_value_added_matrix()
+# check value-added matrix
+my_iom$value_added_matrix
+
+## ------------------------------------------------
+## Method `iom$compute_tech_coeff`
+## ------------------------------------------------
+
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- iom$new("test", intermediate_transactions, total_production)
+# Calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# show the technical coefficients
+my_iom$technical_coefficients_matrix
+
+## ------------------------------------------------
+## Method `iom$compute_leontief_inverse`
+## ------------------------------------------------
+
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+# calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# calculate the Leontief inverse
+my_iom$compute_leontief_inverse()
+# show the Leontief inverse
+my_iom$leontief_inverse_matrix
+
+## ------------------------------------------------
+## Method `iom$compute_multiplier_output`
+## ------------------------------------------------
+
+# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+# calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# calculate the Leontief inverse
+my_iom$compute_leontief_inverse()
+# calculate the output multiplier
+my_iom$compute_multiplier_output()
+# show the output multiplier
+my_iom$multiplier_output
+
+## ------------------------------------------------
+## Method `iom$compute_multiplier_employment`
+## ------------------------------------------------
+
+# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+jobs_data <- matrix(c(10, 12, 15), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production, occupation = jobs_data)
+# calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# calculate the Leontief inverse
+my_iom$compute_leontief_inverse()
+# calculate the employment multiplier
+my_iom$compute_multiplier_employment()
+# show the employment multiplier
+my_iom$multiplier_employment
+
+## ------------------------------------------------
+## Method `iom$compute_multiplier_wages`
+## ------------------------------------------------
+
+# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+wages_data <- matrix(c(10, 12, 15), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production, wages = wages_data)
+# calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# calculate the Leontief inverse
+my_iom$compute_leontief_inverse()
+# calculate the wages multiplier
+my_iom$compute_multiplier_wages()
+# show the wages multiplier
+my_iom$multiplier_wages
+
+## ------------------------------------------------
+## Method `iom$compute_multiplier_taxes`
+## ------------------------------------------------
+
+# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+tax_data <- matrix(c(10, 12, 15), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production, taxes = tax_data)
+# calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# calculate the Leontief inverse
+my_iom$compute_leontief_inverse()
+# calculate the tax multiplier
+my_iom$compute_multiplier_taxes()
+# show the taxes multiplier
+my_iom$multiplier_taxes
+
+## ------------------------------------------------
+## Method `iom$compute_field_influence`
+## ------------------------------------------------
+
+# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+# calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# calculate the Leontief inverse
+my_iom$compute_leontief_inverse()
+# calculate field of influence
+my_iom$compute_field_influence(epsilon = 0.01)
+# show the field of influence
+my_iom$field_influence
+
+## ------------------------------------------------
+## Method `iom$compute_key_sectors`
+## ------------------------------------------------
+
+# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+# calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# calculate the Leontief inverse
+my_iom$compute_leontief_inverse()
+# calculate key sectors
+my_iom$compute_key_sectors()
+# show the key sectors
+my_iom$key_sectors
+
+## ------------------------------------------------
+## Method `iom$compute_allocation_coeff`
+## ------------------------------------------------
+
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+# Calculate the allocation coefficients
+my_iom$compute_allocation_coeff()
+# show the allocation coefficients
+my_iom$allocation_coefficients_matrix
+
+## ------------------------------------------------
+## Method `iom$compute_ghosh_inverse`
+## ------------------------------------------------
+
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+# Calculate the allocation coefficients
+my_iom$compute_allocation_coeff()
+# Calculate the Ghosh inverse
+my_iom$compute_ghosh_inverse()
+# show the Ghosh inverse
+my_iom$ghosh_inverse_matrix
+
+## ------------------------------------------------
+## Method `iom$compute_hypothetical_extraction`
+## ------------------------------------------------
+
+# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+exports_data <- matrix(c(5, 10, 15), 3, 1)
+holsehold_consumption_data <- matrix(c(20, 25, 30), 3, 1)
+operating_income_data <- matrix(c(2, 5, 10), 1, 3)
+taxes_data <- matrix(c(1, 2, 3), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new(
+ "test",
+ intermediate_transactions,
+ total_production,
+ exports = exports_data,
+ household_consumption = holsehold_consumption_data,
+ operating_income = operating_income_data,
+ taxes = taxes_data
+)
+# update value-added matrix
+my_iom$update_value_added_matrix()
+# update final demand matrix
+my_iom$update_final_demand_matrix()
+# calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# calculate the Leontief inverse
+my_iom$compute_leontief_inverse()
+# calculate allocation coefficients
+my_iom$compute_allocation_coeff()
+# calculate Ghosh inverse
+my_iom$compute_ghosh_inverse()
+# calculate hypothetical extraction
 my_iom$compute_hypothetical_extraction()
-print(my_iom$hypothetical_extraction)
+# show results
+my_iom$hypothetical_extraction
 
+## ------------------------------------------------
+## Method `iom$set_max_threads`
+## ------------------------------------------------
+
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+# to run single threaded (sequential)
+my_iom$set_max_threads(1L)
+my_iom$threads
+}
+\references{
+\insertAllCited{}
+
+\insertAllCited{}
+
+\insertAllCited{}
+
+\insertAllCited{}
+
+\insertAllCited{}
+
+\insertAllCited{}
+
+\insertAllCited{}
+
+\insertAllCited{}
+
+\insertAllCited{}
+
+\insertAllCited{}
+
+\insertAllCited{}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{id}}{Identifier of the new instance}
+\item{\code{id}}{(\code{character})\cr
+Identifier of the new instance.}
 
-\item{\code{intermediate_transactions}}{Intermediate transactions matrix}
+\item{\code{intermediate_transactions}}{(\code{matrix})\cr
+Intermediate transactions matrix.}
 
-\item{\code{total_production}}{Total production vector}
+\item{\code{total_production}}{(\code{matrix})\cr
+Total production vector.}
 
-\item{\code{household_consumption}}{Household consumption vector}
+\item{\code{household_consumption}}{(\code{matrix})\cr
+Household consumption vector.}
 
-\item{\code{government_consumption}}{Government consumption vector}
+\item{\code{government_consumption}}{(\code{matrix})\cr
+Government consumption vector.}
 
-\item{\code{exports}}{Exports vector}
+\item{\code{exports}}{(\code{matrix})\cr
+Exports vector.}
 
-\item{\code{final_demand_others}}{Other vectors of final demand that doesn't have dedicated slots}
+\item{\code{final_demand_others}}{(\code{matrix})\cr
+Other vectors of final demand that doesn't have dedicated slots.}
 
-\item{\code{final_demand_matrix}}{Aggregates final demand vectors into a matrix}
+\item{\code{final_demand_matrix}}{(\code{matrix})\cr
+Aggregates final demand vectors into a matrix.}
 
-\item{\code{imports}}{Imports vector}
+\item{\code{imports}}{(\code{matrix})\cr
+Imports vector.}
 
-\item{\code{taxes}}{Taxes vector}
+\item{\code{taxes}}{(\code{matrix})\cr
+Taxes vector.}
 
-\item{\code{wages}}{Wages vector.}
+\item{\code{wages}}{(\code{matrix})\cr
+Wages vector.}
 
-\item{\code{operating_income}}{Operating income vector}
+\item{\code{operating_income}}{(\code{matrix})\cr
+Operating income vector.}
 
-\item{\code{added_value_others}}{Other vectors of added value that doesn't have dedicated slots}
+\item{\code{value_added_others}}{(\code{matrix})\cr
+Other vectors of value-added that doesn't have dedicated slots.}
 
-\item{\code{added_value_matrix}}{Aggregates added value vectors into a matrix}
+\item{\code{value_added_matrix}}{(\code{matrix})\cr
+Aggregates value-added vectors into a matrix.}
 
-\item{\code{occupation}}{Occupation vector}
+\item{\code{occupation}}{(\code{matrix})\cr
+Occupation vector.}
 
-\item{\code{technical_coefficients_matrix}}{Technical coefficients matrix}
+\item{\code{technical_coefficients_matrix}}{(\code{matrix})\cr
+Technical coefficients matrix.}
 
-\item{\code{leontief_inverse_matrix}}{Leontief inverse matrix}
+\item{\code{leontief_inverse_matrix}}{(\code{matrix})\cr
+Leontief inverse matrix.}
 
-\item{\code{multiplier_output}}{Output multiplier dataframe}
+\item{\code{multiplier_output}}{(\code{data.frame})\cr
+Output multiplier dataframe.}
 
-\item{\code{multiplier_employment}}{Employment multiplier dataframe}
+\item{\code{multiplier_employment}}{(\code{data.frame})\cr
+Employment multiplier dataframe.}
 
-\item{\code{multiplier_taxes}}{Taxes multiplier dataframe}
+\item{\code{multiplier_taxes}}{(\code{data.frame})\cr
+Taxes multiplier dataframe.}
 
-\item{\code{multiplier_wages}}{Wages multiplier dataframe}
+\item{\code{multiplier_wages}}{(\code{data.frame})\cr
+Wages multiplier dataframe.}
 
-\item{\code{field_influence}}{Influence field matrix}
+\item{\code{field_influence}}{(\code{matrix})\cr
+Influence field matrix.}
 
-\item{\code{key_sectors}}{Key sectors dataframe}
+\item{\code{key_sectors}}{(\code{data.frame})\cr
+Key sectors dataframe.}
 
-\item{\code{allocation_coefficients_matrix}}{Allocation coefficients matrix}
+\item{\code{allocation_coefficients_matrix}}{(\code{matrix})\cr
+Allocation coefficients matrix.}
 
-\item{\code{ghosh_inverse_matrix}}{Ghosh inverse matrix}
+\item{\code{ghosh_inverse_matrix}}{(\code{matrix})\cr
+Ghosh inverse matrix.}
 
-\item{\code{hypothetical_extraction}}{Absolute and relative backward and forward differences in total output after a hypothetical extraction}
+\item{\code{hypothetical_extraction}}{(\code{matrix})\cr
+Absolute and relative backward and forward differences in total output after a hypothetical extraction}
 
-\item{\code{threads}}{Number of threads available for Rust to run in parallel}
+\item{\code{threads}}{(\code{integer})\cr
+Number of threads available for Rust to run in parallel}
 }
 \if{html}{\out{</div>}}
 }
@@ -140,7 +445,7 @@ print(my_iom$hypothetical_extraction)
 \item \href{#method-iom-add}{\code{iom$add()}}
 \item \href{#method-iom-remove}{\code{iom$remove()}}
 \item \href{#method-iom-update_final_demand_matrix}{\code{iom$update_final_demand_matrix()}}
-\item \href{#method-iom-update_added_value_matrix}{\code{iom$update_added_value_matrix()}}
+\item \href{#method-iom-update_value_added_matrix}{\code{iom$update_value_added_matrix()}}
 \item \href{#method-iom-compute_tech_coeff}{\code{iom$compute_tech_coeff()}}
 \item \href{#method-iom-compute_leontief_inverse}{\code{iom$compute_leontief_inverse()}}
 \item \href{#method-iom-compute_multiplier_output}{\code{iom$compute_multiplier_output()}}
@@ -174,41 +479,58 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
   taxes = NULL,
   wages = NULL,
   operating_income = NULL,
-  added_value_others = NULL,
-  occupation = NULL
+  value_added_others = NULL,
+  occupation = NULL,
+  threads = 0
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{id}}{Identifier for the input-output matrix.}
+\item{\code{id}}{(\code{character})\cr
+Identifier for the input-output matrix.}
 
-\item{\code{intermediate_transactions}}{Intermediate transactions matrix.}
+\item{\code{intermediate_transactions}}{(\code{matrix})\cr
+Intermediate transactions matrix.}
 
-\item{\code{total_production}}{Total production vector.}
+\item{\code{total_production}}{(\code{matrix})\cr
+Total production vector.}
 
-\item{\code{household_consumption}}{Household consumption vector.}
+\item{\code{household_consumption}}{(\code{matrix})\cr
+Household consumption vector.}
 
-\item{\code{government_consumption}}{Government consumption vector.}
+\item{\code{government_consumption}}{(\code{matrix})\cr
+Government consumption vector.}
 
-\item{\code{exports}}{Exports vector.}
+\item{\code{exports}}{(\code{matrix})\cr
+Exports vector.}
 
-\item{\code{final_demand_others}}{Other vectors of final demand that doesn't have dedicated slots.
+\item{\code{final_demand_others}}{(\code{matrix})\cr
+Other vectors of final demand that doesn't have dedicated slots.
 Setting column names is advised for better readability.}
 
-\item{\code{imports}}{Imports vector.}
+\item{\code{imports}}{(\code{matrix})\cr
+Imports vector.}
 
-\item{\code{taxes}}{Taxes vector.}
+\item{\code{taxes}}{(\code{matrix})\cr
+Taxes vector.}
 
-\item{\code{wages}}{Wages vector.}
+\item{\code{wages}}{(\code{matrix})\cr
+Wages vector.}
 
-\item{\code{operating_income}}{Operating income vector.}
+\item{\code{operating_income}}{(\code{matrix})\cr
+Operating income vector.}
 
-\item{\code{added_value_others}}{Other vectors of added value that doesn't have dedicated slots.
+\item{\code{value_added_others}}{(\code{matrix})\cr
+Other vectors of value-added that doesn't have dedicated slots.
 Setting row names is advised for better readability.}
 
-\item{\code{occupation}}{Occupation matrix.}
+\item{\code{occupation}}{(\code{matrix})\cr
+Occupation matrix.}
+
+\item{\code{threads}}{(\code{integer})\cr
+Number of threads available for Rust to run in parallel.}
 }
 \if{html}{\out{</div>}}
 }
@@ -217,7 +539,7 @@ Setting row names is advised for better readability.}
 \if{html}{\out{<a id="method-iom-add"></a>}}
 \if{latex}{\out{\hypertarget{method-iom-add}{}}}
 \subsection{Method \code{add()}}{
-Adds a matrix to a previously imported IO matrix.
+Adds a \code{matrix} to the \code{iom} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$add(matrix_name, matrix)}\if{html}{\out{</div>}}
 }
@@ -225,19 +547,40 @@ Adds a matrix to a previously imported IO matrix.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{matrix_name}}{One of household_consumption, government_consumption, exports, final_demand_others,
-imports, taxes, wages, operating income, added_value_others or occupation matrix to be added.}
+\item{\code{matrix_name}}{(\code{character})\cr
+One of household_consumption, government_consumption, exports, final_demand_others,
+imports, taxes, wages, operating income, value_added_others or occupation matrix to be added.}
 
-\item{\code{matrix}}{Matrix object to be added.}
+\item{\code{matrix}}{(\code{matrix})\cr
+Matrix object to be added.}
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Returns}{
+Self (invisibly).
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- iom$new("mock", intermediate_transactions, total_production)
+# Create a dummy matrix
+exports_data <- matrix(as.numeric(1:3), 3, 1)
+# Add the matrix
+my_iom$add("exports", exports_data)
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-iom-remove"></a>}}
 \if{latex}{\out{\hypertarget{method-iom-remove}{}}}
 \subsection{Method \code{remove()}}{
-Removes a matrix from a previously imported IO matrix.
+Removes a \code{matrix} from the \code{iom} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$remove(matrix_name)}\if{html}{\out{</div>}}
 }
@@ -245,29 +588,114 @@ Removes a matrix from a previously imported IO matrix.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{matrix_name}}{One of household_consumption, government_consumption, exports, final_demand_others,
-imports, taxes, wages, operating income, added_value_others or occupation matrix to be removed.}
+\item{\code{matrix_name}}{(\code{character})\cr
+One of household_consumption, government_consumption, exports, final_demand_others,
+imports, taxes, wages, operating_income, value_added_others or occupation matrix to be removed.}
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Returns}{
+Self (invisibly).
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+ exports_data <- matrix(as.numeric(1:3), 3, 1)
+# instantiate iom object
+my_iom <- iom$new("mock", intermediate_transactions, total_production, exports = exports_data)
+# Remove the matrix
+my_iom$remove("exports")
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-iom-update_final_demand_matrix"></a>}}
 \if{latex}{\out{\hypertarget{method-iom-update_final_demand_matrix}{}}}
 \subsection{Method \code{update_final_demand_matrix()}}{
-Aggregates final demand vectors into a matrix.
+Aggregates final demand vectors into the \code{final_demand_matrix} field.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$update_final_demand_matrix()}\if{html}{\out{</div>}}
 }
 
+\subsection{Details}{
+Some methods, as \verb{$compute_hypothetical_extraction()}, require the final demand and value-added vectors
+to be aggregated into a matrix. This method does this aggregation, binding the vectors into
+\verb{$final_demand_matrix}.
+}
+
+\subsection{Returns}{
+This functions doesn't returns a value.
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+exports_data <- matrix(c(10, 20, 30), 3, 1)
+households <- matrix(as.numeric(4:6), 3, 1)
+# instantiate iom object
+my_iom <- iom$new(
+ "mock",
+ intermediate_transactions,
+ total_production,
+ exports = exports_data,
+ household_consumption = households
+)
+# aggregate all final demand vectors
+my_iom$update_final_demand_matrix()
+# check final demand matrix
+my_iom$final_demand_matrix
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-iom-update_added_value_matrix"></a>}}
-\if{latex}{\out{\hypertarget{method-iom-update_added_value_matrix}{}}}
-\subsection{Method \code{update_added_value_matrix()}}{
-Aggregates added value vectors into a matrix.
+\if{html}{\out{<a id="method-iom-update_value_added_matrix"></a>}}
+\if{latex}{\out{\hypertarget{method-iom-update_value_added_matrix}{}}}
+\subsection{Method \code{update_value_added_matrix()}}{
+Aggregates value-added vectors into the \code{value_added_matrix} field.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{iom$update_added_value_matrix()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{iom$update_value_added_matrix()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+Some methods, as \verb{$compute_hypothetical_extraction()}, require the final demand and value-added vectors
+to be aggregated into a matrix. This method does this aggregation, binding the vectors into
+\verb{$value_added_matrix}.
+}
+
+\subsection{Returns}{
+This functions doesn't returns a value.
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+imports_data <- matrix(c(5, 10, 15), 1, 3)
+taxes_data <- matrix(c(2, 5, 10), 1, 3)
+# instantiate iom object
+my_iom <- iom$new(
+"mock",
+intermediate_transactions,
+total_production,
+imports = imports_data,
+taxes = taxes_data
+)
+# aggregate all value-added vectors
+my_iom$update_value_added_matrix()
+# check value-added matrix
+my_iom$value_added_matrix
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -275,9 +703,33 @@ Aggregates added value vectors into a matrix.
 \if{html}{\out{<a id="method-iom-compute_tech_coeff"></a>}}
 \if{latex}{\out{\hypertarget{method-iom-compute_tech_coeff}{}}}
 \subsection{Method \code{compute_tech_coeff()}}{
-Computes the technical coefficients matrix.
+Computes the technical coefficients matrix and populate the \code{technical_coefficients_matrix} field with the
+resulting \code{(matrix)}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_tech_coeff()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+It computes the technical coefficients matrix, a \eqn{n x n} matrix known as \code{A} matrix which is the column-wise
+ratio of intermediate transactions to total production \insertCite{leontief_economia_1983}{fio}.
+}
+
+\subsection{Returns}{
+Self (invisibly).
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- iom$new("test", intermediate_transactions, total_production)
+# Calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# show the technical coefficients
+my_iom$technical_coefficients_matrix
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -285,9 +737,46 @@ Computes the technical coefficients matrix.
 \if{html}{\out{<a id="method-iom-compute_leontief_inverse"></a>}}
 \if{latex}{\out{\hypertarget{method-iom-compute_leontief_inverse}{}}}
 \subsection{Method \code{compute_leontief_inverse()}}{
-Computes the Leontief inverse matrix.
+Computes the Leontief inverse matrix and populate the \code{leontief_inverse_matrix} field with the resulting
+\code{(matrix)}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_leontief_inverse()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+It computes the Leontief inverse matrix \insertCite{leontief_economia_1983}{fio}, which is the inverse of the
+Leontief matrix, defined as:
+
+\deqn{L = I - A}
+
+where I is the identity matrix and A is the technical coefficients matrix.
+The Leontief inverse matrix is calculated by solving the following equation:
+
+\deqn{L^{-1} = (I - A)^{-1}}
+
+Since the Leontief matrix is a square matrix and the subtraction of the technical coefficients matrix from the
+identity matrix guarantees that the Leontief matrix is invertible, underlined Rust function uses LU decomposition
+to solve the equation.
+}
+
+\subsection{Returns}{
+Self (invisibly).
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+# calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# calculate the Leontief inverse
+my_iom$compute_leontief_inverse()
+# show the Leontief inverse
+my_iom$leontief_inverse_matrix
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -295,9 +784,43 @@ Computes the Leontief inverse matrix.
 \if{html}{\out{<a id="method-iom-compute_multiplier_output"></a>}}
 \if{latex}{\out{\hypertarget{method-iom-compute_multiplier_output}{}}}
 \subsection{Method \code{compute_multiplier_output()}}{
-Computes the output multiplier dataframe.
+Computes the output multiplier and populate the \code{multiplier_output} field with the resulting \code{(data.frame)}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_multiplier_output()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+An output multiplier for sector \emph{j} is defined as the total value of production in all sectors of the economy
+that is necessary in order to satisfy a monetary unit (e.g., a dollar) worth of final demand for sector \emph{j}'s
+output \insertCite{miller_input-output_2009}{fio}.
+
+This method computes the simple output multiplier, defined as the column sums of the Leontief inverse matrix,
+the direct and indirect output multipliers, which are the column sums of the technical
+coefficients matrix and the difference between total and direct output multipliers, respectively
+\insertCite{vale_alise_2020}{fio}.
+}
+
+\subsection{Returns}{
+Self (invisibly).
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+# calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# calculate the Leontief inverse
+my_iom$compute_leontief_inverse()
+# calculate the output multiplier
+my_iom$compute_multiplier_output()
+# show the output multiplier
+my_iom$multiplier_output
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -305,9 +828,41 @@ Computes the output multiplier dataframe.
 \if{html}{\out{<a id="method-iom-compute_multiplier_employment"></a>}}
 \if{latex}{\out{\hypertarget{method-iom-compute_multiplier_employment}{}}}
 \subsection{Method \code{compute_multiplier_employment()}}{
-Computes the employment multiplier dataframe.
+Computes the employment multiplier and populate the \code{multiplier_employment} field with the resulting
+\code{(data.frame)}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_multiplier_employment()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+The employment multiplier for sector \emph{j} relates the jobs created in each sector in response to a
+initial exogenous shock \insertCite{miller_input-output_2009}{fio}.
+
+Current implementation follows \insertCite{vale_alise_2020}{fio}.
+}
+
+\subsection{Returns}{
+Self (invisibly).
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+jobs_data <- matrix(c(10, 12, 15), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production, occupation = jobs_data)
+# calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# calculate the Leontief inverse
+my_iom$compute_leontief_inverse()
+# calculate the employment multiplier
+my_iom$compute_multiplier_employment()
+# show the employment multiplier
+my_iom$multiplier_employment
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -315,9 +870,42 @@ Computes the employment multiplier dataframe.
 \if{html}{\out{<a id="method-iom-compute_multiplier_wages"></a>}}
 \if{latex}{\out{\hypertarget{method-iom-compute_multiplier_wages}{}}}
 \subsection{Method \code{compute_multiplier_wages()}}{
-Computes the wages multiplier dataframe.
+Computes the wages multiplier dataframe and populate the \code{multiplier_wages} field with the resulting
+\code{(data.frame)}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_multiplier_wages()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+The wages multiplier for sector \emph{j} relates increases in wages for each
+sector in response to a initial exogenous shock
+\insertCite{miller_input-output_2009}{fio}.
+
+Current implementation follows \insertCite{vale_alise_2020}{fio}.
+}
+
+\subsection{Returns}{
+Self (invisibly).
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+wages_data <- matrix(c(10, 12, 15), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production, wages = wages_data)
+# calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# calculate the Leontief inverse
+my_iom$compute_leontief_inverse()
+# calculate the wages multiplier
+my_iom$compute_multiplier_wages()
+# show the wages multiplier
+my_iom$multiplier_wages
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -325,9 +913,42 @@ Computes the wages multiplier dataframe.
 \if{html}{\out{<a id="method-iom-compute_multiplier_taxes"></a>}}
 \if{latex}{\out{\hypertarget{method-iom-compute_multiplier_taxes}{}}}
 \subsection{Method \code{compute_multiplier_taxes()}}{
-Computes the taxes multiplier dataframe.
+Computes the taxes multiplier and populate the \code{multiplier_taxes} field with
+the resulting \code{(data.frame)}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_multiplier_taxes()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+The taxes multiplier for sector \emph{j} relates the increases on tax revenue from
+each sector in response to a initial exogenous shock
+\insertCite{miller_input-output_2009}{fio}.
+
+Current implementation follows \insertCite{vale_alise_2020}{fio}.
+}
+
+\subsection{Returns}{
+Self (invisibly).
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+tax_data <- matrix(c(10, 12, 15), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production, taxes = tax_data)
+# calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# calculate the Leontief inverse
+my_iom$compute_leontief_inverse()
+# calculate the tax multiplier
+my_iom$compute_multiplier_taxes()
+# show the taxes multiplier
+my_iom$multiplier_taxes
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -335,7 +956,8 @@ Computes the taxes multiplier dataframe.
 \if{html}{\out{<a id="method-iom-compute_field_influence"></a>}}
 \if{latex}{\out{\hypertarget{method-iom-compute_field_influence}{}}}
 \subsection{Method \code{compute_field_influence()}}{
-Computes the influence field matrix.
+Computes the field of influence for all sectors and populate the
+\code{field_influence} field with the resulting \code{(matrix)}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_field_influence(epsilon)}\if{html}{\out{</div>}}
 }
@@ -343,19 +965,91 @@ Computes the influence field matrix.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{epsilon}}{Epsilon value. A technical change in the input-output matrix, caused by a variation of size \code{epsilon} into each
+\item{\code{epsilon}}{(\code{numeric})\cr
+Epsilon value. A technical change in the input-output matrix, caused by a variation of size \code{epsilon} into each
 element of technical coefficients matrix.}
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+The field of influence shows how changes in direct coefficients are
+distributed throughout the entire economic system, allowing for the
+determination of which relationships between sectors are most important
+within the production process.
+
+It determines which sectors have the greatest influence over others,
+specifically, which coefficients, when altered, would have the greatest
+impact on the system as a whole \insertCite{vale_alise_2020}{fio}.
+}
+
+\subsection{Returns}{
+Self (invisibly).
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+# calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# calculate the Leontief inverse
+my_iom$compute_leontief_inverse()
+# calculate field of influence
+my_iom$compute_field_influence(epsilon = 0.01)
+# show the field of influence
+my_iom$field_influence
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-iom-compute_key_sectors"></a>}}
 \if{latex}{\out{\hypertarget{method-iom-compute_key_sectors}{}}}
 \subsection{Method \code{compute_key_sectors()}}{
-Computes the key sectors dataframe, based on it's backward and forward linkages.
+Computes the key sectors dataframe, based on it's power and sensitivity of dispersion,
+and populate the \code{key_sectors} field with the resulting \code{(data.frame)}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_key_sectors()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+Increased production from a sector \emph{j} means that the sector \emph{j} will need to
+purchase more goods from other sectors. At the same time, it means that more goods from sector \emph{j} will be
+available for other sectors to purchase. Sectors that are above average in the demand sense (stronger backward
+linkage) have power of dispersion indices greater than 1. Sectors that are above average in the supply sense
+(stronger forward linkage) have sensitivity of dispersion indices greater than 1
+\insertCite{miller_input-output_2009}{fio}.
+
+As both power and sensitivity of dispersion are related to average values on the economy, coefficients of
+variation are also calculated for both indices. The lesser the coefficient of variation, greater the number of
+sectors on the demand or supply structure of that sector \insertCite{vale_alise_2020}{fio}.
+}
+
+\subsection{Returns}{
+Self (invisibly).
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+# calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# calculate the Leontief inverse
+my_iom$compute_leontief_inverse()
+# calculate key sectors
+my_iom$compute_key_sectors()
+# show the key sectors
+my_iom$key_sectors
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -363,9 +1057,33 @@ Computes the key sectors dataframe, based on it's backward and forward linkages.
 \if{html}{\out{<a id="method-iom-compute_allocation_coeff"></a>}}
 \if{latex}{\out{\hypertarget{method-iom-compute_allocation_coeff}{}}}
 \subsection{Method \code{compute_allocation_coeff()}}{
-Computes the allocation coefficients matrix.
+Computes the allocation coefficients matrix and populate the \code{allocation_coefficients_matrix} field with the
+resulting \code{(matrix)}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_allocation_coeff()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+It computes the allocation coefficients matrix, a \eqn{n x n} matrix known as \code{B} matrix which is the row-wise
+ratio of intermediate transactions to total production \insertCite{miller_input-output_2009}{fio}.
+}
+
+\subsection{Returns}{
+Self (invisibly).
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+# Calculate the allocation coefficients
+my_iom$compute_allocation_coeff()
+# show the allocation coefficients
+my_iom$allocation_coefficients_matrix
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -373,9 +1091,35 @@ Computes the allocation coefficients matrix.
 \if{html}{\out{<a id="method-iom-compute_ghosh_inverse"></a>}}
 \if{latex}{\out{\hypertarget{method-iom-compute_ghosh_inverse}{}}}
 \subsection{Method \code{compute_ghosh_inverse()}}{
-Computes the Ghosh inverse matrix.
+Computes the Ghosh inverse matrix and populate the \code{ghosh_inverse_matrix} field with the resulting \code{(matrix)}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_ghosh_inverse()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+It computes the Ghosh inverse matrix \insertCite{miller_input-output_2009}{fio}, defined as:
+\deqn{G = (I - B)^{-1}}
+where I is the identity matrix and B is the allocation coefficients matrix.
+}
+
+\subsection{Returns}{
+Self (invisibly).
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+# Calculate the allocation coefficients
+my_iom$compute_allocation_coeff()
+# Calculate the Ghosh inverse
+my_iom$compute_ghosh_inverse()
+# show the Ghosh inverse
+my_iom$ghosh_inverse_matrix
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -383,9 +1127,60 @@ Computes the Ghosh inverse matrix.
 \if{html}{\out{<a id="method-iom-compute_hypothetical_extraction"></a>}}
 \if{latex}{\out{\hypertarget{method-iom-compute_hypothetical_extraction}{}}}
 \subsection{Method \code{compute_hypothetical_extraction()}}{
-Computes the hypothetical extraction.
+Computes total impact after extracting a each sector and populate the \code{hypothetical_extraction} field with the
+resulting \code{(data.frame)}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$compute_hypothetical_extraction()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+Computes impact on demand and supply structures after extracting each
+sector \insertCite{miller_input-output_2009}{fio}.
+
+The total impact is calculated by the sum of the direct and indirect impacts.
+}
+
+\subsection{Returns}{
+Self (invisibly).
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+exports_data <- matrix(c(5, 10, 15), 3, 1)
+holsehold_consumption_data <- matrix(c(20, 25, 30), 3, 1)
+operating_income_data <- matrix(c(2, 5, 10), 1, 3)
+taxes_data <- matrix(c(1, 2, 3), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new(
+ "test",
+ intermediate_transactions,
+ total_production,
+ exports = exports_data,
+ household_consumption = holsehold_consumption_data,
+ operating_income = operating_income_data,
+ taxes = taxes_data
+)
+# update value-added matrix
+my_iom$update_value_added_matrix()
+# update final demand matrix
+my_iom$update_final_demand_matrix()
+# calculate the technical coefficients
+my_iom$compute_tech_coeff()
+# calculate the Leontief inverse
+my_iom$compute_leontief_inverse()
+# calculate allocation coefficients
+my_iom$compute_allocation_coeff()
+# calculate Ghosh inverse
+my_iom$compute_ghosh_inverse()
+# calculate hypothetical extraction
+my_iom$compute_hypothetical_extraction()
+# show results
+my_iom$hypothetical_extraction
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -393,7 +1188,7 @@ Computes the hypothetical extraction.
 \if{html}{\out{<a id="method-iom-set_max_threads"></a>}}
 \if{latex}{\out{\hypertarget{method-iom-set_max_threads}{}}}
 \subsection{Method \code{set_max_threads()}}{
-Sets max number of threads used by fio.
+Sets max number of threads used by fio and populate the \code{threads} field with the resulting \code{(integer)}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{iom$set_max_threads(max_threads)}\if{html}{\out{</div>}}
 }
@@ -401,11 +1196,45 @@ Sets max number of threads used by fio.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{max_threads}}{Number of threads enabled for parallel computing. Defaults to the number
-of threads available.}
+\item{\code{max_threads}}{(\code{integer})\cr
+Number of threads enabled for parallel computing. Defaults to 0, meaning all
+threads available.}
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+Calling this function sets a global limit of threads to Rayon crate, affecting
+all computations that runs in parallel by default.
+
+Default behavior of Rayon is to use all available threads (including logical). Setting to 1 will result in
+single threaded (sequential) computations.
+
+Initialization of the global thread pool happens exactly once. Once started, the configuration cannot be changed
+in the current session. If \verb{$set_max_threads()} is called again in the same session, it'll result in an error.
+
+Methods that deals with linear algebra computations, like \verb{$compute_leontief_inverse()} and
+\verb{$compute_ghosh_inverse()}, will try to use all available threads by default, so they also initializes global
+thread pool. In order to choose a maximum number of threads other than default, \verb{$set_max_threads()} must be
+called before any computation, preferably right after \code{iom$new()}.
+}
+
+\subsection{Returns}{
+This function does not return a value.
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+# instantiate iom object
+my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+# to run single threaded (sequential)
+my_iom$set_max_threads(1L)
+my_iom$threads
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-iom-clone"></a>}}

@@ -3,7 +3,18 @@ use extendr_api::prelude::*;
 use rayon::prelude::*;
 
 #[extendr]
+/// @description
 /// Computes technical coefficients matrix.
+/// 
+/// @details
+/// It computes the technical coefficients matrix, a \eqn{n x n} matrix known as `A` matrix which is the column-wise
+/// ratio of intermediate transactions to total production \insertCite{leontief_economia_1983}{fio}.
+///
+/// It takes a \eqn{n x n} matrix of intermediate transactions and a \eqn{1 x n} vector of total production,
+/// and populates the `technical_coefficients_matrix` field with the result.
+///
+/// Underlined Rust code uses Rayon crate to parallelize the computation. So there is no need to use future or
+/// async/await to parallelize.
 /// 
 /// @param intermediate_transactions
 /// A \eqn{n x n} matrix of intermediate transactions.
@@ -14,14 +25,14 @@ use rayon::prelude::*;
 /// It computes the technical coefficients matrix, which is the columnwise ratio of
 /// intermediate transactions to total production \insertCite{leontief_economia_1983}{fio}.
 /// 
+/// Underlined Rust code uses Rayon crate to parallelize the computation by
+/// default, so there is no need to use future or async/await to parallelize.
+/// 
 /// @return
 /// A \eqn{n x n} matrix of technical coefficients, known as A matrix.
 /// 
 /// @references
 /// \insertAllCited{}
-/// 
-/// Underlined Rust code uses Rayon crate to parallelize the computation by
-/// default, so there is no need to use future or async/await to parallelize.
 /// 
 /// @examples
 /// intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
@@ -32,6 +43,8 @@ use rayon::prelude::*;
 /// my_iom$compute_tech_coeff()
 /// # show the technical coefficients
 /// my_iom$technical_coefficients_matrix
+/// 
+/// @noRd
 
 fn compute_tech_coeff(
   // There's an optional faer feature in extendr-api but it's not working (for the time I'm writing this)
@@ -54,6 +67,7 @@ fn compute_tech_coeff(
 }
 
 #[extendr]
+/// @description
 /// Computes Leontief inverse matrix.
 /// 
 /// @param tech_coeff
@@ -61,7 +75,7 @@ fn compute_tech_coeff(
 /// 
 /// @details
 /// It computes the Leontief inverse matrix \insertCite{leontief_economia_1983}{fio}, which is the inverse of the
-/// Leontief matrix. The formula is:
+/// Leontief matrix. Defined as:
 /// 
 /// \deqn{L = I - A}
 /// 
@@ -93,6 +107,8 @@ fn compute_tech_coeff(
 /// my_iom$compute_leontief_inverse()
 /// # show the Leontief inverse
 /// my_iom$leontief_inverse_matrix
+/// 
+/// @noRd
 
 fn compute_leontief_inverse(tech_coeff: &[f64]) -> RArray<f64, [usize;2]> {
 

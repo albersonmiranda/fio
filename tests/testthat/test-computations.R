@@ -16,6 +16,7 @@ test_that("parallelization can be disabled", {
   obj <- iom$new("test", intermediate_transactions, total_production)
   # set number of threads to 1
   obj$set_max_threads(1L)
+  # Check if the number of threads is set to 1
   expect_equal(obj$threads, 1)
 })
 
@@ -64,7 +65,7 @@ test_that("output multiplier is calculated correctly", {
   b <- solve(diag(1, nrow = nrow(intermediate_transactions)) - obj$technical_coefficients_matrix)
   mult_out = colSums(b)
   # Check if the output multiplier is calculated correctly
-  expect_equal(obj$multiplier_output[["multiplier_total"]], as.vector(mult_out))
+  expect_equal(obj$multiplier_output[["multiplier_simple"]], as.vector(mult_out))
 })
 
 # multiplier generator is calculated correctly
@@ -76,9 +77,9 @@ test_that("multiplier generator is calculated correctly", {
   # Calculate the leontief matrix
   obj$compute_leontief_inverse()
   # Calculate employment requirements
-  employment_reqs <- compute_requirements_added_value(obj$occupation, obj$total_production)
+  employment_reqs <- compute_requirements_value_added(obj$occupation, obj$total_production)
   # Calculate employment generator
-  employment_generator <- compute_generator_added_value(employment_reqs, obj$leontief_inverse_matrix)
+  employment_generator <- compute_generator_value_added(employment_reqs, obj$leontief_inverse_matrix)
   dimnames(employment_generator) <- list(NULL, c(1, 2, 3))
   # solution
   c_j <- occupation / total_production
@@ -106,7 +107,7 @@ test_that("employment multiplier is calculated correctly", {
   e <- c_j_diag %*% obj$leontief_inverse_matrix
   mult_emp <- colSums(e)
   # Check if the employment multiplier is calculated correctly
-  expect_equal(obj$multiplier_employment[["multiplier_total"]], as.vector(mult_emp))
+  expect_equal(obj$multiplier_employment[["multiplier_simple"]], as.vector(mult_emp))
 })
 
 # wages multiplier is calculated correctly
@@ -127,7 +128,7 @@ test_that("wages multiplier is calculated correctly", {
   e = c_j_diag %*% obj$leontief_inverse_matrix
   mult_wages = colSums(e)
   # Check if the wages multiplier is calculated correctly
-  expect_equal(obj$multiplier_wages[["multiplier_total"]], as.vector(mult_wages))
+  expect_equal(obj$multiplier_wages[["multiplier_simple"]], as.vector(mult_wages))
 })
 
 # taxes multiplier is calculated correctly
@@ -148,7 +149,7 @@ test_that("taxes multiplier is calculated correctly", {
   e = c_j_diag %*% obj$leontief_inverse_matrix
   mult_taxes = colSums(e)
   # Check if the taxes multiplier is calculated correctly
-  expect_equal(obj$multiplier_taxes[["multiplier_total"]], as.vector(mult_taxes))
+  expect_equal(obj$multiplier_taxes[["multiplier_simple"]], as.vector(mult_taxes))
 })
 
 # field of influence is calculated correctly
@@ -249,7 +250,7 @@ test_that("hypothetical extraction is calculated correctly", {
   # fails if aggregated matrices isn't available
   expect_error(obj$compute_hypothetical_extraction())
   # set aggregated matrices
-  obj$update_added_value_matrix()
+  obj$update_value_added_matrix()
   obj$update_final_demand_matrix()
   # Calculate the hypothetical extraction
   obj$compute_hypothetical_extraction()
@@ -271,7 +272,7 @@ test_that("hypothetical extraction is calculated correctly", {
       ffl = obj$allocation_coefficients_matrix
       ffl[i, ] = 0
       gfl = solve(im - ffl)
-      xfl = obj$added_value_matrix %*% gfl
+      xfl = obj$value_added_matrix %*% gfl
       tfl = sum(xfl) - sum(obj$total_production)
       flextrac[i] = tfl
       flextracp = flextrac / sum(obj$total_production)

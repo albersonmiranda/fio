@@ -11,37 +11,49 @@
 NULL
 
 #' Sets max number of threads used by fio
-#' 
+#'
 #' @details
 #' Calling this function sets a global limit of threads to Rayon crate, affecting
 #' all computations that runs in parallel by default.
-#' 
+#'
 #' Default behavior of Rayon is to use all available threads (including logical).
 #' Setting to 1 will result in single threaded (sequential) computations.
-#' 
+#'
 #' Initialization of the global thread pool happens exactly once.
 #' Once started, the configuration cannot be changed in the current session.
 #' If `set_max_threads()` is called again in the same session, it'll result
 #' in an error.
-#' 
+#'
 #' @param max_threads Int.
 #' Default is 0 (all threads available). 1 means single threaded.
-#' 
+#'
 #' @return
 #' This functions does not return a value.
-#' 
+#'
 #' @examples
-#' \dontrun{
-#'   intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
-#'   total_production <- matrix(c(100, 200, 300), 1, 3)
-#'   # instantiate iom object
-#'   my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
-#'   # to use only 2 threads
-#'   my_iom$set_max_threads(2L)
-#' }
+#' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+#' total_production <- matrix(c(100, 200, 300), 1, 3)
+#' # instantiate iom object
+#' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+#' # to run single threaded (sequential)
+#' my_iom$set_max_threads(1L)
+#' my_iom$threads
+#'
+#' @noRd
 set_max_threads <- function(max_threads) invisible(.Call(wrap__set_max_threads, max_threads))
 
+#' @description
 #' Computes technical coefficients matrix.
+#' 
+#' @details
+#' It computes the technical coefficients matrix, a \eqn{n x n} matrix known as `A` matrix which is the column-wise
+#' ratio of intermediate transactions to total production \insertCite{leontief_economia_1983}{fio}.
+#'
+#' It takes a \eqn{n x n} matrix of intermediate transactions and a \eqn{1 x n} vector of total production,
+#' and populates the `technical_coefficients_matrix` field with the result.
+#'
+#' Underlined Rust code uses Rayon crate to parallelize the computation. So there is no need to use future or
+#' async/await to parallelize.
 #' 
 #' @param intermediate_transactions
 #' A \eqn{n x n} matrix of intermediate transactions.
@@ -52,14 +64,14 @@ set_max_threads <- function(max_threads) invisible(.Call(wrap__set_max_threads, 
 #' It computes the technical coefficients matrix, which is the columnwise ratio of
 #' intermediate transactions to total production \insertCite{leontief_economia_1983}{fio}.
 #' 
+#' Underlined Rust code uses Rayon crate to parallelize the computation by
+#' default, so there is no need to use future or async/await to parallelize.
+#' 
 #' @return
 #' A \eqn{n x n} matrix of technical coefficients, known as A matrix.
 #' 
 #' @references
 #' \insertAllCited{}
-#' 
-#' Underlined Rust code uses Rayon crate to parallelize the computation by
-#' default, so there is no need to use future or async/await to parallelize.
 #' 
 #' @examples
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
@@ -70,8 +82,11 @@ set_max_threads <- function(max_threads) invisible(.Call(wrap__set_max_threads, 
 #' my_iom$compute_tech_coeff()
 #' # show the technical coefficients
 #' my_iom$technical_coefficients_matrix
+#' 
+#' @noRd
 compute_tech_coeff <- function(intermediate_transactions, total_production) .Call(wrap__compute_tech_coeff, intermediate_transactions, total_production)
 
+#' @description
 #' Computes Leontief inverse matrix.
 #' 
 #' @param tech_coeff
@@ -79,7 +94,7 @@ compute_tech_coeff <- function(intermediate_transactions, total_production) .Cal
 #' 
 #' @details
 #' It computes the Leontief inverse matrix \insertCite{leontief_economia_1983}{fio}, which is the inverse of the
-#' Leontief matrix. The formula is:
+#' Leontief matrix. Defined as:
 #' 
 #' \deqn{L = I - A}
 #' 
@@ -111,52 +126,130 @@ compute_tech_coeff <- function(intermediate_transactions, total_production) .Cal
 #' my_iom$compute_leontief_inverse()
 #' # show the Leontief inverse
 #' my_iom$leontief_inverse_matrix
+#' 
+#' @noRd
 compute_leontief_inverse <- function(tech_coeff) .Call(wrap__compute_leontief_inverse, tech_coeff)
 
-#' Computes type I output multiplier.
+#' Computes output multiplier.
 #' @param leontief_inverse_matrix The open model Leontief inverse matrix.
 #' @return A 1xn vector of type I output multipliers.
+#' @noRd
 compute_multiplier_output <- function(leontief_inverse_matrix) .Call(wrap__compute_multiplier_output, leontief_inverse_matrix)
 
 #' Computes direct output multiplier.
 #' @param technical_coefficients_matrix The open model technical coefficients matrix.
 #' @return A 1xn vector of direct output multipliers.
+#' @noRd
 compute_multiplier_output_direct <- function(technical_coefficients_matrix) .Call(wrap__compute_multiplier_output_direct, technical_coefficients_matrix)
 
 #' Computes indirect output multiplier.
 #' @param technical_coefficients_matrix The open model technical coefficients matrix.
 #' @param leontief_inverse_matrix The open model Leontief inverse matrix.
 #' @return A 1xn vector of indirect output multipliers.
+#' @noRd
 compute_multiplier_output_indirect <- function(technical_coefficients_matrix, leontief_inverse_matrix) .Call(wrap__compute_multiplier_output_indirect, technical_coefficients_matrix, leontief_inverse_matrix)
 
-#' Computes requirements for a given added value vector
-#' @param added_value_element An added value vector.
-#' @param total_production The total production vector.
-#' @return A 1xn vector of a given added value coefficients.
-compute_requirements_added_value <- function(added_value_element, total_production) .Call(wrap__compute_requirements_added_value, added_value_element, total_production)
-
-#' Computes generator matrix for a given added value vector.
-#' @param added_value_requirements The coefficients for a given added value vector.
-#' @param leontief_inverse_matrix The open model Leontief inverse matrix.
-#' @return A nxn matrix of an added value vector generator.
-compute_generator_added_value <- function(added_value_requirements, leontief_inverse_matrix) .Call(wrap__compute_generator_added_value, added_value_requirements, leontief_inverse_matrix)
-
-#' Computes multiplier for a given added value vector.
-#' @param added_value_requirements The coefficients for a given added value vector.
-#' @param leontief_inverse_matrix The open model Leontief inverse matrix.
-compute_multiplier_added_value <- function(added_value_requirements, leontief_inverse_matrix) .Call(wrap__compute_multiplier_added_value, added_value_requirements, leontief_inverse_matrix)
-
-#' Computes indirect multiplier for a given added value vector.
-#' @param added_value_element An added value vector.
-#' @param total_production The total production vector.
-#' @param leontief_inverse_matrix The open model Leontief inverse matrix.
-#' @return A 1xn vector of indirect multipliers for a given added value vector.
-compute_multiplier_added_value_indirect <- function(added_value_element, total_production, leontief_inverse_matrix) .Call(wrap__compute_multiplier_added_value_indirect, added_value_element, total_production, leontief_inverse_matrix)
-
-#' Computes field of influence given a technical change.
-#' 
 #' @description
-#' Computes total field of influence given a incremental change in the technical coefficients matrix \insertCite{vale_alise_2020}{fio}.
+#' Computes requirements for a given value-added vector (direct multiplier).
+#' 
+#' @details
+#' For others value-added components that doesn't get dedicated slots in the input-output table,
+#' users can calculate multipliers by:
+#' 
+#' 1. computing the requirements for a given value-added vector;
+#' 2. computing the generator matrix for a given value-added vector;
+#' 3. and, finally, computing the multiplier for a given value-added vector.
+#' 
+#' Current implementation follows \insertCite{vale_alise_2020}{fio}.
+#' 
+#' @param value_added_element A value-added vector.
+#' @param total_production The total production vector.
+#' @return A 1xn vector of a given value-added coefficients.
+#' 
+#' @references \insertAllCited{}
+#' 
+#' @seealso
+#' [compute_multiplier_value_added()] for computing multipliers.
+#' 
+#' @examples
+#' # data
+#' transporation_revenue <- c(100, 200, 300)
+#' total_production <- c(1000, 2000, 3000)
+#' # compute requirements
+#' reqs <- compute_requirements_value_added(transporation_revenue, total_production)
+#' reqs
+#' 
+#' @noRd
+compute_requirements_value_added <- function(value_added_element, total_production) .Call(wrap__compute_requirements_value_added, value_added_element, total_production)
+
+#' Computes generator matrix for a given value-added vector.
+#' @param value_added_requirements The coefficients for a given value-added vector.
+#' @param leontief_inverse_matrix The open model Leontief inverse matrix.
+#' @return A nxn matrix of an value-added vector generator.
+#' @noRd
+compute_generator_value_added <- function(value_added_requirements, leontief_inverse_matrix) .Call(wrap__compute_generator_value_added, value_added_requirements, leontief_inverse_matrix)
+
+#' @description
+#' Computes multiplier for a given value-added vector.
+#' 
+#' @details
+#' For others value-added components that doesn't get dedicated slots in the input-output table,
+#' users can calculate multipliers by:
+#' 
+#' 1. computing the requirements for a given value-added vector;
+#' 2. computing the generator matrix for a given value-added vector;
+#' 3. and, finally, computing the multiplier for a given value-added vector.
+#' 
+#' Current implementation follows \insertCite{vale_alise_2020}{fio}.
+#' 
+#' @param value_added_requirements The coefficients for a given value-added vector.
+#' @param leontief_inverse_matrix The open model Leontief inverse matrix.
+#' 
+#' @return A 1xn vector of a given value-added multipliers.
+#' 
+#' @references \insertAllCited{}
+#' 
+#' @seealso
+#' [compute_requirements_value_added] for computing multipliers.
+#' 
+#' @examples
+#' # data
+#' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+#' transporation_revenue <- c(100, 200, 300)
+#' total_production <- c(1750, 2500, 3800)
+#' # get technical coefficients matrix using unexported function
+#' tech_coeffs <- fio:::compute_tech_coeff(intermediate_transactions, total_production)
+#' # get Leontief inverse matrix using unexported function
+#' leontief_inverse <- fio:::compute_leontief_inverse(tech_coeffs)
+#' # get requirements
+#' reqs <- compute_requirements_value_added(transporation_revenue, total_production)
+#' # get multipliers
+#' multipliers <- compute_multiplier_value_added(reqs, leontief_inverse)
+#' multipliers
+#' 
+#' @noRd
+compute_multiplier_value_added <- function(value_added_requirements, leontief_inverse_matrix) .Call(wrap__compute_multiplier_value_added, value_added_requirements, leontief_inverse_matrix)
+
+#' Computes indirect multiplier for a given value-added vector.
+#' @param value_added_element An value-added vector.
+#' @param total_production The total production vector.
+#' @param leontief_inverse_matrix The open model Leontief inverse matrix.
+#' @return A 1xn vector of indirect multipliers for a given value-added vector.
+#' @noRd
+compute_multiplier_value_added_indirect <- function(value_added_element, total_production, leontief_inverse_matrix) .Call(wrap__compute_multiplier_value_added_indirect, value_added_element, total_production, leontief_inverse_matrix)
+
+#' @description
+#' Computes the field of influence for all sectors.
+#' 
+#' @details
+#' The field of influence shows how changes in direct coefficients are
+#' distributed throughout the entire economic system, allowing for the
+#' determination of which relationships between sectors are most important
+#' within the production process.
+#' 
+#' It determines which sectors have the greatest influence over others,
+#' specifically, which coefficients, when altered, would have the greatest
+#' impact on the system as a whole \insertCite{vale_alise_2020}{fio}.
 #' 
 #' @param tech_coeff_matrix A nxn matrix of technical coefficients.
 #' @param leontief_inverse_matrix The open model nxn Leontief inverse matrix.
@@ -179,45 +272,32 @@ compute_multiplier_added_value_indirect <- function(added_value_element, total_p
 #' # calculate field of influence
 #' my_iom$compute_field_influence(epsilon = 0.01)
 #' my_iom$field_influence
+#' 
+#' @noRd
 compute_field_influence <- function(tech_coeff_matrix, leontief_inverse_matrix, epsilon) .Call(wrap__compute_field_influence, tech_coeff_matrix, leontief_inverse_matrix, epsilon)
 
 #' Computes power of dispersion coefficients of variation
-#' 
-#' @description
-#' Computes power of dispersion coefficients of variation of an economy.
-#' 
 #' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
-#' 
 #' @return A vector of power of dispersion coefficients of variation.
+#' @noRd
 compute_power_dispersion_cv <- function(leontief_inverse_matrix) .Call(wrap__compute_power_dispersion_cv, leontief_inverse_matrix)
 
 #' Computes sensitivity of dispersion coefficients of variation
-#' 
-#' @description
-#' Computes sensitivity of dispersion coefficients of variation of an economy.
-#' 
 #' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
-#' 
 #' @return A vector of sensitivity of dispersion coefficients of variation.
+#' @noRd
 compute_sensitivity_dispersion_cv <- function(leontief_inverse_matrix) .Call(wrap__compute_sensitivity_dispersion_cv, leontief_inverse_matrix)
 
 #' Computes power of dispersion
-#' 
-#' @description
-#' Computes power of dispersion from a Leontief inverse matrix.
-#' 
 #' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
-#' 
 #' @return A vector of power of dispersion.
+#' @noRd
 compute_power_dispersion <- function(leontief_inverse_matrix) .Call(wrap__compute_power_dispersion, leontief_inverse_matrix)
 
-#' Computes sensitivity of dispersion
+#' @description Computes sensitivity of dispersion
 #' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
-#'
-#' @description
-#' Computes sensitivity of dispersion from a Leontief inverse matrix.
-#'
 #' @return A vector of sensitivity of dispersion.
+#' @noRd
 compute_sensitivity_dispersion <- function(leontief_inverse_matrix) .Call(wrap__compute_sensitivity_dispersion, leontief_inverse_matrix)
 
 #' Computes allocation coefficients matrix.
@@ -245,6 +325,8 @@ compute_sensitivity_dispersion <- function(leontief_inverse_matrix) .Call(wrap__
 #' my_iom$allocation_coefficients_matrix
 #' 
 #' @return A nxn matrix of allocation coefficients, known as F matrix.
+#' 
+#' @noRd
 compute_allocation_coeff <- function(intermediate_transactions, total_production) .Call(wrap__compute_allocation_coeff, intermediate_transactions, total_production)
 
 #' Computes Ghosh inverse matrix.
@@ -263,17 +345,7 @@ compute_allocation_coeff <- function(intermediate_transactions, total_production
 #' @references
 #' \insertAllCited{}
 #' 
-#' @examples
-#' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
-#' total_production <- matrix(c(100, 200, 300), 1, 3)
-#' # instantiate iom object
-#' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
-#' # Calculate the allocation coefficients
-#' my_iom$compute_allocation_coeff()
-#' # Calculate the Ghosh inverse
-#' my_iom$compute_ghosh_inverse()
-#' # show the Ghosh inverse
-#' my_iom$ghosh_inverse_matrix
+#' @noRd
 compute_ghosh_inverse <- function(allocation_coeff) .Call(wrap__compute_ghosh_inverse, allocation_coeff)
 
 #' Computes backward linkage extraction.
@@ -290,6 +362,8 @@ compute_ghosh_inverse <- function(allocation_coeff) .Call(wrap__compute_ghosh_in
 #' 
 #' @references
 #' \insertAllCited{}
+#' 
+#' @noRd
 compute_extraction_backward <- function(technical_coefficients_matrix, final_demand_matrix, total_production) .Call(wrap__compute_extraction_backward, technical_coefficients_matrix, final_demand_matrix, total_production)
 
 #' Computes forward linkage extraction.
@@ -298,20 +372,18 @@ compute_extraction_backward <- function(technical_coefficients_matrix, final_dem
 #' Computes impact on supply structure after extracting a given sector \insertCite{miller_input-output_2009}{fio}.
 #' 
 #' @param allocation_coefficients_matrix A nxn matrix of allocation coefficients.
-#' @param added_value_matrix The added value matrix.
+#' @param value_added_matrix The value-added matrix.
 #' @param total_production A 1xn vector of total production.
 #' 
 #' @references
 #' \insertAllCited{}
-compute_extraction_forward <- function(allocation_coefficients_matrix, added_value_matrix, total_production) .Call(wrap__compute_extraction_forward, allocation_coefficients_matrix, added_value_matrix, total_production)
+#' 
+#' @noRd
+compute_extraction_forward <- function(allocation_coefficients_matrix, value_added_matrix, total_production) .Call(wrap__compute_extraction_forward, allocation_coefficients_matrix, value_added_matrix, total_production)
 
-#' Computes total extraction
+#' Computes total impact after extracting a given sector.
 #' @param backward_linkage_matrix A nx2 matrix of backward linkage.
 #' @param forward_linkage_matrix A nx2 matrix of forward linkage.
-#' 
-#' @description
-#' Computes total impact after extracting a given sector.
-#' 
 #' @details
 #' Here we define total impact as the sum of impact on demand and supply structures
 #' after removal of a given sector.
@@ -336,13 +408,15 @@ compute_extraction_forward <- function(allocation_coefficients_matrix, added_val
 #' my_iom$compute_tech_coeff()
 #' # calculate the Leontief inverse
 #' my_iom$compute_allocation_coeff()
-#' # aggregate final demand and added value matrices
-#' my_iom$update_added_value_matrix()
+#' # aggregate final demand and value-added matrices
+#' my_iom$update_value_added_matrix()
 #' my_iom$update_final_demand_matrix()
 #' # Calculate effects on both demand and supply structures after extracting a sector
 #' my_iom$compute_hypothetical_extraction()
 #' # show results
 #' my_iom$hypothetical_extraction
+#' 
+#' @noRd
 compute_extraction_total <- function(backward_linkage_matrix, forward_linkage_matrix) .Call(wrap__compute_extraction_total, backward_linkage_matrix, forward_linkage_matrix)
 
 

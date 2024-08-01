@@ -16,7 +16,8 @@ use faer::{prelude::SpSolver, Mat};
 /// 
 /// @references
 /// \insertAllCited{}
-
+/// 
+/// @noRd
 fn compute_extraction_backward(
   technical_coefficients_matrix: &[f64],
   final_demand_matrix: RMatrix<f64>,
@@ -77,25 +78,26 @@ fn compute_extraction_backward(
 /// Computes impact on supply structure after extracting a given sector \insertCite{miller_input-output_2009}{fio}.
 /// 
 /// @param allocation_coefficients_matrix A nxn matrix of allocation coefficients.
-/// @param added_value_matrix The added value matrix.
+/// @param value_added_matrix The value-added matrix.
 /// @param total_production A 1xn vector of total production.
 /// 
 /// @references
 /// \insertAllCited{}
-
+/// 
+/// @noRd
 fn compute_extraction_forward(
   allocation_coefficients_matrix: &[f64],
-  added_value_matrix: RMatrix<f64>,
+  value_added_matrix: RMatrix<f64>,
   total_production: &[f64]
 ) -> RMatrix<f64> {
 
   // get dimensions
   let n = (allocation_coefficients_matrix.len() as f64).sqrt() as usize;
-  let n_av = added_value_matrix.nrows();
-  let m_av = added_value_matrix.ncols();
+  let n_av = value_added_matrix.nrows();
+  let m_av = value_added_matrix.ncols();
   
-  // get rowsum of added value matrix
-  let added_value_colsum: Vec<f64> = Mat::from_fn(n_av, m_av, |row, col| added_value_matrix[(row, col).into()])
+  // get rowsum of value-added matrix
+  let value_added_colsum: Vec<f64> = Mat::from_fn(n_av, m_av, |row, col| value_added_matrix[(row, col).into()])
   .col_iter()
   .map(|x| x.iter().sum::<f64>())
   .collect();
@@ -118,7 +120,7 @@ fn compute_extraction_forward(
     let lu = ghosh_matrix.partial_piv_lu();
     let ghosh_inverse = lu.solve(identity_matrix);
     // calculate new output level
-    let new_output: Mat<f64> = Mat::from_fn(1, n, |_, col| added_value_colsum[col]) * ghosh_inverse;
+    let new_output: Mat<f64> = Mat::from_fn(1, n, |_, col| value_added_colsum[col]) * ghosh_inverse;
     // calculate diff in output
     let diff_output = new_output.col_iter().map(|x| x.iter().sum::<f64>()).sum::<f64>() - &sum_output;
     // store diff in output
@@ -137,13 +139,9 @@ fn compute_extraction_forward(
 }
 
 #[extendr]
-/// Computes total extraction
+/// Computes total impact after extracting a given sector.
 /// @param backward_linkage_matrix A nx2 matrix of backward linkage.
 /// @param forward_linkage_matrix A nx2 matrix of forward linkage.
-/// 
-/// @description
-/// Computes total impact after extracting a given sector.
-/// 
 /// @details
 /// Here we define total impact as the sum of impact on demand and supply structures
 /// after removal of a given sector.
@@ -168,14 +166,15 @@ fn compute_extraction_forward(
 /// my_iom$compute_tech_coeff()
 /// # calculate the Leontief inverse
 /// my_iom$compute_allocation_coeff()
-/// # aggregate final demand and added value matrices
-/// my_iom$update_added_value_matrix()
+/// # aggregate final demand and value-added matrices
+/// my_iom$update_value_added_matrix()
 /// my_iom$update_final_demand_matrix()
 /// # Calculate effects on both demand and supply structures after extracting a sector
 /// my_iom$compute_hypothetical_extraction()
 /// # show results
 /// my_iom$hypothetical_extraction
-
+/// 
+/// @noRd
 fn compute_extraction_total(
   backward_linkage_matrix: RMatrix<f64>,
   forward_linkage_matrix: RMatrix<f64>

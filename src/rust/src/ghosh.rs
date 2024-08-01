@@ -28,7 +28,8 @@ use rayon::prelude::*;
 /// my_iom$allocation_coefficients_matrix
 /// 
 /// @return A nxn matrix of allocation coefficients, known as F matrix.
-
+/// 
+/// @noRd
 fn compute_allocation_coeff(
   intermediate_transactions: &[f64],
   total_production: &[f64],
@@ -64,18 +65,7 @@ fn compute_allocation_coeff(
 /// @references
 /// \insertAllCited{}
 /// 
-/// @examples
-/// intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
-/// total_production <- matrix(c(100, 200, 300), 1, 3)
-/// # instantiate iom object
-/// my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
-/// # Calculate the allocation coefficients
-/// my_iom$compute_allocation_coeff()
-/// # Calculate the Ghosh inverse
-/// my_iom$compute_ghosh_inverse()
-/// # show the Ghosh inverse
-/// my_iom$ghosh_inverse_matrix
-
+/// @noRd
 fn compute_ghosh_inverse(allocation_coeff: &[f64]) -> RArray<f64, [usize;2]> {
 
   // get dimensions

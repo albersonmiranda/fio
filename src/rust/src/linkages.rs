@@ -4,11 +4,9 @@ use faer::Mat;
 
 #[extendr]
 /// Computes average of all elements of Leontief inverse matrix
-/// 
 /// @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
-/// 
 /// @return A single value of average of elements of Leontief inverse matrix.
-
+/// @noRd
 fn compute_leontief_inverse_average(
   leontief_inverse_matrix: &[f64]
 ) -> f64 {
@@ -17,11 +15,9 @@ fn compute_leontief_inverse_average(
 
 #[extendr]
 /// Computes row averages of Leontief inverse matrix
-/// 
 /// @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
-/// 
 /// @return A vector of row averages.
-
+/// @noRd
 fn compute_row_average(
   leontief_inverse_matrix: &[f64]
 ) -> Vec<f64> {
@@ -51,11 +47,9 @@ fn compute_row_average(
 
 #[extendr]
 /// Computes column averages of Leontief inverse matrix
-/// 
 /// @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
-/// 
 /// @return A vector of column averages
-
+/// @noRd
 fn compute_col_average(
   leontief_inverse_matrix: &[f64]
 ) -> Vec<f64> {
@@ -70,14 +64,10 @@ fn compute_col_average(
 }
 
 #[extendr]
-/// Computes sensitivity of dispersion
+/// @description Computes sensitivity of dispersion
 /// @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
-///
-/// @description
-/// Computes sensitivity of dispersion from a Leontief inverse matrix.
-///
 /// @return A vector of sensitivity of dispersion.
-
+/// @noRd
 fn compute_sensitivity_dispersion(
   leontief_inverse_matrix: &[f64]
 ) -> Vec<f64> {
@@ -94,14 +84,9 @@ fn compute_sensitivity_dispersion(
 
 #[extendr]
 /// Computes power of dispersion
-/// 
-/// @description
-/// Computes power of dispersion from a Leontief inverse matrix.
-/// 
 /// @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
-/// 
 /// @return A vector of power of dispersion.
-
+/// @noRd
 fn compute_power_dispersion(
   leontief_inverse_matrix: &[f64]
 ) -> Vec<f64> {
@@ -118,14 +103,9 @@ fn compute_power_dispersion(
 
 #[extendr]
 /// Computes power of dispersion coefficients of variation
-/// 
-/// @description
-/// Computes power of dispersion coefficients of variation of an economy.
-/// 
 /// @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
-/// 
 /// @return A vector of power of dispersion coefficients of variation.
-
+/// @noRd
 fn compute_power_dispersion_cv(
   leontief_inverse_matrix: &[f64]
 ) -> Vec<f64> {
@@ -166,14 +146,9 @@ fn compute_power_dispersion_cv(
 
 #[extendr]
 /// Computes sensitivity of dispersion coefficients of variation
-/// 
-/// @description
-/// Computes sensitivity of dispersion coefficients of variation of an economy.
-/// 
 /// @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
-/// 
 /// @return A vector of sensitivity of dispersion coefficients of variation.
-
+/// @noRd
 fn compute_sensitivity_dispersion_cv(
   leontief_inverse_matrix: &[f64]
 ) -> Vec<f64> {

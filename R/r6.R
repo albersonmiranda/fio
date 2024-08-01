@@ -4,41 +4,45 @@
 #' @description
 #' R6 class for input-output matrix.
 #'
-#' @param id
+#' @param id (`character`)\cr
 #' Identifier for the input-output matrix.
-#' @param intermediate_transactions
+#' @param intermediate_transactions (`matrix`)\cr
 #' Intermediate transactions matrix.
-#' @param total_production
+#' @param total_production (`matrix`)\cr
 #' Total production vector.
-#' @param household_consumption
+#' @param household_consumption (`matrix`)\cr
 #' Household consumption vector.
-#' @param government_consumption
+#' @param government_consumption (`matrix`)\cr
 #' Government consumption vector.
-#' @param exports
+#' @param exports (`matrix`)\cr
 #' Exports vector.
-#' @param final_demand_others
+#' @param final_demand_others (`matrix`)\cr
 #' Other vectors of final demand that doesn't have dedicated slots.
 #' Setting column names is advised for better readability.
-#' @param imports
+#' @param imports (`matrix`)\cr
 #' Imports vector.
-#' @param taxes
+#' @param taxes (`matrix`)\cr
 #' Taxes vector.
-#' @param wages
+#' @param wages (`matrix`)\cr
 #' Wages vector.
-#' @param operating_income
+#' @param operating_income (`matrix`)\cr
 #' Operating income vector.
-#' @param added_value_others
-#' Other vectors of added value that doesn't have dedicated slots.
+#' @param value_added_others (`matrix`)\cr
+#' Other vectors of value-added that doesn't have dedicated slots.
 #' Setting row names is advised for better readability.
-#' @param occupation
+#' @param occupation (`matrix`)\cr
 #' Occupation matrix.
+#' @param threads (`integer`)\cr
+#' Number of threads available for Rust to run in parallel.
+#'
+#' @return A new instance of the `iom` class.
 #'
 #' @examples
 #' # data
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
 #' total_production <- matrix(c(100, 200, 300), 1, 3)
 #' exports <- matrix(c(10, 20, 30), 3, 1)
-#' households <- matrix(4:6, 3, 1)
+#' households <- matrix(as.numeric(4:6), 3, 1)
 #' imports <- matrix(c(5, 10, 15), 1, 3)
 #' jobs <- matrix(c(10, 12, 15), 1, 3)
 #' taxes <- matrix(c(2, 5, 10), 1, 3)
@@ -46,59 +50,23 @@
 #'
 #' # a new iom instance can be created by passing just intermediate transactions and total production
 #' my_iom <- iom$new(
-#'  "example",
+#'  "example_1",
 #'  intermediate_transactions,
 #'  total_production
 #' )
 #'
-#' # Compute technical coefficients matrix
-#' my_iom$compute_tech_coeff()
-#' print(my_iom$technical_coefficients_matrix)
-#'
-#' # Compute leontief inverse matrix
-#' my_iom$compute_leontief_inverse()
-#' print(my_iom$leontief_inverse_matrix)
-#'
-#' # compute output multiplier
-#' my_iom$compute_multiplier_output()
-#' print(my_iom$multiplier_output)
-#'
-#' # `add` or `remove` other elements to IO matrix
-#' my_iom$add("exports", exports)
-#' my_iom$add("household_consumption", households)
-#' my_iom$add("occupation", jobs)
-#' my_iom$add("taxes", taxes)
-#' my_iom$add("wages", wages)
-#'
-#' # compute multipliers for added elements
-#' my_iom$compute_multiplier_employment()
-#' my_iom$compute_multiplier_taxes()
-#' my_iom$compute_multiplier_wages()
-#' print(my_iom$multiplier_wages)
-#'
-#' # compute field of influence
-#' my_iom$compute_field_influence(epsilon = 0.001)
-#'
-#' # compute power and sensitivity of dispersion, it's coefficients of variation
-#' # and identify key sectors
-#' my_iom$compute_key_sectors()
-#' print(my_iom$key_sectors)
-#'
-#' # supply-wise model
-#' my_iom$compute_allocation_coeff()
-#' my_iom$compute_ghosh_inverse()
-#' print(my_iom$ghosh_inverse_matrix)
-#'
-#' # aggregates final demand and added value vectors
-#' my_iom$update_final_demand_matrix()
-#' print(my_iom$final_demand_matrix)
-#'
-#' my_iom$update_added_value_matrix()
-#' print(my_iom$added_value_matrix)
-#'
-#' # perform hypothetical extraction of a given sector
-#' my_iom$compute_hypothetical_extraction()
-#' print(my_iom$hypothetical_extraction)
+#' # or by passing optional arguments
+#' my_iom <- iom$new(
+#' "example_2",
+#' intermediate_transactions,
+#' total_production,
+#' household_consumption = households,
+#' exports = exports,
+#' imports = imports,
+#' taxes = taxes,
+#' wages = wages,
+#' occupation = jobs
+#' )
 #'
 #' @importFrom Rdpack reprompt
 #' @export
@@ -107,113 +75,111 @@
 iom <- R6::R6Class(
   classname = "iom",
   public = list(
-    # data members
-
-    #' @field id
-    #' Identifier of the new instance
+    #' @field id (`character`)\cr
+    #' Identifier of the new instance.
     id = NULL,
 
-    #' @field intermediate_transactions
-    #' Intermediate transactions matrix
+    #' @field intermediate_transactions (`matrix`)\cr
+    #' Intermediate transactions matrix.
     intermediate_transactions = NULL,
 
-    #' @field total_production
-    #' Total production vector
+    #' @field total_production (`matrix`)\cr
+    #' Total production vector.
     total_production = NULL,
 
-    #' @field household_consumption
-    #' Household consumption vector
+    #' @field household_consumption (`matrix`)\cr
+    #' Household consumption vector.
     household_consumption = NULL,
 
-    #' @field government_consumption
-    #' Government consumption vector
+    #' @field government_consumption (`matrix`)\cr
+    #' Government consumption vector.
     government_consumption = NULL,
 
-    #' @field exports
-    #' Exports vector
+    #' @field exports (`matrix`)\cr
+    #' Exports vector.
     exports = NULL,
 
-    #' @field final_demand_others
-    #' Other vectors of final demand that doesn't have dedicated slots
+    #' @field final_demand_others (`matrix`)\cr
+    #' Other vectors of final demand that doesn't have dedicated slots.
     final_demand_others = NULL,
 
-    #' @field final_demand_matrix
-    #' Aggregates final demand vectors into a matrix
+    #' @field final_demand_matrix (`matrix`)\cr
+    #' Aggregates final demand vectors into a matrix.
     final_demand_matrix = NULL,
 
-    #' @field imports
-    #' Imports vector
+    #' @field imports (`matrix`)\cr
+    #' Imports vector.
     imports = NULL,
 
-    #' @field taxes
-    #' Taxes vector
+    #' @field taxes (`matrix`)\cr
+    #' Taxes vector.
     taxes = NULL,
 
-    #' @field wages
+    #' @field wages (`matrix`)\cr
     #' Wages vector.
     wages = NULL,
 
-    #' @field operating_income
-    #' Operating income vector
+    #' @field operating_income (`matrix`)\cr
+    #' Operating income vector.
     operating_income = NULL,
 
-    #' @field added_value_others
-    #' Other vectors of added value that doesn't have dedicated slots
-    added_value_others = NULL,
+    #' @field value_added_others (`matrix`)\cr
+    #' Other vectors of value-added that doesn't have dedicated slots.
+    value_added_others = NULL,
 
-    #' @field added_value_matrix
-    #' Aggregates added value vectors into a matrix
-    added_value_matrix = NULL,
+    #' @field value_added_matrix (`matrix`)\cr
+    #' Aggregates value-added vectors into a matrix.
+    value_added_matrix = NULL,
 
-    #' @field occupation
-    #' Occupation vector
+    #' @field occupation (`matrix`)\cr
+    #' Occupation vector.
     occupation = NULL,
 
-    #' @field technical_coefficients_matrix
-    #' Technical coefficients matrix
+    #' @field technical_coefficients_matrix (`matrix`)\cr
+    #' Technical coefficients matrix.
     technical_coefficients_matrix = NULL,
 
-    #' @field leontief_inverse_matrix
-    #' Leontief inverse matrix
+    #' @field leontief_inverse_matrix (`matrix`)\cr
+    #' Leontief inverse matrix.
     leontief_inverse_matrix = NULL,
 
-    #' @field multiplier_output
-    #' Output multiplier dataframe
+    #' @field multiplier_output (`data.frame`)\cr
+    #' Output multiplier dataframe.
     multiplier_output = NULL,
 
-    #' @field multiplier_employment
-    #' Employment multiplier dataframe
+    #' @field multiplier_employment (`data.frame`)\cr
+    #' Employment multiplier dataframe.
     multiplier_employment = NULL,
 
-    #' @field multiplier_taxes
-    #' Taxes multiplier dataframe
+    #' @field multiplier_taxes (`data.frame`)\cr
+    #' Taxes multiplier dataframe.
     multiplier_taxes = NULL,
 
-    #' @field multiplier_wages
-    #' Wages multiplier dataframe
+    #' @field multiplier_wages (`data.frame`)\cr
+    #' Wages multiplier dataframe.
     multiplier_wages = NULL,
 
-    #' @field field_influence
-    #' Influence field matrix
+    #' @field field_influence (`matrix`)\cr
+    #' Influence field matrix.
     field_influence = NULL,
 
-    #' @field key_sectors
-    #' Key sectors dataframe
+    #' @field key_sectors (`data.frame`)\cr
+    #' Key sectors dataframe.
     key_sectors = NULL,
 
-    #' @field allocation_coefficients_matrix
-    #' Allocation coefficients matrix
+    #' @field allocation_coefficients_matrix (`matrix`)\cr
+    #' Allocation coefficients matrix.
     allocation_coefficients_matrix = NULL,
 
-    #' @field ghosh_inverse_matrix
-    #' Ghosh inverse matrix
+    #' @field ghosh_inverse_matrix (`matrix`)\cr
+    #' Ghosh inverse matrix.
     ghosh_inverse_matrix = NULL,
 
-    #' @field hypothetical_extraction
+    #' @field hypothetical_extraction (`matrix`)\cr
     #' Absolute and relative backward and forward differences in total output after a hypothetical extraction
     hypothetical_extraction = NULL,
 
-    #' @field threads
+    #' @field threads (`integer`)\cr
     #' Number of threads available for Rust to run in parallel
     threads = 0,
 
@@ -230,18 +196,16 @@ iom <- R6::R6Class(
                           taxes = NULL,
                           wages = NULL,
                           operating_income = NULL,
-                          added_value_others = NULL,
-                          occupation = NULL) {
-      # set default
-      self$threads <- 0
-
+                          value_added_others = NULL,
+                          occupation = NULL,
+                          threads = 0) {
       ### assertions ###
       # check class
       for (matrix in private$iom_elements()) {
-        if (!is.null(get(matrix)) && !is.matrix(get(matrix))) {
+        if (!is.null(get_var(matrix)) && !is.matrix(get_var(matrix))) {
           cli::cli_h1("Error in matrix class")
-          alert("Try coerce {matrix} to a matrix using as.matrix() function.")
-          error("{matrix} must be a matrix.")
+          alert(paste("Try coerce", matrix, "to a matrix using as.matrix() function."))
+          error(paste(matrix, "must be a matrix."))
         }
       }
 
@@ -257,10 +221,22 @@ iom <- R6::R6Class(
         "exports",
         "final_demand_others"
       )) {
-        if (!is.null(get(matrix)) && nrow(get(matrix)) != nrow(intermediate_transactions)) {
+        if (
+          !is.null(get_var(matrix))
+          && nrow(get_var(matrix)) != nrow(intermediate_transactions)
+        ) {
           cli::cli_h1("Error in matrix dimensions")
-          error("`{matrix}` must have the same number of rows than `intermediate_transactions`,
-          which is {nrow(intermediate_transactions)} rows. But `{matrix}` has {nrow(get(matrix))} rows.")
+          error(
+            paste(
+              matrix,
+              "must have the same number of rows than `intermediate_transactions`,
+              which is",
+              nrow(intermediate_transactions),
+              "rows. But has",
+              nrow(get_var(matrix)),
+              "rows."
+            )
+          )
         }
       }
 
@@ -269,25 +245,41 @@ iom <- R6::R6Class(
         "taxes",
         "wages",
         "operating_income",
-        "added_value_others",
+        "value_added_others",
         "occupation",
         "total_production"
       )) {
-        if (!is.null(get(matrix)) && ncol(get(matrix)) != ncol(intermediate_transactions)) {
+        if (!is.null(get_var(matrix)) && ncol(get_var(matrix)) != ncol(intermediate_transactions)) {
           cli::cli_h1("Error in matrix dimensions")
-          error("`{matrix}` must have the same number of columns than `intermediate_transactions`,
-          which is {ncol(intermediate_transactions)} columns. But `{matrix}` has {ncol(get(matrix))} columns.")
+          error(
+            paste(
+              matrix,
+              "must have the same number of columns than `intermediate_transactions`, which is",
+              ncol(intermediate_transactions),
+              "columns. But",
+              matrix,
+              "has",
+              ncol(get_var(matrix)),
+              "columns."
+            )
+          )
         }
       }
 
       # check number format
       for (matrix in private$iom_elements()) {
-        if (!is.null(get(matrix))) {
+        if (!is.null(get_var(matrix))) {
           # Check if the matrix storage mode is not double
-          if (storage.mode(get(matrix)) != "double") {
+          if (storage.mode(get_var(matrix)) != "double") {
             cli::cli_h1("Error in matrix number format")
-            alert("Try coerce {matrix} elements to double using as.numeric().")
-            error("{matrix} elements must be of type double.")
+            alert(
+              paste(
+                "Try coerce",
+                matrix,
+                "elements to double using as.numeric()."
+              )
+            )
+            error(paste(matrix, "elements must be of type double."))
           }
         }
       }
@@ -304,45 +296,72 @@ iom <- R6::R6Class(
       self$taxes <- set_rownames(taxes)
       self$wages <- set_rownames(wages)
       self$operating_income <- set_rownames(operating_income)
-      self$added_value_others <- added_value_others
+      self$value_added_others <- value_added_others
       self$occupation <- set_rownames(occupation)
     },
 
     #' @description
-    #' Adds a matrix to a previously imported IO matrix.
-    #' @param matrix_name
+    #' Adds a `matrix` to the `iom` object.
+    #' @param matrix_name (`character`)\cr
     #' One of household_consumption, government_consumption, exports, final_demand_others,
-    #' imports, taxes, wages, operating income, added_value_others or occupation matrix to be added.
-    #' @param matrix
+    #' imports, taxes, wages, operating income, value_added_others or occupation matrix to be added.
+    #' @param matrix (`matrix`)\cr
     #' Matrix object to be added.
+    #' @return
+    #' Self (invisibly).
+    #' @examples
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- iom$new("mock", intermediate_transactions, total_production)
+    #' # Create a dummy matrix
+    #' exports_data <- matrix(as.numeric(1:3), 3, 1)
+    #' # Add the matrix
+    #' my_iom$add("exports", exports_data)
     add = function(matrix_name, matrix) {
       # check arg
       choices <- private$iom_elements()
-      tryCatch(
-        match.arg(matrix_name, choices),
-        error = function(e) {
-          cli::cli_h1("Error in matrix_name")
-          error("matrix_name must be one of {choices}")
-        }
-      )
+      if (!matrix_name %in% choices) {
+        cli::cli_h1("Error in matrix_name")
+        error(paste("matrix_name must be one of", paste(choices, collapse = ", ")))
+      }
+
       # check class
       if (!is.matrix(matrix)) {
         cli::cli_h1("Error in matrix class")
-        alert("Try coerce {matrix} to a matrix using as.matrix() function.")
-        error("{matrix} must be a matrix.")
+        alert(paste("Try coerce", matrix_name, "to a matrix using as.matrix() function."))
+        error(paste(matrix_name, "must be a matrix."))
       }
+
       # check dimensions
       if (matrix_name %in% c("household_consumption", "government_consumption", "exports", "final_demand_others")) {
         if (nrow(matrix) != nrow(self$intermediate_transactions)) {
           cli::cli_h1("Error in matrix dimensions")
-          error("{matrix_name} must have the same number of rows than intermediate_transactions,
-          which is {nrow(self$intermediate_transactions)} rows. But {matrix_name} has {nrow(matrix)} rows.")
+          error(
+            paste(
+              matrix_name,
+              "must have the same number of rows than intermediate_transactions, which is",
+              nrow(self$intermediate_transactions),
+              "rows. But",
+              matrix_name,
+              "has",
+              nrow(matrix),
+              "rows."
+            )
+          )
         }
       } else {
         if (ncol(matrix) != ncol(self$intermediate_transactions)) {
           cli::cli_h1("Error in matrix dimensions")
-          error("{matrix_name} must have the same number of columns than intermediate_transactions,
-          which is {ncol(self$intermediate_transactions)} columns. But {matrix_name} has {ncol(matrix)} columns.")
+          error(
+            paste(
+              matrix_name,
+              "must have the same number of columns than intermediate_transactions, which is",
+              ncol(self$intermediate_transactions),
+              "columns. But", matrix_name, "has", ncol(matrix), "columns."
+            )
+          )
         }
       }
       # import matrix
@@ -351,27 +370,58 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Removes a matrix from a previously imported IO matrix.
-    #' @param matrix_name
+    #' Removes a `matrix` from the `iom` object.
+    #' @param matrix_name (`character`)\cr
     #' One of household_consumption, government_consumption, exports, final_demand_others,
-    #' imports, taxes, wages, operating income, added_value_others or occupation matrix to be removed.
+    #' imports, taxes, wages, operating_income, value_added_others or occupation matrix to be removed.
+    #' @return Self (invisibly).
+    #' @examples
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #'  exports_data <- matrix(as.numeric(1:3), 3, 1)
+    #' # instantiate iom object
+    #' my_iom <- iom$new("mock", intermediate_transactions, total_production, exports = exports_data)
+    #' # Remove the matrix
+    #' my_iom$remove("exports")
     remove = function(matrix_name) {
       # check arg
       choices <- private$iom_elements()
-      tryCatch(
-        match.arg(matrix_name, choices),
-        error = function(e) {
-          cli::cli_h1("Error in matrix_name")
-          error("matrix_name must be one of {choices}")
-        }
-      )
+      if (!matrix_name %in% choices) {
+        cli::cli_h1("Error in matrix_name")
+        error(paste("matrix_name must be one of", paste(choices, collapse = ", ")))
+      }
       # remove matrix
       self[[matrix_name]] <- NULL
       invisible(self)
     },
 
     #' @description
-    #' Aggregates final demand vectors into a matrix.
+    #' Aggregates final demand vectors into the `final_demand_matrix` field.
+    #' @details
+    #' Some methods, as `$compute_hypothetical_extraction()`, require the final demand and value-added vectors
+    #' to be aggregated into a matrix. This method does this aggregation, binding the vectors into
+    #' `$final_demand_matrix`.
+    #' @return
+    #' This functions doesn't returns a value.
+    #' @examples
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' exports_data <- matrix(c(10, 20, 30), 3, 1)
+    #' households <- matrix(as.numeric(4:6), 3, 1)
+    #' # instantiate iom object
+    #' my_iom <- iom$new(
+    #'  "mock",
+    #'  intermediate_transactions,
+    #'  total_production,
+    #'  exports = exports_data,
+    #'  household_consumption = households
+    #' )
+    #' # aggregate all final demand vectors
+    #' my_iom$update_final_demand_matrix()
+    #' # check final demand matrix
+    #' my_iom$final_demand_matrix
     update_final_demand_matrix = function() {
       # bind final demand vectors
       self$final_demand_matrix <- as.matrix(cbind(
@@ -383,20 +433,61 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Aggregates added value vectors into a matrix.
-    update_added_value_matrix = function() {
-      # bind added value vectors
-      self$added_value_matrix <- as.matrix(rbind(
+    #' Aggregates value-added vectors into the `value_added_matrix` field.
+    #' @details
+    #' Some methods, as `$compute_hypothetical_extraction()`, require the final demand and value-added vectors
+    #' to be aggregated into a matrix. This method does this aggregation, binding the vectors into
+    #' `$value_added_matrix`.
+    #' @return
+    #' This functions doesn't returns a value.
+    #' @examples
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' imports_data <- matrix(c(5, 10, 15), 1, 3)
+    #' taxes_data <- matrix(c(2, 5, 10), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- iom$new(
+    #' "mock",
+    #' intermediate_transactions,
+    #' total_production,
+    #' imports = imports_data,
+    #' taxes = taxes_data
+    #' )
+    #' # aggregate all value-added vectors
+    #' my_iom$update_value_added_matrix()
+    #' # check value-added matrix
+    #' my_iom$value_added_matrix
+    update_value_added_matrix = function() {
+      # bind value-added vectors
+      self$value_added_matrix <- as.matrix(rbind(
         self$imports,
         self$taxes,
         self$wages,
         self$operating_income,
-        self$added_value_others
+        self$value_added_others
       ))
     },
 
     #' @description
-    #' Computes the technical coefficients matrix.
+    #' Computes the technical coefficients matrix and populate the `technical_coefficients_matrix` field with the
+    #' resulting `(matrix)`.
+    #' @details
+    #' It computes the technical coefficients matrix, a \eqn{n x n} matrix known as `A` matrix which is the column-wise
+    #' ratio of intermediate transactions to total production \insertCite{leontief_economia_1983}{fio}.
+    #' @return
+    #' Self (invisibly).
+    #' @references
+    #' \insertAllCited{}
+    #' @examples
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- iom$new("test", intermediate_transactions, total_production)
+    #' # Calculate the technical coefficients
+    #' my_iom$compute_tech_coeff()
+    #' # show the technical coefficients
+    #' my_iom$technical_coefficients_matrix
     compute_tech_coeff = function() {
       # save row and column names
       row_names <- if (is.null(rownames(self$intermediate_transactions))) {
@@ -424,7 +515,37 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Computes the Leontief inverse matrix.
+    #' Computes the Leontief inverse matrix and populate the `leontief_inverse_matrix` field with the resulting
+    #' `(matrix)`.
+    #' @details
+    #' It computes the Leontief inverse matrix \insertCite{leontief_economia_1983}{fio}, which is the inverse of the
+    #' Leontief matrix, defined as:
+    #'
+    #' \deqn{L = I - A}
+    #'
+    #' where I is the identity matrix and A is the technical coefficients matrix.
+    #' The Leontief inverse matrix is calculated by solving the following equation:
+    #'
+    #' \deqn{L^{-1} = (I - A)^{-1}}
+    #'
+    #' Since the Leontief matrix is a square matrix and the subtraction of the technical coefficients matrix from the
+    #' identity matrix guarantees that the Leontief matrix is invertible, underlined Rust function uses LU decomposition
+    #' to solve the equation.
+    #' @return
+    #' Self (invisibly).
+    #' @references
+    #' \insertAllCited{}
+    #' @examples
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+    #' # calculate the technical coefficients
+    #' my_iom$compute_tech_coeff()
+    #' # calculate the Leontief inverse
+    #' my_iom$compute_leontief_inverse()
+    #' # show the Leontief inverse
+    #' my_iom$leontief_inverse_matrix
     compute_leontief_inverse = function() {
       # check if technical coefficients matrix is available
       if (is.null(self$technical_coefficients_matrix)) {
@@ -448,7 +569,33 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Computes the output multiplier dataframe.
+    #' Computes the output multiplier and populate the `multiplier_output` field with the resulting `(data.frame)`.
+    #' @details
+    #' An output multiplier for sector *j* is defined as the total value of production in all sectors of the economy
+    #' that is necessary in order to satisfy a monetary unit (e.g., a dollar) worth of final demand for sector *j*'s
+    #' output \insertCite{miller_input-output_2009}{fio}.
+    #'
+    #' This method computes the simple output multiplier, defined as the column sums of the Leontief inverse matrix,
+    #' the direct and indirect output multipliers, which are the column sums of the technical
+    #' coefficients matrix and the difference between total and direct output multipliers, respectively
+    #' \insertCite{vale_alise_2020}{fio}.
+    #' @return
+    #' Self (invisibly).
+    #' @references \insertAllCited{}
+    #' @examples
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+    #' # calculate the technical coefficients
+    #' my_iom$compute_tech_coeff()
+    #' # calculate the Leontief inverse
+    #' my_iom$compute_leontief_inverse()
+    #' # calculate the output multiplier
+    #' my_iom$compute_multiplier_output()
+    #' # show the output multiplier
+    #' my_iom$multiplier_output
     compute_multiplier_output = function() {
       # check if leontief inverse matrix is available
       if (is.null(self$leontief_inverse_matrix)) {
@@ -458,7 +605,7 @@ iom <- R6::R6Class(
       # save column names
       col_names <- colnames(self$leontief_inverse_matrix)
       # compute output multiplier vector
-      multiplier_output_total <- compute_multiplier_output(
+      multiplier_output_simple <- compute_multiplier_output(
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
       # compute direct output multiplier vector
@@ -473,7 +620,7 @@ iom <- R6::R6Class(
 
       multiplier_output <- data.frame(
         sector = col_names,
-        multiplier_total = multiplier_output_total,
+        multiplier_simple = multiplier_output_simple,
         multiplier_direct = multiplier_output_direct,
         multiplier_indirect = multiplier_output_indirect
       )
@@ -484,7 +631,32 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Computes the employment multiplier dataframe.
+    #' Computes the employment multiplier and populate the `multiplier_employment` field with the resulting
+    #' `(data.frame)`.
+    #' @details
+    #' The employment multiplier for sector *j* relates the jobs created in each sector in response to a
+    #' initial exogenous shock \insertCite{miller_input-output_2009}{fio}.
+    #'
+    #' Current implementation follows \insertCite{vale_alise_2020}{fio}.
+    #' @return
+    #' Self (invisibly).
+    #' @references
+    #' \insertAllCited{}
+    #' @examples
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' jobs_data <- matrix(c(10, 12, 15), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production, occupation = jobs_data)
+    #' # calculate the technical coefficients
+    #' my_iom$compute_tech_coeff()
+    #' # calculate the Leontief inverse
+    #' my_iom$compute_leontief_inverse()
+    #' # calculate the employment multiplier
+    #' my_iom$compute_multiplier_employment()
+    #' # show the employment multiplier
+    #' my_iom$multiplier_employment
     compute_multiplier_employment = function() {
       # check if leontief inverse matrix is available
       if (is.null(self$leontief_inverse_matrix)) {
@@ -494,25 +666,25 @@ iom <- R6::R6Class(
       # save column names
       col_names <- colnames(self$leontief_inverse_matrix)
       # compute employment requirements
-      employment_requirements <- compute_requirements_added_value(
-        added_value_element = self$occupation,
+      employment_requirements <- compute_requirements_value_added(
+        value_added_element = self$occupation,
         total_production = self$total_production
       )
       # compute employment multiplier vector
-      multiplier_employment_total <- compute_multiplier_added_value(
-        added_value_requirements = employment_requirements,
+      multiplier_employment_simple <- compute_multiplier_value_added(
+        value_added_requirements = employment_requirements,
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
       # compute indirect employment multiplier
-      multiplier_employment_indirect <- compute_multiplier_added_value_indirect(
-        added_value_element = self$occupation,
+      multiplier_employment_indirect <- compute_multiplier_value_added_indirect(
+        value_added_element = self$occupation,
         total_production = self$total_production,
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
 
       multiplier_employment <- data.frame(
         sector = col_names,
-        multiplier_total = multiplier_employment_total,
+        multiplier_simple = multiplier_employment_simple,
         multiplier_direct = employment_requirements,
         multiplier_indirect = multiplier_employment_indirect
       )
@@ -523,7 +695,33 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Computes the wages multiplier dataframe.
+    #' Computes the wages multiplier dataframe and populate the `multiplier_wages` field with the resulting
+    #' `(data.frame)`.
+    #' @details
+    #' The wages multiplier for sector *j* relates increases in wages for each
+    #' sector in response to a initial exogenous shock
+    #' \insertCite{miller_input-output_2009}{fio}.
+    #'
+    #' Current implementation follows \insertCite{vale_alise_2020}{fio}.
+    #' @return
+    #' Self (invisibly).
+    #' @references
+    #' \insertAllCited{}
+    #' @examples
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' wages_data <- matrix(c(10, 12, 15), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production, wages = wages_data)
+    #' # calculate the technical coefficients
+    #' my_iom$compute_tech_coeff()
+    #' # calculate the Leontief inverse
+    #' my_iom$compute_leontief_inverse()
+    #' # calculate the wages multiplier
+    #' my_iom$compute_multiplier_wages()
+    #' # show the wages multiplier
+    #' my_iom$multiplier_wages
     compute_multiplier_wages = function() {
       # check if leontief inverse matrix is available
       if (is.null(self$leontief_inverse_matrix)) {
@@ -533,25 +731,25 @@ iom <- R6::R6Class(
       # save column names
       col_names <- colnames(self$leontief_inverse_matrix)
       # compute wages requirements
-      wages_requirements <- compute_requirements_added_value(
-        added_value_element = self$wages,
+      wages_requirements <- compute_requirements_value_added(
+        value_added_element = self$wages,
         total_production = self$total_production
       )
       # compute wages multiplier vector
-      multiplier_wages_total <- compute_multiplier_added_value(
-        added_value_requirements = wages_requirements,
+      multiplier_wages_simple <- compute_multiplier_value_added(
+        value_added_requirements = wages_requirements,
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
       # compute indirect wages multiplier
-      multiplier_wages_indirect <- compute_multiplier_added_value_indirect(
-        added_value_element = self$wages,
+      multiplier_wages_indirect <- compute_multiplier_value_added_indirect(
+        value_added_element = self$wages,
         total_production = self$total_production,
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
 
       multiplier_wages <- data.frame(
         sector = col_names,
-        multiplier_total = multiplier_wages_total,
+        multiplier_simple = multiplier_wages_simple,
         multiplier_direct = wages_requirements,
         multiplier_indirect = multiplier_wages_indirect
       )
@@ -562,7 +760,33 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Computes the taxes multiplier dataframe.
+    #' Computes the taxes multiplier and populate the `multiplier_taxes` field with
+    #' the resulting `(data.frame)`.
+    #' @details
+    #' The taxes multiplier for sector *j* relates the increases on tax revenue from
+    #' each sector in response to a initial exogenous shock
+    #' \insertCite{miller_input-output_2009}{fio}.
+    #'
+    #' Current implementation follows \insertCite{vale_alise_2020}{fio}.
+    #' @return
+    #' Self (invisibly).
+    #' @references
+    #' \insertAllCited{}
+    #' @examples
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' tax_data <- matrix(c(10, 12, 15), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production, taxes = tax_data)
+    #' # calculate the technical coefficients
+    #' my_iom$compute_tech_coeff()
+    #' # calculate the Leontief inverse
+    #' my_iom$compute_leontief_inverse()
+    #' # calculate the tax multiplier
+    #' my_iom$compute_multiplier_taxes()
+    #' # show the taxes multiplier
+    #' my_iom$multiplier_taxes
     compute_multiplier_taxes = function() {
       # check if leontief inverse matrix is available
       if (is.null(self$leontief_inverse_matrix)) {
@@ -572,25 +796,25 @@ iom <- R6::R6Class(
       # save column names
       col_names <- colnames(self$leontief_inverse_matrix)
       # compute taxes requirements
-      taxes_requirements <- compute_requirements_added_value(
-        added_value_element = self$taxes,
+      taxes_requirements <- compute_requirements_value_added(
+        value_added_element = self$taxes,
         total_production = self$total_production
       )
       # compute taxes multiplier vector
-      multiplier_taxes_total <- compute_multiplier_added_value(
-        added_value_requirements = taxes_requirements,
+      multiplier_taxes_simple <- compute_multiplier_value_added(
+        value_added_requirements = taxes_requirements,
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
       # compute indirect taxes multiplier
-      multiplier_taxes_indirect <- compute_multiplier_added_value_indirect(
-        added_value_element = self$taxes,
+      multiplier_taxes_indirect <- compute_multiplier_value_added_indirect(
+        value_added_element = self$taxes,
         total_production = self$total_production,
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
 
       multiplier_taxes <- data.frame(
         sector = col_names,
-        multiplier_total = multiplier_taxes_total,
+        multiplier_simple = multiplier_taxes_simple,
         multiplier_direct = taxes_requirements,
         multiplier_indirect = multiplier_taxes_indirect
       )
@@ -601,10 +825,38 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Computes the influence field matrix.
-    #' @param epsilon
+    #' Computes the field of influence for all sectors and populate the
+    #' `field_influence` field with the resulting `(matrix)`.
+    #' @details
+    #' The field of influence shows how changes in direct coefficients are
+    #' distributed throughout the entire economic system, allowing for the
+    #' determination of which relationships between sectors are most important
+    #' within the production process.
+    #'
+    #' It determines which sectors have the greatest influence over others,
+    #' specifically, which coefficients, when altered, would have the greatest
+    #' impact on the system as a whole \insertCite{vale_alise_2020}{fio}.
+    #' @param epsilon (`numeric`)\cr
     #' Epsilon value. A technical change in the input-output matrix, caused by a variation of size `epsilon` into each
     #' element of technical coefficients matrix.
+    #' @return
+    #' Self (invisibly).
+    #' @references
+    #' \insertAllCited{}
+    #' @examples
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+    #' # calculate the technical coefficients
+    #' my_iom$compute_tech_coeff()
+    #' # calculate the Leontief inverse
+    #' my_iom$compute_leontief_inverse()
+    #' # calculate field of influence
+    #' my_iom$compute_field_influence(epsilon = 0.01)
+    #' # show the field of influence
+    #' my_iom$field_influence
     compute_field_influence = function(epsilon) {
       # check if epsilon was set
       if (missing(epsilon)) {
@@ -635,7 +887,37 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Computes the key sectors dataframe, based on it's backward and forward linkages.
+    #' Computes the key sectors dataframe, based on it's power and sensitivity of dispersion,
+    #' and populate the `key_sectors` field with the resulting `(data.frame)`.
+    #' @details
+    #' Increased production from a sector *j* means that the sector *j* will need to
+    #' purchase more goods from other sectors. At the same time, it means that more goods from sector *j* will be
+    #' available for other sectors to purchase. Sectors that are above average in the demand sense (stronger backward
+    #' linkage) have power of dispersion indices greater than 1. Sectors that are above average in the supply sense
+    #' (stronger forward linkage) have sensitivity of dispersion indices greater than 1
+    #' \insertCite{miller_input-output_2009}{fio}.
+    #'
+    #' As both power and sensitivity of dispersion are related to average values on the economy, coefficients of
+    #' variation are also calculated for both indices. The lesser the coefficient of variation, greater the number of
+    #' sectors on the demand or supply structure of that sector \insertCite{vale_alise_2020}{fio}.
+    #' @return
+    #' Self (invisibly).
+    #' @references
+    #' \insertAllCited{}
+    #' @examples
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+    #' # calculate the technical coefficients
+    #' my_iom$compute_tech_coeff()
+    #' # calculate the Leontief inverse
+    #' my_iom$compute_leontief_inverse()
+    #' # calculate key sectors
+    #' my_iom$compute_key_sectors()
+    #' # show the key sectors
+    #' my_iom$key_sectors
     compute_key_sectors = function() {
       # check if leontief inverse matrix is available
       if (is.null(self$leontief_inverse_matrix)) {
@@ -678,7 +960,24 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Computes the allocation coefficients matrix.
+    #' Computes the allocation coefficients matrix and populate the `allocation_coefficients_matrix` field with the
+    #' resulting `(matrix)`.
+    #' @details
+    #' It computes the allocation coefficients matrix, a \eqn{n x n} matrix known as `B` matrix which is the row-wise
+    #' ratio of intermediate transactions to total production \insertCite{miller_input-output_2009}{fio}.
+    #' @return
+    #' Self (invisibly).
+    #' @references
+    #' \insertAllCited{}
+    #' @examples
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+    #' # Calculate the allocation coefficients
+    #' my_iom$compute_allocation_coeff()
+    #' # show the allocation coefficients
+    #' my_iom$allocation_coefficients_matrix
     compute_allocation_coeff = function() {
       # save row and column names
       row_names <- if (is.null(rownames(self$intermediate_transactions))) {
@@ -706,7 +1005,26 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Computes the Ghosh inverse matrix.
+    #' Computes the Ghosh inverse matrix and populate the `ghosh_inverse_matrix` field with the resulting `(matrix)`.
+    #' @details
+    #' It computes the Ghosh inverse matrix \insertCite{miller_input-output_2009}{fio}, defined as:
+    #' \deqn{G = (I - B)^{-1}}
+    #' where I is the identity matrix and B is the allocation coefficients matrix.
+    #' @return
+    #' Self (invisibly).
+    #' @references
+    #' \insertAllCited{}
+    #' @examples
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+    #' # Calculate the allocation coefficients
+    #' my_iom$compute_allocation_coeff()
+    #' # Calculate the Ghosh inverse
+    #' my_iom$compute_ghosh_inverse()
+    #' # show the Ghosh inverse
+    #' my_iom$ghosh_inverse_matrix
     compute_ghosh_inverse = function() {
       # check if allocation coefficients matrix is available
       if (is.null(self$allocation_coefficients_matrix)) {
@@ -730,25 +1048,69 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Computes the hypothetical extraction.
+    #' Computes total impact after extracting a each sector and populate the `hypothetical_extraction` field with the
+    #' resulting `(data.frame)`.
+    #' @details
+    #' Computes impact on demand and supply structures after extracting each
+    #' sector \insertCite{miller_input-output_2009}{fio}.
+    #'
+    #' The total impact is calculated by the sum of the direct and indirect impacts.
+    #' @return
+    #' Self (invisibly).
+    #' @references
+    #' \insertAllCited{}
+    #' @examples
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' exports_data <- matrix(c(5, 10, 15), 3, 1)
+    #' holsehold_consumption_data <- matrix(c(20, 25, 30), 3, 1)
+    #' operating_income_data <- matrix(c(2, 5, 10), 1, 3)
+    #' taxes_data <- matrix(c(1, 2, 3), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- fio::iom$new(
+    #'  "test",
+    #'  intermediate_transactions,
+    #'  total_production,
+    #'  exports = exports_data,
+    #'  household_consumption = holsehold_consumption_data,
+    #'  operating_income = operating_income_data,
+    #'  taxes = taxes_data
+    #' )
+    #' # update value-added matrix
+    #' my_iom$update_value_added_matrix()
+    #' # update final demand matrix
+    #' my_iom$update_final_demand_matrix()
+    #' # calculate the technical coefficients
+    #' my_iom$compute_tech_coeff()
+    #' # calculate the Leontief inverse
+    #' my_iom$compute_leontief_inverse()
+    #' # calculate allocation coefficients
+    #' my_iom$compute_allocation_coeff()
+    #' # calculate Ghosh inverse
+    #' my_iom$compute_ghosh_inverse()
+    #' # calculate hypothetical extraction
+    #' my_iom$compute_hypothetical_extraction()
+    #' # show results
+    #' my_iom$hypothetical_extraction
     compute_hypothetical_extraction = function() {
       # check if arguments are available
-      for (matrix in c(
+      for (matrix_name in c(
         "technical_coefficients_matrix",
         "allocation_coefficients_matrix"
       )) {
-        if (is.null(self[[matrix]])) {
-          cli::cli_h1("Error in {matrix}")
-          error("You must compute the {matrix} first. Run respective compute_*() method.")
+        if (is.null(self[[matrix_name]])) {
+          cli::cli_h1("Error in {matrix_name}")
+          error(paste("You must compute the", matrix_name, "first. Run respective compute_*() method."))
         }
       }
       for (matrix in c(
         "final_demand_matrix",
-        "added_value_matrix"
+        "value_added_matrix"
       )) {
-        if (is.null(self[[matrix]])) {
-          cli::cli_h1("Error in {matrix}")
-          error("You must compute the {matrix} first. Run respective update_*() method.")
+        if (is.null(self[[matrix_name]])) {
+          cli::cli_h1("Error in {matrix_name}")
+          error("You must compute the {matrix_name} first. Run respective update_*() method.")
         }
       }
       # save row and column names
@@ -762,7 +1124,7 @@ iom <- R6::R6Class(
       # compute forward extraction
       extraction_forward <- compute_extraction_forward(
         allocation_coeff = self$allocation_coefficients_matrix,
-        added_value_matrix = self$added_value_matrix,
+        value_added_matrix = self$value_added_matrix,
         total_production = self$total_production
       )
       # compute total extraction
@@ -792,10 +1154,34 @@ iom <- R6::R6Class(
     },
 
     #' @description
-    #' Sets max number of threads used by fio.
-    #' @param max_threads
-    #' Number of threads enabled for parallel computing. Defaults to the number
-    #' of threads available.
+    #' Sets max number of threads used by fio and populate the `threads` field with the resulting `(integer)`.
+    #' @param max_threads (`integer`)\cr
+    #' Number of threads enabled for parallel computing. Defaults to 0, meaning all
+    #' threads available.
+    #' @details
+    #' Calling this function sets a global limit of threads to Rayon crate, affecting
+    #' all computations that runs in parallel by default.
+    #'
+    #' Default behavior of Rayon is to use all available threads (including logical). Setting to 1 will result in
+    #' single threaded (sequential) computations.
+    #'
+    #' Initialization of the global thread pool happens exactly once. Once started, the configuration cannot be changed
+    #' in the current session. If `$set_max_threads()` is called again in the same session, it'll result in an error.
+    #'
+    #' Methods that deals with linear algebra computations, like `$compute_leontief_inverse()` and
+    #' `$compute_ghosh_inverse()`, will try to use all available threads by default, so they also initializes global
+    #' thread pool. In order to choose a maximum number of threads other than default, `$set_max_threads()` must be
+    #' called before any computation, preferably right after `iom$new()`.
+    #' @return
+    #' This function does not return a value.
+    #' @examples
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+    #' # to run single threaded (sequential)
+    #' my_iom$set_max_threads(1L)
+    #' my_iom$threads
     set_max_threads = function(max_threads) {
       # assert type
       if (!(is.integer(max_threads) && max_threads >= 0)) {
@@ -829,7 +1215,7 @@ iom <- R6::R6Class(
         "taxes",
         "wages",
         "operating_income",
-        "added_value_others",
+        "value_added_others",
         "occupation"
       )
     }
