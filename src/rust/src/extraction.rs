@@ -30,7 +30,7 @@ fn compute_extraction_backward(
   let m_fd = final_demand_matrix.ncols();
   
   // get rowsum of final demand matrix
-  let final_demand_rowsum: Vec<f64> = Mat::from_fn(n_fd, m_fd, |row, col| final_demand_matrix[(row, col).into()])
+  let final_demand_rowsum: Vec<f64> = Mat::from_fn(n_fd, m_fd, |row, col| final_demand_matrix[[row, col]])
   .row_iter()
   .map(|x| x.iter().sum::<f64>())
   .collect();
@@ -97,7 +97,7 @@ fn compute_extraction_forward(
   let m_av = value_added_matrix.ncols();
   
   // get rowsum of value-added matrix
-  let value_added_colsum: Vec<f64> = Mat::from_fn(n_av, m_av, |row, col| value_added_matrix[(row, col).into()])
+  let value_added_colsum: Vec<f64> = Mat::from_fn(n_av, m_av, |row, col| value_added_matrix[[row, col]])
   .col_iter()
   .map(|x| x.iter().sum::<f64>())
   .collect();
@@ -188,12 +188,12 @@ fn compute_extraction_total(
 
   // computes absolute total linkage
   for i in 0..n_bl {
-    total_linkage[(i, 0)] = backward_linkage_matrix[(i, 0).into()] + forward_linkage_matrix[(i, 0).into()];
+    total_linkage[(i, 0)] = backward_linkage_matrix[[i, 0]] + forward_linkage_matrix[[i, 0]];
   }
 
   // computes relative total linkage
   for i in 0..n_bl {
-    total_linkage[(i, 1)] = backward_linkage_matrix[(i, 1).into()] + forward_linkage_matrix[(i, 1).into()];
+    total_linkage[(i, 1)] = backward_linkage_matrix[[i, 1]] + forward_linkage_matrix[[i, 1]];
   }
 
   // return total linkage

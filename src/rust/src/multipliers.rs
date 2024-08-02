@@ -116,7 +116,7 @@ fn compute_generator_value_added(
   
   let n = leontief_inverse_matrix.nrows();
 
-  let leontief_inverse_matrix_faer = Mat::from_fn(n, n, |row, col| leontief_inverse_matrix[(row, col).into()]);
+  let leontief_inverse_matrix_faer = Mat::from_fn(n, n, |row, col| leontief_inverse_matrix[[row, col]]);
   let value_added_requirements_matrix = Mat::from_fn(n, 1, |row, _| value_added_requirements[row]);
 
   // create diagonal matrix from value_added requirements
@@ -180,7 +180,7 @@ fn compute_multiplier_value_added(
   let generator_value_added = compute_generator_value_added(value_added_requirements, leontief_inverse_matrix);
 
   // convert to faer matrix
-  let generator_value_added_faer = Mat::from_fn(n, n, |row, col| generator_value_added[(row, col).into()]);
+  let generator_value_added_faer = Mat::from_fn(n, n, |row, col| generator_value_added[[row, col]]);
 
   // get column sums
   generator_value_added_faer.col_iter().map(|col| col.iter().sum()).collect::<Vec<f64>>()

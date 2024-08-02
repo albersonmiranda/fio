@@ -29,7 +29,7 @@ Roxygen: list(markdown = TRUE, r6 = TRUE)
 RoxygenNote: 7.3.2
 Depends: 
     R (>= 4.0)
-SystemRequirements: Cargo (Rust's package manager), rustc (Rust's compiler)
+SystemRequirements: Cargo (Rust's package manager), rustc >= 1.67.1
 LazyData: true
 Imports: 
     cli,
