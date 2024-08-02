@@ -1,34 +1,9 @@
-## Third ressubmission
-
-In this version I have:
-
-* Updated `import_iom()` example so it does not require `dontrun` nor `donttest` tag.
-* Added missing `return` tag to `iom` class (previously only on methods).
-
-## Second Ressubmission
-
-In this version I have:
- 
-* Rewrite `r6.R` documentation to address Konstanze's instructions.
-* Refactor `$set_max_threads()` method for better parallelism control and error handling.
-* Comply with CRAN's policies by building offline:
-  * Pass "--offline" flag to `cargo build` to avoid online compilation.
-  * Included compressed Rust dependencies in order to compile offline.
-* Added `configure` and `configure.win` files with 'Cargo' installation instructions when needed but not found.
-
-## Ressubmission
-
-This is a resubmission. Previous submission failed due to parallelization by default.
-In this version I have:
- 
-* Added "-j 2" flag to `cargo build` to avoid parallelism during building (`makevars` and `makevars.win`).
-* Added `$set_max_threads()` method to provide parallelism control to the user.
-* Added tests.
-
 ## R CMD check results
 
-0 errors | 0 warnings | 2 notes
+0 errors | 0 warnings | 0 notes
 
-* Check on Ubuntu
-  - Installed size is 9.3Mb: Rust code and dependencies are compiled and statically linked into the shared library `fio.so`.
-  - Build on Ubuntu 24.04 raises non-portable flag due to `-mno-omit-leaf-frame-pointer` which is [set by default in 24.04](https://ubuntu.com/blog/ubuntu-performance-engineering-with-frame-pointers-by-default).
+* Addresses CRAN removal:
+  - Update `extraction.rs`and `multipliers.rs` in order to lower MSRV from 1.71 to 1.67.
+  - Set minimum version of rustc >= 1.67.1 in `SystemRequirements`. **NOTE** this will result in build errors on Fedora due to outdated Rust installation. That specific version is due to dependency `faer-entity v0.19.0`, which requires rustc >= 1.67.0.
+  - Update `configure` and `configure.win` to check rustc version and prompt users to update when version is lower than specified in `DESCRIPTION`.
+* The large tarball size is due to vendored dependencies.
