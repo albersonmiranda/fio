@@ -1,12 +1,24 @@
 #!/bin/sh
 
-# https://github.com/eitsupi/prqlr/blob/main/configure.win
+# check if cargo is installed
 export PATH="$PATH:$HOME/.cargo/bin"
 
 if [ ! "$(command -v cargo)" ]; then
     echo "----------------------- [RUST NOT FOUND]---------------------------"
     echo "The 'cargo' command was not found on the PATH. Please install rustc"
     echo "from: https://www.rust-lang.org/tools/install"
+    echo "-------------------------------------------------------------------"
+    echo ""
+    exit 1
+fi
+
+# Check rustc version
+REQUIRED_RUSTC_VERSION="1.67.1"
+INSTALLED_RUSTC_VERSION=$(rustc --version | awk '{print $2}')
+if [ "$(printf '%s\n' "$REQUIRED_RUSTC_VERSION" "$INSTALLED_RUSTC_VERSION" | sort -V | head -n1)" != "$REQUIRED_RUSTC_VERSION" ]; then
+    echo "----------------------- [RUST VERSION TOO LOW]---------------------------"
+    echo "The installed rustc version is $INSTALLED_RUSTC_VERSION. Please install"
+    echo "rustc version $REQUIRED_RUSTC_VERSION or higher."
     echo "-------------------------------------------------------------------"
     echo ""
     exit 1
