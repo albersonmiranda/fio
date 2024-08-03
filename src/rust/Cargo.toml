@@ -2,6 +2,12 @@
 name = 'fio'
 version = '0.1.1'
 edition = '2021'
+authors = ['Alberson Miranda']
+description = 'Input-Output Analysis'
+repository = 'https://github.com/albersonmiranda/fio/tree/main/src/rust'
+license = 'MIT'
+rust-version = '1.67.1'
+keywords = ['economics', 'input-output-analysis']
 
 [lib]
 crate-type = [ 'staticlib' ]
