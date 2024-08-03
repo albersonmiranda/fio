@@ -1,6 +1,6 @@
 [package]
 name = 'fio'
-version = '0.1.0'
+version = '0.1.1'
 edition = '2021'
 
 [lib]
@@ -8,7 +8,7 @@ crate-type = [ 'staticlib' ]
 name = 'fio'
 
 [dependencies]
-extendr-api = '*'
-faer = { version = '*', features = ['rayon'] }
-rayon = '*'
-num_cpus = '*'
+extendr-api = '0.7.0'
+faer = { version = '0.19.1', features = ['rayon'] }
+rayon = '1.10.0'
+num_cpus = '1.16.0'
