@@ -75,7 +75,6 @@ current_rust_version <- extract_semver(rustc_version)
 
 # perform check
 if (!is.na(msrv)) {
-  message(sprintf("Minimum supported rust version is: %s", msrv))
   # -1 when current version is later
   # 0 when they are the same
   # 1 when MSRV is newer than current
