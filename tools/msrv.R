@@ -32,6 +32,16 @@ no_cargo_msg <- c("----------------------- [CARGO NOT FOUND]--------------------
 
 no_rustc_msg <- c("----------------------- [RUST NOT FOUND]---------------------------", "The 'rustc' compiler was not found on the PATH. Please install Rust", "from: https://www.rust-lang.org/tools/install", "", "Alternatively, you may install Rust from your OS package manager:", " - Debian/Ubuntu: apt-get install rustc", " - Fedora/CentOS: dnf install rustc", " - macOS: brew install rustc", "-------------------------------------------------------------------")
 
+# Add {user}/.cargo/bin to path before checking
+new_path <- paste0(
+  Sys.getenv("PATH"),
+  ":",
+  paste0(Sys.getenv("HOME"), "/.cargo/bin")
+)
+
+# set the path with the new path
+Sys.setenv("PATH" = new_path)
+
 # check for cargo installation
 cargo_version <- tryCatch(
   system("cargo --version", intern = TRUE),
