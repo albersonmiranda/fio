@@ -56,3 +56,22 @@ jobs:
         with:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+
+  Check on Fedora 36:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:36
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup R
+        run: |
+          sudo dnf install -y R
+
+      - name: Install dependencies
+        run: |
+          sudo dnf install -y libxml2-devel
+          R -e 'install.packages(c("devtools", "roxygen2", "testthat", "knitr", "rmarkdown"))'
+      - name: Check package
+        run: R CMD check .
