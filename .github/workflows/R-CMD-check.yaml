@@ -61,6 +61,8 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: fedora:36
+    env:
+      msrv: 1.67.1
 
     steps:
       - uses: actions/checkout@v4
@@ -72,12 +74,21 @@ jobs:
 
       - name: Setup Rust
         run: |
-          sudo dnf install -y rust
-          rustup default 1.67.0
+          curl https://sh.rustup.rs -sSf | sh -s -- -y 
+          . "$HOME/.cargo/env"
+          rustup default ${{ env.msrv }}
+          rustup --version
 
-      - name: Install dependencies
+      - name: Install Fedora dependencies
         run: |
-          sudo dnf install -y libxml2-devel
-          R -e 'install.packages(c("devtools", "roxygen2", "testthat", "knitr", "rmarkdown"), repos="https://cloud.r-project.org/")'
-      - name: Check package
-        run: R CMD build . && R CMD check --as-cran $(ls -t . | head -n1)
+          sudo dnf install -y libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
+      
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
