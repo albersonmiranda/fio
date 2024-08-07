@@ -117,7 +117,7 @@ jobs:
 
       - name: Install Fedora dependencies
         run: |
-          sudo dnf install -y libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf
+          sudo dnf install -y libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
