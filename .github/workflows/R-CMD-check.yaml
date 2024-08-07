@@ -2,7 +2,7 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: [main, master, dev]
+    branches: [main, master]
   pull_request:
     branches: [main, master]
     types:
@@ -67,11 +67,17 @@ jobs:
 
       - name: Setup R
         run: |
+          cat /etc/os-release
           sudo dnf install -y R
+
+      - name: Setup Rust
+        run: |
+          sudo dnf install -y rust
+          rustup default 1.67.0
 
       - name: Install dependencies
         run: |
           sudo dnf install -y libxml2-devel
-          R -e 'install.packages(c("devtools", "roxygen2", "testthat", "knitr", "rmarkdown"))'
+          R -e 'install.packages(c("devtools", "roxygen2", "testthat", "knitr", "rmarkdown"), repos="https://cloud.r-project.org/")'
       - name: Check package
         run: R CMD check .

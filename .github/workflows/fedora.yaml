@@ -1,0 +1,43 @@
+# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
+# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+on:
+  push:
+    branches: [main, master, dev]
+  pull_request:
+    branches: [main, master]
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+
+name: R-CMD-check
+
+permissions: read-all
+
+jobs:
+  Fedora-36:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:36
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup R
+        run: |
+          cat /etc/os-release
+          sudo dnf install -y R
+
+      - name: Setup Rust
+        run: |
+          sudo dnf install -y rust
+          rustup default 1.67.0
+          rustup --version
+
+      - name: Install dependencies
+        run: |
+          sudo dnf install -y libxml2-devel
+          R -e 'install.packages(c("devtools", "roxygen2", "testthat", "knitr", "rmarkdown"), repos="https://cloud.r-project.org/")'
+      - name: Check package
+        run: R CMD check .
