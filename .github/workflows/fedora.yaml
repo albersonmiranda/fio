@@ -32,6 +32,7 @@ jobs:
       - name: Setup Rust
         run: |
           curl https://sh.rustup.rs -sSf | sh -s -- -y 
+          . "$HOME/.cargo/env"
           rustup default 1.67.1
           rustup --version
 
