@@ -31,8 +31,8 @@ jobs:
 
       - name: Setup Rust
         run: |
-          sudo dnf install -y rust
-          rustup default 1.67.0
+          curl https://sh.rustup.rs -sSf | sh -s -- -y 
+          rustup default 1.67.1
           rustup --version
 
       - name: Install dependencies
