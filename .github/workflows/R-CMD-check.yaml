@@ -80,4 +80,4 @@ jobs:
           sudo dnf install -y libxml2-devel
           R -e 'install.packages(c("devtools", "roxygen2", "testthat", "knitr", "rmarkdown"), repos="https://cloud.r-project.org/")'
       - name: Check package
-        run: R CMD check .
+        run: R CMD build . && R CMD check --as-cran $(ls -t . | head -n1)
