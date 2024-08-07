@@ -36,9 +36,16 @@ jobs:
           rustup default 1.67.1
           rustup --version
 
-      - name: Install dependencies
+      - name: Install Fedora dependencies
         run: |
-          sudo dnf install -y libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel
-          R -e 'install.packages(c("devtools", "roxygen2", "testthat", "knitr", "rmarkdown"), repos="https://cloud.r-project.org/")'
-      - name: Check package
-        run: R CMD build . && R CMD check --as-cran --no-manual --compact-vignettes=gs+qpdf $(ls -t . | head -n1)
+          sudo dnf install -y libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
+      
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
