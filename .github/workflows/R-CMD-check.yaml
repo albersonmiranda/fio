@@ -78,6 +78,8 @@ jobs:
           . "$HOME/.cargo/env"
           rustup default ${{ env.msrv }}
           rustup --version
+          rustup default stable-x86_64-unknown-linux-gnu
+          rustup --version
 
       - name: Install Fedora dependencies
         run: |
