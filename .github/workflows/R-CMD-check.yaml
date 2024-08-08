@@ -67,6 +67,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install Fedora dependencies
+        run: |
+          sudo dnf install -y --allowerasing libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf glibc-langpack-en
+
       - name: Setup R
         run: |
           # update the fedora repo to 37
@@ -81,10 +85,6 @@ jobs:
           curl https://sh.rustup.rs -sSf | sh -s -- -y 
           . "$HOME/.cargo/env"
           rustup default ${{ env.msrv }}
-
-      - name: Install Fedora dependencies
-        run: |
-          sudo dnf install -y libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf devscripts glibc-langpack-en
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
@@ -106,9 +106,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install Fedora dependencies
+        run: |
+          sudo dnf install -y libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz devscripts glibc-langpack-en
+
+
       - name: Setup R
         run: |
-          cat /etc/os-release
           sudo dnf install -y R
 
       - name: Setup Rust
@@ -116,11 +120,6 @@ jobs:
           curl https://sh.rustup.rs -sSf | sh -s -- -y 
           . "$HOME/.cargo/env"
           rustup default ${{ env.msrv }}
-          rustup --version
-
-      - name: Install Fedora dependencies
-        run: |
-          sudo dnf install -y libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz devscripts glibc-langpack-en
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
