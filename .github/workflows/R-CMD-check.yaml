@@ -69,19 +69,22 @@ jobs:
 
       - name: Setup R
         run: |
-          cat /etc/os-release
+          # update the fedora repo to 37
+          sudo sed -i 's/$releasever/37/' /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora-updates.repo
+          # install R
           sudo dnf install -y R
+          # update the fedora repo back to the original value
+          sudo sed -i 's/37/$releasever/' /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora-updates.repo
 
       - name: Setup Rust
         run: |
           curl https://sh.rustup.rs -sSf | sh -s -- -y 
           . "$HOME/.cargo/env"
           rustup default ${{ env.msrv }}
-          rustup --version
 
       - name: Install Fedora dependencies
         run: |
-          sudo dnf install -y libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf
+          sudo dnf install -y libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf devscripts glibc-langpack-en
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
@@ -117,7 +120,7 @@ jobs:
 
       - name: Install Fedora dependencies
         run: |
-          sudo dnf install -y libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz
+          sudo dnf install -y libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz devscripts glibc-langpack-en
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
