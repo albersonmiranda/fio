@@ -62,15 +62,13 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: fedora:36
-    env:
-      msrv: 1.67.1
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Install Fedora dependencies
         run: |
-          sudo dnf install -y --allowerasing libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz glibc-langpack-en devscripts-checkbashisms
+          sudo dnf install -y --allowerasing rust libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz glibc-langpack-en devscripts-checkbashisms
 
       - name: Setup R
         run: |
@@ -80,12 +78,6 @@ jobs:
           sudo dnf install -y R
           # update the fedora repo back to the original value
           sudo sed -i 's/37/$releasever/' /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora-updates.repo
-
-      - name: Setup Rust
-        run: |
-          curl https://sh.rustup.rs -sSf | sh -s -- -y 
-          . "$HOME/.cargo/env"
-          rustup default ${{ env.msrv }}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
@@ -101,26 +93,17 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: fedora:37
-    env:
-      msrv: 1.67.1
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Install Fedora dependencies
         run: |
-          sudo dnf install -y libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz devscripts glibc-langpack-en
-
+          sudo dnf install -y rust libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz devscripts glibc-langpack-en
 
       - name: Setup R
         run: |
           sudo dnf install -y R
-
-      - name: Setup Rust
-        run: |
-          curl https://sh.rustup.rs -sSf | sh -s -- -y 
-          . "$HOME/.cargo/env"
-          rustup default ${{ env.msrv }}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
