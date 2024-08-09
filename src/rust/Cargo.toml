@@ -18,3 +18,6 @@ extendr-api = '0.7.0'
 faer = { version = '0.19.1', features = ['rayon'] }
 rayon = '1.10.0'
 num_cpus = '1.16.0'
+
+[patch.crates-io]
+libR-sys = { git = "https://github.com/extendr/libR-sys", rev = "976c56d396175f8d09548b0a1f0a77fc393018f2" }
