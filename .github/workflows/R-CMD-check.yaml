@@ -86,7 +86,7 @@ jobs:
 
       - name: Install Fedora dependencies
         run: |
-          sudo dnf install -y --allowerasing rust libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz glibc-langpack-en devscripts-checkbashisms
+          sudo dnf install -y --allowerasing rust gcc llvm libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz glibc-langpack-en devscripts-checkbashisms
 
       - name: Setup R
         run: |
