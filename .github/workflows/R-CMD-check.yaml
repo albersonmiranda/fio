@@ -82,8 +82,6 @@ jobs:
       image: fedora:36
 
     steps:
-      - uses: actions/checkout@v4
-
       - name: Install Fedora dependencies
         run: |
           sudo dnf install -y --allowerasing pip rust gcc llvm libxml2-devel libcurl-devel harfbuzz-devel \
@@ -99,8 +97,10 @@ jobs:
           tar -xvf R-4.2.0.tar.gz
           # build R 4.2.0
           cd R-4.2.0 && ./configure --prefix=/usr/local && make && make install
-          cd ..
-          cd fio
+          # back to the root directory
+          cd ~
+
+      - uses: actions/checkout@v4
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
