@@ -41,13 +41,13 @@ jobs:
           - {os: windows-2019,     r: 'release'}
           - {os: windows-2019,     r: 'devel'}
           - {os: windows-2019,     r: 'oldrel-1'}
-          - {os: ubuntu-2024.04,   r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-2024.04,   r: 'devel'}
           - {os: ubuntu-2024.04,   r: 'release'}
           - {os: ubuntu-2024.04,   r: 'oldrel-1'}
-          - {os: ubuntu-2022.04,   r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-2022.04,   r: 'devel'}
           - {os: ubuntu-2022.04,   r: 'release'}
           - {os: ubuntu-2022.04,   r: 'oldrel-1'}
-          - {os: ubuntu-2020.04,   r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-2020.04,   r: 'devel'}
           - {os: ubuntu-2020.04,   r: 'release'}
           - {os: ubuntu-2020.04,   r: 'oldrel-1'}
 
