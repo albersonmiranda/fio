@@ -153,11 +153,8 @@ jobs:
       - name: Setup R
         run: |
           sudo dnf install -y R
-
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: any::rcmdcheck
-          needs: check
+          # install R packages
+          R -e 'install.packages(c("remotes", "rcmdcheck", "emoji", "Rdpack", "readxl"))'
       
       - uses: r-lib/actions/check-r-package@v2
         with:
@@ -179,11 +176,8 @@ jobs:
       - name: Setup R
         run: |
           sudo dnf install -y R
-
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: any::rcmdcheck
-          needs: check
+          # install R packages
+          R -e 'install.packages(c("remotes", "rcmdcheck", "emoji", "Rdpack", "readxl"))'
       
       - uses: r-lib/actions/check-r-package@v2
         with:
@@ -205,12 +199,9 @@ jobs:
       - name: Setup R
         run: |
           sudo dnf install -y R
+          # install R packages
+          R -e 'install.packages(c("remotes", "rcmdcheck", "emoji", "Rdpack", "readxl"))'
 
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: any::rcmdcheck
-          needs: check
-      
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
