@@ -15,5 +15,5 @@ In this version I have:
     - macOS 12, 13 and 14; R release, devel and oldrel-1.
     - Windows Server 2019, 2022; R release, devel and oldrel-1.
     - Ubuntu 20.04, 22.04, 24.04; R release, devel and oldrel-1.
-    - Fedora 36; R 4.2 built from source. `cargo` and other dependencies installed from Fedora 36 default repository.
-    - Fedora 37, 38, 39, 40; R and all dependencies installed from each version default repository (`dnf install`).
+    - Fedora 36; R 4.2 built from source. `cargo` and other dependencies installed from Fedora 36 default repository (`dnf install`).
+    - Fedora 37, 38, 39, 40; R and all dependencies installed from default repository (`dnf install`).
