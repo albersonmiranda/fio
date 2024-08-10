@@ -2,9 +2,9 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: [main, master, dev]
+    branches: [dev]
   pull_request:
-    branches: [main, master]
+    branches: [main]
     types:
       - opened
       - reopened
@@ -99,6 +99,8 @@ jobs:
           tar -xvf R-4.2.0.tar.gz
           # build R 4.2.0
           cd R-4.2.0 && ./configure --prefix=/usr/local && make && make install
+          cd ..
+          cd fio
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
