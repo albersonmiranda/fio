@@ -1,32 +1,4 @@
 #!/usr/bin/env sh
 
-export PATH="$PATH:$HOME/.cargo/bin"
-
-# check if cargo is installed
-if [ ! "$(command -v cargo)" ]; then
-    echo "----------------------- [RUST NOT FOUND]---------------------------"
-    echo "The 'cargo' command was not found on the PATH. Please install rustc"
-    echo "from: https://www.rust-lang.org/tools/install"
-    echo ""
-    echo "Alternatively, you may install cargo from your OS package manager:"
-    echo " - Debian/Ubuntu: apt-get install cargo"
-    echo " - Fedora/CentOS: dnf install cargo"
-    echo " - macOS: brew install rustc"
-    echo "-------------------------------------------------------------------"
-    echo ""
-    exit 1
-fi
-
-# Check rustc version
-REQUIRED_RUSTC_VERSION="1.67.1"
-INSTALLED_RUSTC_VERSION=$(rustc --version | awk '{print $2}')
-if [ "$(printf '%s\n' "$REQUIRED_RUSTC_VERSION" "$INSTALLED_RUSTC_VERSION" | sort -V | head -n1)" != "$REQUIRED_RUSTC_VERSION" ]; then
-    echo "----------------------- [RUST VERSION TOO LOW]---------------------------"
-    echo "The installed rustc version is $INSTALLED_RUSTC_VERSION. Please install"
-    echo "rustc version $REQUIRED_RUSTC_VERSION or higher."
-    echo "-------------------------------------------------------------------"
-    echo ""
-    exit 1
-fi
-
-exit 0
+: "${R_HOME=`R RHOME`}"
+"${R_HOME}/bin/Rscript" tools/msrv.R 

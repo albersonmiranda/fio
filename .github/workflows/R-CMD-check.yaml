@@ -16,65 +16,65 @@ name: R-CMD-check
 permissions: read-all
 
 jobs:
-#  R-CMD-check:
-#    if: '! github.event.pull_request.draft'
-#    runs-on: ${{ matrix.config.os }}
-#
-#    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
-#
-#    strategy:
-#      fail-fast: false
-#      matrix:
-#        config:
-#          - {os: macos-14,         r: 'release'}
-#          - {os: macos-14,         r: 'devel'}
-#          - {os: macos-14,         r: 'oldrel-1'}
-#          - {os: macos-13,         r: 'release'}
-#          - {os: macos-13,         r: 'devel'}
-#          - {os: macos-13,         r: 'oldrel-1'}
-#          - {os: macos-12,         r: 'release'}
-#          - {os: macos-12,         r: 'devel'}
-#          - {os: macos-12,         r: 'oldrel-1'}
-#          - {os: windows-2022,     r: 'release'}
-#          - {os: windows-2022,     r: 'devel'}
-#          - {os: windows-2022,     r: 'oldrel-1'}
-#          - {os: windows-2019,     r: 'release'}
-#          - {os: windows-2019,     r: 'devel'}
-#          - {os: windows-2019,     r: 'oldrel-1'}
-#          - {os: ubuntu-2024.04,   r: 'devel', http-user-agent: 'release'}
-#          - {os: ubuntu-2024.04,   r: 'release'}
-#          - {os: ubuntu-2024.04,   r: 'oldrel-1'}
-#          - {os: ubuntu-2022.04,   r: 'devel', http-user-agent: 'release'}
-#          - {os: ubuntu-2022.04,   r: 'release'}
-#          - {os: ubuntu-2022.04,   r: 'oldrel-1'}
-#          - {os: ubuntu-2020.04,   r: 'devel', http-user-agent: 'release'}
-#          - {os: ubuntu-2020.04,   r: 'release'}
-#          - {os: ubuntu-2020.04,   r: 'oldrel-1'}
-#
-#    env:
-#      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-#      R_KEEP_PKG_SOURCE: yes
-#
-#    steps:
-#      - uses: actions/checkout@v4
-#
-#      - uses: r-lib/actions/setup-pandoc@v2
-#
-#      - uses: r-lib/actions/setup-r@v2
-#        with:
-#          r-version: ${{ matrix.config.r }}
-#          http-user-agent: ${{ matrix.config.http-user-agent }}
-#          use-public-rspm: true
-#
-#      - uses: r-lib/actions/setup-r-dependencies@v2
-#        with:
-#          extra-packages: any::rcmdcheck
-#          needs: check
-#
-#      - uses: r-lib/actions/check-r-package@v2
-#        with:
-#          upload-snapshots: true
-#          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+  R-CMD-check:
+    if: '! github.event.pull_request.draft'
+    runs-on: ${{ matrix.config.os }}
+
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: macos-14,         r: 'release'}
+          - {os: macos-14,         r: 'devel'}
+          - {os: macos-14,         r: 'oldrel-1'}
+          - {os: macos-13,         r: 'release'}
+          - {os: macos-13,         r: 'devel'}
+          - {os: macos-13,         r: 'oldrel-1'}
+          - {os: macos-12,         r: 'release'}
+          - {os: macos-12,         r: 'devel'}
+          - {os: macos-12,         r: 'oldrel-1'}
+          - {os: windows-2022,     r: 'release'}
+          - {os: windows-2022,     r: 'devel'}
+          - {os: windows-2022,     r: 'oldrel-1'}
+          - {os: windows-2019,     r: 'release'}
+          - {os: windows-2019,     r: 'devel'}
+          - {os: windows-2019,     r: 'oldrel-1'}
+          - {os: ubuntu-2024.04,   r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-2024.04,   r: 'release'}
+          - {os: ubuntu-2024.04,   r: 'oldrel-1'}
+          - {os: ubuntu-2022.04,   r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-2022.04,   r: 'release'}
+          - {os: ubuntu-2022.04,   r: 'oldrel-1'}
+          - {os: ubuntu-2020.04,   r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-2020.04,   r: 'release'}
+          - {os: ubuntu-2020.04,   r: 'oldrel-1'}
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.config.r }}
+          http-user-agent: ${{ matrix.config.http-user-agent }}
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
+
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
 
   Fedora-36:
     runs-on: ubuntu-latest
@@ -116,6 +116,84 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: fedora:37
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Fedora dependencies
+        run: |
+          sudo dnf install -y rust libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz devscripts glibc-langpack-en
+
+      - name: Setup R
+        run: |
+          sudo dnf install -y R
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
+      
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+
+  Fedora-38:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:38
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Fedora dependencies
+        run: |
+          sudo dnf install -y rust libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz devscripts glibc-langpack-en
+
+      - name: Setup R
+        run: |
+          sudo dnf install -y R
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
+      
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+
+  Fedora-39:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:39
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Fedora dependencies
+        run: |
+          sudo dnf install -y rust libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz devscripts glibc-langpack-en
+
+      - name: Setup R
+        run: |
+          sudo dnf install -y R
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
+      
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+
+  Fedora-40:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:40
 
     steps:
       - uses: actions/checkout@v4
