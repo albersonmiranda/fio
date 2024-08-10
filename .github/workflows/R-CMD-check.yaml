@@ -154,7 +154,7 @@ jobs:
         run: |
           sudo dnf install -y R
           # install R packages
-          R -e 'install.packages(c("remotes", "rcmdcheck", "emoji", "Rdpack", "readxl", "clipr", "fs", "miniUI", "shiny"), repos = "http://cloud.r-project.org")'
+          R -e 'install.packages(c("remotes", "rcmdcheck", "emoji", "Rdpack", "readxl", "clipr", "fs", "miniUI", "shiny", "knitr", "rmarkdown"), repos = "http://cloud.r-project.org")'
       
       - uses: r-lib/actions/check-r-package@v2
         with:
@@ -177,7 +177,7 @@ jobs:
         run: |
           sudo dnf install -y R
           # install R packages
-          R -e 'install.packages(c("remotes", "rcmdcheck", "emoji", "Rdpack", "readxl", "clipr", "fs", "miniUI", "shiny"), repos = "http://cloud.r-project.org")'
+          R -e 'install.packages(c("remotes", "rcmdcheck", "emoji", "Rdpack", "readxl", "clipr", "fs", "miniUI", "shiny", "knitr", "rmarkdown"), repos = "http://cloud.r-project.org")'
       
       - uses: r-lib/actions/check-r-package@v2
         with:
@@ -200,7 +200,7 @@ jobs:
         run: |
           sudo dnf install -y R
           # install R packages
-          R -e 'install.packages(c("remotes", "rcmdcheck", "emoji", "Rdpack", "readxl", "clipr", "fs", "miniUI", "shiny"), repos = "http://cloud.r-project.org")'
+          R -e 'install.packages(c("remotes", "rcmdcheck", "emoji", "Rdpack", "readxl", "clipr", "fs", "miniUI", "shiny", "knitr", "rmarkdown"), repos = "http://cloud.r-project.org")'
 
       - uses: r-lib/actions/check-r-package@v2
         with:
