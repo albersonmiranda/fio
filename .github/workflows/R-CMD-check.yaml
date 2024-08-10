@@ -87,7 +87,7 @@ jobs:
           sudo dnf install -y --allowerasing pip rust gcc llvm libxml2-devel libcurl-devel harfbuzz-devel \
           fribidi-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz \
           glibc-langpack-en devscripts-checkbashisms gcc-c++ gcc-gfortran readline-devel xz-devel bzip2-devel \
-          zlib-devel pcre2-devel cairo-devel libgit2-devel libX11-devel libXt-devel texinfo texlive-* which
+          zlib-devel pcre2-devel cairo-devel libgit2-devel libX11-devel libXt-devel which
 
       - name: Compile R from source
         run: |
