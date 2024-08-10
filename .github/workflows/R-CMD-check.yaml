@@ -86,16 +86,19 @@ jobs:
 
       - name: Install Fedora dependencies
         run: |
-          sudo dnf install -y --allowerasing rust cargo libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz glibc-langpack-en devscripts-checkbashisms
+          sudo dnf install -y --allowerasing pip rust gcc llvm libxml2-devel libcurl-devel harfbuzz-devel \
+          fribidi-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz \
+          glibc-langpack-en devscripts-checkbashisms gcc-c++ gcc-gfortran readline-devel xz-devel bzip2-devel \
+          zlib-devel pcre2-devel cairo-devel libgit2-devel libX11-devel libXt-devel texinfo texlive-* which
 
-      - name: Setup R
+      - name: Compile R from source
         run: |
-          # update the fedora repo to 37
-          sudo sed -i 's/$releasever/37/' /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora-updates.repo
-          # install R
-          sudo dnf install -y R
-          # update the fedora repo back to the original value
-          sudo sed -i 's/37/$releasever/' /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora-updates.repo
+          # download R 4.2.0
+          curl https://cran.r-project.org/src/base/R-4/R-4.2.0.tar.gz -O
+          # extract R 4.2.0
+          tar -xvf R-4.2.0.tar.gz
+          # build R 4.2.0
+          cd R-4.2.0 && ./configure --prefix=/usr/local && make && make install
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
