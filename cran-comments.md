@@ -18,3 +18,4 @@ In this version I have:
     - Fedora 36; R 4.2 built from source. `cargo` and other dependencies installed from Fedora 36 default repository (`dnf install`).
     - Fedora 37, 38, 39, 40; R and all dependencies installed from default repository (`dnf install`).
 * Added 'xz' to `SystemRequirements` for decompression of the vendored Rust dependencies.
+* Added 'R6' to `Imports` in `DESCRIPTION` as it is used in the package but for some reason it's absence didn't trigger a NOTE.
