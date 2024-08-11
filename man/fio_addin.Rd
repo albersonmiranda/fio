@@ -13,3 +13,6 @@ where the data source is (either clipboard or Excel file) and import the
 data into the global environment.
 Appears as "Import input-output data" in the RStudio Addins menu.
 }
+\references{
+This function is based on the \href{https://github.com/tidyverse/reprex}{reprex} package.
+}
