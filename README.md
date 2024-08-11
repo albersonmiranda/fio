@@ -39,14 +39,17 @@ You can install the released version of `{fio}` from CRAN with:
 install.packages("fio")
 ```
 
-For the latest development version, you’ll find precompiled binaries at
+For the latest tested but unreleased version ([main
+branch](https://github.com/albersonmiranda/fio/tree/main)), you’ll find
+precompiled binaries at
 [R-universe](https://albersonmiranda.r-universe.dev/fio):
 
 ``` r
 install.packages("fio", repos = c("https://albersonmiranda.r-universe.dev", "https://cloud.r-project.org"))
 ```
 
-If you wish to compile the latest development version from source,
+For the development version, you can compile the [dev
+branch](https://github.com/albersonmiranda/fio/tree/dev) from source,
 you’ll need [Rust](https://www.rust-lang.org/) installed on your system.
 You can install Rust with the following commands:
 

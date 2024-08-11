@@ -2,5 +2,5 @@
 inst/doc
 docs
 revdep/
+src/vendor
 src/rust/vendor
-.vscode/

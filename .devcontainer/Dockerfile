@@ -7,6 +7,8 @@ RUN install2.r --error --skipinstalled -n -1 \
         # pacotes R
         leontief \
         microbenchmark \
+        Rdpack \
+        emoji \
     && rm -rf /tmp/downloaded_packages
 
 # Pacotes Python (digitar nomes em requirements.txt)

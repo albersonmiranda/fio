@@ -2,9 +2,9 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: [main, master]
+    branches: [main]
   pull_request:
-    branches: [main, master]
+    branches: [main]
     types:
       - opened
       - reopened
@@ -26,11 +26,30 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macos-latest,   r: 'release'}
-          - {os: windows-latest, r: 'release'}
-          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
-          - {os: ubuntu-latest,   r: 'release'}
-          - {os: ubuntu-latest,   r: 'oldrel-1'}
+          - {os: macos-14,      r: 'release'}
+          - {os: macos-14,      r: 'devel'}
+          - {os: macos-14,      r: 'oldrel-1'}
+          - {os: macos-13,      r: 'release'}
+          - {os: macos-13,      r: 'devel'}
+          - {os: macos-13,      r: 'oldrel-1'}
+          - {os: macos-12,      r: 'release'}
+          - {os: macos-12,      r: 'devel'}
+          - {os: macos-12,      r: 'oldrel-1'}
+          - {os: windows-2022,  r: 'release'}
+          - {os: windows-2022,  r: 'devel'}
+          - {os: windows-2022,  r: 'oldrel-1'}
+          - {os: windows-2019,  r: 'release'}
+          - {os: windows-2019,  r: 'devel'}
+          - {os: windows-2019,  r: 'oldrel-1'}
+          - {os: ubuntu-24.04,  r: 'devel'}
+          - {os: ubuntu-24.04,  r: 'release'}
+          - {os: ubuntu-24.04,  r: 'oldrel-1'}
+          - {os: ubuntu-22.04,  r: 'devel'}
+          - {os: ubuntu-22.04,  r: 'release'}
+          - {os: ubuntu-22.04,  r: 'oldrel-1'}
+          - {os: ubuntu-20.04,  r: 'devel'}
+          - {os: ubuntu-20.04,  r: 'release'}
+          - {os: ubuntu-20.04,  r: 'oldrel-1'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -51,6 +70,137 @@ jobs:
         with:
           extra-packages: any::rcmdcheck
           needs: check
+
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+
+  Fedora-36:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:36
+
+    steps:
+      - name: Install Fedora dependencies
+        run: |
+          sudo dnf install -y --allowerasing pip rust gcc llvm libxml2-devel libcurl-devel harfbuzz-devel \
+          fribidi-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz \
+          glibc-langpack-en devscripts-checkbashisms gcc-c++ gcc-gfortran readline-devel xz-devel bzip2-devel \
+          zlib-devel pcre2-devel cairo-devel libgit2-devel libX11-devel libXt-devel which
+
+      - name: Compile R from source
+        run: |
+          # download R 4.2.0
+          curl https://cran.r-project.org/src/base/R-4/R-4.2.0.tar.gz -O
+          # extract R 4.2.0
+          tar -xvf R-4.2.0.tar.gz
+          # build R 4.2.0
+          cd R-4.2.0 && ./configure --prefix=/usr/local && make && make install
+          # back to the root directory
+          cd ~
+
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
+      
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+
+  Fedora-37:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:37
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Fedora dependencies
+        run: |
+          sudo dnf install -y rust libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz devscripts glibc-langpack-en
+
+      - name: Setup R
+        run: |
+          sudo dnf install -y R
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
+      
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+
+  Fedora-38:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:38
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Fedora dependencies
+        run: |
+          sudo dnf install -y rust cargo libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz devscripts glibc-langpack-en pandoc
+
+      - name: Setup R
+        run: |
+          sudo dnf install -y R
+          # install R packages
+          R -e 'install.packages(c("remotes", "rcmdcheck", "emoji", "Rdpack", "readxl", "clipr", "fs", "miniUI", "shiny", "knitr", "rmarkdown", "spelling", "microbenchmark", "leontief", "ggplot2", "writexl", "testthat"), repos = "http://cloud.r-project.org")'
+      
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+
+  Fedora-39:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:39
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Fedora dependencies
+        run: |
+          sudo dnf install -y rust cargo libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz devscripts glibc-langpack-en pandoc
+
+      - name: Setup R
+        run: |
+          sudo dnf install -y R
+          # install R packages
+          R -e 'install.packages(c("remotes", "rcmdcheck", "emoji", "Rdpack", "readxl", "clipr", "fs", "miniUI", "shiny", "knitr", "rmarkdown", "spelling", "microbenchmark", "leontief", "ggplot2", "writexl", "testthat"), repos = "http://cloud.r-project.org")'
+      
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+
+  Fedora-40:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:40
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Fedora dependencies
+        run: |
+          sudo dnf install -y rust cargo libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz devscripts glibc-langpack-en pandoc
+
+      - name: Setup R
+        run: |
+          sudo dnf install -y R
+          # install R packages
+          R -e 'install.packages(c("remotes", "rcmdcheck", "emoji", "Rdpack", "readxl", "clipr", "fs", "miniUI", "shiny", "knitr", "rmarkdown", "spelling", "microbenchmark", "leontief", "ggplot2", "writexl", "testthat"), repos = "http://cloud.r-project.org")'
 
       - uses: r-lib/actions/check-r-package@v2
         with:

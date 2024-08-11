@@ -1,3 +1,11 @@
+# fio 0.1.1
+
+## 🛠️ Other improvements
+
+* Update `extraction.rs`and `multipliers.rs` in order to lower minimum supported Rust version from 1.71 to 1.67.
+* Set minimum version of rustc >= 1.67.1 in `SystemRequirements`.
+* Add system checks to rustc and prompt users either install, if missing, or update when version is lower than specified in `DESCRIPTION`.
+
 # fio 0.1.0
 
 ## ✨ Enhancements
