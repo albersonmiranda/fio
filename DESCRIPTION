@@ -41,7 +41,8 @@ Imports:
     readxl,
     rlang,
     shiny,
-    Rdpack
+    Rdpack,
+    R6
 License: MIT + file LICENSE
 Config/rextendr/version: 0.3.1.9000
 Suggests: 
