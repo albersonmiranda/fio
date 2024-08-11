@@ -4,7 +4,7 @@
 
 * Update `extraction.rs`and `multipliers.rs` in order to lower minimum supported Rust version from 1.71 to 1.67.
 * Set minimum version of rustc >= 1.67.1 in `SystemRequirements`.
-* Update `configure` and `configure.win` to check rustc version and prompt users to update when version is lower than specified in `DESCRIPTION`.
+* Add system checks to rustc and prompt users either install, if missing, or update when version is lower than specified in `DESCRIPTION`.
 
 # fio 0.1.0
 
