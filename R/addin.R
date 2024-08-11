@@ -33,6 +33,7 @@ input_options <- shiny::selectInput(
 #'  where the data source is (either clipboard or Excel file) and import the
 #'  data into the global environment.
 #'  Appears as "Import input-output data" in the RStudio Addins menu.
+#' @references This function is based on the [reprex](https://github.com/tidyverse/reprex) package.
 
 fio_addin <- function() {
   rlang::check_installed(
