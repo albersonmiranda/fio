@@ -69,10 +69,11 @@
 #' )
 #'
 #' @importFrom Rdpack reprompt
+#' @import R6
 #' @export
 
 # input-output matrix class
-iom <- R6::R6Class(
+iom <- R6Class(
   classname = "iom",
   public = list(
     #' @field id (`character`)\cr

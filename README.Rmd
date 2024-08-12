@@ -31,18 +31,25 @@ The package is optimized for speed and efficiency. It leverages the [R6 class](h
 
 ## Installation
 
-You can install the released version of `{fio}` from CRAN with:
+### CRAN Release
+
+You can install the latest stable release of {fio} from CRAN with:
 
 ```r
 install.packages("fio")
 ```
-For the latest tested but unreleased version ([main branch](https://github.com/albersonmiranda/fio/tree/main)), you'll find precompiled binaries at [R-universe](https://albersonmiranda.r-universe.dev/fio):
+
+### Latest Tested version
+
+ install the latest tested but unreleased version from the [main branch](https://github.com/albersonmiranda/fio/tree/main), use the precompiled binaries available on [R-universe](https://albersonmiranda.r-universe.dev/fio):
 
 ```r
 install.packages("fio", repos = c("https://albersonmiranda.r-universe.dev", "https://cloud.r-project.org"))
 ```
 
-For the development version, you can compile the [dev branch](https://github.com/albersonmiranda/fio/tree/dev) from source, you'll need [Rust](https://www.rust-lang.org/) installed on your system. You can install Rust with the following commands:
+### Development version
+
+For the cutting-edge development version from the [dev branch](https://github.com/albersonmiranda/fio/tree/dev), you'll need to compile it from source. This requires [Rust](https://www.rust-lang.org/) to be installed on your system. You can install Rust using the following commands:
 
 - Debian/Ubuntu: `apt-get install cargo`
 - Fedora/CentOS: `dnf install cargo`
