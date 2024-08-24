@@ -102,7 +102,12 @@ if (!is.na(msrv)) {
   # 1 when MSRV is newer than current
   is_msrv <- utils::compareVersion(msrv, current_rust_version)
   if (is_msrv == 1) {
-    fmt <- "Unsupported rust version.\nMinimum supported rust version is %s\nInstalled rust version is %s"
+    fmt <- c(
+      "------------------ [UNSUPPORTED RUST VERSION]------------------",
+      "Minimum supported Rust version is %s.",
+      "Installed Rust version is %s.",
+      "---------------------------------------------------------------"
+    )
     stop(sprintf(fmt, msrv, current_rust_version))
   }
 }
