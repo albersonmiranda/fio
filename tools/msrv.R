@@ -45,7 +45,7 @@ Sys.setenv("PATH" = new_path)
 # check for cargo installation
 cargo_version <- tryCatch(
   system("cargo --version", intern = TRUE),
-  warning = function(e) {
+  error = function(e) {
     stop(paste(no_cargo_msg, collapse = "\n"))
   }
 )
@@ -53,7 +53,7 @@ cargo_version <- tryCatch(
 # check for rustc installation
 rustc_version <- tryCatch(
   system("rustc --version", intern = TRUE),
-  warning = function(e) {
+  error = function(e) {
     stop(paste(no_rustc_msg, collapse = "\n"))
   }
 )
