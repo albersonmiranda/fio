@@ -14,11 +14,11 @@ sysreqs <- desc[, "SystemRequirements"]
 
 # check that cargo and rustc is found
 if (!grepl("cargo", sysreqs, ignore.case = TRUE)) {
-  message("You must specify `Cargo (Rust's package manager)` in your `SystemRequirements`")
+  stop("You must specify `Cargo (Rust's package manager)` in your `SystemRequirements`")
 }
 
 if (!grepl("rustc", sysreqs, ignore.case = TRUE)) {
-  message("You must specify `Cargo (Rust's package manager), rustc` in your `SystemRequirements`")
+  stop("You must specify `Cargo (Rust's package manager), rustc` in your `SystemRequirements`")
 }
 
 # split into parts
@@ -64,19 +64,19 @@ new_path <- paste0(
 # set the path with the new path
 Sys.setenv("PATH" = new_path)
 
-# check for cargo installation
-cargo_version <- tryCatch(
-  system("cargo --version", intern = TRUE),
-  error = function(e) {
-    stop(paste(no_cargo_msg, collapse = "\n"))
-  }
-)
-
 # check for rustc installation
 rustc_version <- tryCatch(
   system("rustc --version", intern = TRUE),
   error = function(e) {
     stop(paste(no_rustc_msg, collapse = "\n"))
+  }
+)
+
+# check for cargo installation
+cargo_version <- tryCatch(
+  system("cargo --version", intern = TRUE),
+  error = function(e) {
+    message(paste(no_cargo_msg, collapse = "\n"))
   }
 )
 
