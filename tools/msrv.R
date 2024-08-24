@@ -14,11 +14,11 @@ sysreqs <- desc[, "SystemRequirements"]
 
 # check that cargo and rustc is found
 if (!grepl("cargo", sysreqs, ignore.case = TRUE)) {
-  stop("You must specify `Cargo (Rust's package manager)` in your `SystemRequirements`")
+  message("You must specify `Cargo (Rust's package manager)` in your `SystemRequirements`")
 }
 
 if (!grepl("rustc", sysreqs, ignore.case = TRUE)) {
-  stop("You must specify `Cargo (Rust's package manager), rustc` in your `SystemRequirements`")
+  message("You must specify `Cargo (Rust's package manager), rustc` in your `SystemRequirements`")
 }
 
 # split into parts
@@ -28,9 +28,31 @@ parts <- strsplit(sysreqs, ", ")[[1]]
 rustc_ver <- parts[grepl("rustc", parts)]
 
 # perform checks for the presence of rustc and cargo on the OS
-no_cargo_msg <- c("----------------------- [CARGO NOT FOUND]--------------------------", "The 'cargo' command was not found on the PATH. Please install Cargo", "from: https://www.rust-lang.org/tools/install", "", "Alternatively, you may install Cargo from your OS package manager:", " - Debian/Ubuntu: apt-get install cargo", " - Fedora/CentOS: dnf install cargo", " - macOS: brew install rustc", "-------------------------------------------------------------------")
+no_cargo_msg <- c(
+  "----------------------- [CARGO NOT FOUND]--------------------------",
+  "The 'cargo' command was not found on the PATH. Please install Cargo",
+  "from: https://www.rust-lang.org/tools/install",
+  "",
+  "Alternatively, you may install Cargo from your OS package manager:",
+  " - Debian/Ubuntu: apt-get install cargo",
+  " - Fedora/CentOS: dnf install cargo",
+  " - macOS: brew install rustc",
+  "-------------------------------------------------------------------"
+)
 
-no_rustc_msg <- c("----------------------- [RUST NOT FOUND]---------------------------", "The 'rustc' compiler was not found on the PATH. Please install Rust", "from: https://www.rust-lang.org/tools/install", "", "Alternatively, you may install Rust from your OS package manager:", " - Debian/Ubuntu: apt-get install rustc", " - Fedora/CentOS: dnf install rustc", " - macOS: brew install rustc", "-------------------------------------------------------------------")
+no_rustc_msg <- c(
+  "----------------------- [RUST NOT FOUND]---------------------------",
+  "The 'rustc' compiler was not found on the PATH. Please install",
+  rustc_ver,
+  "or higher",
+  "from: https://www.rust-lang.org/tools/install",
+  "",
+  "Alternatively, you may install Rust from your OS package manager:",
+  " - Debian/Ubuntu: apt-get install rustc",
+  " - Fedora/CentOS: dnf install rustc",
+  " - macOS: brew install rustc",
+  "-------------------------------------------------------------------"
+)
 
 # Add {user}/.cargo/bin to path before checking
 new_path <- paste0(
