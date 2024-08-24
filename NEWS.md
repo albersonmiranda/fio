@@ -1,3 +1,9 @@
+# fio 0.1.2
+
+## 🛠️ Other improvements
+
+* Fixes system checks scripts to correctly handle errors when Rust and Cargo are not found.
+
 # fio 0.1.1
 
 ## 🛠️ Other improvements
