@@ -43,8 +43,7 @@ no_cargo_msg <- c(
 no_rustc_msg <- c(
   "----------------------- [RUST NOT FOUND]---------------------------",
   "The 'rustc' compiler was not found on the PATH. Please install",
-  rustc_ver,
-  "or higher",
+  paste(rustc_ver, "or higher"),
   "from: https://www.rust-lang.org/tools/install",
   "",
   "Alternatively, you may install Rust from your OS package manager:",
@@ -103,9 +102,9 @@ if (!is.na(msrv)) {
   is_msrv <- utils::compareVersion(msrv, current_rust_version)
   if (is_msrv == 1) {
     fmt <- c(
-      "------------------ [UNSUPPORTED RUST VERSION]------------------",
-      "Minimum supported Rust version is %s.",
-      "Installed Rust version is %s.",
+      "------------------ [UNSUPPORTED RUST VERSION]------------------\n",
+      "Minimum supported Rust version is %s.\n",
+      "Installed Rust version is %s.\n",
       "---------------------------------------------------------------"
     )
     stop(sprintf(fmt, msrv, current_rust_version))
