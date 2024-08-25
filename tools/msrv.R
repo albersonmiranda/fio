@@ -28,9 +28,30 @@ parts <- strsplit(sysreqs, ", ")[[1]]
 rustc_ver <- parts[grepl("rustc", parts)]
 
 # perform checks for the presence of rustc and cargo on the OS
-no_cargo_msg <- c("----------------------- [CARGO NOT FOUND]--------------------------", "The 'cargo' command was not found on the PATH. Please install Cargo", "from: https://www.rust-lang.org/tools/install", "", "Alternatively, you may install Cargo from your OS package manager:", " - Debian/Ubuntu: apt-get install cargo", " - Fedora/CentOS: dnf install cargo", " - macOS: brew install rustc", "-------------------------------------------------------------------")
+no_cargo_msg <- c(
+  "----------------------- [CARGO NOT FOUND]--------------------------",
+  "The 'cargo' command was not found on the PATH. Please install Cargo",
+  "from: https://www.rust-lang.org/tools/install",
+  "",
+  "Alternatively, you may install Cargo from your OS package manager:",
+  " - Debian/Ubuntu: apt-get install cargo",
+  " - Fedora/CentOS: dnf install cargo",
+  " - macOS: brew install rustc",
+  "-------------------------------------------------------------------"
+)
 
-no_rustc_msg <- c("----------------------- [RUST NOT FOUND]---------------------------", "The 'rustc' compiler was not found on the PATH. Please install Rust", "from: https://www.rust-lang.org/tools/install", "", "Alternatively, you may install Rust from your OS package manager:", " - Debian/Ubuntu: apt-get install rustc", " - Fedora/CentOS: dnf install rustc", " - macOS: brew install rustc", "-------------------------------------------------------------------")
+no_rustc_msg <- c(
+  "----------------------- [RUST NOT FOUND]---------------------------",
+  "The 'rustc' compiler was not found on the PATH. Please install",
+  paste(rustc_ver, "or higher from:"),
+  "https://www.rust-lang.org/tools/install",
+  "",
+  "Alternatively, you may install Rust from your OS package manager:",
+  " - Debian/Ubuntu: apt-get install rustc",
+  " - Fedora/CentOS: dnf install rustc",
+  " - macOS: brew install rustc",
+  "-------------------------------------------------------------------"
+)
 
 # Add {user}/.cargo/bin to path before checking
 new_path <- paste0(
@@ -42,19 +63,19 @@ new_path <- paste0(
 # set the path with the new path
 Sys.setenv("PATH" = new_path)
 
-# check for cargo installation
-cargo_version <- tryCatch(
-  system("cargo --version", intern = TRUE),
-  warning = function(e) {
-    stop(paste(no_cargo_msg, collapse = "\n"))
-  }
-)
-
 # check for rustc installation
 rustc_version <- tryCatch(
   system("rustc --version", intern = TRUE),
-  warning = function(e) {
+  error = function(e) {
     stop(paste(no_rustc_msg, collapse = "\n"))
+  }
+)
+
+# check for cargo installation
+cargo_version <- tryCatch(
+  system("cargo --version", intern = TRUE),
+  error = function(e) {
+    stop(paste(no_cargo_msg, collapse = "\n"))
   }
 )
 
@@ -80,7 +101,12 @@ if (!is.na(msrv)) {
   # 1 when MSRV is newer than current
   is_msrv <- utils::compareVersion(msrv, current_rust_version)
   if (is_msrv == 1) {
-    fmt <- "Unsupported rust version.\nMinimum supported rust version is %s\nInstalled rust version is %s"
+    fmt <- paste0(
+      "\n------------------ [UNSUPPORTED RUST VERSION]------------------\n",
+      "- Minimum supported Rust version is %s.\n",
+      "- Installed Rust version is %s.\n",
+      "---------------------------------------------------------------"
+    )
     stop(sprintf(fmt, msrv, current_rust_version))
   }
 }

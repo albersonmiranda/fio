@@ -3,19 +3,24 @@
 0 errors | 0 warnings | 1 notes
 
 * NOTE:
- - installed size is 8.2Mb due to vendored Rust dependencies as per CRAN policy.
+  - installed size is 8.2Mb due to vendored Rust dependencies as per CRAN policy.
 
-In this version I have:
+* CI tests include:
+  - macOS 12, 13 and 14; R release, devel and oldrel-1.
+  - Windows Server 2019, 2022; R release, devel and oldrel-1.
+  - Ubuntu 20.04, 22.04, 24.04; R release, devel and oldrel-1.
+  - Fedora 36; R 4.2 built from source. `cargo` and other dependencies installed from Fedora 36 default repository (`dnf install`).
+  - Fedora 37, 38, 39, 40; R and all dependencies installed from default repository (`dnf install`).
+* All tests passed successfully, except macOS 13 (R-devel). Transitive dependency `fs` could not be installed due to a compilation error. The error is not related to `fio`. The error is being tracked in the following issue: [Compilation fail macOS 13 (R 4.5)](https://github.com/r-lib/fs/issues/467)
 
-* Addressed CRAN removal:
-  - Update `extraction.rs`and `multipliers.rs` in order to lower MSRV from 1.71 to 1.67. That fixes previous failure, assuming CRAN lowest 'rustc' version is 1.69.0 (last release in Fedora 36 default repository).
-  - Set minimum version of rustc >= 1.67.1 in `SystemRequirements`. That specific version is due to dependency `faer-entity v0.19.0`.
-  - Update `configure` and `configure.win` to check `SystemRequirements` field in `DESCRIPTION` and performe a system check for both `Rust` and `Cargo` tools. If any of them is not found, build fails with a message to install them. If they are found, it checks for the minimum version of `rustc`. If it is lower than specified in `SystemRequirements`, build fails with a message stating both installed and minimum version required. Finally, if all tests pass, it prints the version of `cargo` and `rustc` found, which will be used to build the package.
-  - CI tests include (all passed R CMD check):
-    - macOS 12, 13 and 14; R release, devel and oldrel-1.
-    - Windows Server 2019, 2022; R release, devel and oldrel-1.
-    - Ubuntu 20.04, 22.04, 24.04; R release, devel and oldrel-1.
-    - Fedora 36; R 4.2 built from source. `cargo` and other dependencies installed from Fedora 36 default repository (`dnf install`).
-    - Fedora 37, 38, 39, 40; R and all dependencies installed from default repository (`dnf install`).
-* Added 'xz' to `SystemRequirements` for decompression of the vendored Rust dependencies.
-* Added 'R6' to `Imports` in `DESCRIPTION` as it is used in the package but for some reason it's absence didn't trigger a NOTE.
+In this version I have addressed CRAN requests (e-mail received in 2024-08-23):
+
+* Update messages in `msrv.R`:
+  - Now, when `rustc` or `cargo` are not found, besides giving the user install instructions, also prints minimum version required.
+* Update error handling in `msrv.R`:
+  - Problem: System checks wasn't correctly handling errors when Rust and Cargo were not found. The `tryCatch()` bit were using the `warning` argument instead of the `error` argument. Since `Command not found` is an error, it have been ignored by the `warning` arg.
+  - Fix: Update `msrv.R` script to use the `error` arg instead of `warning` in `tryCatch()`. This ensures that appropriate error messages are displayed when the `cargo` or `rustc` installations are not found.
+  - Evidence: Evidence of the fix can be found in the following CI run:
+    - [GitHub Actions - Rust-check](https://github.com/albersonmiranda/fio/actions/runs/10536150893)
+    - Job `no-install` for evidence that build fails when `cargo` and `rustc` are not found and install instructions are displayed along with the minimum version required.
+    - Job `msrv-lower` for evidence that build fails when `cargo` and `rustc` are found but the minimum version required is not met and an error message is displayed containing both installed and required Rust versions.

@@ -16,6 +16,7 @@ status](https://www.r-pkg.org/badges/version/fio)](https://CRAN.R-project.org/pa
 [![R-CMD-check](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/albersonmiranda/fio/branch/main/graph/badge.svg)](https://app.codecov.io/gh/albersonmiranda/fio?branch=main)
+[![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/fio)]()
 <!-- badges: end -->
 
 `{fio}` (*Friendly Input-Output*) is a R package designed for

@@ -1,0 +1,58 @@
+# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
+# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+on:
+  workflow_dispatch:
+    
+
+name: Rust-check
+
+permissions: read-all
+
+jobs:
+  no-install:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:40
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Fedora dependencies
+        run: |
+          sudo dnf install -y libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz devscripts glibc-langpack-en pandoc
+      - name: Setup R
+        run: |
+          sudo dnf install -y R
+          # install R packages
+          R -e 'install.packages(c("remotes", "rcmdcheck", "emoji", "Rdpack", "readxl", "clipr", "fs", "miniUI", "shiny", "knitr", "rmarkdown", "spelling", "microbenchmark", "leontief", "ggplot2", "writexl", "testthat"), repos = "http://cloud.r-project.org")'
+      - name: Build package
+        run: |
+          R CMD build .
+  msrv-lower:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:40
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Fedora dependencies
+        run: |
+          sudo dnf install -y libxml2-devel libcurl-devel harfbuzz-devel fribidi-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz devscripts glibc-langpack-en pandoc
+      - name: Install and set Rust toolchain to 1.66.0
+        run: |
+          # download and install rust
+          curl https://sh.rustup.rs -sSf | sh -s -- -y
+          # add cargo to PATH
+          . "$HOME/.cargo/env"
+          # set default toolchain
+          rustup default 1.66
+      
+      - name: Setup R
+        run: |
+          sudo dnf install -y R
+          # install R packages
+          R -e 'install.packages(c("remotes", "rcmdcheck", "emoji", "Rdpack", "readxl", "clipr", "fs", "miniUI", "shiny", "knitr", "rmarkdown", "spelling", "microbenchmark", "leontief", "ggplot2", "writexl", "testthat"), repos = "http://cloud.r-project.org")'
+      - name: Build package
+        run: |
+          R CMD build .
