@@ -18,6 +18,7 @@
 This is a resubmission. In this version I have:
 
 * Fixed empty URL in README.md.
+* Added unit test for empty URLs in .Rd, .Rmd and .md files.
 
 ## CRAN requests
 
