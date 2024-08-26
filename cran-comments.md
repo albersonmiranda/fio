@@ -13,6 +13,15 @@
   - Fedora 37, 38, 39, 40; R and all dependencies installed from default repository (`dnf install`).
 * All tests passed successfully, except macOS 13 (R-devel). Transitive dependency `fs` could not be installed due to a compilation error. The error is not related to `fio`. The error is being tracked in the following issue: [Compilation fail macOS 13 (R 4.5)](https://github.com/r-lib/fs/issues/467)
 
+## Resubmission
+
+This is a resubmission. In this version I have:
+
+* Fixed empty URL in README.md.
+* Added unit test for empty URLs in .Rd, .Rmd and .md files.
+
+## CRAN requests
+
 In this version I have addressed CRAN requests (e-mail received in 2024-08-23):
 
 * Update messages in `msrv.R`:

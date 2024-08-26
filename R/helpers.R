@@ -39,3 +39,16 @@ set_rownames = function(vec) {
 
   return(vec)
 }
+
+# check for empty URLs in a file
+check_empty_urls <- function(file_path) {
+  content <- readLines(file_path)
+  # Regex to match empty URLs like [text]()
+  empty_url_pattern <- "\\[.*?\\]\\(\\s*\\)"
+
+  # Look for any lines that match the pattern
+  empty_urls <- grep(empty_url_pattern, content, value = TRUE)
+
+  # Return all found empty URLs
+  return(empty_urls)
+}
