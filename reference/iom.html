@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fio</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.9001</span>
       </span>
     </div>
 
@@ -53,7 +53,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>R6 class for input-output matrix</h1>
-    <small class="dont-index">Source: <a href="https://github.com/albersonmiranda/fio/blob/v0.1.2/R/r6.R" class="external-link"><code>R/r6.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/albersonmiranda/fio/blob/main/R/r6.R" class="external-link"><code>R/r6.R</code></a></small>
     <div class="hidden name"><code>iom.Rd</code></div>
     </div>
 
@@ -65,20 +65,6 @@
     <div id="value">
     <h2>Value</h2>
     <p>A new instance of the <code>iom</code> class.</p>
-    </div>
-    <div id="references">
-    <h2>References</h2>
-    <p>There are no references for Rd macro <code>\insertAllCites</code> on this help page.</p>
-<p>There are no references for Rd macro <code>\insertAllCites</code> on this help page.</p>
-<p>There are no references for Rd macro <code>\insertAllCites</code> on this help page.</p>
-<p>There are no references for Rd macro <code>\insertAllCites</code> on this help page.</p>
-<p>There are no references for Rd macro <code>\insertAllCites</code> on this help page.</p>
-<p>There are no references for Rd macro <code>\insertAllCites</code> on this help page.</p>
-<p>There are no references for Rd macro <code>\insertAllCites</code> on this help page.</p>
-<p>There are no references for Rd macro <code>\insertAllCites</code> on this help page.</p>
-<p>There are no references for Rd macro <code>\insertAllCites</code> on this help page.</p>
-<p>There are no references for Rd macro <code>\insertAllCites</code> on this help page.</p>
-<p>There are no references for Rd macro <code>\insertAllCites</code> on this help page.</p>
     </div>
     <div id="public-fields">
     <h2>Public fields</h2>
@@ -508,7 +494,15 @@ resulting <code>(matrix)</code>.</p><div class="section">
 <h4 id="details-2">Details<a class="anchor" aria-label="anchor" href="#details-2"></a></h4>
 <p>It computes the technical coefficients matrix, a \(n x n\) matrix known as <code>A</code> matrix which is the column-wise
 ratio of intermediate transactions to total production (Leontief 1983)
-.</p>
+.</p><div class="section">
+<h5 id="references-">References:<a class="anchor" aria-label="anchor" href="#references-"></a></h5>
+
+
+<p>Leontief W (1983).
+<em>A Economia do Insumo-Produto</em>,  Os Economistas.
+Abril Cultural, São Paulo.</p>
+</div>
+
 </div>
 
 <div class="section">
@@ -547,7 +541,15 @@ The Leontief inverse matrix is calculated by solving the following equation:</p>
 <p>$$L^{-1} = (I - A)^{-1}$$</p>
 <p>Since the Leontief matrix is a square matrix and the subtraction of the technical coefficients matrix from the
 identity matrix guarantees that the Leontief matrix is invertible, underlined Rust function uses LU decomposition
-to solve the equation.</p>
+to solve the equation.</p><div class="section">
+<h5 id="references--1">References:<a class="anchor" aria-label="anchor" href="#references--1"></a></h5>
+
+
+<p>Leontief W (1983).
+<em>A Economia do Insumo-Produto</em>,  Os Economistas.
+Abril Cultural, São Paulo.</p>
+</div>
+
 </div>
 
 <div class="section">
@@ -586,7 +588,20 @@ output (Miller and Blair 2009)
 the direct and indirect output multipliers, which are the column sums of the technical
 coefficients matrix and the difference between total and direct output multipliers, respectively
 (Vale and Perobelli 2020)
-.</p>
+.</p><div class="section">
+<h5 id="references--2">References:<a class="anchor" aria-label="anchor" href="#references--2"></a></h5>
+
+
+<p>Miller RE, Blair PD (2009).
+<em>Input-Output Analysis: Foundations and Extensions</em>, 2 edition.
+Cambridge University Press.
+ISBN 978-0-521-73902-3 978-0-521-51713-3 978-0-511-62698-2, <a href="https://doi.org/10.1017/CBO9780511626982" class="external-link">doi:10.1017/CBO9780511626982</a>
+, <a href="https://www.cambridge.org/core/product/identifier/9780511626982/type/book" class="external-link">https://www.cambridge.org/core/product/identifier/9780511626982/type/book</a>.<br><br> Vale VdA, Perobelli FS (2020).
+<em>Análise de Insumo-Produto: teoria e aplicações no R</em>.
+Edição Independente, Curitiba, PR.
+ISBN 9786500103649.</p>
+</div>
+
 </div>
 
 <div class="section">
@@ -625,7 +640,20 @@ coefficients matrix and the difference between total and direct output multiplie
 initial exogenous shock (Miller and Blair 2009)
 .</p>
 <p>Current implementation follows (Vale and Perobelli 2020)
-.</p>
+.</p><div class="section">
+<h5 id="references--3">References:<a class="anchor" aria-label="anchor" href="#references--3"></a></h5>
+
+
+<p>Miller RE, Blair PD (2009).
+<em>Input-Output Analysis: Foundations and Extensions</em>, 2 edition.
+Cambridge University Press.
+ISBN 978-0-521-73902-3 978-0-521-51713-3 978-0-511-62698-2, <a href="https://doi.org/10.1017/CBO9780511626982" class="external-link">doi:10.1017/CBO9780511626982</a>
+, <a href="https://www.cambridge.org/core/product/identifier/9780511626982/type/book" class="external-link">https://www.cambridge.org/core/product/identifier/9780511626982/type/book</a>.<br><br> Vale VdA, Perobelli FS (2020).
+<em>Análise de Insumo-Produto: teoria e aplicações no R</em>.
+Edição Independente, Curitiba, PR.
+ISBN 9786500103649.</p>
+</div>
+
 </div>
 
 <div class="section">
@@ -666,7 +694,20 @@ sector in response to a initial exogenous shock
 (Miller and Blair 2009)
 .</p>
 <p>Current implementation follows (Vale and Perobelli 2020)
-.</p>
+.</p><div class="section">
+<h5 id="references--4">References:<a class="anchor" aria-label="anchor" href="#references--4"></a></h5>
+
+
+<p>Miller RE, Blair PD (2009).
+<em>Input-Output Analysis: Foundations and Extensions</em>, 2 edition.
+Cambridge University Press.
+ISBN 978-0-521-73902-3 978-0-521-51713-3 978-0-511-62698-2, <a href="https://doi.org/10.1017/CBO9780511626982" class="external-link">doi:10.1017/CBO9780511626982</a>
+, <a href="https://www.cambridge.org/core/product/identifier/9780511626982/type/book" class="external-link">https://www.cambridge.org/core/product/identifier/9780511626982/type/book</a>.<br><br> Vale VdA, Perobelli FS (2020).
+<em>Análise de Insumo-Produto: teoria e aplicações no R</em>.
+Edição Independente, Curitiba, PR.
+ISBN 9786500103649.</p>
+</div>
+
 </div>
 
 <div class="section">
@@ -707,7 +748,20 @@ each sector in response to a initial exogenous shock
 (Miller and Blair 2009)
 .</p>
 <p>Current implementation follows (Vale and Perobelli 2020)
-.</p>
+.</p><div class="section">
+<h5 id="references--5">References:<a class="anchor" aria-label="anchor" href="#references--5"></a></h5>
+
+
+<p>Miller RE, Blair PD (2009).
+<em>Input-Output Analysis: Foundations and Extensions</em>, 2 edition.
+Cambridge University Press.
+ISBN 978-0-521-73902-3 978-0-521-51713-3 978-0-511-62698-2, <a href="https://doi.org/10.1017/CBO9780511626982" class="external-link">doi:10.1017/CBO9780511626982</a>
+, <a href="https://www.cambridge.org/core/product/identifier/9780511626982/type/book" class="external-link">https://www.cambridge.org/core/product/identifier/9780511626982/type/book</a>.<br><br> Vale VdA, Perobelli FS (2020).
+<em>Análise de Insumo-Produto: teoria e aplicações no R</em>.
+Edição Independente, Curitiba, PR.
+ISBN 9786500103649.</p>
+</div>
+
 </div>
 
 <div class="section">
@@ -760,7 +814,16 @@ within the production process.</p>
 <p>It determines which sectors have the greatest influence over others,
 specifically, which coefficients, when altered, would have the greatest
 impact on the system as a whole (Vale and Perobelli 2020)
-.</p>
+.</p><div class="section">
+<h5 id="references--6">References:<a class="anchor" aria-label="anchor" href="#references--6"></a></h5>
+
+
+<p>Vale VdA, Perobelli FS (2020).
+<em>Análise de Insumo-Produto: teoria e aplicações no R</em>.
+Edição Independente, Curitiba, PR.
+ISBN 9786500103649.</p>
+</div>
+
 </div>
 
 <div class="section">
@@ -805,7 +868,20 @@ linkage) have power of dispersion indices greater than 1. Sectors that are above
 <p>As both power and sensitivity of dispersion are related to average values on the economy, coefficients of
 variation are also calculated for both indices. The lesser the coefficient of variation, greater the number of
 sectors on the demand or supply structure of that sector (Vale and Perobelli 2020)
-.</p>
+.</p><div class="section">
+<h5 id="references--7">References:<a class="anchor" aria-label="anchor" href="#references--7"></a></h5>
+
+
+<p>Miller RE, Blair PD (2009).
+<em>Input-Output Analysis: Foundations and Extensions</em>, 2 edition.
+Cambridge University Press.
+ISBN 978-0-521-73902-3 978-0-521-51713-3 978-0-511-62698-2, <a href="https://doi.org/10.1017/CBO9780511626982" class="external-link">doi:10.1017/CBO9780511626982</a>
+, <a href="https://www.cambridge.org/core/product/identifier/9780511626982/type/book" class="external-link">https://www.cambridge.org/core/product/identifier/9780511626982/type/book</a>.<br><br> Vale VdA, Perobelli FS (2020).
+<em>Análise de Insumo-Produto: teoria e aplicações no R</em>.
+Edição Independente, Curitiba, PR.
+ISBN 9786500103649.</p>
+</div>
+
 </div>
 
 <div class="section">
@@ -842,7 +918,17 @@ resulting <code>(matrix)</code>.</p><div class="section">
 <h4 id="details-10">Details<a class="anchor" aria-label="anchor" href="#details-10"></a></h4>
 <p>It computes the allocation coefficients matrix, a \(n x n\) matrix known as <code>B</code> matrix which is the row-wise
 ratio of intermediate transactions to total production (Miller and Blair 2009)
-.</p>
+.</p><div class="section">
+<h5 id="references--8">References:<a class="anchor" aria-label="anchor" href="#references--8"></a></h5>
+
+
+<p>Miller RE, Blair PD (2009).
+<em>Input-Output Analysis: Foundations and Extensions</em>, 2 edition.
+Cambridge University Press.
+ISBN 978-0-521-73902-3 978-0-521-51713-3 978-0-511-62698-2, <a href="https://doi.org/10.1017/CBO9780511626982" class="external-link">doi:10.1017/CBO9780511626982</a>
+, <a href="https://www.cambridge.org/core/product/identifier/9780511626982/type/book" class="external-link">https://www.cambridge.org/core/product/identifier/9780511626982/type/book</a>.</p>
+</div>
+
 </div>
 
 <div class="section">
@@ -874,7 +960,17 @@ ratio of intermediate transactions to total production (Miller and Blair 2009)
 <p>It computes the Ghosh inverse matrix (Miller and Blair 2009)
 , defined as:
 $$G = (I - B)^{-1}$$
-where I is the identity matrix and B is the allocation coefficients matrix.</p>
+where I is the identity matrix and B is the allocation coefficients matrix.</p><div class="section">
+<h5 id="references--9">References:<a class="anchor" aria-label="anchor" href="#references--9"></a></h5>
+
+
+<p>Miller RE, Blair PD (2009).
+<em>Input-Output Analysis: Foundations and Extensions</em>, 2 edition.
+Cambridge University Press.
+ISBN 978-0-521-73902-3 978-0-521-51713-3 978-0-511-62698-2, <a href="https://doi.org/10.1017/CBO9780511626982" class="external-link">doi:10.1017/CBO9780511626982</a>
+, <a href="https://www.cambridge.org/core/product/identifier/9780511626982/type/book" class="external-link">https://www.cambridge.org/core/product/identifier/9780511626982/type/book</a>.</p>
+</div>
+
 </div>
 
 <div class="section">
@@ -909,7 +1005,17 @@ resulting <code>(data.frame)</code>.</p><div class="section">
 <p>Computes impact on demand and supply structures after extracting each
 sector (Miller and Blair 2009)
 .</p>
-<p>The total impact is calculated by the sum of the direct and indirect impacts.</p>
+<p>The total impact is calculated by the sum of the direct and indirect impacts.</p><div class="section">
+<h5 id="references--10">References:<a class="anchor" aria-label="anchor" href="#references--10"></a></h5>
+
+
+<p>Miller RE, Blair PD (2009).
+<em>Input-Output Analysis: Foundations and Extensions</em>, 2 edition.
+Cambridge University Press.
+ISBN 978-0-521-73902-3 978-0-521-51713-3 978-0-511-62698-2, <a href="https://doi.org/10.1017/CBO9780511626982" class="external-link">doi:10.1017/CBO9780511626982</a>
+, <a href="https://www.cambridge.org/core/product/identifier/9780511626982/type/book" class="external-link">https://www.cambridge.org/core/product/identifier/9780511626982/type/book</a>.</p>
+</div>
+
 </div>
 
 <div class="section">
