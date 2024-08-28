@@ -477,7 +477,7 @@ iom <- R6Class(
     #' It computes the technical coefficients matrix, a \eqn{n x n} matrix known as `A` matrix which is the column-wise
     #' ratio of intermediate transactions to total production \insertCite{leontief_economia_1983}{fio}.
     #'
-    #' ## References:
+    #' ## References
     #' \insertCited{}
     #' @return
     #' Self (invisibly).
@@ -534,7 +534,7 @@ iom <- R6Class(
     #' identity matrix guarantees that the Leontief matrix is invertible, underlined Rust function uses LU decomposition
     #' to solve the equation.
     #'
-    #' ## References:
+    #' ## Referenceses:
     #' \insertCited{}
     #' @return
     #' Self (invisibly).
@@ -583,7 +583,7 @@ iom <- R6Class(
     #' coefficients matrix and the difference between total and direct output multipliers, respectively
     #' \insertCite{vale_alise_2020}{fio}.
     #'
-    #' ## References:
+    #' ## References
     #' \insertCited{}
     #' @return
     #' Self (invisibly).
@@ -644,7 +644,7 @@ iom <- R6Class(
     #'
     #' Current implementation follows \insertCite{vale_alise_2020}{fio}.
     #'
-    #' ## References:
+    #' ## References
     #' \insertCited{}
     #' @return
     #' Self (invisibly).
@@ -710,7 +710,7 @@ iom <- R6Class(
     #'
     #' Current implementation follows \insertCite{vale_alise_2020}{fio}.
     #'
-    #' ## References:
+    #' ## References
     #' \insertCited{}
     #' @return
     #' Self (invisibly).
@@ -776,7 +776,7 @@ iom <- R6Class(
     #'
     #' Current implementation follows \insertCite{vale_alise_2020}{fio}.
     #'
-    #' ## References:
+    #' ## References
     #' \insertCited{}
     #' @return
     #' Self (invisibly).
@@ -845,7 +845,7 @@ iom <- R6Class(
     #' specifically, which coefficients, when altered, would have the greatest
     #' impact on the system as a whole \insertCite{vale_alise_2020}{fio}.
     #'
-    #' ## References:
+    #' ## References
     #' \insertCited{}
     #' @param epsilon (`numeric`)\cr
     #' Epsilon value. A technical change in the input-output matrix, caused by a variation of size `epsilon` into each
@@ -910,7 +910,7 @@ iom <- R6Class(
     #' variation are also calculated for both indices. The lesser the coefficient of variation, greater the number of
     #' sectors on the demand or supply structure of that sector \insertCite{vale_alise_2020}{fio}.
     #'
-    #' ## References:
+    #' ## References
     #' \insertCited{}
     #' @return
     #' Self (invisibly).
@@ -976,7 +976,7 @@ iom <- R6Class(
     #' It computes the allocation coefficients matrix, a \eqn{n x n} matrix known as `B` matrix which is the row-wise
     #' ratio of intermediate transactions to total production \insertCite{miller_input-output_2009}{fio}.
     #'
-    #' ## References:
+    #' ## References
     #' \insertCited{}
     #' @return
     #' Self (invisibly).
@@ -1022,7 +1022,7 @@ iom <- R6Class(
     #' \deqn{G = (I - B)^{-1}}
     #' where I is the identity matrix and B is the allocation coefficients matrix.
     #'
-    #' ## References:
+    #' ## References
     #' \insertCited{}
     #' @return
     #' Self (invisibly).
@@ -1068,7 +1068,7 @@ iom <- R6Class(
     #'
     #' The total impact is calculated by the sum of the direct and indirect impacts.
     #'
-    #' ## References:
+    #' ## References
     #' \insertCited{}
     #' @return
     #' Self (invisibly).
