@@ -8,6 +8,4 @@ updates:
   - package-ecosystem: "cargo" # See documentation for possible values
     directory: "/src/rust" # Location of package manifests
     schedule:
-      interval: "daily"
-      time: "17:30"
-      timezone: "America/Sao_Paulo"
+      interval: "weekly"
