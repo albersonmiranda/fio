@@ -26,7 +26,7 @@ jobs:
         run: |
           cd src
           cd rust
-          cargo upgrade --locked
+          cargo upgrade
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
