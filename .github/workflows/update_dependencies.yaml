@@ -33,4 +33,3 @@ jobs:
           branch: "dependabot/rust-dependencies-update"
           title: "Upgrade Rust dependencies"
           body: "This PR updates Rust dependencies to their latest versions."
-          labels: ["dependencies", "rust"]
