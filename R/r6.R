@@ -32,8 +32,6 @@
 #' Setting row names is advised for better readability.
 #' @param occupation (`matrix`)\cr
 #' Occupation matrix.
-#' @param threads (`integer`)\cr
-#' Number of threads available for Rust to run in parallel.
 #'
 #' @return A new instance of the `iom` class.
 #'
@@ -180,10 +178,6 @@ iom <- R6Class(
     #' Absolute and relative backward and forward differences in total output after a hypothetical extraction
     hypothetical_extraction = NULL,
 
-    #' @field threads (`integer`)\cr
-    #' Number of threads available for Rust to run in parallel
-    threads = 0,
-
     #' @description
     #' Creates a new instance of this [R6][R6::R6Class] class.
     initialize = function(id,
@@ -198,8 +192,7 @@ iom <- R6Class(
                           wages = NULL,
                           operating_income = NULL,
                           value_added_others = NULL,
-                          occupation = NULL,
-                          threads = 0) {
+                          occupation = NULL) {
       ### assertions ###
       # check class
       for (matrix in private$iom_elements()) {
@@ -1194,23 +1187,17 @@ iom <- R6Class(
     #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
     #' # to run single threaded (sequential)
     #' my_iom$set_max_threads(1L)
-    #' my_iom$threads
     set_max_threads = function(max_threads) {
       # assert type
       if (!(is.integer(max_threads) && max_threads >= 0)) {
-        error("max_threads must be a positive integer.")
+        return(error("max_threads must be a positive integer."))
       }
 
-      if (self$threads == 0 && max_threads == 0) {
-        alert("0 means all available threads, which is default behavior. Nothing changed")
+      if (max_threads == 0) {
+        return(alert("0 means all available threads, which is default behavior. Nothing changed"))
       }
 
-      if (self$threads > 0) {
-        error("Max threads already been set in this session.")
-      } else {
-        set_max_threads(max_threads)
-        self$threads <- max_threads
-      }
+      return(set_max_threads(max_threads))
     }
   ),
 

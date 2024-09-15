@@ -37,7 +37,6 @@ NULL
 #' my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
 #' # to run single threaded (sequential)
 #' my_iom$set_max_threads(1L)
-#' my_iom$threads
 #'
 #' @noRd
 set_max_threads <- function(max_threads) invisible(.Call(wrap__set_max_threads, max_threads))
