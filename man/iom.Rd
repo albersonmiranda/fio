@@ -327,7 +327,6 @@ total_production <- matrix(c(100, 200, 300), 1, 3)
 my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
 # to run single threaded (sequential)
 my_iom$set_max_threads(1L)
-my_iom$threads
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -409,9 +408,6 @@ Ghosh inverse matrix.}
 
 \item{\code{hypothetical_extraction}}{(\code{matrix})\cr
 Absolute and relative backward and forward differences in total output after a hypothetical extraction}
-
-\item{\code{threads}}{(\code{integer})\cr
-Number of threads available for Rust to run in parallel}
 }
 \if{html}{\out{</div>}}
 }
@@ -457,8 +453,7 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
   wages = NULL,
   operating_income = NULL,
   value_added_others = NULL,
-  occupation = NULL,
-  threads = 0
+  occupation = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -505,9 +500,6 @@ Setting row names is advised for better readability.}
 
 \item{\code{occupation}}{(\code{matrix})\cr
 Occupation matrix.}
-
-\item{\code{threads}}{(\code{integer})\cr
-Number of threads available for Rust to run in parallel.}
 }
 \if{html}{\out{</div>}}
 }
@@ -1250,7 +1242,6 @@ total_production <- matrix(c(100, 200, 300), 1, 3)
 my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
 # to run single threaded (sequential)
 my_iom$set_max_threads(1L)
-my_iom$threads
 }
 \if{html}{\out{</div>}}
 
