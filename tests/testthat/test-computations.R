@@ -14,10 +14,15 @@ wages <- matrix(c(11, 12, 13), 1, 3)
 test_that("parallelization can be disabled", {
   # Instantiate the class
   obj <- iom$new("test", intermediate_transactions, total_production)
-  # set number of threads to 1
-  obj$set_max_threads(1L)
-  # Check if the number of threads is set to 1
-  expect_equal(obj$threads, 1)
+  # test if no error occur
+  expect_no_error(obj$set_max_threads(1L))
+})
+
+test_that("fails if try to set max_threads twice", {
+  # Instantiate the class
+  obj <- iom$new("test", intermediate_transactions, total_production)
+  # test if error occur
+  expect_error(obj$set_max_threads(2L))
 })
 
 # technical coefficients are calculated correctly

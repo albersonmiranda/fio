@@ -1,5 +1,9 @@
 # fio (development version)
 
+## 💥 Breaking changes
+
+* Removed `threads` slot from `iom` object.
+
 # fio 0.1.2
 
 ## 🛠️ Other improvements

@@ -51,7 +51,6 @@ fn get_parallelism_settings() -> Result<usize> {
 /// my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
 /// # to run single threaded (sequential)
 /// my_iom$set_max_threads(1L)
-/// my_iom$threads
 ///
 /// @noRd
 fn set_max_threads(max_threads: usize) {
@@ -80,7 +79,7 @@ fn set_max_threads(max_threads: usize) {
 
     match rayon_settings {
         Ok(_) => println!("Global thread pool successfully set."),
-        Err(_) => println!(
+        Err(_) => panic!(
             "Global thread pool has already been initialized via faer, and is set to {:?}. Cannot change settings in this session.",
             threads
         ),

@@ -321,13 +321,14 @@ my_iom$hypothetical_extraction
 ## Method `iom$set_max_threads`
 ## ------------------------------------------------
 
-intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
-total_production <- matrix(c(100, 200, 300), 1, 3)
-# instantiate iom object
-my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
-# to run single threaded (sequential)
-my_iom$set_max_threads(1L)
-my_iom$threads
+\dontrun{
+ intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+ total_production <- matrix(c(100, 200, 300), 1, 3)
+ # instantiate iom object
+ my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+ # to run single threaded (sequential)
+ my_iom$set_max_threads(1L)
+}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -409,9 +410,6 @@ Ghosh inverse matrix.}
 
 \item{\code{hypothetical_extraction}}{(\code{matrix})\cr
 Absolute and relative backward and forward differences in total output after a hypothetical extraction}
-
-\item{\code{threads}}{(\code{integer})\cr
-Number of threads available for Rust to run in parallel}
 }
 \if{html}{\out{</div>}}
 }
@@ -457,8 +455,7 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
   wages = NULL,
   operating_income = NULL,
   value_added_others = NULL,
-  occupation = NULL,
-  threads = 0
+  occupation = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -505,9 +502,6 @@ Setting row names is advised for better readability.}
 
 \item{\code{occupation}}{(\code{matrix})\cr
 Occupation matrix.}
-
-\item{\code{threads}}{(\code{integer})\cr
-Number of threads available for Rust to run in parallel.}
 }
 \if{html}{\out{</div>}}
 }
@@ -689,7 +683,7 @@ resulting \code{(matrix)}.
 \subsection{Details}{
 It computes the technical coefficients matrix, a \eqn{n x n} matrix known as \code{A} matrix which is the column-wise
 ratio of intermediate transactions to total production \insertCite{leontief_economia_1983}{fio}.
-\subsection{References:}{
+\subsection{References}{
 
 \insertCited{}
 }
@@ -738,7 +732,7 @@ The Leontief inverse matrix is calculated by solving the following equation:
 Since the Leontief matrix is a square matrix and the subtraction of the technical coefficients matrix from the
 identity matrix guarantees that the Leontief matrix is invertible, underlined Rust function uses LU decomposition
 to solve the equation.
-\subsection{References:}{
+\subsection{Referenceses:}{
 
 \insertCited{}
 }
@@ -783,7 +777,7 @@ This method computes the simple output multiplier, defined as the column sums of
 the direct and indirect output multipliers, which are the column sums of the technical
 coefficients matrix and the difference between total and direct output multipliers, respectively
 \insertCite{vale_alise_2020}{fio}.
-\subsection{References:}{
+\subsection{References}{
 
 \insertCited{}
 }
@@ -828,7 +822,7 @@ The employment multiplier for sector \emph{j} relates the jobs created in each s
 initial exogenous shock \insertCite{miller_input-output_2009}{fio}.
 
 Current implementation follows \insertCite{vale_alise_2020}{fio}.
-\subsection{References:}{
+\subsection{References}{
 
 \insertCited{}
 }
@@ -875,7 +869,7 @@ sector in response to a initial exogenous shock
 \insertCite{miller_input-output_2009}{fio}.
 
 Current implementation follows \insertCite{vale_alise_2020}{fio}.
-\subsection{References:}{
+\subsection{References}{
 
 \insertCited{}
 }
@@ -922,7 +916,7 @@ each sector in response to a initial exogenous shock
 \insertCite{miller_input-output_2009}{fio}.
 
 Current implementation follows \insertCite{vale_alise_2020}{fio}.
-\subsection{References:}{
+\subsection{References}{
 
 \insertCited{}
 }
@@ -981,7 +975,7 @@ within the production process.
 It determines which sectors have the greatest influence over others,
 specifically, which coefficients, when altered, would have the greatest
 impact on the system as a whole \insertCite{vale_alise_2020}{fio}.
-\subsection{References:}{
+\subsection{References}{
 
 \insertCited{}
 }
@@ -1032,7 +1026,7 @@ linkage) have power of dispersion indices greater than 1. Sectors that are above
 As both power and sensitivity of dispersion are related to average values on the economy, coefficients of
 variation are also calculated for both indices. The lesser the coefficient of variation, greater the number of
 sectors on the demand or supply structure of that sector \insertCite{vale_alise_2020}{fio}.
-\subsection{References:}{
+\subsection{References}{
 
 \insertCited{}
 }
@@ -1075,7 +1069,7 @@ resulting \code{(matrix)}.
 \subsection{Details}{
 It computes the allocation coefficients matrix, a \eqn{n x n} matrix known as \code{B} matrix which is the row-wise
 ratio of intermediate transactions to total production \insertCite{miller_input-output_2009}{fio}.
-\subsection{References:}{
+\subsection{References}{
 
 \insertCited{}
 }
@@ -1113,7 +1107,7 @@ Computes the Ghosh inverse matrix and populate the \code{ghosh_inverse_matrix} f
 It computes the Ghosh inverse matrix \insertCite{miller_input-output_2009}{fio}, defined as:
 \deqn{G = (I - B)^{-1}}
 where I is the identity matrix and B is the allocation coefficients matrix.
-\subsection{References:}{
+\subsection{References}{
 
 \insertCited{}
 }
@@ -1155,7 +1149,7 @@ Computes impact on demand and supply structures after extracting each
 sector \insertCite{miller_input-output_2009}{fio}.
 
 The total impact is calculated by the sum of the direct and indirect impacts.
-\subsection{References:}{
+\subsection{References}{
 
 \insertCited{}
 }
@@ -1244,13 +1238,14 @@ This function does not return a value.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
-total_production <- matrix(c(100, 200, 300), 1, 3)
-# instantiate iom object
-my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
-# to run single threaded (sequential)
-my_iom$set_max_threads(1L)
-my_iom$threads
+\preformatted{\dontrun{
+ intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+ total_production <- matrix(c(100, 200, 300), 1, 3)
+ # instantiate iom object
+ my_iom <- fio::iom$new("test", intermediate_transactions, total_production)
+ # to run single threaded (sequential)
+ my_iom$set_max_threads(1L)
+}
 }
 \if{html}{\out{</div>}}
 

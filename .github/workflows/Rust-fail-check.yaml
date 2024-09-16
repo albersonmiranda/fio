@@ -1,9 +1,16 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
-  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
     
-
 name: Rust-check
 
 permissions: read-all
@@ -26,8 +33,19 @@ jobs:
           # install R packages
           R -e 'install.packages(c("remotes", "rcmdcheck", "emoji", "Rdpack", "readxl", "clipr", "fs", "miniUI", "shiny", "knitr", "rmarkdown", "spelling", "microbenchmark", "leontief", "ggplot2", "writexl", "testthat"), repos = "http://cloud.r-project.org")'
       - name: Build package
+        id: check_no_install
+        continue-on-error: true
         run: |
           R CMD build .
+      - name: Fail if check succeeds
+        if: steps.check_no_install.outcome == 'success'
+        run: |
+          echo "Package builds, but it should have failed because Rust is not installed."
+          exit 1
+      - name: Mark as success if failure was expected
+        if: steps.check_no_install.outcome == 'failure'
+        run: echo "Build fails as expected."
+  
   msrv-lower:
     runs-on: ubuntu-latest
     container:
@@ -54,5 +72,14 @@ jobs:
           # install R packages
           R -e 'install.packages(c("remotes", "rcmdcheck", "emoji", "Rdpack", "readxl", "clipr", "fs", "miniUI", "shiny", "knitr", "rmarkdown", "spelling", "microbenchmark", "leontief", "ggplot2", "writexl", "testthat"), repos = "http://cloud.r-project.org")'
       - name: Build package
+        id: check_lower
+        continue-on-error: true
         run: |
           R CMD build .
+      - name: Fail if check succeeds
+        if: steps.check_lower.outcome == 'success'
+        run: |
+          echo "Package builds, but it should have failed because the version of Rust is lower than MSRV."
+      - name: Mark as success if failure was expected
+        if: steps.check_lower.outcome == 'failure'
+        run: echo "Build fails as expected."

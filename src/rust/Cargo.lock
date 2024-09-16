@@ -167,7 +167,16 @@ version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c35da53b5a021d2484a7cc49b2ac7f2d840f8236a286f84202369bd338d761ea"
 dependencies = [
- "equator-macro",
+ "equator-macro 0.2.1",
+]
+
+[[package]]
+name = "equator"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5099e7b6f0b7431c7a1c49f75929e2777693da192784f167066977a2965767af"
+dependencies = [
+ "equator-macro 0.4.1",
 ]
 
 [[package]]
@@ -182,10 +191,21 @@ dependencies = [
 ]
 
 [[package]]
-name = "extendr-api"
-version = "0.7.0"
+name = "equator-macro"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b0701db497d091675e50bb10ba870999742cd1e9a9d94cf3fb52f3ea9a7629c0"
+checksum = "5322a90066ddae2b705096eb9e10c465c0498ae93bf9bdd6437415327c88e3bb"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "extendr-api"
+version = "0.7.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "67505d96c7faa49d20e749dba7ba2447db52c40a788fd88cc2b6bef02c02277a"
 dependencies = [
  "extendr-macros",
  "libR-sys",
@@ -195,9 +215,9 @@ dependencies = [
 
 [[package]]
 name = "extendr-macros"
-version = "0.7.0"
+version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "33d6b806beee182ab3e1105c822df137913b894847a13ec29dfbff9abfb6d1d2"
+checksum = "81b58838056f294411d0b2c35ac1a2b24c507d6828b75f2c1e74f00ee9b99267"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -206,15 +226,15 @@ dependencies = [
 
 [[package]]
 name = "faer"
-version = "0.19.1"
+version = "0.19.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "41543c4de4bfb32efdffdd75cbcca5ef41b800e8a811ea4a41fb9393c6ef3bc0"
+checksum = "0821d176d7fd17ea91d8a5ce84c56413e11410f404e418bfd205acf40184d819"
 dependencies = [
  "bytemuck",
  "coe-rs",
  "dbgf",
  "dyn-stack",
- "equator",
+ "equator 0.4.1",
  "faer-entity",
  "gemm",
  "libm",
@@ -234,9 +254,9 @@ dependencies = [
 
 [[package]]
 name = "faer-entity"
-version = "0.19.0"
+version = "0.19.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ab968a02be27be95de0f1ad0af901b865fa0866b6a9b553a6cc9cf7f19c2ce71"
+checksum = "c9c752ab2bff6f0b9597c6a1adc0112f7fd41fb343bc5a009a6274ae9d32fd03"
 dependencies = [
  "bytemuck",
  "coe-rs",
@@ -249,7 +269,7 @@ dependencies = [
 
 [[package]]
 name = "fio"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "extendr-api",
  "faer",
@@ -411,8 +431,9 @@ checksum = "d231dfb89cfffdbc30e7fc41579ed6066ad03abda9e567ccafae602b97ec5024"
 
 [[package]]
 name = "libR-sys"
-version = "0.7.0"
-source = "git+https://github.com/extendr/libR-sys?rev=976c56d396175f8d09548b0a1f0a77fc393018f2#976c56d396175f8d09548b0a1f0a77fc393018f2"
+version = "0.7.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "06ac9752bc1e83f5a354a62b9e81bd8db4468b1008e29f262441e7f0e91e6bb3"
 
 [[package]]
 name = "libc"
@@ -454,7 +475,7 @@ version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f563548d38f390ef9893e4883ec38c1fb312f569e98d76bededdd91a3b41a043"
 dependencies = [
- "equator",
+ "equator 0.2.2",
  "nano-gemm-c32",
  "nano-gemm-c64",
  "nano-gemm-codegen",
@@ -647,9 +668,9 @@ dependencies = [
 
 [[package]]
 name = "pulp"
-version = "0.18.21"
+version = "0.18.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0ec8d02258294f59e4e223b41ad7e81c874aa6b15bc4ced9ba3965826da0eed5"
+checksum = "a0a01a0dc67cf4558d279f0c25b0962bd08fc6dec0137699eae304103e882fe6"
 dependencies = [
  "bytemuck",
  "libm",
@@ -787,9 +808,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "2.0.71"
+version = "2.0.77"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b146dcf730474b4bcd16c311627b31ede9ab149045db4d6088b3becaea046462"
+checksum = "9f35bcdf61fd8e7be6caf75f429fdca8beb3ed76584befb503b1569faee373ed"
 dependencies = [
  "proc-macro2",
  "quote",
