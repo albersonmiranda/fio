@@ -63,7 +63,7 @@ commands:
 
 - Debian/Ubuntu: `apt-get install cargo`
 - Fedora/CentOS: `dnf install cargo`
-- macOS: `brew install rustc`
+- macOS: `brew install rust`
 - Windows: <https://www.rust-lang.org/tools/install>
 
 ## Getting Started
