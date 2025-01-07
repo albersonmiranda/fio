@@ -2,7 +2,11 @@
 
 ## 💥 Breaking changes
 
-* Removed `threads` slot from `iom` object.
+* Removed `threads` slot from `iom` object (#95).
+
+## 🛠️ Other improvements
+
+* Fix homebrew installation instructions in README and `tools/msrv.r` (#105).
 
 # fio 0.1.2
 
