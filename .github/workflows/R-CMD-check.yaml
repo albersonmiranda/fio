@@ -125,12 +125,12 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {image: fedora:39, r: 'devel'}
-          - {image: fedora:39, r: 'release'}
-          - {image: fedora:40, r: 'devel'}
-          - {image: fedora:40, r: 'release'}
-          - {image: fedora:41, r: 'devel'}
-          - {image: fedora:41, r: 'release'}
+          - {image: 'fedora:39', r: 'devel'}
+          - {image: 'fedora:39', r: 'release'}
+          - {image: 'fedora:40', r: 'devel'}
+          - {image: 'fedora:40', r: 'release'}
+          - {image: 'fedora:41', r: 'devel'}
+          - {image: 'fedora:41', r: 'release'}
     container:
       image: ${{ matrix.config.image }}
 
