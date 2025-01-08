@@ -273,7 +273,9 @@ version = "0.1.2"
 dependencies = [
  "extendr-api",
  "faer",
+ "gemm-common",
  "num_cpus",
+ "pulp 0.18.22",
  "rayon",
 ]
 

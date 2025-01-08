@@ -18,4 +18,5 @@ extendr-api = '0.7.1'
 faer = { version = '0.19.4', features = ['rayon'] }
 rayon = '1.10.0'
 num_cpus = '1.16.0'
-
+pulp = '0.18.21'
+gemm-common = '0.18.0'
