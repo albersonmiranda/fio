@@ -123,10 +123,7 @@ jobs:
       matrix:
         config:
           - {image: 'fedora:39'}
-          - {image: 'fedora:39'}
           - {image: 'fedora:40'}
-          - {image: 'fedora:40'}
-          - {image: 'fedora:41'}
           - {image: 'fedora:41'}
     container:
       image: ${{ matrix.config.image }}
@@ -141,6 +138,7 @@ jobs:
       - name: Setup R packages
         run: |
           R -e 'install.packages(c("remotes", "rcmdcheck"), repos = "https://cloud.r-project.org")'
+          R -e 'remotes::install_deps(dependencies = TRUE)'
       
       - uses: r-lib/actions/check-r-package@v2
         with:
