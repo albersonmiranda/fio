@@ -43,7 +43,7 @@ Imports:
     Rdpack (> 2.3.1),
     R6
 License: MIT + file LICENSE
-Config/rextendr/version: 0.3.1.9000
+Config/rextendr/version: 0.3.1.9001
 Suggests: 
     knitr,
     rmarkdown,
