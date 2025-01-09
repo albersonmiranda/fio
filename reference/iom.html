@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fio</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.9003</span>
       </span>
     </div>
 
@@ -482,14 +482,11 @@ resulting <code>(matrix)</code>.</p><div class="section">
 <div class="section">
 <h4 id="details-2">Details<a class="anchor" aria-label="anchor" href="#details-2"></a></h4>
 <p>It computes the technical coefficients matrix, a \(n x n\) matrix known as <code>A</code> matrix which is the column-wise
-ratio of intermediate transactions to total production (Leontief 1983)
-.</p><div class="section">
+ratio of intermediate transactions to total production leontief_economia_1983fio.</p><div class="section">
 <h5 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h5>
 
 
-<p>Leontief W (1983).
-<em>A Economia do Insumo-Produto</em>,  Os Economistas.
-Abril Cultural, São Paulo.</p>
+<p></p>
 </div>
 
 </div>
@@ -521,8 +518,7 @@ Abril Cultural, São Paulo.</p>
 
 <div class="section">
 <h4 id="details-3">Details<a class="anchor" aria-label="anchor" href="#details-3"></a></h4>
-<p>It computes the Leontief inverse matrix (Leontief 1983)
-, which is the inverse of the
+<p>It computes the Leontief inverse matrix leontief_economia_1983fio, which is the inverse of the
 Leontief matrix, defined as:</p>
 <p>$$L = I - A$$</p>
 <p>where I is the identity matrix and A is the technical coefficients matrix.
@@ -534,9 +530,7 @@ to solve the equation.</p><div class="section">
 <h5 id="referenceses-">Referenceses:<a class="anchor" aria-label="anchor" href="#referenceses-"></a></h5>
 
 
-<p>Leontief W (1983).
-<em>A Economia do Insumo-Produto</em>,  Os Economistas.
-Abril Cultural, São Paulo.</p>
+<p></p>
 </div>
 
 </div>
@@ -571,24 +565,15 @@ Abril Cultural, São Paulo.</p>
 <h4 id="details-4">Details<a class="anchor" aria-label="anchor" href="#details-4"></a></h4>
 <p>An output multiplier for sector <em>j</em> is defined as the total value of production in all sectors of the economy
 that is necessary in order to satisfy a monetary unit (e.g., a dollar) worth of final demand for sector <em>j</em>'s
-output (Miller and Blair 2009)
-.</p>
+output miller_input-output_2009fio.</p>
 <p>This method computes the simple output multiplier, defined as the column sums of the Leontief inverse matrix,
 the direct and indirect output multipliers, which are the column sums of the technical
 coefficients matrix and the difference between total and direct output multipliers, respectively
-(Vale and Perobelli 2020)
-.</p><div class="section">
+vale_alise_2020fio.</p><div class="section">
 <h5 id="references-1">References<a class="anchor" aria-label="anchor" href="#references-1"></a></h5>
 
 
-<p>Miller RE, Blair PD (2009).
-<em>Input-Output Analysis: Foundations and Extensions</em>, 2 edition.
-Cambridge University Press.
-ISBN 978-0-521-73902-3 978-0-521-51713-3 978-0-511-62698-2, <a href="https://doi.org/10.1017/CBO9780511626982" class="external-link">doi:10.1017/CBO9780511626982</a>
-, <a href="https://www.cambridge.org/core/product/identifier/9780511626982/type/book" class="external-link">https://www.cambridge.org/core/product/identifier/9780511626982/type/book</a>.<br><br> Vale VdA, Perobelli FS (2020).
-<em>Análise de Insumo-Produto: teoria e aplicações no R</em>.
-Edição Independente, Curitiba, PR.
-ISBN 9786500103649.</p>
+<p></p>
 </div>
 
 </div>
@@ -626,21 +611,12 @@ ISBN 9786500103649.</p>
 <div class="section">
 <h4 id="details-5">Details<a class="anchor" aria-label="anchor" href="#details-5"></a></h4>
 <p>The employment multiplier for sector <em>j</em> relates the jobs created in each sector in response to a
-initial exogenous shock (Miller and Blair 2009)
-.</p>
-<p>Current implementation follows (Vale and Perobelli 2020)
-.</p><div class="section">
+initial exogenous shock miller_input-output_2009fio.</p>
+<p>Current implementation follows vale_alise_2020fio.</p><div class="section">
 <h5 id="references-2">References<a class="anchor" aria-label="anchor" href="#references-2"></a></h5>
 
 
-<p>Miller RE, Blair PD (2009).
-<em>Input-Output Analysis: Foundations and Extensions</em>, 2 edition.
-Cambridge University Press.
-ISBN 978-0-521-73902-3 978-0-521-51713-3 978-0-511-62698-2, <a href="https://doi.org/10.1017/CBO9780511626982" class="external-link">doi:10.1017/CBO9780511626982</a>
-, <a href="https://www.cambridge.org/core/product/identifier/9780511626982/type/book" class="external-link">https://www.cambridge.org/core/product/identifier/9780511626982/type/book</a>.<br><br> Vale VdA, Perobelli FS (2020).
-<em>Análise de Insumo-Produto: teoria e aplicações no R</em>.
-Edição Independente, Curitiba, PR.
-ISBN 9786500103649.</p>
+<p></p>
 </div>
 
 </div>
@@ -680,21 +656,12 @@ ISBN 9786500103649.</p>
 <h4 id="details-6">Details<a class="anchor" aria-label="anchor" href="#details-6"></a></h4>
 <p>The wages multiplier for sector <em>j</em> relates increases in wages for each
 sector in response to a initial exogenous shock
-(Miller and Blair 2009)
-.</p>
-<p>Current implementation follows (Vale and Perobelli 2020)
-.</p><div class="section">
+miller_input-output_2009fio.</p>
+<p>Current implementation follows vale_alise_2020fio.</p><div class="section">
 <h5 id="references-3">References<a class="anchor" aria-label="anchor" href="#references-3"></a></h5>
 
 
-<p>Miller RE, Blair PD (2009).
-<em>Input-Output Analysis: Foundations and Extensions</em>, 2 edition.
-Cambridge University Press.
-ISBN 978-0-521-73902-3 978-0-521-51713-3 978-0-511-62698-2, <a href="https://doi.org/10.1017/CBO9780511626982" class="external-link">doi:10.1017/CBO9780511626982</a>
-, <a href="https://www.cambridge.org/core/product/identifier/9780511626982/type/book" class="external-link">https://www.cambridge.org/core/product/identifier/9780511626982/type/book</a>.<br><br> Vale VdA, Perobelli FS (2020).
-<em>Análise de Insumo-Produto: teoria e aplicações no R</em>.
-Edição Independente, Curitiba, PR.
-ISBN 9786500103649.</p>
+<p></p>
 </div>
 
 </div>
@@ -734,21 +701,12 @@ the resulting <code>(data.frame)</code>.</p><div class="section">
 <h4 id="details-7">Details<a class="anchor" aria-label="anchor" href="#details-7"></a></h4>
 <p>The taxes multiplier for sector <em>j</em> relates the increases on tax revenue from
 each sector in response to a initial exogenous shock
-(Miller and Blair 2009)
-.</p>
-<p>Current implementation follows (Vale and Perobelli 2020)
-.</p><div class="section">
+miller_input-output_2009fio.</p>
+<p>Current implementation follows vale_alise_2020fio.</p><div class="section">
 <h5 id="references-4">References<a class="anchor" aria-label="anchor" href="#references-4"></a></h5>
 
 
-<p>Miller RE, Blair PD (2009).
-<em>Input-Output Analysis: Foundations and Extensions</em>, 2 edition.
-Cambridge University Press.
-ISBN 978-0-521-73902-3 978-0-521-51713-3 978-0-511-62698-2, <a href="https://doi.org/10.1017/CBO9780511626982" class="external-link">doi:10.1017/CBO9780511626982</a>
-, <a href="https://www.cambridge.org/core/product/identifier/9780511626982/type/book" class="external-link">https://www.cambridge.org/core/product/identifier/9780511626982/type/book</a>.<br><br> Vale VdA, Perobelli FS (2020).
-<em>Análise de Insumo-Produto: teoria e aplicações no R</em>.
-Edição Independente, Curitiba, PR.
-ISBN 9786500103649.</p>
+<p></p>
 </div>
 
 </div>
@@ -802,15 +760,11 @@ determination of which relationships between sectors are most important
 within the production process.</p>
 <p>It determines which sectors have the greatest influence over others,
 specifically, which coefficients, when altered, would have the greatest
-impact on the system as a whole (Vale and Perobelli 2020)
-.</p><div class="section">
+impact on the system as a whole vale_alise_2020fio.</p><div class="section">
 <h5 id="references-5">References<a class="anchor" aria-label="anchor" href="#references-5"></a></h5>
 
 
-<p>Vale VdA, Perobelli FS (2020).
-<em>Análise de Insumo-Produto: teoria e aplicações no R</em>.
-Edição Independente, Curitiba, PR.
-ISBN 9786500103649.</p>
+<p></p>
 </div>
 
 </div>
@@ -852,23 +806,14 @@ purchase more goods from other sectors. At the same time, it means that more goo
 available for other sectors to purchase. Sectors that are above average in the demand sense (stronger backward
 linkage) have power of dispersion indices greater than 1. Sectors that are above average in the supply sense
 (stronger forward linkage) have sensitivity of dispersion indices greater than 1
-(Miller and Blair 2009)
-.</p>
+miller_input-output_2009fio.</p>
 <p>As both power and sensitivity of dispersion are related to average values on the economy, coefficients of
 variation are also calculated for both indices. The lesser the coefficient of variation, greater the number of
-sectors on the demand or supply structure of that sector (Vale and Perobelli 2020)
-.</p><div class="section">
+sectors on the demand or supply structure of that sector vale_alise_2020fio.</p><div class="section">
 <h5 id="references-6">References<a class="anchor" aria-label="anchor" href="#references-6"></a></h5>
 
 
-<p>Miller RE, Blair PD (2009).
-<em>Input-Output Analysis: Foundations and Extensions</em>, 2 edition.
-Cambridge University Press.
-ISBN 978-0-521-73902-3 978-0-521-51713-3 978-0-511-62698-2, <a href="https://doi.org/10.1017/CBO9780511626982" class="external-link">doi:10.1017/CBO9780511626982</a>
-, <a href="https://www.cambridge.org/core/product/identifier/9780511626982/type/book" class="external-link">https://www.cambridge.org/core/product/identifier/9780511626982/type/book</a>.<br><br> Vale VdA, Perobelli FS (2020).
-<em>Análise de Insumo-Produto: teoria e aplicações no R</em>.
-Edição Independente, Curitiba, PR.
-ISBN 9786500103649.</p>
+<p></p>
 </div>
 
 </div>
@@ -906,16 +851,11 @@ resulting <code>(matrix)</code>.</p><div class="section">
 <div class="section">
 <h4 id="details-10">Details<a class="anchor" aria-label="anchor" href="#details-10"></a></h4>
 <p>It computes the allocation coefficients matrix, a \(n x n\) matrix known as <code>B</code> matrix which is the row-wise
-ratio of intermediate transactions to total production (Miller and Blair 2009)
-.</p><div class="section">
+ratio of intermediate transactions to total production miller_input-output_2009fio.</p><div class="section">
 <h5 id="references-7">References<a class="anchor" aria-label="anchor" href="#references-7"></a></h5>
 
 
-<p>Miller RE, Blair PD (2009).
-<em>Input-Output Analysis: Foundations and Extensions</em>, 2 edition.
-Cambridge University Press.
-ISBN 978-0-521-73902-3 978-0-521-51713-3 978-0-511-62698-2, <a href="https://doi.org/10.1017/CBO9780511626982" class="external-link">doi:10.1017/CBO9780511626982</a>
-, <a href="https://www.cambridge.org/core/product/identifier/9780511626982/type/book" class="external-link">https://www.cambridge.org/core/product/identifier/9780511626982/type/book</a>.</p>
+<p></p>
 </div>
 
 </div>
@@ -946,18 +886,13 @@ ISBN 978-0-521-73902-3 978-0-521-51713-3 978-0-511-62698-2, <a href="https://doi
 
 <div class="section">
 <h4 id="details-11">Details<a class="anchor" aria-label="anchor" href="#details-11"></a></h4>
-<p>It computes the Ghosh inverse matrix (Miller and Blair 2009)
-, defined as:
+<p>It computes the Ghosh inverse matrix miller_input-output_2009fio, defined as:
 $$G = (I - B)^{-1}$$
 where I is the identity matrix and B is the allocation coefficients matrix.</p><div class="section">
 <h5 id="references-8">References<a class="anchor" aria-label="anchor" href="#references-8"></a></h5>
 
 
-<p>Miller RE, Blair PD (2009).
-<em>Input-Output Analysis: Foundations and Extensions</em>, 2 edition.
-Cambridge University Press.
-ISBN 978-0-521-73902-3 978-0-521-51713-3 978-0-511-62698-2, <a href="https://doi.org/10.1017/CBO9780511626982" class="external-link">doi:10.1017/CBO9780511626982</a>
-, <a href="https://www.cambridge.org/core/product/identifier/9780511626982/type/book" class="external-link">https://www.cambridge.org/core/product/identifier/9780511626982/type/book</a>.</p>
+<p></p>
 </div>
 
 </div>
@@ -992,17 +927,12 @@ resulting <code>(data.frame)</code>.</p><div class="section">
 <div class="section">
 <h4 id="details-12">Details<a class="anchor" aria-label="anchor" href="#details-12"></a></h4>
 <p>Computes impact on demand and supply structures after extracting each
-sector (Miller and Blair 2009)
-.</p>
+sector miller_input-output_2009fio.</p>
 <p>The total impact is calculated by the sum of the direct and indirect impacts.</p><div class="section">
 <h5 id="references-9">References<a class="anchor" aria-label="anchor" href="#references-9"></a></h5>
 
 
-<p>Miller RE, Blair PD (2009).
-<em>Input-Output Analysis: Foundations and Extensions</em>, 2 edition.
-Cambridge University Press.
-ISBN 978-0-521-73902-3 978-0-521-51713-3 978-0-511-62698-2, <a href="https://doi.org/10.1017/CBO9780511626982" class="external-link">doi:10.1017/CBO9780511626982</a>
-, <a href="https://www.cambridge.org/core/product/identifier/9780511626982/type/book" class="external-link">https://www.cambridge.org/core/product/identifier/9780511626982/type/book</a>.</p>
+<p></p>
 </div>
 
 </div>
@@ -1512,7 +1442,7 @@ called before any computation, preferably right after <code>iom$new()</code>.</p
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer></div>
