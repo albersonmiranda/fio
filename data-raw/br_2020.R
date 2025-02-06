@@ -5,7 +5,7 @@
 path = "inst/extdata/iom/br/2020.xlsx"
 
 # sheet
-sheet = "MIP"
+sheet = "iom"
 
 # names
 col_names = "D4:BB4"
