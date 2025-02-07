@@ -20,7 +20,7 @@
 #' # Import IOM data
 #' intermediate_transactions = import_element(
 #'   file = path_to_xlsx,
-#'   sheet = "MIP",
+#'   sheet = "iom",
 #'   range = "D6:BB56",
 #'   col_names = "D4:BB4",
 #'   row_names = "B6:B56"
