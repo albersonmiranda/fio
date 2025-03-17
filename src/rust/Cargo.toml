@@ -17,4 +17,4 @@ name = 'fio'
 extendr-api = '0.7.1'
 rayon = '1.10.0'
 num_cpus = '1.16.0'
-faer = { version = '0.19.4', features = ['rayon'] }
+faer = { version = '0.21.8', features = ['rayon'] }
