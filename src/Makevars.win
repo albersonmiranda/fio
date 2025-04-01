@@ -30,17 +30,13 @@ $(STATLIB):
 	touch $(TARGET_DIR)/libgcc_mock/libgcc_eh.a
 
 	# CARGO_LINKER is provided in Makevars.ucrt for R >= 4.2
-	if [ "$(NOT_CRAN)" != "true" ]; then \
-		export CARGO_HOME=$(CARGOTMP); \
-	fi && \
+	export CARGO_HOME=$(CARGOTMP) && \
 		export CARGO_TARGET_X86_64_PC_WINDOWS_GNU_LINKER="$(CARGO_LINKER)" && \
 		export LIBRARY_PATH="$${LIBRARY_PATH};$(CURDIR)/$(TARGET_DIR)/libgcc_mock"; \
 		cargo build $(CRAN_FLAGS) --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml --target-dir $(TARGET_DIR) && \
 		echo "Rust version:" `rustc --version` && \
 		echo "Cargo version:" `cargo --version`;
-	if [ "$(NOT_CRAN)" != "true" ]; then \
-		rm -Rf $(CARGOTMP) $(VENDOR_DIR) $(LIBDIR)/build; \
-	fi
+	rm -Rf $(CARGOTMP) $(VENDOR_DIR) $(LIBDIR)/build
 
 C_clean:
 	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS) $(CARGOTMP) $(VENDOR_DIR)
