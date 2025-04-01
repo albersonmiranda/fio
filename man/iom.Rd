@@ -732,7 +732,7 @@ The Leontief inverse matrix is calculated by solving the following equation:
 Since the Leontief matrix is a square matrix and the subtraction of the technical coefficients matrix from the
 identity matrix guarantees that the Leontief matrix is invertible, underlined Rust function uses LU decomposition
 to solve the equation.
-\subsection{Referenceses:}{
+\subsection{References:}{
 
 \insertCited{}
 }

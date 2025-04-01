@@ -527,7 +527,7 @@ iom <- R6Class(
     #' identity matrix guarantees that the Leontief matrix is invertible, underlined Rust function uses LU decomposition
     #' to solve the equation.
     #'
-    #' ## Referenceses:
+    #' ## References:
     #' \insertCited{}
     #' @return
     #' Self (invisibly).

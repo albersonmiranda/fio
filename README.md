@@ -42,7 +42,7 @@ You can install the latest stable release of {fio} from CRAN with:
 install.packages("fio")
 ```
 
-### Latest Tested version
+### Latest tested version
 
 install the latest tested but unreleased version from the [main
 branch](https://github.com/albersonmiranda/fio/tree/main), use the

@@ -19,11 +19,10 @@ VENDOR_DIR = $(CURDIR)/vendor
 # CRAN note: Cargo and Rustc versions are reported during
 # configure via tools/msrv.R.
 #
-# When the NOT_CRAN flag is *not* set, the vendor.tar.xz, if present,
-# is unzipped and used for offline compilation.
+# If the vendor.tar.xz is present, unzip and used for offline compilation.
 $(STATLIB):
 
-	# Unzip vendor.tar.xz if present
+	# unzip vendor.tar.xz if present
 	if [ -f ./rust/vendor.tar.xz ]; then \
 		tar xf rust/vendor.tar.xz && \
 		mkdir -p $(CARGOTMP) && \

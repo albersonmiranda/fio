@@ -9,6 +9,10 @@
 * Fix homebrew installation instructions in README and `tools/msrv.r` (#105).
 * Translate `br_2020` dataset to English (#113).
 
+## 🐞 Bug fixes
+
+* Fix R-devel (4.5) issues (#119).
+
 # fio 0.1.2
 
 ## 🛠️ Other improvements
