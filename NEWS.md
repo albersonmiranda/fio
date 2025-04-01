@@ -1,4 +1,4 @@
-# fio (development version)
+# fio 0.1.3
 
 ## 💥 Breaking changes
 
