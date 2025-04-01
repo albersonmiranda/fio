@@ -14,7 +14,10 @@ crate-type = [ 'staticlib' ]
 name = 'fio'
 
 [dependencies]
-extendr-api = '0.7.1'
+extendr-api = '0.8.0'
 rayon = '1.10.0'
 num_cpus = '1.16.0'
 faer = { version = '0.19.4', features = ['rayon'] }
+
+[patch.crates-io]
+extendr-api = { git = "https://github.com/extendr/extendr" }
