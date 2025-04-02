@@ -1,4 +1,10 @@
-# fio (development version)
+# fio 0.1.4
+
+## 🐞 Bug fixes
+
+* Remove CARGO_LINKER environment variable to use the correct linker for Windows (#123).
+
+# fio 0.1.3
 
 ## 💥 Breaking changes
 
@@ -8,6 +14,10 @@
 
 * Fix homebrew installation instructions in README and `tools/msrv.r` (#105).
 * Translate `br_2020` dataset to English (#113).
+
+## 🐞 Bug fixes
+
+* Fix R-devel (4.5) issues (#119).
 
 # fio 0.1.2
 
