@@ -1,4 +1,8 @@
-# fio (development version)
+# fio 0.1.4
+
+## 🐞 Bug fixes
+
+* Remove CARGO_LINKER environment variable to use the correct linker for Windows (#123).
 
 # fio 0.1.3
 
