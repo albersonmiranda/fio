@@ -1,5 +1,5 @@
 use extendr_api::prelude::*;
-use faer::{prelude::SpSolver, Mat};
+use faer::{linalg::solvers::Solve, Mat};
 
 #[extendr]
 /// Computes backward linkage extraction.

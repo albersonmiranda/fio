@@ -1,6 +1,6 @@
 use extendr_api::prelude::*;
 use rayon::prelude::*;
-use faer::Mat;
+use faer::{Mat, ColRef};
 
 #[extendr]
 /// Computes output multiplier.
@@ -117,10 +117,10 @@ fn compute_generator_value_added(
   let n = leontief_inverse_matrix.nrows();
 
   let leontief_inverse_matrix_faer = Mat::from_fn(n, n, |row, col| leontief_inverse_matrix[[row, col]]);
-  let value_added_requirements_matrix = Mat::from_fn(n, 1, |row, _| value_added_requirements[row]);
+  let value_added_requirements_column = ColRef::from_slice(&value_added_requirements);
 
   // create diagonal matrix from value_added requirements
-  let value_added_requirements_matrix_diag = Mat::column_vector_as_diagonal(&value_added_requirements_matrix);
+  let value_added_requirements_matrix_diag = ColRef::as_diagonal(value_added_requirements_column);
 
   // calculate generator value_added
   let generator_value_added = value_added_requirements_matrix_diag * leontief_inverse_matrix_faer;

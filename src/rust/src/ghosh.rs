@@ -1,4 +1,4 @@
-use faer::{Mat, prelude::SpSolver};
+use faer::{Mat, linalg::solvers::Solve};
 use extendr_api::prelude::*;
 use rayon::prelude::*;
 

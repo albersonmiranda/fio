@@ -17,8 +17,8 @@ fn get_parallelism_settings() -> Result<usize> {
     let result = panic::catch_unwind(|| faer::get_global_parallelism());
 
     match result {
-        Ok(faer::Parallelism::Rayon(n)) => Ok(n),
-        Ok(_) => Err("Received unexpected parallelism setting".into()),
+        Ok(faer::Par::Rayon(n)) => Ok(n.get()),
+        Ok(faer::Par::Seq) => Ok(1),
         Err(_) => Err("Parallelism via faer was not set yet".into()),
     }
 }
