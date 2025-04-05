@@ -74,6 +74,7 @@ jobs:
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
 
   Fedora-36:
+    if: '! github.event.pull_request.draft'
     runs-on: ubuntu-latest
     container:
       image: fedora:36
