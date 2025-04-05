@@ -4,7 +4,7 @@
 		"dockerfile": "Dockerfile",
 		// Update VARIANT to pick a specific R version: 4, 4.1, 4.0
 		// More info: https://github.com/rocker-org/devcontainer-images/pkgs/container/devcontainer%2Ftidyverse
-		"args": { "VARIANT": "4.3" }
+		"args": { "VARIANT": "4.4" }
 	},
 
 	// Install Dev Container Features. More info: https://containers.dev/features
@@ -28,7 +28,9 @@
 				"aaron-bond.better-comments",
 				"Gruntfuggly.todo-tree",
 				"analytic-signal.preview-pdf",
-				"matklad.rust-analyzer"
+				"rust-lang.rust-analyzer",
+        "ms-python.python",
+        "ms-vscode.live-server"
 			]
 		}
 	}
