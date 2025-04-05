@@ -17,6 +17,7 @@ permissions: read-all
 
 jobs:
   no-install:
+    if: '! github.event.pull_request.draft'
     runs-on: ubuntu-latest
     container:
       image: fedora:40
@@ -47,6 +48,7 @@ jobs:
         run: echo "Build fails as expected."
   
   msrv-lower:
+    if: '! github.event.pull_request.draft'
     runs-on: ubuntu-latest
     container:
       image: fedora:40

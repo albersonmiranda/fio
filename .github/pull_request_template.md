@@ -39,8 +39,7 @@ automatically close the issue.
 _Goal is code coverage percentage at 80% and above._
 
 - [ ] Yes
-- [ ] No, and this is why: _please replace this line with details on why tests
-      have not been included_
+- [ ] No, and this is why: <!--please replace this line with details on why tests have not been included-->
 - [ ] I need help with writing tests
 
 ## Pre-merge checklist
@@ -56,16 +55,3 @@ _Goal is code coverage percentage at 80% and above._
 - test: (adding missing tests, refactoring tests; no production code change)
 - chore: (updating grunt tasks etc; no production code change)
 -->
-
-## Release checklist
-
-- [ ] Bump version (both Rust & R packages, accordingly)
-- [ ] Update NEWS.md
-
-### If dev release
-- [ ] Precompiled Linux binaries
-- [ ] Precompiled [Windows binaries](https://win-builder.r-project.org/upload.aspx) `devtools::check_win_devel()` 
-- [ ] Precompiled [macOS binaries](https://mac.r-project.org/macbuilder/submit.html) `devtools::check_mac_release()`
-- [ ] Update tag:
-  - `git tag -m "update tag to new commit" -f -a TAG COMMIT_SHA`
-  - `git push -f origin refs/tags/TAG`
