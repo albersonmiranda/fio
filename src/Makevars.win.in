@@ -32,7 +32,8 @@ $(STATLIB):
 	# Always clean up CARGOTMP
 	rm -Rf $(CARGOTMP);
 
-rust_clean:
+rust_clean: $(SHLIB)
+	@echo "====================CLEANING VENDOR AND TARGET DIR===================="
 	rm -Rf $(CARGOTMP) $(VENDOR_DIR) @CLEAN_TARGET@
 
 clean:
