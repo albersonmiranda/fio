@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   articles/benchmarking: benchmarking.html
   getting_started: getting_started.html
-last_built: 2025-04-02T03:22Z
+last_built: 2025-04-05T01:56Z
 urls:
   reference: https://albersonmiranda.github.io/fio/reference
   article: https://albersonmiranda.github.io/fio/articles
