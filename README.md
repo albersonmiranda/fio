@@ -55,8 +55,7 @@ install.packages("fio", repos = c("https://albersonmiranda.r-universe.dev", "htt
 
 ### Development version
 
-For the cutting-edge development version from the [dev
-branch](https://github.com/albersonmiranda/fio/tree/dev), you’ll need to
+For the cutting-edge development branches from Github, you’ll need to
 compile it from source. This requires [Rust](https://www.rust-lang.org/)
 to be installed on your system. You can install Rust using the following
 commands:

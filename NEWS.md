@@ -1,23 +1,21 @@
-# fio 0.1.4
+# fio 0.1.6
 
 ## 🐞 Bug fixes
 
+* Fix R-devel (4.5) issues (#119).
 * Remove CARGO_LINKER environment variable to use the correct linker for Windows (#123).
-
-# fio 0.1.3
+* Fix `makevars.in` and `makevars.win.in` to avoid race condition when building package in parallel make (#127).
 
 ## 💥 Breaking changes
 
 * Removed `threads` slot from `iom` object (#95).
+* Raise minimum supported Rust version to 1.77 due to pulp crate (faer dependency) (#127).
 
 ## 🛠️ Other improvements
 
 * Fix homebrew installation instructions in README and `tools/msrv.r` (#105).
 * Translate `br_2020` dataset to English (#113).
-
-## 🐞 Bug fixes
-
-* Fix R-devel (4.5) issues (#119).
+* Fedora 36, 37, 38 and 39 from test workflow, since CRAN runners were updated to Fedora 40 (#126).
 
 # fio 0.1.2
 
