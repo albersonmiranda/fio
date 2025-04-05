@@ -6,7 +6,7 @@ authors = ['Alberson Miranda']
 description = 'Input-Output Analysis'
 repository = 'https://github.com/albersonmiranda/fio/tree/main/src/rust'
 license = 'MIT'
-rust-version = '1.67.1'
+rust-version = '1.77'
 keywords = ['economics', 'input-output-analysis']
 
 [lib]

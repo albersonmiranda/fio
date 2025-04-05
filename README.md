@@ -61,8 +61,8 @@ compile it from source. This requires [Rust](https://www.rust-lang.org/)
 to be installed on your system. You can install Rust using the following
 commands:
 
-- Debian/Ubuntu: `apt-get install cargo`
-- Fedora/CentOS: `dnf install cargo`
+- Debian/Ubuntu: `sudo apt install cargo`
+- Fedora/CentOS: `sudo dnf install cargo`
 - macOS: `brew install rust`
 - Windows: <https://www.rust-lang.org/tools/install>
 
