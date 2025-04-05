@@ -39,7 +39,7 @@ automatically close the issue.
 _Goal is code coverage percentage at 80% and above._
 
 - [ ] Yes
-- [ ] No, and this is why: _please replace this line with details on why tests
+- [ ] No, and this is why: <!--please replace this line with details on why tests-->
       have not been included_
 - [ ] I need help with writing tests
 
