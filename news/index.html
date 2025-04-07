@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fio</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6</span>
       </span>
     </div>
 
@@ -53,30 +53,27 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href="https://github.com/albersonmiranda/fio/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/albersonmiranda/fio/blob/v0.1.6/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.1.4" id="fio-014">fio 0.1.4<a class="anchor" aria-label="anchor" href="#fio-014"></a></h2>
+<h2 class="page-header" data-toc-text="0.1.6" id="fio-016">fio 0.1.6<small>2025-04-06</small><a class="anchor" aria-label="anchor" href="#fio-016"></a></h2>
 <div class="section level3">
-<h3 id="id_-bug-fixes-0-1-4">🐞 Bug fixes<a class="anchor" aria-label="anchor" href="#id_-bug-fixes-0-1-4"></a></h3>
-<ul><li>Remove CARGO_LINKER environment variable to use the correct linker for Windows (<a href="https://github.com/albersonmiranda/fio/issues/123" class="external-link">#123</a>).</li>
+<h3 id="id_-bug-fixes-0-1-6">🐞 Bug fixes<a class="anchor" aria-label="anchor" href="#id_-bug-fixes-0-1-6"></a></h3>
+<ul><li>Fix R-devel (4.5) issues (<a href="https://github.com/albersonmiranda/fio/issues/119" class="external-link">#119</a>).</li>
+<li>Remove CARGO_LINKER environment variable to use the correct linker for Windows (<a href="https://github.com/albersonmiranda/fio/issues/123" class="external-link">#123</a>).</li>
+<li>Fix <code>makevars.in</code> and <code>makevars.win.in</code> to avoid race condition when building package in parallel make (<a href="https://github.com/albersonmiranda/fio/issues/127" class="external-link">#127</a>).</li>
 </ul></div>
-</div>
-    <div class="section level2">
-<h2 class="page-header" data-toc-text="0.1.3" id="fio-013">fio 0.1.3<a class="anchor" aria-label="anchor" href="#fio-013"></a></h2>
 <div class="section level3">
-<h3 id="id_-breaking-changes-0-1-3">💥 Breaking changes<a class="anchor" aria-label="anchor" href="#id_-breaking-changes-0-1-3"></a></h3>
+<h3 id="id_-breaking-changes-0-1-6">💥 Breaking changes<a class="anchor" aria-label="anchor" href="#id_-breaking-changes-0-1-6"></a></h3>
 <ul><li>Removed <code>threads</code> slot from <code>iom</code> object (<a href="https://github.com/albersonmiranda/fio/issues/95" class="external-link">#95</a>).</li>
+<li>Raise minimum supported Rust version to 1.77 due to pulp crate (faer dependency) (<a href="https://github.com/albersonmiranda/fio/issues/127" class="external-link">#127</a>).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="id_️-other-improvements-0-1-3">🛠️ Other improvements<a class="anchor" aria-label="anchor" href="#id_%EF%B8%8F-other-improvements-0-1-3"></a></h3>
+<h3 id="id_️-other-improvements-0-1-6">🛠️ Other improvements<a class="anchor" aria-label="anchor" href="#id_%EF%B8%8F-other-improvements-0-1-6"></a></h3>
 <ul><li>Fix homebrew installation instructions in README and <code>tools/msrv.r</code> (<a href="https://github.com/albersonmiranda/fio/issues/105" class="external-link">#105</a>).</li>
 <li>Translate <code>br_2020</code> dataset to English (<a href="https://github.com/albersonmiranda/fio/issues/113" class="external-link">#113</a>).</li>
-</ul></div>
-<div class="section level3">
-<h3 id="id_-bug-fixes-0-1-3">🐞 Bug fixes<a class="anchor" aria-label="anchor" href="#id_-bug-fixes-0-1-3"></a></h3>
-<ul><li>Fix R-devel (4.5) issues (<a href="https://github.com/albersonmiranda/fio/issues/119" class="external-link">#119</a>).</li>
+<li>Fedora 36, 37, 38 and 39 from test workflow, since CRAN runners were updated to Fedora 40 (<a href="https://github.com/albersonmiranda/fio/issues/126" class="external-link">#126</a>).</li>
 </ul></div>
 </div>
     <div class="section level2">
