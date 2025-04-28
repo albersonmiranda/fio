@@ -33,7 +33,6 @@ $(STATLIB):
 	rm -Rf $(CARGOTMP);
 
 rust_clean: $(SHLIB)
-	@echo "====================CLEANING VENDOR AND TARGET DIR===================="
 	rm -Rf $(CARGOTMP) $(VENDOR_DIR) @CLEAN_TARGET@
 
 clean:
