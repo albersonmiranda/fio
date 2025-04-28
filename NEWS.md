@@ -1,3 +1,9 @@
+# fio (development version)
+
+## ✨ Enhancements
+
+* Add support for webR (adds WebAssembly target in `markevars`) (#133).
+
 # fio 0.1.6
 
 ## 🐞 Bug fixes
@@ -11,7 +17,7 @@
 * Removed `threads` slot from `iom` object (#95).
 * Raise minimum supported Rust version to 1.77 due to pulp crate (faer dependency) (#127).
 
-## 🛠️ Other improvements
+## 🛠️pak::pak("r-wasm/rwasm") Other improvements
 
 * Fix homebrew installation instructions in README and `tools/msrv.r` (#105).
 * Translate `br_2020` dataset to English (#113).
