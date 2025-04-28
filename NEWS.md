@@ -2,7 +2,12 @@
 
 ## ✨ Enhancements
 
-* Add support for webR (adds WebAssembly target in `markevars`) (#133).
+* Added support for R 4.3 webR via R-Universe (adds WebAssembly target in `markevars`) (#133).
+* Added support for R 4.4 webR via R-Universe (adds WebAssembly target in `markevars`) (#135).
+
+## 🛠️ Other improvements
+
+* Bump `faer` to 0.20.0 (#135).
 
 # fio 0.1.6
 
@@ -17,7 +22,7 @@
 * Removed `threads` slot from `iom` object (#95).
 * Raise minimum supported Rust version to 1.77 due to pulp crate (faer dependency) (#127).
 
-## 🛠️pak::pak("r-wasm/rwasm") Other improvements
+## 🛠️ Other improvements
 
 * Fix homebrew installation instructions in README and `tools/msrv.r` (#105).
 * Translate `br_2020` dataset to English (#113).
