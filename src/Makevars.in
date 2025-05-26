@@ -19,7 +19,7 @@ VENDOR_DIR = $(CURDIR)/vendor
 # CRAN note: Cargo and Rustc versions are reported during
 # configure via tools/msrv.R.
 #
-# If the vendor.tar.xz is present, unzip and used for offline compilation.
+# If the vendor.tar.xz is present, unzip and use it for offline compilation.
 $(STATLIB):
 
 	# unzip vendor.tar.xz if present

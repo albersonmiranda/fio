@@ -1,9 +1,5 @@
 # fio (development version)
 
-## ✨ Enhancements
-
-* Added support for R 4.3 webR via R-Universe (adds WebAssembly target in `markevars`) (#133).
-* Added support for R 4.4 webR via R-Universe (adds WebAssembly target in `markevars`) (#135).
 
 ## 🛠️ Other improvements
 
