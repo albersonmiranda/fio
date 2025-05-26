@@ -35,12 +35,16 @@ jobs:
           - {os: macos-13,      r: 'release'}
           - {os: macos-13,      r: 'devel'}
           - {os: macos-13,      r: 'oldrel-1'}
+          - {os: windows-11-arm, r: 'release'}
+          - {os: windows-11-arm, r: 'devel'}
           - {os: windows-2022,  r: 'release'}
           - {os: windows-2022,  r: 'devel'}
           - {os: windows-2022,  r: 'oldrel-1'}
           - {os: windows-2019,  r: 'release'}
           - {os: windows-2019,  r: 'devel'}
           - {os: windows-2019,  r: 'oldrel-1'}
+          - {os: ubuntu-24.04-arm, r: 'release'}
+          - {os: ubuntu-24.04-arm, r: 'devel'}
           - {os: ubuntu-24.04,  r: 'devel'}
           - {os: ubuntu-24.04,  r: 'release'}
           - {os: ubuntu-24.04,  r: 'oldrel-1'}
