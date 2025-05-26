@@ -41,6 +41,8 @@ jobs:
           - {os: windows-2019,  r: 'release'}
           - {os: windows-2019,  r: 'devel'}
           - {os: windows-2019,  r: 'oldrel-1'}
+          - {os: ubuntu-24.04-arm, r: 'release'}
+          - {os: ubuntu-24.04-arm, r: 'devel'}
           - {os: ubuntu-24.04,  r: 'devel'}
           - {os: ubuntu-24.04,  r: 'release'}
           - {os: ubuntu-24.04,  r: 'oldrel-1'}
@@ -51,6 +53,7 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
+      MAKEFLAGS: "-j 2"
 
     steps:
       - uses: actions/checkout@v4
