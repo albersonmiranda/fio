@@ -35,8 +35,6 @@ jobs:
           - {os: macos-13,      r: 'release'}
           - {os: macos-13,      r: 'devel'}
           - {os: macos-13,      r: 'oldrel-1'}
-          - {os: windows-11-arm, r: 'release'}
-          - {os: windows-11-arm, r: 'devel'}
           - {os: windows-2022,  r: 'release'}
           - {os: windows-2022,  r: 'devel'}
           - {os: windows-2022,  r: 'oldrel-1'}
