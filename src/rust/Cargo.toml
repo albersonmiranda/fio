@@ -17,7 +17,7 @@ name = 'fio'
 extendr-api = '0.8.0'
 rayon = '1.10.0'
 num_cpus = '1.16.0'
-faer = { version = '0.21.9', features = ['rayon'] }
+faer = { version = '0.22.6', features = ['rayon'] }
 
 [patch.crates-io]
 extendr-api = { git = "https://github.com/extendr/extendr" }
