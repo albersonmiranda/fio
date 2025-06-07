@@ -10,6 +10,10 @@
   - 📗 Update any related documentation and include any relevant screenshots
 -->
 
+## Local testing
+
+- [ ] I have tested my changes locally by running `makeflags=-j8 R CMD build . && R CMD check $(ls -t . | head -n1) --as-cran` and they work as expected.
+
 ## What type of PR is this? (check all applicable)
 
 - [ ] New Feature
