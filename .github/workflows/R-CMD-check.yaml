@@ -41,6 +41,8 @@ jobs:
           - {os: windows-2019,  r: 'release'}
           - {os: windows-2019,  r: 'devel'}
           - {os: windows-2019,  r: 'oldrel-1'}
+          - {os: ubuntu-24.04-arm, r: 'release'}
+          - {os: ubuntu-24.04-arm, r: 'devel'}
           - {os: ubuntu-24.04,  r: 'devel'}
           - {os: ubuntu-24.04,  r: 'release'}
           - {os: ubuntu-24.04,  r: 'oldrel-1'}
@@ -51,6 +53,7 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
+      MAKEFLAGS: "-j 2"
 
     steps:
       - uses: actions/checkout@v4
@@ -73,43 +76,7 @@ jobs:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
 
-  Fedora-36:
-    runs-on: ubuntu-latest
-    container:
-      image: fedora:36
-
-    steps:
-      - name: Install Fedora dependencies
-        run: |
-          sudo dnf install -y --allowerasing pip rust gcc llvm libxml2-devel libcurl-devel harfbuzz-devel \
-          fribidi-devel openssl-devel freetype-devel libpng-devel libtiff-devel libjpeg-devel qpdf xz \
-          glibc-langpack-en devscripts-checkbashisms gcc-c++ gcc-gfortran readline-devel xz-devel bzip2-devel \
-          zlib-devel pcre2-devel cairo-devel libgit2-devel libX11-devel libXt-devel which
-
-      - name: Compile R from source
-        run: |
-          # download R 4.2.0
-          curl https://cran.r-project.org/src/base/R-4/R-4.2.0.tar.gz -O
-          # extract R 4.2.0
-          tar -xvf R-4.2.0.tar.gz
-          # build R 4.2.0
-          cd R-4.2.0 && ./configure --prefix=/usr/local && make && make install
-          # back to the root directory
-          cd ~
-
-      - uses: actions/checkout@v4
-
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: any::rcmdcheck
-          needs: check
-      
-      - uses: r-lib/actions/check-r-package@v2
-        with:
-          upload-snapshots: true
-          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
-
-  Fedora-others:
+  Fedora:
     if: '! github.event.pull_request.draft'
     runs-on: ubuntu-latest
 
@@ -119,7 +86,6 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {image: 'fedora:39'}
           - {image: 'fedora:40'}
           - {image: 'fedora:41'}
     container:

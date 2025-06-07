@@ -1,6 +1,6 @@
 Package: fio
 Title: Friendly Input-Output Analysis
-Version: 0.1.4
+Version: 0.1.6.9001
 Authors@R: c(
   person(
     given = "Alberson",
@@ -29,7 +29,7 @@ Roxygen: list(markdown = TRUE, r6 = TRUE)
 RoxygenNote: 7.3.2
 Depends: 
     R (>= 4.2)
-SystemRequirements: Cargo (Rust's package manager), rustc >= 1.67.1, xz
+SystemRequirements: Cargo (Rust's package manager), rustc >= 1.77, xz
 LazyData: true
 Imports: 
     cli,
