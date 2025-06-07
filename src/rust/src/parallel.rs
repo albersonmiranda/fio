@@ -1,6 +1,5 @@
 use extendr_api::prelude::*;
 use faer::Par;
-use core::num;
 use std::panic;
 
 /// @description
@@ -49,6 +48,7 @@ fn get_parallelism_settings() -> Result<usize> {
 fn set_max_threads(max_threads: usize) {
 
     let threads = get_parallelism_settings().unwrap_or(0);
+    println!("Previous global thread pool size: {}", threads);
     let num_threads = if max_threads == 0 {
         num_cpus::get()
     } else {
@@ -62,6 +62,9 @@ fn set_max_threads(max_threads: usize) {
         threads
       ),
     }
+
+    println!("New global thread pool size: {}", num_threads);
+
   }
 
 extendr_module! {
