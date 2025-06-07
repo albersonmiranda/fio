@@ -18,11 +18,12 @@ test_that("parallelization can be disabled", {
   expect_no_error(obj$set_max_threads(1L))
 })
 
-test_that("fails if try to set max_threads twice", {
+test_that("max_threads can be set multiple times", {
   # Instantiate the class
   obj <- iom$new("test", intermediate_transactions, total_production)
   # test if error occur
-  expect_error(obj$set_max_threads(2L))
+  obj$set_max_threads(1L)
+  expect_no_error(obj$set_max_threads(2L))
 })
 
 # technical coefficients are calculated correctly
