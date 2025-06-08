@@ -76,6 +76,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Benchmarking</h1>
             
+            <h4 data-toc-skip class="date">June 06, 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/albersonmiranda/fio/blob/main/vignettes/articles/benchmarking.Rmd" class="external-link"><code>vignettes/articles/benchmarking.Rmd</code></a></small>
       <div class="hidden name"><code>benchmarking.Rmd</code></div>
@@ -84,6 +85,9 @@
 
     
     
+<p>&lt;– This is a precomputing script. To run it,
+<code>knitr::knit("vignettes/articles/benchmarking_orig.Rmd.orig", output = "vignettes/articles/benchmarking.Rmd")</code>
+–&gt;</p>
 <style>
 p.caption {
   font-size: 0.6em;
@@ -93,16 +97,14 @@ p.caption {
 <div class="section level2">
 <h2 id="disclaimer">DISCLAIMER<a class="anchor" aria-label="anchor" href="#disclaimer"></a>
 </h2>
-<p>The present benchmark was conducted on a Samsung laptop
-(550XCJ/550XCR, Intel i7, 8GB RAM) on Ubuntu 22.04.4 LTS x86_64, which
-is a pretty average machine. For similar hardware (e.g., Intel i5, 16GB
-RAM), the results should hold. In the other hand, for slower hardware
-(e.g., budget VMs like free plan on Posit Cloud, which is single core,
-1GB RAM) results may vary. For faster machines (e.g., 16-core, 64GB RAM
-1, Github Codespaces), differences are only marginal. That is,
-<strong>for fast enough machines, performance isn’t an issue</strong>
-and even base R code should be fast enough for input-output analysis
-with big matrices.</p>
+<p>The present benchmark was conducted on 2025-06-06 on a Macbook Pro M4
+(12-core CPU, 16-core GPU, 24GB RAM). Results <em>will</em> vary
+depending on the hardware. The benchmarks are intended to provide a
+general idea of the performance differences between the <code>fio</code>
+package and other implementations, but they should not be considered
+definitive. The performance of the functions may also vary depending on
+the specific data used and the context in which the functions are
+applied.</p>
 </div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
@@ -120,10 +122,10 @@ and their performance can significantly impact the speed of larger
 analyses.</p>
 <p>Our benchmarking tests, which involve running these functions
 repeatedely in simulated datasets, show that the <code>fio</code>
-package functions are faster than the equivalent base R functions. This
-improved performance can make a substantial difference in larger
-analyses, making the <code>fio</code> package a valuable tool for
-input-output analysis in R.</p>
+package functions are faster than other implementations. This improved
+performance can make a substantial difference in larger analyses, making
+the <code>fio</code> package a valuable tool for input-output analysis
+in R.</p>
 <p>The tests were run on a simulated
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2000</mn><mo>×</mo><mn>2000</mn></mrow><annotation encoding="application/x-tex">2000 \times 2000</annotation></semantics></math>
 matrix, and each test was repeated 100 times to account for variability.
@@ -143,11 +145,7 @@ and a base R implementation. It consists on dividing each
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">a_{ij}</annotation></semantics></math>
 element of intermediate transactions matrix by the correspondent
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mi>j</mi></msub><annotation encoding="application/x-tex">x_j</annotation></semantics></math>
-element of total production vector<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. The results show that both
-<a href="https://albersonmiranda.github.io/fio/">fio</a> and <a href="https://github.com/pachadotdev/leontief" class="external-link">leontief</a> functions execute almost
-instantaneously, with <a href="https://albersonmiranda.github.io/fio/">fio</a> slightly faster (about 5
-milliseconds apart). In contrast, the base R implementation is about 150
-times slower than <a href="https://albersonmiranda.github.io/fio/">fio</a>.</p>
+element of total production vector<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># set seed</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
@@ -183,16 +181,20 @@ times slower than <a href="https://albersonmiranda.github.io/fio/">fio</a>.</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_a</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unit: milliseconds</span></span>
-<span><span class="co">#&gt;      expr        min         lq       mean     median         uq        max neval</span></span>
-<span><span class="co">#&gt;       fio   19.79948   27.52306   32.46416   30.59574   35.91537   89.63771   100</span></span>
-<span><span class="co">#&gt;    Base R 5397.60696 5871.49346 6400.70644 6236.49741 7004.75749 7892.10966   100</span></span>
-<span><span class="co">#&gt;  leontief   25.69267   33.26089   40.73125   38.84038   44.42781  112.25745   100</span></span>
+<span><span class="co">#&gt;      expr         min         lq       mean     median         uq        max</span></span>
+<span><span class="co">#&gt;       fio    9.227378   10.59014   12.32820   11.00756   12.10187   41.55916</span></span>
+<span><span class="co">#&gt;    Base R 1881.959409 1973.27830 1983.37769 1995.08118 2004.39316 2028.18944</span></span>
+<span><span class="co">#&gt;  leontief   34.150253   36.90681   49.15617   40.84664   63.28766   70.77965</span></span>
+<span><span class="co">#&gt;  neval</span></span>
+<span><span class="co">#&gt;    100</span></span>
+<span><span class="co">#&gt;    100</span></span>
+<span><span class="co">#&gt;    100</span></span>
 <span></span>
 <span><span class="co"># plot</span></span>
 <span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">benchmark_a</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_a-1.png" alt="\label{fig:benchmark_a}Base R is about 100 times slower than {fio} and {leontief} functions." width="70%"><p class="caption">
-Base R is about 100 times slower than {fio} and {leontief} functions.
+<img src="figure/benchmark_a-1.png" alt="\label{fig:benchmark_a}{fio} is faster."><p class="caption">
+is faster.
 </p>
 </div>
 </div>
@@ -211,10 +213,7 @@ therefore it has no null rows or columns.</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mi>I</mi><mo>−</mo><mi>A</mi></mrow><annotation encoding="application/x-tex">L = I - A</annotation></semantics></math></p>
 <p>It allows for solving the linear system through LU decomposition,
 which is a more efficient method than the direct inverse matrix
-calculation. <a href="https://albersonmiranda.github.io/fio/">fio</a> takes advantage of LU decomposition and
-becomes incredibly faster, while <a href="https://github.com/pachadotdev/leontief" class="external-link">leontief</a> is over 10
-times slower, followed closed by the over 20 times slower base R
-implementation.</p>
+calculation.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># data</span></span>
 <span><span class="va">iom_fio</span><span class="op">$</span><span class="fu">compute_tech_coeff</span><span class="op">(</span><span class="op">)</span></span>
@@ -236,16 +235,16 @@ implementation.</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_b</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unit: milliseconds</span></span>
-<span><span class="co">#&gt;      expr       min        lq      mean    median        uq      max neval</span></span>
-<span><span class="co">#&gt;       fio  247.3609  285.6822  312.9184  301.5624  329.7859  543.802   100</span></span>
-<span><span class="co">#&gt;    Base R 5177.8100 5531.5195 5700.7660 5596.1821 5722.3004 7489.067   100</span></span>
-<span><span class="co">#&gt;  leontief 4671.1566 4970.6219 5143.4911 5065.7830 5216.6950 6979.434   100</span></span>
+<span><span class="co">#&gt;      expr       min        lq      mean    median        uq        max neval</span></span>
+<span><span class="co">#&gt;       fio  123.4593  128.8462  165.7808  131.4057  136.4588   660.5447   100</span></span>
+<span><span class="co">#&gt;    Base R 2299.2996 2307.4041 3012.2608 2312.4703 2362.0039 13355.7520   100</span></span>
+<span><span class="co">#&gt;  leontief 2301.8362 2306.7297 2604.8781 2309.6734 2333.0734 12778.9560   100</span></span>
 <span></span>
 <span><span class="co"># plot</span></span>
 <span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">benchmark_b</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_b-1.png" alt="\label{fig:figs} {fio} is about 20 times faster than {leontief} and base R functions." width="70%"><p class="caption">
-{fio} is about 20 times faster than {leontief} and base R functions.
+<img src="figure/benchmark_b-1.png" alt="\label{fig:figs} {fio} is incredibly faster."><p class="caption">
+{fio} is incredibly faster.
 </p>
 </div>
 </div>
@@ -253,10 +252,7 @@ implementation.</p>
 <h2 id="sensitivity-of-dispersion-coefficients-of-variation">Sensitivity of dispersion coefficients of variation<a class="anchor" aria-label="anchor" href="#sensitivity-of-dispersion-coefficients-of-variation"></a>
 </h2>
 <p>To represent linkage-based functions performance, we compute
-benchmark for sensitivity of dispersion coefficients of variation. All 3
-implementations executes almost instantaneously, with <a href="https://albersonmiranda.github.io/fio/">fio</a>
-being slightly slower than <a href="https://github.com/pachadotdev/leontief" class="external-link">leontief</a> and base R
-functions.</p>
+benchmark for sensitivity of dispersion coefficients of variation.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># data</span></span>
 <span><span class="va">iom_fio</span><span class="op">$</span><span class="fu">compute_leontief_inverse</span><span class="op">(</span><span class="op">)</span></span>
@@ -279,15 +275,18 @@ functions.</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_c</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unit: milliseconds</span></span>
-<span><span class="co">#&gt;      expr      min       lq     mean   median       uq      max neval</span></span>
-<span><span class="co">#&gt;       fio 18.84368 19.14402 20.55910 19.33092 21.95244 25.82193   100</span></span>
-<span><span class="co">#&gt;    Base R 20.70250 21.81017 23.14538 22.41280 24.08331 34.13879   100</span></span>
-<span><span class="co">#&gt;  leontief 14.07486 14.33243 14.60074 14.44927 14.58205 21.89314   100</span></span>
+<span><span class="co">#&gt;      expr        min         lq       mean     median         uq        max</span></span>
+<span><span class="co">#&gt;       fio   5.009339   5.272210   5.707487   5.808962   5.947563   7.477908</span></span>
+<span><span class="co">#&gt;    Base R   7.331374   7.578727   9.155474   7.792624   7.946743  39.151310</span></span>
+<span><span class="co">#&gt;  leontief 284.126433 318.893961 322.455093 321.330243 324.001373 767.253582</span></span>
+<span><span class="co">#&gt;  neval</span></span>
+<span><span class="co">#&gt;    100</span></span>
+<span><span class="co">#&gt;    100</span></span>
+<span><span class="co">#&gt;    100</span></span>
 <span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">benchmark_c</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_c-1.png" alt="\label{fig:benchmark_c} {fio} is about 15 milliseconds slower than {leontief} and 2 milliseconds slower than base R functions." width="70%"><p class="caption">
-{fio} is about 15 milliseconds slower than {leontief} and 2 milliseconds
-slower than base R functions.
+<img src="figure/benchmark_c-1.png" alt="\label{fig:benchmark_c} {fio} again faster."><p class="caption">
+{fio} again faster.
 </p>
 </div>
 </div>
@@ -351,14 +350,13 @@ repetitions to 10.</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">benchmark_d</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unit: seconds</span></span>
-<span><span class="co">#&gt;    expr     min       lq     mean   median       uq      max neval</span></span>
-<span><span class="co">#&gt;     fio 2.32139 2.581798 2.587570 2.630586 2.669976 2.713694    10</span></span>
-<span><span class="co">#&gt;  Base R 7.78439 7.824686 7.972608 7.847324 7.934813 8.490848    10</span></span>
+<span><span class="co">#&gt;    expr      min       lq     mean   median       uq      max neval</span></span>
+<span><span class="co">#&gt;     fio 2.032791 2.414959 5.583490 2.990123 3.750655 18.25428    10</span></span>
+<span><span class="co">#&gt;  Base R 4.405828 4.423133 7.659431 4.459804 7.651292 21.86961    10</span></span>
 <span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">benchmark_d</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_d-1.png" alt="\label{fig:benchmark_d} {fio} is the best option for input-output analysis when matrix inversion is needed." width="70%"><p class="caption">
-{fio} is the best option for input-output analysis when matrix inversion
-is needed.
+<img src="figure/benchmark_d-1.png" alt="\label{fig:benchmark_d} {fio} faster."><p class="caption">
+{fio} faster.
 </p>
 </div>
 </div>
