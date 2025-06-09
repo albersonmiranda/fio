@@ -15,7 +15,7 @@ output:
     df_print: paged 
 ---
 
-<-- This is a precomputing script. To run it, `knitr::knit("vignettes/articles/benchmarking_orig.Rmd.orig", output = "vignettes/articles/benchmarking.Rmd")` -->
+<!-- This is a precomputing script. To run it, `knitr::knit("vignettes/articles/benchmarking_orig.Rmd.orig", output = "vignettes/articles/benchmarking.Rmd")` -->
 
 <style>
 p.caption {
