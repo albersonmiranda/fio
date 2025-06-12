@@ -127,7 +127,8 @@ benchmark_b <- bench::press(
       fio = fio:::compute_leontief_inverse(technical_coefficients_matrix),
       `Base R` = leontief_inverse_r(technical_coefficients_matrix),
       leontief = leontief::leontief_inverse(technical_coefficients_matrix),
-      iterations = 100
+      iterations = 100,
+      check = FALSE
     )
   }
 )
@@ -171,7 +172,8 @@ benchmark_c <- bench::press(
       fio = fio:::compute_sensitivity_dispersion_cv(leontief_inverse_matrix),
       `Base R` = sensitivity_r(leontief_inverse_matrix),
       leontief = leontief::sensitivity_dispersion_cv(leontief_inverse_matrix),
-      iterations = 100
+      iterations = 100,
+      check = FALSE
     )
   }
 )
@@ -234,7 +236,8 @@ benchmark_d <- bench::press(
         iom_fio_reduced$technical_coefficients_matrix,
         iom_fio_reduced$leontief_inverse_matrix
       ),
-      iterations = 10 # As per original code for this benchmark
+      iterations = 10,
+      check = FALSE
     )
   }
 )
