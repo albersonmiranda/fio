@@ -30,7 +30,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.align = "center",
   fig.output = "70%"
-)
+) 
 ```
 
 # DISCLAIMER
@@ -55,34 +55,34 @@ The technical coefficients matrix calculation, a key and initial step in input-o
 # set seed
 set.seed(100)
 
-# data
-matrix_dim <- 2000
-intermediate_transactions <- matrix(
-  as.double(sample(1:1000, matrix_dim^2, replace = TRUE)),
-  nrow = matrix_dim,
-  ncol = matrix_dim
-)
-total_production <- matrix(
-  as.double(sample(4000000:6000000, matrix_dim, replace = TRUE)),
-  nrow = 1,
-  ncol = matrix_dim
-)
-
 # Base R function
 tech_coeff_r <- function(intermediate_transactions, total_production) {
   tech_coeff_matrix <- intermediate_transactions %*% diag(1 / as.vector(total_production))
   return(tech_coeff_matrix)
 }
 
-# {fio} setup
-iom_fio <- fio::iom$new("iom", intermediate_transactions, total_production)
-
 # benchmark
-benchmark_a <- microbenchmark::microbenchmark(
-  fio = fio:::compute_tech_coeff(intermediate_transactions, total_production),
-  `Base R` = tech_coeff_r(intermediate_transactions, total_production),
-  leontief = leontief::input_requirement(intermediate_transactions, total_production),
-  times = 100
+benchmark_a <- bench::press(
+  matrix_dim = c(100, 500, 1000, 2000),
+  {
+    intermediate_transactions <- matrix(
+      as.double(sample(1:1000, matrix_dim^2, replace = TRUE)),
+      nrow = matrix_dim,
+      ncol = matrix_dim
+    )
+    total_production <- matrix(
+      as.double(sample(4000000:6000000, matrix_dim, replace = TRUE)),
+      nrow = 1,
+      ncol = matrix_dim
+    )
+    iom_fio <- fio::iom$new("iom", intermediate_transactions, total_production)
+    bench::mark(
+      fio = fio:::compute_tech_coeff(intermediate_transactions, total_production),
+      `Base R` = tech_coeff_r(intermediate_transactions, total_production),
+      leontief = leontief::input_requirement(intermediate_transactions, total_production),
+      iterations = 100
+    )
+  }
 )
 print(benchmark_a)
 
@@ -99,10 +99,6 @@ $$L = I - A$$
 It allows for solving the linear system through LU decomposition, which is a more efficient method than the direct inverse matrix calculation.
 
 ```{r benchmark_b, fig.cap="\\label{fig:figs} {fio} is incredibly faster."}
-# data
-iom_fio$compute_tech_coeff()
-technical_coefficients_matrix <- iom_fio$technical_coefficients_matrix
-
 # base R function
 leontief_inverse_r <- function(technical_coefficients_matrix) {
   dim <- nrow(technical_coefficients_matrix)
@@ -111,11 +107,30 @@ leontief_inverse_r <- function(technical_coefficients_matrix) {
 }
 
 # benchmark
-benchmark_b <- microbenchmark::microbenchmark(
-  fio = fio:::compute_leontief_inverse(technical_coefficients_matrix),
-  `Base R` = leontief_inverse_r(technical_coefficients_matrix),
-  leontief = leontief::leontief_inverse(technical_coefficients_matrix),
-  times = 100
+benchmark_b <- bench::press(
+  matrix_dim = c(100, 500, 1000, 2000),
+  {
+    intermediate_transactions <- matrix(
+      as.double(sample(1:1000, matrix_dim^2, replace = TRUE)),
+      nrow = matrix_dim,
+      ncol = matrix_dim
+    )
+    total_production <- matrix(
+      as.double(sample(4000000:6000000, matrix_dim, replace = TRUE)),
+      nrow = 1,
+      ncol = matrix_dim
+    )
+    iom_fio <- fio::iom$new("iom", intermediate_transactions, total_production)
+    iom_fio$compute_tech_coeff()
+    technical_coefficients_matrix <- iom_fio$technical_coefficients_matrix
+    bench::mark(
+      fio = fio:::compute_leontief_inverse(technical_coefficients_matrix),
+      `Base R` = leontief_inverse_r(technical_coefficients_matrix),
+      leontief = leontief::leontief_inverse(technical_coefficients_matrix),
+      iterations = 100,
+      check = FALSE
+    )
+  }
 )
 print(benchmark_b)
 
@@ -128,10 +143,6 @@ ggplot2::autoplot(benchmark_b)
 To represent linkage-based functions performance, we compute benchmark for sensitivity of dispersion coefficients of variation.
 
 ```{r benchmark_c, fig.cap="\\label{fig:benchmark_c} {fio} again faster."}
-# data
-iom_fio$compute_leontief_inverse()
-leontief_inverse_matrix <- iom_fio$leontief_inverse_matrix
-
 # base R function
 sensitivity_r <- function(B) {
   n <- nrow(B)
@@ -141,11 +152,30 @@ sensitivity_r <- function(B) {
 }
 
 # benchmark
-benchmark_c <- microbenchmark::microbenchmark(
-  fio = fio:::compute_sensitivity_dispersion_cv(leontief_inverse_matrix),
-  `Base R` = sensitivity_r(leontief_inverse_matrix),
-  leontief = leontief::sensitivity_dispersion_cv(leontief_inverse_matrix),
-  times = 100
+benchmark_c <- bench::press(
+  matrix_dim = c(100, 500, 1000, 2000),
+  {
+    intermediate_transactions <- matrix(
+      as.double(sample(1:1000, matrix_dim^2, replace = TRUE)),
+      nrow = matrix_dim,
+      ncol = matrix_dim
+    )
+    total_production <- matrix(
+      as.double(sample(4000000:6000000, matrix_dim, replace = TRUE)),
+      nrow = 1,
+      ncol = matrix_dim
+    )
+    iom_fio <- fio::iom$new("iom", intermediate_transactions, total_production)
+    iom_fio$compute_tech_coeff()$compute_leontief_inverse()
+    leontief_inverse_matrix <- iom_fio$leontief_inverse_matrix
+    bench::mark(
+      fio = fio:::compute_sensitivity_dispersion_cv(leontief_inverse_matrix),
+      `Base R` = sensitivity_r(leontief_inverse_matrix),
+      leontief = leontief::sensitivity_dispersion_cv(leontief_inverse_matrix),
+      iterations = 100,
+      check = FALSE
+    )
+  }
 )
 print(benchmark_c)
 ggplot2::autoplot(benchmark_c)
@@ -156,24 +186,6 @@ ggplot2::autoplot(benchmark_c)
 Since field of influence involves computing Leontief inverse matrix for each element of technical coefficients matrix after an increment, it can be demanding for high dimensional matrices. Here, we evaluate benchmark for base R function and {fio}, since there's no similiar function in {leontief}. For brevity, we cut dimensions to 100 and repetitions to 10.
 
 ```{r benchmark_d, fig.cap="\\label{fig:benchmark_d} {fio} faster."}
-# data
-matrix_dim <- 100
-intermediate_transactions <- matrix(
-  as.double(sample(1:1000, matrix_dim^2, replace = TRUE)),
-  nrow = matrix_dim,
-  ncol = matrix_dim
-)
-total_production <- matrix(
-  as.double(sample(4000000:6000000, matrix_dim, replace = TRUE)),
-  nrow = 1,
-  ncol = matrix_dim
-)
-iom_fio_reduced <- fio::iom$new(
-  "iom_reduced",
-  intermediate_transactions,
-  total_production
-)$compute_tech_coeff()$compute_leontief_inverse()
-
 # base R function
 field_influence_r <- function(A, B, ee = 0.001) {
   n = nrow(A)
@@ -192,17 +204,42 @@ field_influence_r <- function(A, B, ee = 0.001) {
       E[i, j] = 0
     }
   }
+  return(SI) # Added return statement
 }
 
 # benchmark
-benchmark_d <- microbenchmark::microbenchmark(
-  fio = fio:::compute_field_influence(
-    iom_fio_reduced$technical_coefficients_matrix,
-    iom_fio_reduced$leontief_inverse_matrix,
-    0.001
-  ),
-  `Base R` = field_influence_r(iom_fio_reduced$technical_coefficients_matrix, iom_fio_reduced$leontief_inverse_matrix),
-  times = 10
+benchmark_d <- bench::press(
+  matrix_dim = c(30, 60, 100),
+  {
+    intermediate_transactions <- matrix(
+      as.double(sample(1:1000, matrix_dim^2, replace = TRUE)),
+      nrow = matrix_dim,
+      ncol = matrix_dim
+    )
+    total_production <- matrix(
+      as.double(sample(4000000:6000000, matrix_dim, replace = TRUE)),
+      nrow = 1,
+      ncol = matrix_dim
+    )
+    iom_fio_reduced <- fio::iom$new(
+      "iom_reduced",
+      intermediate_transactions,
+      total_production
+    )$compute_tech_coeff()$compute_leontief_inverse()
+    bench::mark(
+      fio = fio:::compute_field_influence(
+        iom_fio_reduced$technical_coefficients_matrix,
+        iom_fio_reduced$leontief_inverse_matrix,
+        0.001
+      ),
+      `Base R` = field_influence_r(
+        iom_fio_reduced$technical_coefficients_matrix,
+        iom_fio_reduced$leontief_inverse_matrix
+      ),
+      iterations = 10,
+      check = FALSE
+    )
+  }
 )
 print(benchmark_d)
 ggplot2::autoplot(benchmark_d)
