@@ -46,7 +46,7 @@ use rayon::prelude::*;
 /// 
 /// @noRd
 
-pub fn compute_tech_coeff(
+fn compute_tech_coeff(
   // There's an optional faer feature in extendr-api but it's not working (for the time I'm writing this)
   // see https://github.com/extendr/extendr/discussions/804
   intermediate_transactions: &[f64],
@@ -54,7 +54,7 @@ pub fn compute_tech_coeff(
 ) -> RArray<f64, 2> {
   
   // get dimensions (square root of length)
-  let n = (intermediate_transactions.len() as f32).sqrt() as usize;
+  let n = (intermediate_transactions.len() as f64).sqrt() as usize;
 
   // divide each entry of intermediate_transactions by each column of total_production
   let tech_coeff: Vec<f64> = intermediate_transactions
@@ -113,20 +113,20 @@ pub fn compute_tech_coeff(
 fn compute_leontief_inverse(tech_coeff: &[f64]) -> RArray<f64, 2> {
 
   // get dimensions
-  let n = (tech_coeff.len() as f32).sqrt() as usize;
+  let n = (tech_coeff.len() as f64).sqrt() as usize;
 
   // create faer matrix
-  let tech_coeff_matrix = Mat::from_fn(n, n, |row, col| tech_coeff[col * n + row] as f32);
+  let tech_coeff_matrix = Mat::from_fn(n, n, |row, col| tech_coeff[col * n + row]);
 
   // calculate Leontief matrix
-  let identity_matrix: Mat<f32> = Mat::identity(n, n);
+  let identity_matrix: Mat<f64> = Mat::identity(n, n);
   let leontief_matrix = &identity_matrix - tech_coeff_matrix;
 
   // calculate Leontief inverse
   let leontief_inverse = leontief_matrix.partial_piv_lu().solve(identity_matrix);
 
   // convert to R matrix
-  RArray::new_matrix(n, n, |row, col| leontief_inverse[(row, col)] as f64)
+  RArray::new_matrix(n, n, |row, col| leontief_inverse[(row, col)])
 }
 
 // Macro to generate exports.
