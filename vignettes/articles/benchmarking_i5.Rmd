@@ -1,6 +1,6 @@
 ---
-title: "Benchmarking"
-date: 'June 16, 2025'
+title: "Benchmarking i5"
+date: 'junho 17, 2025'
 output:
   html_document:
     toc: true
@@ -15,7 +15,7 @@ output:
     df_print: paged 
 ---
 
-<!-- This is a precomputing script. To run it, `knitr::knit("vignettes/articles/benchmarking_orig.Rmd.orig", output = "vignettes/articles/benchmarking.Rmd")` -->
+<!-- This is a precomputing script. To run it, `knitr::knit("vignettes/articles/benchmarking_i5_orig.Rmd.orig", output = "vignettes/articles/benchmarking_i5.Rmd")` -->
 
 <style>
 p.caption {
@@ -28,7 +28,7 @@ p.caption {
 
 # DISCLAIMER
 
-The present benchmark was conducted on 2025-06-16 on a Macbook Pro M4 (12-core CPU, 16-core GPU, 24GB RAM). Results _will_ vary depending on the hardware. These benchmarks aim to provide a general idea of the performance differences between the `fio` package and other implementations but should not be considered definitive. The performance of the functions may also vary depending on the specific data used and the context in which they are applied.
+The present benchmark was conducted on 2025-06-17 on a Intel® Core™ i5-7400 (4-core CPU, AMD Radeon™ RX 580 2048SP GPU, 16GB RAM, Ubuntu 24.04). Results _will_ vary depending on the hardware. These benchmarks aim to provide a general idea of the performance differences between the `fio` package and other implementations but should not be considered definitive. The performance of the functions may also vary depending on the specific data used and the context in which they are applied.
 
 # Introduction
 
@@ -84,29 +84,30 @@ benchmark_a <- bench::press(
 #> 2        500
 #> 3       1000
 #> 4       2000
+#> Warning: Some expressions had a GC in every iteration; so filtering is disabled.
 print(benchmark_a)
 #> # A tibble: 12 × 14
-#>    expression matrix_dim      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result                memory                 time             gc                
-#>    <bch:expr>      <dbl> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list>                <list>                 <list>           <list>            
-#>  1 fio               100   50.1µs  77.22µs   11997.   861.83KB      0     100     0     8.34ms <dbl [100 × 100]>     <Rprofmem [6 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
-#>  2 Base R            100  55.64µs  82.51µs   10885.   190.65KB      0     100     0     9.19ms <dbl [100 × 100]>     <Rprofmem [12 × 3]>    <bench_tm [100]> <tibble [100 × 3]>
-#>  3 leontief          100  141.2µs 161.21µs    6124.   706.38KB     61.9    99     1    16.17ms <dbl [100 × 100]>     <Rprofmem [352 × 3]>   <bench_tm [100]> <tibble [100 × 3]>
-#>  4 fio               500 371.67µs 661.95µs    1444.     1.91MB     60.2    96     4    66.48ms <dbl [500 × 500]>     <Rprofmem [1 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
-#>  5 Base R            500   1.02ms   1.25ms     780.     3.82MB     96.4    89    11   114.07ms <dbl [500 × 500]>     <Rprofmem [3 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
-#>  6 leontief          500   1.98ms   2.36ms     422.    16.29MB    734.     38    66    89.98ms <dbl [500 × 500]>     <Rprofmem [1,509 × 3]> <bench_tm [100]> <tibble [100 × 3]>
-#>  7 fio              1000   1.81ms   2.48ms     384.     7.63MB     78.6    83    17   216.22ms <dbl [1,000 × 1,000]> <Rprofmem [1 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
-#>  8 Base R           1000    6.6ms   7.99ms     124.    15.27MB     70.0    64    36   514.21ms <dbl [1,000 × 1,000]> <Rprofmem [3 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
-#>  9 leontief         1000   9.66ms  10.15ms     100.       65MB   4971.      3   149    29.98ms <dbl [1,000 × 1,000]> <Rprofmem [3,009 × 3]> <bench_tm [100]> <tibble [100 × 3]>
-#> 10 fio              2000  10.82ms  11.59ms      83.5   30.52MB     34.1    71    29   850.67ms <dbl [2,000 × 2,000]> <Rprofmem [1 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
-#> 11 Base R           2000  47.07ms  51.94ms      19.2   61.05MB     35.7    35    65      1.82s <dbl [2,000 × 2,000]> <Rprofmem [3 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
-#> 12 leontief         2000   36.2ms  36.92ms      27.0   259.7MB   1263.      4   187   148.01ms <dbl [2,000 × 2,000]> <Rprofmem [6,009 × 3]> <bench_tm [100]> <tibble [100 × 3]>
+#>    expression matrix_dim      min   median `itr/sec` mem_alloc  `gc/sec` n_itr  n_gc total_time result            memory     time       gc      
+#>    <bch:expr>      <dbl> <bch:tm> <bch:tm>     <dbl> <bch:byt>     <dbl> <int> <dbl>   <bch:tm> <list>            <list>     <list>     <list>  
+#>  1 fio               100 108.97µs 148.26µs  6494.     861.82KB    0        100     0     15.4ms <dbl [100 × 100]> <Rprofmem> <bench_tm> <tibble>
+#>  2 Base R            100 722.76µs 730.42µs  1293.     190.67KB    0        100     0    77.31ms <dbl [100 × 100]> <Rprofmem> <bench_tm> <tibble>
+#>  3 leontief          100 311.21µs 325.95µs  2360.     724.27KB   23.8       99     1    41.95ms <dbl [100 × 100]> <Rprofmem> <bench_tm> <tibble>
+#>  4 fio               500   1.22ms   2.16ms   448.       1.91MB   23.6       95     5   211.83ms <dbl [500 × 500]> <Rprofmem> <bench_tm> <tibble>
+#>  5 Base R            500  75.66ms   79.4ms    12.4      3.82MB    1.38      90    10      7.25s <dbl [500 × 500]> <Rprofmem> <bench_tm> <tibble>
+#>  6 leontief          500   4.37ms   4.63ms   209.      16.29MB  354.        39    66   186.45ms <dbl [500 × 500]> <Rprofmem> <bench_tm> <tibble>
+#>  7 fio              1000   7.65ms   7.81ms   127.       7.63MB   19.0       87    13   685.64ms <dbl[…]>          <Rprofmem> <bench_tm> <tibble>
+#>  8 Base R           1000  718.2ms 726.26ms     1.37    15.27MB    0.708     66    34        48s <dbl[…]>          <Rprofmem> <bench_tm> <tibble>
+#>  9 leontief         1000  35.74ms  35.84ms    27.9        65MB 2121.         2   152    71.68ms <dbl[…]>          <Rprofmem> <bench_tm> <tibble>
+#> 10 fio              2000  18.03ms  29.62ms    33.7     30.52MB    5.39     100    16      2.97s <dbl[…]>          <Rprofmem> <bench_tm> <tibble>
+#> 11 Base R           2000    6.01s    6.04s     0.166   61.05MB    0.0613   100    37     10.06m <dbl[…]>          <Rprofmem> <bench_tm> <tibble>
+#> 12 leontief         2000  71.69ms 125.73ms     7.95    259.7MB   21.6      100   272     12.58s <dbl[…]>          <Rprofmem> <bench_tm> <tibble>
 
 # plot
 ggplot2::autoplot(benchmark_a)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_a-1.png" alt="\label{fig:benchmark_a} For larger matrices (≥500x500), {fio} is generally faster and uses significantly less memory: approximately half that of Base R and 12% of that used by {leontief}."  />
+<img src="figure/benchmark_i5_a-1.png" alt="\label{fig:benchmark_a} For larger matrices (≥500x500), {fio} is generally faster and uses significantly less memory: approximately half that of Base R and 12% of that used by {leontief}."  />
 <p class="caption">\label{fig:benchmark_a} For larger matrices (≥500x500), {fio} is generally faster and uses significantly less memory: approximately half that of Base R and 12% of that used by {leontief}.</p>
 </div>
 
@@ -159,28 +160,28 @@ benchmark_b <- bench::press(
 #> 4       2000
 print(benchmark_b)
 #> # A tibble: 12 × 14
-#>    expression matrix_dim      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result memory              time             gc                
-#>    <bch:expr>      <dbl> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list> <list>              <list>           <list>            
-#>  1 fio               100 106.48µs 135.14µs    4168.   158.51KB     0      100     0    23.99ms <NULL> <Rprofmem [6 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#>  2 Base R            100 268.59µs 367.15µs    2750.   413.27KB     0      100     0    36.36ms <NULL> <Rprofmem [20 × 3]> <bench_tm [100]> <tibble [100 × 3]>
-#>  3 leontief          100 274.99µs 361.52µs    2832.   402.57KB     0      100     0    35.31ms <NULL> <Rprofmem [15 × 3]> <bench_tm [100]> <tibble [100 × 3]>
-#>  4 fio               500   3.39ms   4.14ms     236.     3.81MB     4.81    98     2   415.45ms <NULL> <Rprofmem [2 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#>  5 Base R            500   3.95ms    4.3ms     231.     9.55MB     9.61    96     4   416.13ms <NULL> <Rprofmem [7 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#>  6 leontief          500   4.04ms   4.36ms     222.     9.55MB     6.87    97     3   436.57ms <NULL> <Rprofmem [8 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#>  7 fio              1000  15.38ms  17.82ms      56.1   15.26MB     2.34    96     4      1.71s <NULL> <Rprofmem [2 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#>  8 Base R           1000  17.05ms  17.59ms      56.6   38.18MB    14.2     80    20      1.41s <NULL> <Rprofmem [7 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#>  9 leontief         1000  16.97ms  17.55ms      56.4   38.18MB    14.1     80    20      1.42s <NULL> <Rprofmem [7 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#> 10 fio              2000  79.96ms  88.73ms      11.1   61.03MB     1.96    85    15      7.67s <NULL> <Rprofmem [2 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#> 11 Base R           2000   84.6ms  85.88ms      11.6  152.66MB   140.       8    97   691.22ms <NULL> <Rprofmem [7 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#> 12 leontief         2000  84.65ms  88.03ms      11.4  152.66MB   160.       7    98   611.96ms <NULL> <Rprofmem [7 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
+#>    expression matrix_dim      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result memory              time       gc      
+#>    <bch:expr>      <dbl> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list> <list>              <list>     <list>  
+#>  1 fio               100 476.68µs 492.41µs  1772.     158.51KB    0       100     0    56.45ms <NULL> <Rprofmem [6 × 3]>  <bench_tm> <tibble>
+#>  2 Base R            100 834.58µs 843.59µs  1137.     413.29KB    0       100     0    87.94ms <NULL> <Rprofmem [20 × 3]> <bench_tm> <tibble>
+#>  3 leontief          100 837.19µs 846.39µs  1174.     402.57KB    0       100     0    85.19ms <NULL> <Rprofmem [15 × 3]> <bench_tm> <tibble>
+#>  4 fio               500   8.57ms   9.93ms    91.6      3.81MB    0.925    99     1      1.08s <NULL> <Rprofmem [2 × 3]>  <bench_tm> <tibble>
+#>  5 Base R            500  82.82ms  83.51ms    11.9      9.55MB    1.03     92     8      7.74s <NULL> <Rprofmem [7 × 3]>  <bench_tm> <tibble>
+#>  6 leontief          500  82.91ms  83.29ms    12.0      9.55MB    1.18     91     9       7.6s <NULL> <Rprofmem [7 × 3]>  <bench_tm> <tibble>
+#>  7 fio              1000  41.35ms  43.24ms    22.5     15.26MB    1.69     93     7      4.14s <NULL> <Rprofmem [2 × 3]>  <bench_tm> <tibble>
+#>  8 Base R           1000 669.08ms 681.85ms     1.46    38.18MB    0.389    79    21     53.94s <NULL> <Rprofmem [7 × 3]>  <bench_tm> <tibble>
+#>  9 leontief         1000  672.2ms 682.89ms     1.46    38.18MB    0.412    78    22     53.43s <NULL> <Rprofmem [7 × 3]>  <bench_tm> <tibble>
+#> 10 fio              2000 236.29ms 247.58ms     3.91    61.03MB    1.04     79    21     20.21s <NULL> <Rprofmem [2 × 3]>  <bench_tm> <tibble>
+#> 11 Base R           2000     6.4s    6.41s     0.156  152.66MB    0.467    26    78      2.78m <NULL> <Rprofmem [7 × 3]>  <bench_tm> <tibble>
+#> 12 leontief         2000    6.39s     6.4s     0.156  152.66MB    0.156    50    50      5.34m <NULL> <Rprofmem [7 × 3]>  <bench_tm> <tibble>
 
 # plot
 ggplot2::autoplot(benchmark_b)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_b-1.png" alt="\label{fig:figs} While execution times are comparable across methods, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger."  />
-<p class="caption">\label{fig:figs} While execution times are comparable across methods, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger.</p>
+<img src="figure/benchmark_i5_b-1.png" alt="\label{fig:benchmark_b} While execution times are comparable across methods, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger."  />
+<p class="caption">\label{fig:benchmark_b} While execution times are comparable across methods, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger.</p>
 </div>
 
 # Sensitivity of dispersion coefficients of variation
@@ -234,25 +235,25 @@ benchmark_c <- bench::press(
 #> Warning: Some expressions had a GC in every iteration; so filtering is disabled.
 print(benchmark_c)
 #> # A tibble: 12 × 14
-#>    expression matrix_dim      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result memory                  time             gc                
-#>    <bch:expr>      <dbl> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list> <list>                  <list>           <list>            
-#>  1 fio               100 123.04µs 201.88µs   4828.     81.23KB     0      100     0    20.71ms <NULL> <Rprofmem [6 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
-#>  2 Base R            100  21.73µs  25.81µs  18133.     81.48KB     0      100     0     5.51ms <NULL> <Rprofmem [5 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
-#>  3 leontief          100 507.01µs  561.5µs   1782.    745.38KB    18.0     99     1    55.56ms <NULL> <Rprofmem [522 × 3]>    <bench_tm [100]> <tibble [100 × 3]>
-#>  4 fio               500 429.23µs 595.91µs   1671.      1.91MB     0      100     0    59.84ms <NULL> <Rprofmem [2 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
-#>  5 Base R            500 525.37µs 553.89µs   1801.      1.92MB     0      100     0    55.54ms <NULL> <Rprofmem [5 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
-#>  6 leontief          500  10.45ms  11.21ms     88.9    17.31MB     6.69    93     7      1.05s <NULL> <Rprofmem [2,513 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#>  7 fio              1000   1.47ms   1.66ms    589.      7.64MB     0      100     0   169.65ms <NULL> <Rprofmem [2 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
-#>  8 Base R           1000   1.79ms   2.13ms    468.      7.66MB    14.5     97     3   207.23ms <NULL> <Rprofmem [5 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
-#>  9 leontief         1000  60.99ms  63.03ms     15.9    68.94MB     4.22    79    21      4.97s <NULL> <Rprofmem [5,013 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#> 10 fio              2000   5.03ms   5.19ms    191.     30.53MB     0      100     0    522.2ms <NULL> <Rprofmem [2 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
-#> 11 Base R           2000   8.14ms   8.35ms    108.     30.58MB    16.1    100    15   929.67ms <NULL> <Rprofmem [5 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
-#> 12 leontief         2000  295.5ms 299.92ms      3.27  275.22MB     3.27   100   100     30.54s <NULL> <Rprofmem [10,013 × 3]> <bench_tm [100]> <tibble [100 × 3]>
+#>    expression matrix_dim      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result memory                  time       gc      
+#>    <bch:expr>      <dbl> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list> <list>                  <list>     <list>  
+#>  1 fio               100  104.9µs 117.43µs   7615.     81.23KB     0      100     0    13.13ms <NULL> <Rprofmem [6 × 3]>      <bench_tm> <tibble>
+#>  2 Base R            100  59.04µs  59.95µs   7116.     81.48KB     0      100     0    14.05ms <NULL> <Rprofmem [5 × 3]>      <bench_tm> <tibble>
+#>  3 leontief          100   1.39ms   1.42ms    667.    745.38KB     6.74    99     1   148.37ms <NULL> <Rprofmem [522 × 3]>    <bench_tm> <tibble>
+#>  4 fio               500 695.04µs 797.88µs   1251.      1.91MB     0      100     0    79.91ms <NULL> <Rprofmem [2 × 3]>      <bench_tm> <tibble>
+#>  5 Base R            500   1.14ms   1.95ms    552.      1.92MB     0      100     0      181ms <NULL> <Rprofmem [5 × 3]>      <bench_tm> <tibble>
+#>  6 leontief          500  27.78ms  28.01ms     35.3    17.31MB     2.66    93     7      2.63s <NULL> <Rprofmem [2,513 × 3]>  <bench_tm> <tibble>
+#>  7 fio              1000   3.11ms    3.3ms    298.      7.64MB     0      100     0   335.86ms <NULL> <Rprofmem [2 × 3]>      <bench_tm> <tibble>
+#>  8 Base R           1000   4.82ms   4.87ms    201.      7.66MB     8.37    96     4   477.94ms <NULL> <Rprofmem [5 × 3]>      <bench_tm> <tibble>
+#>  9 leontief         1000 155.33ms 156.15ms      6.39   68.94MB     3.29    66    34     10.33s <NULL> <Rprofmem [5,013 × 3]>  <bench_tm> <tibble>
+#> 10 fio              2000  14.83ms  15.02ms     65.9    30.53MB     0      100     0      1.52s <NULL> <Rprofmem [2 × 3]>      <bench_tm> <tibble>
+#> 11 Base R           2000  19.37ms  32.08ms     35.2    30.58MB     4.23   100    12      2.84s <NULL> <Rprofmem [5 × 3]>      <bench_tm> <tibble>
+#> 12 leontief         2000 744.88ms 822.07ms      1.21  275.22MB     3.35   100   276      1.37m <NULL> <Rprofmem [10,013 × 3]> <bench_tm> <tibble>
 ggplot2::autoplot(benchmark_c)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_c-1.png" alt="\label{fig:benchmark_c} {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 1000x1000 and larger, while memory usage remains comparable."  />
+<img src="figure/benchmark_i5_c-1.png" alt="\label{fig:benchmark_c} {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 1000x1000 and larger, while memory usage remains comparable."  />
 <p class="caption">\label{fig:benchmark_c} {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 1000x1000 and larger, while memory usage remains comparable.</p>
 </div>
 
@@ -328,18 +329,18 @@ benchmark_d <- bench::press(
 #> Warning: Some expressions had a GC in every iteration; so filtering is disabled.
 print(benchmark_d)
 #> # A tibble: 6 × 14
-#>   expression matrix_dim      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result memory                  time            gc               
-#>   <bch:expr>      <dbl> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list> <list>                  <list>          <list>           
-#> 1 fio                30   5.48ms   5.51ms   180.      16.67KB     0       10     0     55.6ms <NULL> <Rprofmem [6 × 3]>      <bench_tm [10]> <tibble [10 × 3]>
-#> 2 Base R             30  24.16ms  24.46ms    40.7     44.52MB    10.2      8     2   196.78ms <NULL> <Rprofmem [7,384 × 3]>  <bench_tm [10]> <tibble [10 × 3]>
-#> 3 fio                60  111.3ms 111.69ms     8.93    56.34KB     0       10     0      1.12s <NULL> <Rprofmem [2 × 3]>      <bench_tm [10]> <tibble [10 × 3]>
-#> 4 Base R             60 713.37ms 721.51ms     1.37    701.2MB     3.02    10    22      7.28s <NULL> <Rprofmem [32,403 × 3]> <bench_tm [10]> <tibble [10 × 3]>
-#> 5 fio               100    1.64s    2.39s     0.414  156.34KB     0       10     0     24.13s <NULL> <Rprofmem [2 × 3]>      <bench_tm [10]> <tibble [10 × 3]>
-#> 6 Base R            100    4.21s    4.26s     0.234    5.25GB     4.35    10   186     42.78s <NULL> <Rprofmem [90,003 × 3]> <bench_tm [10]> <tibble [10 × 3]>
+#>   expression matrix_dim      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result memory                  time       gc      
+#>   <bch:expr>      <dbl> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list> <list>                  <list>     <list>  
+#> 1 fio                30   49.3ms  49.59ms    20.1     16.66KB     0       10     0   496.66ms <NULL> <Rprofmem [6 × 3]>      <bench_tm> <tibble>
+#> 2 Base R             30  53.92ms  54.84ms    18.2     44.52MB     4.56     8     2   438.77ms <NULL> <Rprofmem [7,383 × 3]>  <bench_tm> <tibble>
+#> 3 fio                60 802.29ms 809.86ms     1.21    56.34KB     0       10     0      8.26s <NULL> <Rprofmem [2 × 3]>      <bench_tm> <tibble>
+#> 4 Base R             60 890.07ms  893.2ms     1.11    701.2MB     2.23    10    20      8.98s <NULL> <Rprofmem [32,403 × 3]> <bench_tm> <tibble>
+#> 5 fio               100    4.64s    4.71s     0.210  156.34KB     0       10     0     47.72s <NULL> <Rprofmem [2 × 3]>      <bench_tm> <tibble>
+#> 6 Base R            100    8.93s    8.95s     0.111    5.25GB     1.95    10   175       1.5m <NULL> <Rprofmem [90,003 × 3]> <bench_tm> <tibble>
 ggplot2::autoplot(benchmark_d)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_d-1.png" alt="\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior performance, being considerably faster and more memory-efficient than the Base R implementation."  />
+<img src="figure/benchmark_i5_d-1.png" alt="\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior performance, being considerably faster and more memory-efficient than the Base R implementation."  />
 <p class="caption">\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior performance, being considerably faster and more memory-efficient than the Base R implementation.</p>
 </div>
