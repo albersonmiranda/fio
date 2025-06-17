@@ -1,6 +1,10 @@
 # fio (development version)
 
 
+## 🚀 Performance improvements
+
+* Use f32 instead of f64 in Rust code to reduce memory usage and improve performance (#145).
+
 ## 🛠️ Other improvements
 
 * Bump `faer` to 0.20.0 (#135).
