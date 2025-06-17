@@ -181,7 +181,7 @@ ggplot2::autoplot(benchmark_b)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_i7_b-1.png" alt="\\label{fig:benchmark_b} While execution times are comparable across methods, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger."  />
+<img src="figure/benchmark_i7_b-1.png" alt="\label{fig:benchmark_b} While execution times are comparable across methods, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger."  />
 <p class="caption">\label{fig:benchmark_b} While `{fio}` is slightly slower for larger matrices, it demonstrates superior memory efficiency, using less than half the memory of alternatives.</p>
 </div>
 
@@ -255,7 +255,7 @@ ggplot2::autoplot(benchmark_c)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_i7_c-1.png" alt="\\label{fig:benchmark_c} {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 1000x1000 and larger, while memory usage remains comparable."  />
+<img src="figure/benchmark_i7_c-1.png" alt="\label{fig:benchmark_c} {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 1000x1000 and larger, while memory usage remains comparable."  />
 <p class="caption">\label{fig:benchmark_c} {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 1000x1000 and larger, while memory usage remains comparable.</p>
 </div>
 
@@ -347,6 +347,6 @@ ggplot2::autoplot(benchmark_d)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_i7_d-1.png" alt="\\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior performance, being considerably faster and more memory-efficient than the Base R implementation."  />
+<img src="figure/benchmark_i7_d-1.png" alt="\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior performance, being considerably faster and more memory-efficient than the Base R implementation."  />
 <p class="caption">\label{fig:benchmark_d} {fio} is faster and vastly more memory-efficient than the Base R implementation, whose memory usage makes it impractical for larger matrices.</p>
 </div>

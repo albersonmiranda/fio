@@ -178,8 +178,8 @@ ggplot2::autoplot(benchmark_b)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_m4_b-1.png" alt="\\label{fig:benchmark_b} While slightly slower, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger."  />
-<p class="caption">\\label{fig:benchmark_b} While slightly slower, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger.</p>
+<img src="figure/benchmark_m4_b-1.png" alt="\label{fig:benchmark_b} While slightly slower, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger."  />
+<p class="caption">\label{fig:benchmark_b} While slightly slower, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger.</p>
 </div>
 
 # Sensitivity of dispersion coefficients of variation
@@ -343,6 +343,6 @@ ggplot2::autoplot(benchmark_d)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_m4_d-1.png" alt="\\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior memory-efficiency. It is also faster for smaller matrices."  />
-<p class="caption">\\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior memory-efficiency. It is also faster for smaller matrices.</p>
+<img src="figure/benchmark_m4_d-1.png" alt="\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior memory-efficiency. It is also faster for smaller matrices."  />
+<p class="caption">\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior memory-efficiency. It is also faster for smaller matrices.</p>
 </div>
