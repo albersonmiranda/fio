@@ -115,7 +115,7 @@ ggplot2::autoplot(benchmark_a)
 
 The Leontief matrix ($L$) is obtained by subtracting the technical coefficients matrix ($A$) from the identity matrix ($I$); therefore, it has no null rows or columns. This allows for solving the linear system $L \times L^{-1} = I$ through LU decomposition, which is a more efficient method than direct inverse matrix calculation.
 
-Results shows that execution times are comparable across methods, with {fio} demonstrating superior memory efficiency, using less than half the memory of alternatives.
+Results shows that for larger matrices, `{fio}` is slightly slower than the alternatives, but demonstrates superior memory efficiency, using less than half the memory.
 
 
 ``` r
@@ -181,8 +181,8 @@ ggplot2::autoplot(benchmark_b)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_i7_b-1.png" alt="\label{fig:benchmark_b} While execution times are comparable across methods, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger."  />
-<p class="caption">\label{fig:benchmark_b} While execution times are comparable across methods, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger.</p>
+<img src="figure/benchmark_i7_b-1.png" alt="\\label{fig:benchmark_b} While execution times are comparable across methods, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger."  />
+<p class="caption">\label{fig:benchmark_b} While `{fio}` is slightly slower for larger matrices, it demonstrates superior memory efficiency, using less than half the memory of alternatives.</p>
 </div>
 
 # Sensitivity of dispersion coefficients of variation
@@ -249,11 +249,13 @@ print(benchmark_c)
 #> 10 fio              2000  12.66ms  14.83ms     69.2    30.53MB     0      100     0      1.45s <NULL> <Rprofmem [2 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
 #> 11 Base R           2000  17.17ms  23.86ms     46.2    30.58MB     7.53    86    14      1.86s <NULL> <Rprofmem [5 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
 #> 12 leontief         2000 861.23ms    865ms      1.16  275.22MB    19.5      9   152      7.79s <NULL> <Rprofmem [10,013 × 3]> <bench_tm [100]> <tibble [100 × 3]>
+
+# plot
 ggplot2::autoplot(benchmark_c)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_i7_c-1.png" alt="\label{fig:benchmark_c} {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 1000x1000 and larger, while memory usage remains comparable."  />
+<img src="figure/benchmark_i7_c-1.png" alt="\\label{fig:benchmark_c} {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 1000x1000 and larger, while memory usage remains comparable."  />
 <p class="caption">\label{fig:benchmark_c} {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 1000x1000 and larger, while memory usage remains comparable.</p>
 </div>
 
@@ -261,7 +263,7 @@ ggplot2::autoplot(benchmark_c)
 
 Since computing the field of influence involves calculating the Leontief inverse matrix for each element of the technical coefficients matrix after an increment, it can be demanding for high-dimensional matrices. Here, we benchmark the base R function and `{fio}`, as there is no similar function in `{leontief}`. For brevity, we limited the matrix dimensions to 100x100 and the number of repetitions to 10.
 
-Results shows that {fio} is almost two times faster than the base R implementation and uses significantly less memory. For the 100x100 matrix, {fio} used 156.34KB, while the base R implementation used 5.25GB, which would lead to memory issues for larger matrices and would make it impractical for real-world applications, specially in personal computers with limited memory.
+Results shows that {fio} is faster than the base R implementation and uses vastly less memory. For the 200x200 matrix, {fio} used 625KB, while the base R implementation used 83.73GB. This enormous difference in memory consumption makes the Base R version impractical for larger matrices on most machines.
 
 
 ``` r
@@ -345,6 +347,6 @@ ggplot2::autoplot(benchmark_d)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_i7_d-1.png" alt="\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior performance, being considerably faster and more memory-efficient than the Base R implementation."  />
-<p class="caption">\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior performance, being considerably faster and more memory-efficient than the Base R implementation.</p>
+<img src="figure/benchmark_i7_d-1.png" alt="\\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior performance, being considerably faster and more memory-efficient than the Base R implementation."  />
+<p class="caption">\label{fig:benchmark_d} {fio} is faster and vastly more memory-efficient than the Base R implementation, whose memory usage makes it impractical for larger matrices.</p>
 </div>

@@ -114,7 +114,7 @@ ggplot2::autoplot(benchmark_a)
 
 The Leontief matrix ($L$) is obtained by subtracting the technical coefficients matrix ($A$) from the identity matrix ($I$); therefore, it has no null rows or columns. This allows for solving the linear system $L \times L^{-1} = I$ through LU decomposition, which is a more efficient method than direct inverse matrix calculation.
 
-Results shows that execution times are comparable across methods, with {fio} demonstrating superior memory efficiency, using less than half the memory of alternatives.
+Results shows that while {fio} is slightly slower, it demonstrates superior memory efficiency, using less than half the memory of alternatives.
 
 
 ``` r
@@ -179,15 +179,15 @@ ggplot2::autoplot(benchmark_b)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_m1_b-1.png" alt="\label{fig:benchmark_b} While execution times are comparable across methods, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger."  />
-<p class="caption">\label{fig:benchmark_b} While execution times are comparable across methods, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger.</p>
+<img src="figure/benchmark_m1_b-1.png" alt="\\label{fig:benchmark_b} While slightly slower, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger."  />
+<p class="caption">\\label{fig:benchmark_b} While slightly slower, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger.</p>
 </div>
 
 # Sensitivity of dispersion coefficients of variation
 
 To evaluate the performance of linkage-based functions, we benchmarked the sensitivity of dispersion coefficients of variation.
 
-Results shows that {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 1000x1000 and larger, while memory usage remains comparable.
+Results shows that {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 500x500 and larger, while memory usage remains comparable.
 
 
 ``` r
@@ -247,19 +247,21 @@ print(benchmark_c)
 #> 10 fio              2000   8.37ms   8.88ms    113.     30.53MB     0      100     0   887.34ms <NULL> <Rprofmem [2 × 3]>      <bench_tm [100]> <tibble>
 #> 11 Base R           2000  13.09ms  13.21ms     75.6    30.58MB     7.47    91     9       1.2s <NULL> <Rprofmem [5 × 3]>      <bench_tm [100]> <tibble>
 #> 12 leontief         2000 441.81ms 441.81ms      2.26  275.22MB   378.       1   167   441.81ms <NULL> <Rprofmem [10,013 × 3]> <bench_tm [100]> <tibble>
+
+# plot
 ggplot2::autoplot(benchmark_c)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_m1_c-1.png" alt="\label{fig:benchmark_c} {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 1000x1000 and larger, while memory usage remains comparable."  />
-<p class="caption">\label{fig:benchmark_c} {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 1000x1000 and larger, while memory usage remains comparable.</p>
+<img src="figure/benchmark_m1_c-1.png" alt="\\label{fig:benchmark_c} {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 500x500 and larger, while memory usage remains comparable."  />
+<p class="caption">\\label{fig:benchmark_c} {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 500x500 and larger, while memory usage remains comparable.</p>
 </div>
 
 # Field of influence
 
 Since computing the field of influence involves calculating the Leontief inverse matrix for each element of the technical coefficients matrix after an increment, it can be demanding for high-dimensional matrices. Here, we benchmark the base R function and `{fio}`, as there is no similar function in `{leontief}`. For brevity, we limited the matrix dimensions to 200x200 and the number of repetitions to 20.
 
-Results shows that {fio} is almost two times faster than the base R implementation and uses significantly less memory. For the 100x100 matrix, {fio} used 156.34KB, while the base R implementation used 5.25GB, which would lead to memory issues for larger matrices and would make it impractical for real-world applications, specially in personal computers with limited memory.
+Results shows that {fio} is considerably faster and uses significantly less memory. For the 100x100 matrix, {fio} used 156.34KB while Base R used 5.25GB, and for the 200x200 matrix, {fio} used 625.09KB while Base R used 83.73GB. This massive memory difference makes the Base R implementation impractical for real-world applications, especially on personal computers with limited memory.
 
 
 ``` r
@@ -343,6 +345,6 @@ ggplot2::autoplot(benchmark_d)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_m1_d-1.png" alt="\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior performance, being considerably faster and more memory-efficient than the Base R implementation."  />
-<p class="caption">\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior performance, being considerably faster and more memory-efficient than the Base R implementation.</p>
+<img src="figure/benchmark_m1_d-1.png" alt="\\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior performance, being considerably faster and more memory-efficient than the Base R implementation."  />
+<p class="caption">\\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior performance, being considerably faster and more memory-efficient than the Base R implementation.</p>
 </div>
