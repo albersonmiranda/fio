@@ -2,9 +2,12 @@ pandoc: 3.1.11
 pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
-  articles/benchmarking: benchmarking.html
+  articles/benchmarking_i5: benchmarking_i5.html
+  articles/benchmarking_i7: benchmarking_i7.html
+  articles/benchmarking_m1: benchmarking_m1.html
+  articles/benchmarking_m4: benchmarking_m4.html
   getting_started: getting_started.html
-last_built: 2025-06-12T01:37Z
+last_built: 2025-06-17T18:50Z
 urls:
   reference: https://albersonmiranda.github.io/fio/reference
   article: https://albersonmiranda.github.io/fio/articles
