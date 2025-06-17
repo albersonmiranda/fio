@@ -38,9 +38,9 @@ jobs:
           - {os: windows-2022,  r: 'release'}
           - {os: windows-2022,  r: 'devel'}
           - {os: windows-2022,  r: 'oldrel-1'}
-          - {os: windows-2019,  r: 'release'}
-          - {os: windows-2019,  r: 'devel'}
-          - {os: windows-2019,  r: 'oldrel-1'}
+          - {os: windows-2025,  r: 'release'}
+          - {os: windows-2025,  r: 'devel'}
+          - {os: windows-2025,  r: 'oldrel-1'}
           - {os: ubuntu-24.04-arm, r: 'release'}
           - {os: ubuntu-24.04-arm, r: 'devel'}
           - {os: ubuntu-24.04,  r: 'devel'}
@@ -88,6 +88,7 @@ jobs:
         config:
           - {image: 'fedora:40'}
           - {image: 'fedora:41'}
+          - {image: 'fedora:42'}
     container:
       image: ${{ matrix.config.image }}
 

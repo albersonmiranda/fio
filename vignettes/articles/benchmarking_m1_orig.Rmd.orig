@@ -1,0 +1,248 @@
+---
+title: "Benchmarking M1"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float:
+      collapsed: false
+      toc_levels: 2
+    number_sections: true
+    highlight: zenburn
+    code_folding: show
+    fig_caption: true
+    df_print: paged 
+---
+
+<!-- This is a precomputing script. To run it, `knitr::knit("vignettes/articles/benchmarking_m1_orig.Rmd.orig", output = "vignettes/articles/benchmarking_m1.Rmd")` -->
+
+<style>
+p.caption {
+  font-size: 0.6em;
+  text-align: "center";
+}
+</style>
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.align = "center",
+  fig.output = "70%"
+) 
+```
+
+# DISCLAIMER
+
+The present benchmark was conducted on `r Sys.Date()` on a Macbook Air M1 (8-core CPU, 7-core GPU, 8GB RAM). Results _will_ vary depending on the hardware. These benchmarks aim to provide a general idea of the performance differences between the `fio` package and other implementations but should not be considered definitive. The performance of the functions may also vary depending on the specific data used and the context in which they are applied.
+
+# Introduction
+
+This vignette presents a benchmarking analysis comparing the performance of functions from the `fio` package with equivalent base R functions and functions from other packages. The `fio` package provides a set of functions for input-output analysis, a method used in economics to analyze the interdependencies between different sectors of an economy.
+
+Our benchmarking tests show that `fio` package functions are either faster or more memory-efficient than other implementations. This improved performance can make a substantial difference in larger analyses, making the `fio` package a valuable tool for input-output analysis in R.
+
+The tests were run on simulated square matrices, with dimensions ranging from 100x100 up to 2000x2000, and each test was repeated at least 50 times to account for variability. Please note that the results of this benchmarking analysis depend on the specific test datasets used and the hardware on which the algorithms were run. Therefore, the results should be interpreted in the context of these specific conditions.
+
+# Technical coefficients matrix
+
+The technical coefficients matrix calculation, a key and initial step in input-output analysis, was tested using the `compute_tech_coeff()` function from the `{fio}` package, equivalent functions from the `{leontief}` package, and a base R implementation. It consists of dividing each $a_{ij}$ element of the intermediate transactions matrix by the corresponding $x_j$ element of the total production vector^[Or equivalently, multiplying the intermediate transactions matrix by a diagonal matrix constructed from the total production vector.].
+
+Results shows that {fio} is generally faster and uses significantly less memory than the other two implementations, especially for larger matrices (≥500x500). The memory usage of {fio} is approximately half that of Base R and 12% of that used by {leontief}.
+
+```{r benchmark_m1_a, fig.cap="\\label{fig:benchmark_a} For larger matrices (≥500x500), {fio} is generally faster and uses significantly less memory: approximately half that of Base R and 12% of that used by {leontief}."}
+# set seed
+set.seed(100)
+
+# Base R function
+tech_coeff_r <- function(intermediate_transactions, total_production) {
+  tech_coeff_matrix <- intermediate_transactions %*% diag(1 / as.vector(total_production))
+  return(tech_coeff_matrix)
+}
+
+# benchmark
+benchmark_a <- bench::press(
+  matrix_dim = c(100, 500, 1000, 2000),
+  {
+    intermediate_transactions <- matrix(
+      as.double(sample(1:1000, matrix_dim^2, replace = TRUE)),
+      nrow = matrix_dim,
+      ncol = matrix_dim
+    )
+    total_production <- matrix(
+      as.double(sample(4000000:6000000, matrix_dim, replace = TRUE)),
+      nrow = 1,
+      ncol = matrix_dim
+    )
+    iom_fio <- fio::iom$new("iom", intermediate_transactions, total_production)
+    bench::mark(
+      fio = fio:::compute_tech_coeff(intermediate_transactions, total_production),
+      `Base R` = tech_coeff_r(intermediate_transactions, total_production),
+      leontief = leontief::input_requirement(intermediate_transactions, total_production),
+      iterations = 100
+    )
+  }
+)
+print(benchmark_a)
+
+# plot
+ggplot2::autoplot(benchmark_a)
+```
+
+# Leontief inverse matrix
+
+The Leontief matrix ($L$) is obtained by subtracting the technical coefficients matrix ($A$) from the identity matrix ($I$); therefore, it has no null rows or columns. This allows for solving the linear system $L \times L^{-1} = I$ through LU decomposition, which is a more efficient method than direct inverse matrix calculation.
+
+Results shows that while {fio} is slightly slower, it demonstrates superior memory efficiency, using less than half the memory of alternatives.
+
+```{r benchmark_m1_b, fig.cap="\\label{fig:benchmark_b} While slightly slower, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger."}
+# base R function
+leontief_inverse_r <- function(technical_coefficients_matrix) {
+  dim <- nrow(technical_coefficients_matrix)
+  leontief_inverse_matrix <- solve(diag(dim) - technical_coefficients_matrix)
+  return(leontief_inverse_matrix)
+}
+
+# benchmark
+benchmark_b <- bench::press(
+  matrix_dim = c(100, 500, 1000, 2000),
+  {
+    intermediate_transactions <- matrix(
+      as.double(sample(1:1000, matrix_dim^2, replace = TRUE)),
+      nrow = matrix_dim,
+      ncol = matrix_dim
+    )
+    total_production <- matrix(
+      as.double(sample(4000000:6000000, matrix_dim, replace = TRUE)),
+      nrow = 1,
+      ncol = matrix_dim
+    )
+    iom_fio <- fio::iom$new("iom", intermediate_transactions, total_production)
+    iom_fio$compute_tech_coeff()
+    technical_coefficients_matrix <- iom_fio$technical_coefficients_matrix
+    bench::mark(
+      fio = fio:::compute_leontief_inverse(technical_coefficients_matrix),
+      `Base R` = leontief_inverse_r(technical_coefficients_matrix),
+      leontief = leontief::leontief_inverse(technical_coefficients_matrix),
+      iterations = 100,
+      check = FALSE
+    )
+  }
+)
+print(benchmark_b)
+
+# plot
+ggplot2::autoplot(benchmark_b)
+```
+
+# Sensitivity of dispersion coefficients of variation
+
+To evaluate the performance of linkage-based functions, we benchmarked the sensitivity of dispersion coefficients of variation.
+
+Results shows that {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 500x500 and larger, while memory usage remains comparable.
+
+```{r benchmark_m1_c, fig.cap="\\label{fig:benchmark_c} {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 500x500 and larger, while memory usage remains comparable."}
+# base R function
+sensitivity_r <- function(B) {
+  n <- nrow(B)
+  SL = rowSums(B)
+  ML = SL / n
+  (((1 / (n - 1)) * (colSums((B - ML) ** 2))) ** 0.5) / ML
+}
+
+# benchmark
+benchmark_c <- bench::press(
+  matrix_dim = c(100, 500, 1000, 2000),
+  {
+    intermediate_transactions <- matrix(
+      as.double(sample(1:1000, matrix_dim^2, replace = TRUE)),
+      nrow = matrix_dim,
+      ncol = matrix_dim
+    )
+    total_production <- matrix(
+      as.double(sample(4000000:6000000, matrix_dim, replace = TRUE)),
+      nrow = 1,
+      ncol = matrix_dim
+    )
+    iom_fio <- fio::iom$new("iom", intermediate_transactions, total_production)
+    iom_fio$compute_tech_coeff()$compute_leontief_inverse()
+    leontief_inverse_matrix <- iom_fio$leontief_inverse_matrix
+    bench::mark(
+      fio = fio:::compute_sensitivity_dispersion_cv(leontief_inverse_matrix),
+      `Base R` = sensitivity_r(leontief_inverse_matrix),
+      leontief = leontief::sensitivity_dispersion_cv(leontief_inverse_matrix),
+      iterations = 100,
+      check = FALSE
+    )
+  }
+)
+print(benchmark_c)
+ggplot2::autoplot(benchmark_c)
+```
+
+# Field of influence
+
+Since computing the field of influence involves calculating the Leontief inverse matrix for each element of the technical coefficients matrix after an increment, it can be demanding for high-dimensional matrices. Here, we benchmark the base R function and `{fio}`, as there is no similar function in `{leontief}`. For brevity, we limited the matrix dimensions to 200x200 and the number of repetitions to 20.
+
+Results shows that {fio} is considerably faster and uses significantly less memory. For the 100x100 matrix, {fio} used 156.34KB while Base R used 5.25GB, and for the 200x200 matrix, {fio} used 625.09KB while Base R used 83.73GB. This massive memory difference makes the Base R implementation impractical for real-world applications, especially on personal computers with limited memory.
+
+```{r benchmark_m1_d, fig.cap="\\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior performance, being considerably faster and more memory-efficient than the Base R implementation."}
+# base R function
+field_influence_r <- function(A, B, ee = 0.001) {
+  n = nrow(A)
+  I = diag(n)
+  E = matrix(0, ncol = n, nrow = n)
+  SI = matrix(0, ncol = n, nrow = n)
+  for (i in 1:n) {
+    for (j in 1:n) {
+      E[i, j] = ee
+      AE = A + E
+      BE = solve(I - AE)
+      FE = (BE - B) / ee
+      FEq = FE * FE
+      S = sum(FEq)
+      SI[i, j] = S
+      E[i, j] = 0
+    }
+  }
+  return(SI) # Added return statement
+}
+
+# benchmark
+benchmark_d <- bench::press(
+  matrix_dim = c(30, 60, 100, 200),
+  {
+    intermediate_transactions <- matrix(
+      as.double(sample(1:1000, matrix_dim^2, replace = TRUE)),
+      nrow = matrix_dim,
+      ncol = matrix_dim
+    )
+    total_production <- matrix(
+      as.double(sample(4000000:6000000, matrix_dim, replace = TRUE)),
+      nrow = 1,
+      ncol = matrix_dim
+    )
+    iom_fio_reduced <- fio::iom$new(
+      "iom_reduced",
+      intermediate_transactions,
+      total_production
+    )$compute_tech_coeff()$compute_leontief_inverse()
+    bench::mark(
+      fio = fio:::compute_field_influence(
+        iom_fio_reduced$technical_coefficients_matrix,
+        iom_fio_reduced$leontief_inverse_matrix,
+        0.001
+      ),
+      `Base R` = field_influence_r(
+        iom_fio_reduced$technical_coefficients_matrix,
+        iom_fio_reduced$leontief_inverse_matrix
+      ),
+      iterations = 20,
+      check = FALSE
+    )
+  }
+)
+print(benchmark_d)
+ggplot2::autoplot(benchmark_d)
+```
