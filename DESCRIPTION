@@ -48,7 +48,7 @@ Suggests:
     knitr,
     rmarkdown,
     spelling,
-    microbenchmark,
+    bench,
     leontief,
     ggplot2,
     writexl,
