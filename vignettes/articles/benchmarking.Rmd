@@ -1,6 +1,6 @@
 ---
 title: "Benchmarking"
-date: 'June 11, 2025'
+date: 'June 16, 2025'
 output:
   html_document:
     toc: true
@@ -28,21 +28,21 @@ p.caption {
 
 # DISCLAIMER
 
-The present benchmark was conducted on 2025-06-11 on a Macbook Pro M4 (12-core CPU, 16-core GPU, 24GB RAM). Results _will_ vary depending on the hardware. The benchmarks are intended to provide a general idea of the performance differences between the `fio` package and other implementations, but they should not be considered definitive. The performance of the functions may also vary depending on the specific data used and the context in which the functions are applied.
+The present benchmark was conducted on 2025-06-16 on a Macbook Pro M4 (12-core CPU, 16-core GPU, 24GB RAM). Results _will_ vary depending on the hardware. These benchmarks aim to provide a general idea of the performance differences between the `fio` package and other implementations but should not be considered definitive. The performance of the functions may also vary depending on the specific data used and the context in which they are applied.
 
 # Introduction
 
-This vignette presents a benchmarking analysis comparing the performance of functions from the `fio` package with equivalent base R functions. The `fio` package provides a set of functions for input-output analysis, a method used in economics to analyze the interdependencies between different sectors of an economy.
+This vignette presents a benchmarking analysis comparing the performance of functions from the `fio` package with equivalent base R functions and functions from other packages. The `fio` package provides a set of functions for input-output analysis, a method used in economics to analyze the interdependencies between different sectors of an economy.
 
-In this document, we will focus on two key functions: the technical coefficients matrix calculation and the Leontief inverse matrix calculation. These functions are fundamental to input-output analysis, and their performance can significantly impact the speed of larger analyses.
+Our benchmarking tests show that `fio` package functions are either faster or more memory-efficient than other implementations. This improved performance can make a substantial difference in larger analyses, making the `fio` package a valuable tool for input-output analysis in R.
 
-Our benchmarking tests, which involve running these functions repeatedely in simulated datasets, show that the `fio` package functions are faster than other implementations. This improved performance can make a substantial difference in larger analyses, making the `fio` package a valuable tool for input-output analysis in R.
-
-The tests were run on a simulated $2000 \times 2000$ matrix, and each test was repeated 100 times to account for variability. Please note that the results of this benchmarking analysis are dependent on the specific test datasets used and the hardware on which the algorithms were run. Therefore, the results should be interpreted in the context of these specific conditions.
+The tests were run on simulated square matrices, with dimensions ranging from 100x100 up to 2000x2000, and each test was repeated at least 10 times to account for variability. Please note that the results of this benchmarking analysis depend on the specific test datasets used and the hardware on which the algorithms were run. Therefore, the results should be interpreted in the context of these specific conditions.
 
 # Technical coefficients matrix
 
-The technical coefficients matrix calculation, a key and initial step in input-output analysis, was tested using the `compute_tech_coeff()` function from the `{fio}` package, equivalent functions from the `{leontief}` package, and a base R implementation. It consists on dividing each $a_{ij}$ element of intermediate transactions matrix by the correspondent $x_j$ element of total production vector^[Or in a equivalent way, multiplying intermediate transactions matrix by a diagonal matrix constructed from total production vector.].
+The technical coefficients matrix calculation, a key and initial step in input-output analysis, was tested using the `compute_tech_coeff()` function from the `{fio}` package, equivalent functions from the `{leontief}` package, and a base R implementation. It consists of dividing each $a_{ij}$ element of the intermediate transactions matrix by the corresponding $x_j$ element of the total production vector^[Or equivalently, multiplying the intermediate transactions matrix by a diagonal matrix constructed from the total production vector.].
+
+Results shows that {fio} is generally faster and uses significantly less memory than the other two implementations, especially for larger matrices (≥500x500). The memory usage of {fio} is approximately half that of Base R and 12% of that used by {leontief}.
 
 
 ``` r
@@ -84,43 +84,37 @@ benchmark_a <- bench::press(
 #> 2        500
 #> 3       1000
 #> 4       2000
-#> Warning: Some expressions had a GC in every iteration; so filtering is
-#> disabled.
 print(benchmark_a)
 #> # A tibble: 12 × 14
-#>    expression matrix_dim      min   median `itr/sec` mem_alloc `gc/sec` n_itr
-#>    <bch:expr>      <dbl> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int>
-#>  1 fio               100  49.57µs  81.41µs   11381.   861.83KB     0      100
-#>  2 Base R            100  59.61µs  78.72µs   11191.   190.65KB     0      100
-#>  3 leontief          100 131.45µs 161.95µs    6175.   706.38KB    62.4     99
-#>  4 fio               500 445.67µs 625.95µs    1562.     1.91MB    65.1     96
-#>  5 Base R            500 940.38µs   1.27ms     722.     3.82MB    80.2     90
-#>  6 leontief          500   1.73ms   2.11ms     464.    16.29MB   691.      41
-#>  7 fio              1000   1.83ms   2.38ms     405.     7.63MB    83.0     83
-#>  8 Base R           1000   6.56ms   7.88ms     125.    15.27MB    70.1     64
-#>  9 leontief         1000   8.46ms    8.6ms     116.       65MB  9131.       2
-#> 10 fio              2000   9.56ms  10.89ms      87.9   30.52MB    12.3    100
-#> 11 Base R           2000  45.27ms  52.44ms      18.8   61.05MB     6.38   100
-#> 12 leontief         2000  39.91ms  62.49ms      16.4   259.7MB    44.6    100
-#> # ℹ 6 more variables: n_gc <dbl>, total_time <bch:tm>, result <list>,
-#> #   memory <list>, time <list>, gc <list>
+#>    expression matrix_dim      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result                memory                 time             gc                
+#>    <bch:expr>      <dbl> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list>                <list>                 <list>           <list>            
+#>  1 fio               100   50.1µs  77.22µs   11997.   861.83KB      0     100     0     8.34ms <dbl [100 × 100]>     <Rprofmem [6 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
+#>  2 Base R            100  55.64µs  82.51µs   10885.   190.65KB      0     100     0     9.19ms <dbl [100 × 100]>     <Rprofmem [12 × 3]>    <bench_tm [100]> <tibble [100 × 3]>
+#>  3 leontief          100  141.2µs 161.21µs    6124.   706.38KB     61.9    99     1    16.17ms <dbl [100 × 100]>     <Rprofmem [352 × 3]>   <bench_tm [100]> <tibble [100 × 3]>
+#>  4 fio               500 371.67µs 661.95µs    1444.     1.91MB     60.2    96     4    66.48ms <dbl [500 × 500]>     <Rprofmem [1 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
+#>  5 Base R            500   1.02ms   1.25ms     780.     3.82MB     96.4    89    11   114.07ms <dbl [500 × 500]>     <Rprofmem [3 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
+#>  6 leontief          500   1.98ms   2.36ms     422.    16.29MB    734.     38    66    89.98ms <dbl [500 × 500]>     <Rprofmem [1,509 × 3]> <bench_tm [100]> <tibble [100 × 3]>
+#>  7 fio              1000   1.81ms   2.48ms     384.     7.63MB     78.6    83    17   216.22ms <dbl [1,000 × 1,000]> <Rprofmem [1 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
+#>  8 Base R           1000    6.6ms   7.99ms     124.    15.27MB     70.0    64    36   514.21ms <dbl [1,000 × 1,000]> <Rprofmem [3 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
+#>  9 leontief         1000   9.66ms  10.15ms     100.       65MB   4971.      3   149    29.98ms <dbl [1,000 × 1,000]> <Rprofmem [3,009 × 3]> <bench_tm [100]> <tibble [100 × 3]>
+#> 10 fio              2000  10.82ms  11.59ms      83.5   30.52MB     34.1    71    29   850.67ms <dbl [2,000 × 2,000]> <Rprofmem [1 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
+#> 11 Base R           2000  47.07ms  51.94ms      19.2   61.05MB     35.7    35    65      1.82s <dbl [2,000 × 2,000]> <Rprofmem [3 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
+#> 12 leontief         2000   36.2ms  36.92ms      27.0   259.7MB   1263.      4   187   148.01ms <dbl [2,000 × 2,000]> <Rprofmem [6,009 × 3]> <bench_tm [100]> <tibble [100 × 3]>
 
 # plot
 ggplot2::autoplot(benchmark_a)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_a-1.png" alt="\label{fig:benchmark_a}{fio} is faster."  />
-<p class="caption">\label{fig:benchmark_a}{fio} is faster.</p>
+<img src="figure/benchmark_a-1.png" alt="\label{fig:benchmark_a} For larger matrices (≥500x500), {fio} is generally faster and uses significantly less memory: approximately half that of Base R and 12% of that used by {leontief}."  />
+<p class="caption">\label{fig:benchmark_a} For larger matrices (≥500x500), {fio} is generally faster and uses significantly less memory: approximately half that of Base R and 12% of that used by {leontief}.</p>
 </div>
 
 # Leontief inverse matrix
 
-When we're talking about inverting a $2000 \times 2000$ there's a lot more work involved. Leontief matrix ($L$) is obtained from subtracting the technical coefficients matrix ($A$) from the identity matrix ($I$), therefore it has no null rows or columns. 
+The Leontief matrix ($L$) is obtained by subtracting the technical coefficients matrix ($A$) from the identity matrix ($I$); therefore, it has no null rows or columns. This allows for solving the linear system $L \times L^{-1} = I$ through LU decomposition, which is a more efficient method than direct inverse matrix calculation.
 
-$$L = I - A$$
-
-It allows for solving the linear system through LU decomposition, which is a more efficient method than the direct inverse matrix calculation.
+Results shows that execution times are comparable across methods, with {fio} demonstrating superior memory efficiency, using less than half the memory of alternatives.
 
 
 ``` r
@@ -163,39 +157,37 @@ benchmark_b <- bench::press(
 #> 2        500
 #> 3       1000
 #> 4       2000
-#> Warning: Some expressions had a GC in every iteration; so filtering is
-#> disabled.
 print(benchmark_b)
 #> # A tibble: 12 × 14
-#>    expression matrix_dim      min   median `itr/sec` mem_alloc `gc/sec` n_itr
-#>    <bch:expr>      <dbl> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int>
-#>  1 fio               100 138.58µs  339.4µs   2410.    158.51KB     0      100
-#>  2 Base R            100 254.04µs 356.86µs   2765.    413.27KB     0      100
-#>  3 leontief          100 270.72µs  363.4µs   2837.    402.57KB     0      100
-#>  4 fio               500   4.83ms   5.78ms    172.      3.81MB     3.51    98
-#>  5 Base R            500   3.96ms   4.27ms    230.      9.55MB    20.0     92
-#>  6 leontief          500   3.99ms   4.26ms    231.      9.55MB    20.1     92
-#>  7 fio              1000  24.13ms  27.31ms     36.6    15.26MB     3.62    91
-#>  8 Base R           1000  16.67ms  17.36ms     56.8    38.18MB    16.0     78
-#>  9 leontief         1000  15.96ms   17.3ms     57.3    38.18MB    16.2     78
-#> 10 fio              2000 129.76ms 136.91ms      7.26   61.03MB     1.45   100
-#> 11 Base R           2000  85.67ms  89.92ms     10.9   152.66MB    11.1    100
-#> 12 leontief         2000  85.94ms  90.43ms     10.8   152.66MB    10.8    100
-#> # ℹ 6 more variables: n_gc <dbl>, total_time <bch:tm>, result <list>,
-#> #   memory <list>, time <list>, gc <list>
+#>    expression matrix_dim      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result memory              time             gc                
+#>    <bch:expr>      <dbl> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list> <list>              <list>           <list>            
+#>  1 fio               100 106.48µs 135.14µs    4168.   158.51KB     0      100     0    23.99ms <NULL> <Rprofmem [6 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
+#>  2 Base R            100 268.59µs 367.15µs    2750.   413.27KB     0      100     0    36.36ms <NULL> <Rprofmem [20 × 3]> <bench_tm [100]> <tibble [100 × 3]>
+#>  3 leontief          100 274.99µs 361.52µs    2832.   402.57KB     0      100     0    35.31ms <NULL> <Rprofmem [15 × 3]> <bench_tm [100]> <tibble [100 × 3]>
+#>  4 fio               500   3.39ms   4.14ms     236.     3.81MB     4.81    98     2   415.45ms <NULL> <Rprofmem [2 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
+#>  5 Base R            500   3.95ms    4.3ms     231.     9.55MB     9.61    96     4   416.13ms <NULL> <Rprofmem [7 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
+#>  6 leontief          500   4.04ms   4.36ms     222.     9.55MB     6.87    97     3   436.57ms <NULL> <Rprofmem [8 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
+#>  7 fio              1000  15.38ms  17.82ms      56.1   15.26MB     2.34    96     4      1.71s <NULL> <Rprofmem [2 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
+#>  8 Base R           1000  17.05ms  17.59ms      56.6   38.18MB    14.2     80    20      1.41s <NULL> <Rprofmem [7 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
+#>  9 leontief         1000  16.97ms  17.55ms      56.4   38.18MB    14.1     80    20      1.42s <NULL> <Rprofmem [7 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
+#> 10 fio              2000  79.96ms  88.73ms      11.1   61.03MB     1.96    85    15      7.67s <NULL> <Rprofmem [2 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
+#> 11 Base R           2000   84.6ms  85.88ms      11.6  152.66MB   140.       8    97   691.22ms <NULL> <Rprofmem [7 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
+#> 12 leontief         2000  84.65ms  88.03ms      11.4  152.66MB   160.       7    98   611.96ms <NULL> <Rprofmem [7 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
 
 # plot
 ggplot2::autoplot(benchmark_b)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_b-1.png" alt="\label{fig:figs} {fio} is incredibly faster."  />
-<p class="caption">\label{fig:figs} {fio} is incredibly faster.</p>
+<img src="figure/benchmark_b-1.png" alt="\label{fig:figs} While execution times are comparable across methods, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger."  />
+<p class="caption">\label{fig:figs} While execution times are comparable across methods, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger.</p>
 </div>
 
 # Sensitivity of dispersion coefficients of variation
 
-To represent linkage-based functions performance, we compute benchmark for sensitivity of dispersion coefficients of variation.
+To evaluate the performance of linkage-based functions, we benchmarked the sensitivity of dispersion coefficients of variation.
+
+Results shows that {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 1000x1000 and larger, while memory usage remains comparable.
 
 
 ``` r
@@ -239,37 +231,36 @@ benchmark_c <- bench::press(
 #> 2        500
 #> 3       1000
 #> 4       2000
-#> Warning: Some expressions had a GC in every iteration; so filtering is
-#> disabled.
+#> Warning: Some expressions had a GC in every iteration; so filtering is disabled.
 print(benchmark_c)
 #> # A tibble: 12 × 14
-#>    expression matrix_dim      min   median `itr/sec` mem_alloc `gc/sec` n_itr
-#>    <bch:expr>      <dbl> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int>
-#>  1 fio               100 130.05µs 193.19µs   4449.     81.23KB     0      100
-#>  2 Base R            100  21.48µs  25.07µs  19494.     81.48KB     0      100
-#>  3 leontief          100 512.99µs 544.77µs   1826.    745.38KB    18.4     99
-#>  4 fio               500 445.34µs  592.8µs   1652.      1.91MB     0      100
-#>  5 Base R            500 468.18µs 551.22µs   1808.      1.92MB     0      100
-#>  6 leontief          500  10.46ms  11.03ms     90.3    17.31MB     6.79    93
-#>  7 fio              1000   1.49ms   1.68ms    581.      7.64MB     0      100
-#>  8 Base R           1000    1.8ms   2.11ms    474.      7.66MB    14.6     97
-#>  9 leontief         1000  61.18ms   62.3ms     16.0    68.94MB     9.42    63
-#> 10 fio              2000   4.94ms   5.16ms    192.     30.53MB     0      100
-#> 11 Base R           2000   8.14ms   8.27ms    115.     30.58MB    21.9    100
-#> 12 leontief         2000 286.46ms 301.14ms      3.24  275.22MB     4.60   100
-#> # ℹ 6 more variables: n_gc <dbl>, total_time <bch:tm>, result <list>,
-#> #   memory <list>, time <list>, gc <list>
+#>    expression matrix_dim      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result memory                  time             gc                
+#>    <bch:expr>      <dbl> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list> <list>                  <list>           <list>            
+#>  1 fio               100 123.04µs 201.88µs   4828.     81.23KB     0      100     0    20.71ms <NULL> <Rprofmem [6 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
+#>  2 Base R            100  21.73µs  25.81µs  18133.     81.48KB     0      100     0     5.51ms <NULL> <Rprofmem [5 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
+#>  3 leontief          100 507.01µs  561.5µs   1782.    745.38KB    18.0     99     1    55.56ms <NULL> <Rprofmem [522 × 3]>    <bench_tm [100]> <tibble [100 × 3]>
+#>  4 fio               500 429.23µs 595.91µs   1671.      1.91MB     0      100     0    59.84ms <NULL> <Rprofmem [2 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
+#>  5 Base R            500 525.37µs 553.89µs   1801.      1.92MB     0      100     0    55.54ms <NULL> <Rprofmem [5 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
+#>  6 leontief          500  10.45ms  11.21ms     88.9    17.31MB     6.69    93     7      1.05s <NULL> <Rprofmem [2,513 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
+#>  7 fio              1000   1.47ms   1.66ms    589.      7.64MB     0      100     0   169.65ms <NULL> <Rprofmem [2 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
+#>  8 Base R           1000   1.79ms   2.13ms    468.      7.66MB    14.5     97     3   207.23ms <NULL> <Rprofmem [5 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
+#>  9 leontief         1000  60.99ms  63.03ms     15.9    68.94MB     4.22    79    21      4.97s <NULL> <Rprofmem [5,013 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
+#> 10 fio              2000   5.03ms   5.19ms    191.     30.53MB     0      100     0    522.2ms <NULL> <Rprofmem [2 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
+#> 11 Base R           2000   8.14ms   8.35ms    108.     30.58MB    16.1    100    15   929.67ms <NULL> <Rprofmem [5 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
+#> 12 leontief         2000  295.5ms 299.92ms      3.27  275.22MB     3.27   100   100     30.54s <NULL> <Rprofmem [10,013 × 3]> <bench_tm [100]> <tibble [100 × 3]>
 ggplot2::autoplot(benchmark_c)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_c-1.png" alt="\label{fig:benchmark_c} {fio} again faster."  />
-<p class="caption">\label{fig:benchmark_c} {fio} again faster.</p>
+<img src="figure/benchmark_c-1.png" alt="\label{fig:benchmark_c} {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 1000x1000 and larger, while memory usage remains comparable."  />
+<p class="caption">\label{fig:benchmark_c} {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 1000x1000 and larger, while memory usage remains comparable.</p>
 </div>
 
 # Field of influence
 
-Since field of influence involves computing Leontief inverse matrix for each element of technical coefficients matrix after an increment, it can be demanding for high dimensional matrices. Here, we evaluate benchmark for base R function and {fio}, since there's no similiar function in {leontief}. For brevity, we cut dimensions to 100 and repetitions to 10.
+Since computing the field of influence involves calculating the Leontief inverse matrix for each element of the technical coefficients matrix after an increment, it can be demanding for high-dimensional matrices. Here, we benchmark the base R function and `{fio}`, as there is no similar function in `{leontief}`. For brevity, we limited the matrix dimensions to 100x100 and the number of repetitions to 10.
+
+Results shows that {fio} is almost two times faster than the base R implementation and uses significantly less memory. For the 100x100 matrix, {fio} used 156.34KB, while the base R implementation used 5.25GB, which would lead to memory issues for larger matrices and would make it impractical for real-world applications, specially in personal computers with limited memory.
 
 
 ``` r
@@ -332,27 +323,23 @@ benchmark_d <- bench::press(
 #>   matrix_dim
 #> 1         30
 #> 2         60
-#> Warning: Some expressions had a GC in every iteration; so filtering is
-#> disabled.
+#> Warning: Some expressions had a GC in every iteration; so filtering is disabled.
 #> 3        100
-#> Warning: Some expressions had a GC in every iteration; so filtering is
-#> disabled.
+#> Warning: Some expressions had a GC in every iteration; so filtering is disabled.
 print(benchmark_d)
 #> # A tibble: 6 × 14
-#>   expression matrix_dim      min   median `itr/sec` mem_alloc `gc/sec` n_itr
-#>   <bch:expr>      <dbl> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int>
-#> 1 fio                30   5.47ms   5.51ms   181.      16.67KB     0       10
-#> 2 Base R             30  23.76ms  24.17ms    41.3     44.52MB    10.3      8
-#> 3 fio                60 111.41ms 111.72ms     8.95    56.34KB     0       10
-#> 4 Base R             60 718.27ms 726.39ms     1.37    701.2MB     2.75    10
-#> 5 fio               100     3.6s    5.07s     0.203  156.34KB     0       10
-#> 6 Base R            100    4.24s    4.26s     0.234    5.25GB     3.83    10
-#> # ℹ 6 more variables: n_gc <dbl>, total_time <bch:tm>, result <list>,
-#> #   memory <list>, time <list>, gc <list>
+#>   expression matrix_dim      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result memory                  time            gc               
+#>   <bch:expr>      <dbl> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list> <list>                  <list>          <list>           
+#> 1 fio                30   5.48ms   5.51ms   180.      16.67KB     0       10     0     55.6ms <NULL> <Rprofmem [6 × 3]>      <bench_tm [10]> <tibble [10 × 3]>
+#> 2 Base R             30  24.16ms  24.46ms    40.7     44.52MB    10.2      8     2   196.78ms <NULL> <Rprofmem [7,384 × 3]>  <bench_tm [10]> <tibble [10 × 3]>
+#> 3 fio                60  111.3ms 111.69ms     8.93    56.34KB     0       10     0      1.12s <NULL> <Rprofmem [2 × 3]>      <bench_tm [10]> <tibble [10 × 3]>
+#> 4 Base R             60 713.37ms 721.51ms     1.37    701.2MB     3.02    10    22      7.28s <NULL> <Rprofmem [32,403 × 3]> <bench_tm [10]> <tibble [10 × 3]>
+#> 5 fio               100    1.64s    2.39s     0.414  156.34KB     0       10     0     24.13s <NULL> <Rprofmem [2 × 3]>      <bench_tm [10]> <tibble [10 × 3]>
+#> 6 Base R            100    4.21s    4.26s     0.234    5.25GB     4.35    10   186     42.78s <NULL> <Rprofmem [90,003 × 3]> <bench_tm [10]> <tibble [10 × 3]>
 ggplot2::autoplot(benchmark_d)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_d-1.png" alt="\label{fig:benchmark_d} {fio} faster."  />
-<p class="caption">\label{fig:benchmark_d} {fio} faster.</p>
+<img src="figure/benchmark_d-1.png" alt="\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior performance, being considerably faster and more memory-efficient than the Base R implementation."  />
+<p class="caption">\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior performance, being considerably faster and more memory-efficient than the Base R implementation.</p>
 </div>
