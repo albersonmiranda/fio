@@ -84,7 +84,7 @@ benchmark_a <- bench::press(
     )
   }
 )
-print(benchmark_a)
+subset(benchmark_a, select = c("expression", "matrix_dim", "min", "median", "mem_alloc", "gc/sec", "n_gc", "total_time"))
 
 # plot
 ggplot2::autoplot(benchmark_a)
@@ -130,7 +130,7 @@ benchmark_b <- bench::press(
     )
   }
 )
-print(benchmark_b)
+subset(benchmark_b, select = c("expression", "matrix_dim", "min", "median", "mem_alloc", "gc/sec", "n_gc", "total_time"))
 
 # plot
 ggplot2::autoplot(benchmark_b)
@@ -177,7 +177,7 @@ benchmark_c <- bench::press(
     )
   }
 )
-print(benchmark_c)
+subset(benchmark_c, select = c("expression", "matrix_dim", "min", "median", "mem_alloc", "gc/sec", "n_gc", "total_time"))
 ggplot2::autoplot(benchmark_c)
 ```
 
@@ -243,6 +243,6 @@ benchmark_d <- bench::press(
     )
   }
 )
-print(benchmark_d)
+subset(benchmark_d, select = c("expression", "matrix_dim", "min", "median", "mem_alloc", "gc/sec", "n_gc", "total_time"))
 ggplot2::autoplot(benchmark_d)
 ```

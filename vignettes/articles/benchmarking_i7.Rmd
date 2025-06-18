@@ -86,21 +86,21 @@ benchmark_a <- bench::press(
 #> 4       2000
 #> Warning: Some expressions had a GC in every iteration; so filtering is disabled.
 print(benchmark_a)
-#> # A tibble: 12 × 14
-#>    expression matrix_dim      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result                memory                 time             gc                
-#>    <bch:expr>      <dbl> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list>                <list>                 <list>           <list>            
-#>  1 fio               100 112.56µs 118.83µs   7854.    861.82KB     0      100     0    12.73ms <dbl [100 × 100]>     <Rprofmem [6 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
-#>  2 Base R            100  91.71µs     98µs   8359.    190.67KB     0      100     0    11.96ms <dbl [100 × 100]>     <Rprofmem [13 × 3]>    <bench_tm [100]> <tibble [100 × 3]>
-#>  3 leontief          100 320.35µs 353.71µs   2323.    724.27KB    23.5     99     1    42.61ms <dbl [100 × 100]>     <Rprofmem [363 × 3]>   <bench_tm [100]> <tibble [100 × 3]>
-#>  4 fio               500 985.86µs    1.4ms    771.      1.91MB    40.6     95     5   123.16ms <dbl [500 × 500]>     <Rprofmem [1 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
-#>  5 Base R            500   2.05ms    2.7ms    323.      3.82MB    35.9     90    10   278.89ms <dbl [500 × 500]>     <Rprofmem [3 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
-#>  6 leontief          500   5.26ms   6.13ms    142.     16.29MB   241.      39    66   274.29ms <dbl [500 × 500]>     <Rprofmem [1,509 × 3]> <bench_tm [100]> <tibble [100 × 3]>
-#>  7 fio              1000   5.59ms   6.31ms    155.      7.63MB    23.2     87    13   560.16ms <dbl [1,000 × 1,000]> <Rprofmem [1 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
-#>  8 Base R           1000  13.75ms  17.73ms     55.1    15.27MB    28.4     66    34       1.2s <dbl [1,000 × 1,000]> <Rprofmem [3 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
-#>  9 leontief         1000  32.03ms  32.21ms     31.0       65MB  2359.       2   152    64.43ms <dbl [1,000 × 1,000]> <Rprofmem [3,009 × 3]> <bench_tm [100]> <tibble [100 × 3]>
-#> 10 fio              2000  16.91ms  23.11ms     42.7    30.52MB     6.83   100    16      2.34s <dbl [2,000 × 2,000]> <Rprofmem [1 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
-#> 11 Base R           2000 132.31ms 168.71ms      5.86   61.05MB     2.17   100    37     17.05s <dbl [2,000 × 2,000]> <Rprofmem [3 × 3]>     <bench_tm [100]> <tibble [100 × 3]>
-#> 12 leontief         2000  91.15ms 132.83ms      7.63   259.7MB    20.8    100   272     13.11s <dbl [2,000 × 2,000]> <Rprofmem [6,009 × 3]> <bench_tm [100]> <tibble [100 × 3]>
+#> # A tibble: 12 × 9
+#>    expression matrix_dim      min   median mem_alloc `gc/sec` n_itr  n_gc total_time
+#>    <bch:expr>      <dbl> <bch:tm> <bch:tm> <bch:byt>    <dbl> <int> <dbl>   <bch:tm>
+#>  1 fio               100 112.56µs 118.83µs  861.82KB     0      100     0    12.73ms
+#>  2 Base R            100  91.71µs     98µs  190.67KB     0      100     0    11.96ms
+#>  3 leontief          100 320.35µs 353.71µs  724.27KB    23.5     99     1    42.61ms
+#>  4 fio               500 985.86µs    1.4ms    1.91MB    40.6     95     5   123.16ms
+#>  5 Base R            500   2.05ms    2.7ms    3.82MB    35.9     90    10   278.89ms
+#>  6 leontief          500   5.26ms   6.13ms   16.29MB   241.      39    66   274.29ms
+#>  7 fio              1000   5.59ms   6.31ms    7.63MB    23.2     87    13   560.16ms
+#>  8 Base R           1000  13.75ms  17.73ms   15.27MB    28.4     66    34       1.2s
+#>  9 leontief         1000  32.03ms  32.21ms      65MB  2359.       2   152    64.43ms
+#> 10 fio              2000  16.91ms  23.11ms   30.52MB     6.83   100    16      2.34s
+#> 11 Base R           2000 132.31ms 168.71ms   61.05MB     2.17   100    37     17.05s
+#> 12 leontief         2000  91.15ms 132.83ms   259.7MB    20.8    100   272     13.11s
 
 # plot
 ggplot2::autoplot(benchmark_a)
@@ -160,21 +160,21 @@ benchmark_b <- bench::press(
 #> 4       2000
 #> Warning: Some expressions had a GC in every iteration; so filtering is disabled.
 print(benchmark_b)
-#> # A tibble: 12 × 14
-#>    expression matrix_dim      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result memory              time             gc                
-#>    <bch:expr>      <dbl> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list> <list>              <list>           <list>            
-#>  1 fio               100 191.88µs 226.28µs   3668.    158.49KB    0       100     0    27.26ms <NULL> <Rprofmem [6 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#>  2 Base R            100 203.29µs 207.36µs   4221.    413.29KB    0       100     0    23.69ms <NULL> <Rprofmem [20 × 3]> <bench_tm [100]> <tibble [100 × 3]>
-#>  3 leontief          100 207.99µs 216.64µs   4512.    402.57KB   45.6      99     1    21.94ms <NULL> <Rprofmem [15 × 3]> <bench_tm [100]> <tibble [100 × 3]>
-#>  4 fio               500   6.61ms   7.67ms    129.      3.81MB    1.31     99     1   765.07ms <NULL> <Rprofmem [2 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#>  5 Base R            500   6.75ms   7.27ms    114.      9.55MB    9.89     92     8   808.97ms <NULL> <Rprofmem [7 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#>  6 leontief          500   7.16ms    7.2ms    137.      9.55MB   13.5      91     9   664.83ms <NULL> <Rprofmem [7 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#>  7 fio              1000  39.35ms  40.58ms     24.4    15.26MB    2.12     92     8      3.77s <NULL> <Rprofmem [2 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#>  8 Base R           1000  40.98ms  43.47ms     22.3    38.18MB    5.24     81    19      3.63s <NULL> <Rprofmem [7 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#>  9 leontief         1000  42.15ms   43.5ms     22.2    38.18MB    5.89     79    21      3.56s <NULL> <Rprofmem [7 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#> 10 fio              2000 272.45ms 297.67ms      3.33   61.03MB    0.633   100    19     30.01s <NULL> <Rprofmem [2 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#> 11 Base R           2000 268.28ms 274.25ms      3.47  152.66MB    3.64    100   105     28.86s <NULL> <Rprofmem [7 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#> 12 leontief         2000 265.02ms 273.16ms      3.48  152.66MB    2.57    100    74     28.76s <NULL> <Rprofmem [7 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
+#> # A tibble: 12 × 9
+#>    expression matrix_dim      min   median mem_alloc `gc/sec` n_itr  n_gc total_time
+#>    <bch:expr>      <dbl> <bch:tm> <bch:tm> <bch:byt>    <dbl> <int> <dbl>   <bch:tm>
+#>  1 fio               100 191.88µs 226.28µs  158.49KB    0       100     0    27.26ms
+#>  2 Base R            100 203.29µs 207.36µs  413.29KB    0       100     0    23.69ms
+#>  3 leontief          100 207.99µs 216.64µs  402.57KB   45.6      99     1    21.94ms
+#>  4 fio               500   6.61ms   7.67ms    3.81MB    1.31     99     1   765.07ms
+#>  5 Base R            500   6.75ms   7.27ms    9.55MB    9.89     92     8   808.97ms
+#>  6 leontief          500   7.16ms    7.2ms    9.55MB   13.5      91     9   664.83ms
+#>  7 fio              1000  39.35ms  40.58ms   15.26MB    2.12     92     8      3.77s
+#>  8 Base R           1000  40.98ms  43.47ms   38.18MB    5.24     81    19      3.63s
+#>  9 leontief         1000  42.15ms   43.5ms   38.18MB    5.89     79    21      3.56s
+#> 10 fio              2000 272.45ms 297.67ms   61.03MB    0.633   100    19     30.01s
+#> 11 Base R           2000 268.28ms 274.25ms  152.66MB    3.64    100   105     28.86s
+#> 12 leontief         2000 265.02ms 273.16ms  152.66MB    2.57    100    74     28.76s
 
 # plot
 ggplot2::autoplot(benchmark_b)
@@ -234,21 +234,21 @@ benchmark_c <- bench::press(
 #> 3       1000
 #> 4       2000
 print(benchmark_c)
-#> # A tibble: 12 × 14
-#>    expression matrix_dim      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result memory                  time             gc                
-#>    <bch:expr>      <dbl> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list> <list>                  <list>           <list>            
-#>  1 fio               100  98.81µs 111.06µs   8712.     81.21KB     0      100     0    11.48ms <NULL> <Rprofmem [6 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
-#>  2 Base R            100  52.02µs  53.11µs   7899.     81.48KB     0      100     0    12.66ms <NULL> <Rprofmem [5 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
-#>  3 leontief          100   1.46ms   1.49ms    662.    745.38KB     6.69    99     1   149.52ms <NULL> <Rprofmem [522 × 3]>    <bench_tm [100]> <tibble [100 × 3]>
-#>  4 fio               500 692.57µs 745.83µs   1304.      1.91MB     0      100     0    76.71ms <NULL> <Rprofmem [2 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
-#>  5 Base R            500      1ms   1.47ms    714.      1.92MB     0      100     0   140.15ms <NULL> <Rprofmem [5 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
-#>  6 leontief          500  31.64ms  31.98ms     30.7    17.31MB     1.28    96     4      3.13s <NULL> <Rprofmem [2,513 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#>  7 fio              1000   3.15ms   3.27ms    301.      7.64MB     0      100     0   331.91ms <NULL> <Rprofmem [2 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
-#>  8 Base R           1000   4.09ms   4.26ms    233.      7.66MB     4.75    98     2   421.33ms <NULL> <Rprofmem [5 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
-#>  9 leontief         1000 173.77ms 175.64ms      5.69   68.94MB     1.17    83    17     14.59s <NULL> <Rprofmem [5,013 × 3]>  <bench_tm [100]> <tibble [100 × 3]>
-#> 10 fio              2000  12.66ms  14.83ms     69.2    30.53MB     0      100     0      1.45s <NULL> <Rprofmem [2 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
-#> 11 Base R           2000  17.17ms  23.86ms     46.2    30.58MB     7.53    86    14      1.86s <NULL> <Rprofmem [5 × 3]>      <bench_tm [100]> <tibble [100 × 3]>
-#> 12 leontief         2000 861.23ms    865ms      1.16  275.22MB    19.5      9   152      7.79s <NULL> <Rprofmem [10,013 × 3]> <bench_tm [100]> <tibble [100 × 3]>
+#> # A tibble: 12 × 9
+#>    expression matrix_dim      min   median mem_alloc `gc/sec` n_itr  n_gc total_time
+#>    <bch:expr>      <dbl> <bch:tm> <bch:tm> <bch:byt>    <dbl> <int> <dbl>   <bch:tm>
+#>  1 fio               100  98.81µs 111.06µs   81.21KB     0      100     0    11.48ms
+#>  2 Base R            100  52.02µs  53.11µs   81.48KB     0      100     0    12.66ms
+#>  3 leontief          100   1.46ms   1.49ms  745.38KB     6.69    99     1   149.52ms
+#>  4 fio               500 692.57µs 745.83µs    1.91MB     0      100     0    76.71ms
+#>  5 Base R            500      1ms   1.47ms    1.92MB     0      100     0   140.15ms
+#>  6 leontief          500  31.64ms  31.98ms   17.31MB     1.28    96     4      3.13s
+#>  7 fio              1000   3.15ms   3.27ms    7.64MB     0      100     0   331.91ms
+#>  8 Base R           1000   4.09ms   4.26ms    7.66MB     4.75    98     2   421.33ms
+#>  9 leontief         1000 173.77ms 175.64ms   68.94MB     1.17    83    17     14.59s
+#> 10 fio              2000  12.66ms  14.83ms   30.53MB     0      100     0      1.45s
+#> 11 Base R           2000  17.17ms  23.86ms   30.58MB     7.53    86    14      1.86s
+#> 12 leontief         2000 861.23ms    865ms  275.22MB    19.5      9   152      7.79s
 
 # plot
 ggplot2::autoplot(benchmark_c)
@@ -332,17 +332,17 @@ benchmark_d <- bench::press(
 #> 4        200
 #> Warning: Some expressions had a GC in every iteration; so filtering is disabled.
 print(benchmark_d)
-#> # A tibble: 8 × 14
-#>   expression matrix_dim      min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc total_time result memory                   time            gc               
-#>   <bch:expr>      <dbl> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int> <dbl>   <bch:tm> <list> <list>                   <list>          <list>           
-#> 1 fio                30  11.32ms  11.55ms   86.3      16.66KB     0       20     0   231.88ms <NULL> <Rprofmem [6 × 3]>       <bench_tm [20]> <tibble [20 × 3]>
-#> 2 Base R             30  40.07ms   40.5ms   24.6      44.52MB     4.34    17     3   690.66ms <NULL> <Rprofmem [7,383 × 3]>   <bench_tm [20]> <tibble [20 × 3]>
-#> 3 fio                60 189.83ms 190.81ms    5.24     56.34KB     0       20     0      3.82s <NULL> <Rprofmem [2 × 3]>       <bench_tm [20]> <tibble [20 × 3]>
-#> 4 Base R             60 403.25ms  404.8ms    2.46     701.2MB     5.04    20    41      8.13s <NULL> <Rprofmem [32,403 × 3]>  <bench_tm [20]> <tibble [20 × 3]>
-#> 5 fio               100    2.24s    2.31s    0.429   156.34KB     0       20     0      46.6s <NULL> <Rprofmem [2 × 3]>       <bench_tm [20]> <tibble [20 × 3]>
-#> 6 Base R            100    3.04s    3.08s    0.323     5.25GB     5.62    20   348      1.03m <NULL> <Rprofmem [90,003 × 3]>  <bench_tm [20]> <tibble [20 × 3]>
-#> 7 fio               200   39.98s   40.43s    0.0247  625.09KB     0       20     0     13.49m <NULL> <Rprofmem [2 × 3]>       <bench_tm [20]> <tibble [20 × 3]>
-#> 8 Base R            200   46.14s    46.6s    0.0204   83.73GB     9.23    20  9050     16.35m <NULL> <Rprofmem [360,003 × 3]> <bench_tm [20]> <tibble [20 × 3]>
+#> # A tibble: 8 × 9
+#>   expression matrix_dim      min   median mem_alloc `gc/sec` n_itr  n_gc total_time
+#>   <bch:expr>      <dbl> <bch:tm> <bch:tm> <bch:byt>    <dbl> <int> <dbl>   <bch:tm>
+#> 1 fio                30  11.32ms  11.55ms   16.66KB     0       20     0   231.88ms
+#> 2 Base R             30  40.07ms   40.5ms   44.52MB     4.34    17     3   690.66ms
+#> 3 fio                60 189.83ms 190.81ms   56.34KB     0       20     0      3.82s
+#> 4 Base R             60 403.25ms  404.8ms   701.2MB     5.04    20    41      8.13s
+#> 5 fio               100    2.24s    2.31s  156.34KB     0       20     0      46.6s
+#> 6 Base R            100    3.04s    3.08s    5.25GB     5.62    20   348      1.03m
+#> 7 fio               200   39.98s   40.43s  625.09KB     0       20     0     13.49m
+#> 8 Base R            200   46.14s    46.6s   83.73GB     9.23    20  9050     16.35m
 ggplot2::autoplot(benchmark_d)
 ```
 
