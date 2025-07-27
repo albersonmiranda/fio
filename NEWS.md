@@ -1,5 +1,8 @@
 # fio (development version)
 
+## ✨ New features
+
+* Add `matrix` parameter to `compute_key_sectors()` and `compute_hypothetical_extraction()` methods to allow choosing between Ghosh and Leontief matrices for forward linkage calculations (#81).
 
 ## 🛠️ Other improvements
 

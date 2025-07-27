@@ -114,6 +114,21 @@ my_iom$compute_tech_coeff()$compute_leontief_inverse()$compute_key_sectors()
 print(my_iom$key_sectors)
 ```
 
+## Matrix selection for forward linkages
+
+The `compute_key_sectors()` and `compute_hypothetical_extraction()` methods now allow users to choose which matrix to use for forward linkage calculations. By default, `compute_key_sectors()` uses the Leontief matrix and `compute_hypothetical_extraction()` uses the Ghosh matrix, preserving the traditional behavior. However, users can now specify an alternative:
+
+```{r matrix_choice, eval=FALSE}
+# For key sectors analysis, you can choose between Leontief (default) and Ghosh matrices
+my_iom$compute_allocation_coeff()$compute_ghosh_inverse()
+my_iom$compute_key_sectors(matrix = "ghosh")
+
+# For hypothetical extraction, you can choose between Ghosh (default) and Leontief matrices  
+my_iom$compute_hypothetical_extraction(matrix = "leontief")
+```
+
+This flexibility allows researchers to compare results using different methodological approaches and choose the most appropriate matrix for their specific analysis.
+
 # References
 
 Bernd Bischl, Raphael Sonabend, Lars Kotthoff, & Michel Lang (2024). Applied Machine Learning Using mlr3 in R. CRC Press.
