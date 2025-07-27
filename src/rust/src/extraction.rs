@@ -201,6 +201,67 @@ fn compute_extraction_total(
 
 }
 
+#[extendr]
+/// Computes forward linkage extraction using Leontief inverse matrix.
+/// 
+/// @description
+/// Computes impact on supply structure after extracting a given sector using Leontief approach \insertCite{miller_input-output_2009}{fio}.
+/// 
+/// @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
+/// @param value_added_matrix The value-added matrix.
+/// @param total_production A 1xn vector of total production.
+/// 
+/// @references
+/// \insertAllCited{}
+/// 
+/// @noRd
+fn compute_extraction_forward_leontief(
+  leontief_inverse_matrix: &[f64],
+  value_added_matrix: RMatrix<f64>,
+  total_production: &[f64]
+) -> RMatrix<f64> {
+
+  // get dimensions
+  let n = (leontief_inverse_matrix.len() as f64).sqrt() as usize;
+  let n_av = value_added_matrix.nrows();
+  let m_av = value_added_matrix.ncols();
+  
+  // get rowsum of value-added matrix
+  let value_added_colsum: Vec<f64> = Mat::from_fn(n_av, m_av, |row, col| value_added_matrix[[row, col]])
+  .col_iter()
+  .map(|x| x.iter().sum::<f64>())
+  .collect();
+
+  // initialize objects
+  let mut forward_linkage = Mat::zeros(n, n);
+  let mut leontief_inverse_matrix_bl = Mat::from_fn(n, n, |row, col| leontief_inverse_matrix[col * n + row]);
+  let sum_output = total_production.iter().sum::<f64>();
+
+  // computes diff in output after extracting a sector supply structure using Leontief
+  for i in 0..n {
+    // set i row to zero in Leontief inverse
+    for j in 0..n {
+      leontief_inverse_matrix_bl[(i, j)] = 0.0;
+    }
+    // calculate new output level using modified Leontief inverse
+    let new_output: Mat<f64> = Mat::from_fn(1, n, |_, col| value_added_colsum[col]) * &leontief_inverse_matrix_bl;
+    // calculate diff in output
+    let diff_output = new_output.col_iter().map(|x| x.iter().sum::<f64>()).sum::<f64>() - &sum_output;
+    // store diff in output
+    forward_linkage[(i, 0)] = diff_output;
+    // store relative forward linkage by dividing forward linkage by sum of total production
+    forward_linkage[(i, 1)] = diff_output / sum_output;
+    // reset i row to original values
+    for j in 0..n {
+      leontief_inverse_matrix_bl[(i, j)] = leontief_inverse_matrix[j * n + i];
+    }
+  }
+
+  // return forward linkage
+  RArray::new_matrix(n, 2, |rows, cols| forward_linkage[(rows, cols)])
+
+}
+
 // Macro to generate exports.
 // This ensures exported functions are registered with R.
 // See corresponding C code in `entrypoint.c`.
@@ -208,5 +269,6 @@ extendr_module! {
   mod extraction;
   fn compute_extraction_backward;
   fn compute_extraction_forward;
+  fn compute_extraction_forward_leontief;
   fn compute_extraction_total;
 }

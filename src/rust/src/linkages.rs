@@ -178,6 +178,70 @@ fn compute_sensitivity_dispersion_cv(
     .collect::<Vec<f64>>()
 }
 
+#[extendr]
+/// @description Computes sensitivity of dispersion using Ghosh inverse matrix
+/// @param ghosh_inverse_matrix A nxn matrix of Ghosh inverse.
+/// @return A vector of sensitivity of dispersion.
+/// @noRd
+fn compute_sensitivity_dispersion_ghosh(
+  ghosh_inverse_matrix: &[f64]
+) -> Vec<f64> {
+  
+  // get average of the matrix
+  let ghosh_average = compute_ghosh_inverse_average(ghosh_inverse_matrix);
+  
+  // get row averages
+  let rows_average = compute_row_average(ghosh_inverse_matrix);
+
+  // divide each row sum by the average of the matrix
+  rows_average.par_iter().map(|x| x / ghosh_average).collect()
+}
+
+#[extendr]
+/// Computes sensitivity of dispersion coefficients of variation using Ghosh inverse matrix
+/// @param ghosh_inverse_matrix A nxn matrix of Ghosh inverse.
+/// @return A vector of sensitivity of dispersion coefficients of variation.
+/// @noRd
+fn compute_sensitivity_dispersion_cv_ghosh(
+  ghosh_inverse_matrix: &[f64]
+) -> Vec<f64> {
+  
+  // get dimensions
+  let n = (ghosh_inverse_matrix.len() as f64).sqrt() as usize;
+
+  // get rows averages
+  let rows_average = compute_row_average(ghosh_inverse_matrix);
+
+  // ghosh_inverse_matrix - row averages
+  let gim_minus_ra: Vec<f64> = ghosh_inverse_matrix.par_iter()
+    .enumerate()
+    .map(|(i, &value)| value - rows_average[i % n])
+    .collect();
+
+  // get column sums of squared elements of gim_minus_ra
+  let mut col_sums = gim_minus_ra.par_chunks(n)
+    .map(|col| col.iter().map(|x| x.powi(2)).sum::<f64>())
+    .collect::<Vec<f64>>();
+
+  // multiply col_sums by 1 / (n - 1), take the square root and divide by row averages
+  col_sums.par_iter_mut()
+    .map(|x| ((*x * (1.0 / (n as f64 - 1.0))).sqrt()))
+    .zip(rows_average.par_iter())
+    .map(|(a, b)| a / b)
+    .collect::<Vec<f64>>()
+}
+
+#[extendr]
+/// Computes average of all elements of Ghosh inverse matrix
+/// @param ghosh_inverse_matrix A nxn matrix of Ghosh inverse.
+/// @return A single value of average of elements of Ghosh inverse matrix.
+/// @noRd
+fn compute_ghosh_inverse_average(
+  ghosh_inverse_matrix: &[f64]
+) -> f64 {
+  ghosh_inverse_matrix.par_iter().sum::<f64>() / (ghosh_inverse_matrix.len() as f64)
+}
+
 // Macro to generate exports.
 // This ensures exported functions are registered with R.
 // See corresponding C code in `entrypoint.c`.
@@ -187,4 +251,7 @@ extendr_module! {
   fn compute_sensitivity_dispersion_cv;
   fn compute_power_dispersion;
   fn compute_sensitivity_dispersion;
+  fn compute_sensitivity_dispersion_ghosh;
+  fn compute_sensitivity_dispersion_cv_ghosh;
+  fn compute_ghosh_inverse_average;
 }

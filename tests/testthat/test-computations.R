@@ -290,3 +290,50 @@ test_that("hypothetical extraction is calculated correctly", {
   # Check if the hypothetical extraction is calculated correctly
   expect_equal(obj$hypothetical_extraction[, 1:4], extrac)
 })
+
+# key sectors with different matrices works
+test_that("key sectors with ghosh matrix option works", {
+  # Instantiate the class
+  obj <- iom$new("test", intermediate_transactions, total_production)
+  # Calculate the technical coefficients
+  obj$compute_tech_coeff()
+  obj$compute_leontief_inverse()
+  obj$compute_allocation_coeff()
+  obj$compute_ghosh_inverse()
+  # Calculate the key sectors with default (leontief)
+  obj$compute_key_sectors()
+  key_sectors_leontief <- obj$key_sectors
+  # Calculate the key sectors with ghosh matrix
+  obj$compute_key_sectors(matrix = "ghosh")
+  key_sectors_ghosh <- obj$key_sectors
+  # Should be different results when using different matrices
+  expect_true(!all(key_sectors_leontief$sensitivity_dispersion == key_sectors_ghosh$sensitivity_dispersion))
+  expect_true(!all(key_sectors_leontief$sensitivity_dispersion_cv == key_sectors_ghosh$sensitivity_dispersion_cv))
+  # But power_dispersion should be the same (always uses Leontief)
+  expect_equal(key_sectors_leontief$power_dispersion, key_sectors_ghosh$power_dispersion)
+  expect_equal(key_sectors_leontief$power_dispersion_cv, key_sectors_ghosh$power_dispersion_cv)
+})
+
+# hypothetical extraction with different matrices works
+test_that("hypothetical extraction with leontief matrix option works", {
+  # Instantiate the class
+  obj <- iom$new("test", intermediate_transactions, total_production, exports = exports, imports = imports)
+  # Calculate prerequisites
+  obj$compute_tech_coeff()
+  obj$compute_leontief_inverse()
+  obj$compute_allocation_coeff()
+  obj$update_value_added_matrix()
+  obj$update_final_demand_matrix()
+  # Calculate with default (ghosh)
+  obj$compute_hypothetical_extraction()
+  extraction_ghosh <- obj$hypothetical_extraction
+  # Calculate with leontief matrix
+  obj$compute_hypothetical_extraction(matrix = "leontief")
+  extraction_leontief <- obj$hypothetical_extraction
+  # Should be different results when using different matrices for forward linkage
+  expect_true(!all(extraction_ghosh[, "forward_absolute"] == extraction_leontief[, "forward_absolute"]))
+  expect_true(!all(extraction_ghosh[, "forward_relative"] == extraction_leontief[, "forward_relative"]))
+  # But backward linkage should be the same (always uses Leontief)
+  expect_equal(extraction_ghosh[, "backward_absolute"], extraction_leontief[, "backward_absolute"])
+  expect_equal(extraction_ghosh[, "backward_relative"], extraction_leontief[, "backward_relative"])
+})

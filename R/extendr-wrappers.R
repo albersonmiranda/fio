@@ -268,6 +268,24 @@ compute_power_dispersion <- function(leontief_inverse_matrix) .Call(wrap__comput
 #' @noRd
 compute_sensitivity_dispersion <- function(leontief_inverse_matrix) .Call(wrap__compute_sensitivity_dispersion, leontief_inverse_matrix)
 
+#' @description Computes sensitivity of dispersion using Ghosh inverse matrix
+#' @param ghosh_inverse_matrix A nxn matrix of Ghosh inverse.
+#' @return A vector of sensitivity of dispersion.
+#' @noRd
+compute_sensitivity_dispersion_ghosh <- function(ghosh_inverse_matrix) .Call(wrap__compute_sensitivity_dispersion_ghosh, ghosh_inverse_matrix)
+
+#' Computes sensitivity of dispersion coefficients of variation using Ghosh inverse matrix
+#' @param ghosh_inverse_matrix A nxn matrix of Ghosh inverse.
+#' @return A vector of sensitivity of dispersion coefficients of variation.
+#' @noRd
+compute_sensitivity_dispersion_cv_ghosh <- function(ghosh_inverse_matrix) .Call(wrap__compute_sensitivity_dispersion_cv_ghosh, ghosh_inverse_matrix)
+
+#' Computes average of all elements of Ghosh inverse matrix
+#' @param ghosh_inverse_matrix A nxn matrix of Ghosh inverse.
+#' @return A single value of average of elements of Ghosh inverse matrix.
+#' @noRd
+compute_ghosh_inverse_average <- function(ghosh_inverse_matrix) .Call(wrap__compute_ghosh_inverse_average, ghosh_inverse_matrix)
+
 #' Computes allocation coefficients matrix.
 #' 
 #' @param intermediate_transactions
@@ -386,6 +404,21 @@ compute_extraction_forward <- function(allocation_coefficients_matrix, value_add
 #' 
 #' @noRd
 compute_extraction_total <- function(backward_linkage_matrix, forward_linkage_matrix) .Call(wrap__compute_extraction_total, backward_linkage_matrix, forward_linkage_matrix)
+
+#' Computes forward linkage extraction using Leontief inverse matrix.
+#' 
+#' @description
+#' Computes impact on supply structure after extracting a given sector using Leontief approach \insertCite{miller_input-output_2009}{fio}.
+#' 
+#' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
+#' @param value_added_matrix The value-added matrix.
+#' @param total_production A 1xn vector of total production.
+#' 
+#' @references
+#' \insertAllCited{}
+#' 
+#' @noRd
+compute_extraction_forward_leontief <- function(leontief_inverse_matrix, value_added_matrix, total_production) .Call(wrap__compute_extraction_forward_leontief, leontief_inverse_matrix, value_added_matrix, total_production)
 
 #' Sets max number of threads used by fio
 #'

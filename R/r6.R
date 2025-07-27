@@ -905,6 +905,9 @@ iom <- R6Class(
     #'
     #' ## References
     #' \insertCited{}
+    #' @param matrix (`character`)\cr
+    #' Matrix to use for forward linkage calculation. One of "leontief" (default) or "ghosh".
+    #' Backward linkage is always calculated using Leontief matrix.
     #' @return
     #' Self (invisibly).
     #' @examples
@@ -917,32 +920,58 @@ iom <- R6Class(
     #' my_iom$compute_tech_coeff()
     #' # calculate the Leontief inverse
     #' my_iom$compute_leontief_inverse()
-    #' # calculate key sectors
+    #' # calculate key sectors using Leontief matrix (default)
     #' my_iom$compute_key_sectors()
+    #' # or calculate key sectors using Ghosh matrix for forward linkage
+    #' my_iom$compute_allocation_coeff()
+    #' my_iom$compute_ghosh_inverse()
+    #' my_iom$compute_key_sectors(matrix = "ghosh")
     #' # show the key sectors
     #' my_iom$key_sectors
-    compute_key_sectors = function() {
+    compute_key_sectors = function(matrix = "leontief") {
+      # check matrix argument
+      if (!matrix %in% c("leontief", "ghosh")) {
+        cli::cli_h1("Error in matrix")
+        error("matrix must be one of 'leontief' or 'ghosh'.")
+      }
       # check if leontief inverse matrix is available
       if (is.null(self$leontief_inverse_matrix)) {
         cli::cli_h1("Error in leontief_inverse_matrix")
         error("You must compute the leontief inverse matrix first. Run compute_leontief_inverse() method.")
       }
-      # power of dispersion
+      # check if ghosh inverse matrix is available when needed
+      if (matrix == "ghosh" && is.null(self$ghosh_inverse_matrix)) {
+        cli::cli_h1("Error in ghosh_inverse_matrix")
+        error("You must compute the ghosh inverse matrix first. Run compute_ghosh_inverse() method.")
+      }
+      # power of dispersion (always uses Leontief for backward linkage)
       power_dispersion <- compute_power_dispersion(
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
-      # sensitivity of dispersion
-      sensitivity_dispersion <- compute_sensitivity_dispersion(
-        leontief_inverse_matrix = self$leontief_inverse_matrix
-      )
-      # power of dispersion coefficients of variation
+      # sensitivity of dispersion (forward linkage - choice of matrix)
+      if (matrix == "leontief") {
+        sensitivity_dispersion <- compute_sensitivity_dispersion(
+          leontief_inverse_matrix = self$leontief_inverse_matrix
+        )
+      } else {
+        sensitivity_dispersion <- compute_sensitivity_dispersion_ghosh(
+          ghosh_inverse_matrix = self$ghosh_inverse_matrix
+        )
+      }
+      # power of dispersion coefficients of variation (always uses Leontief)
       power_dispersion_cv <- compute_power_dispersion_cv(
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
-      # sensitivity of dispersion coefficients of variation
-      sensitivity_dispersion_cv <- compute_sensitivity_dispersion_cv(
-        leontief_inverse_matrix = self$leontief_inverse_matrix
-      )
+      # sensitivity of dispersion coefficients of variation (forward linkage - choice of matrix)
+      if (matrix == "leontief") {
+        sensitivity_dispersion_cv <- compute_sensitivity_dispersion_cv(
+          leontief_inverse_matrix = self$leontief_inverse_matrix
+        )
+      } else {
+        sensitivity_dispersion_cv <- compute_sensitivity_dispersion_cv_ghosh(
+          ghosh_inverse_matrix = self$ghosh_inverse_matrix
+        )
+      }
       # compute key sectors dataframe
       key_sectors <- data.frame(
         sector = rownames(self$leontief_inverse_matrix),
@@ -1063,6 +1092,9 @@ iom <- R6Class(
     #'
     #' ## References
     #' \insertCited{}
+    #' @param matrix (`character`)\cr
+    #' Matrix to use for forward linkage calculation. One of "ghosh" (default) or "leontief".
+    #' Backward linkage is always calculated using Leontief matrix.
     #' @return
     #' Self (invisibly).
     #' @examples
@@ -1095,22 +1127,38 @@ iom <- R6Class(
     #' my_iom$compute_allocation_coeff()
     #' # calculate Ghosh inverse
     #' my_iom$compute_ghosh_inverse()
-    #' # calculate hypothetical extraction
+    #' # calculate hypothetical extraction using Ghosh matrix (default)
     #' my_iom$compute_hypothetical_extraction()
+    #' # or calculate hypothetical extraction using Leontief matrix for forward linkage
+    #' my_iom$compute_hypothetical_extraction(matrix = "leontief")
     #' # show results
     #' my_iom$hypothetical_extraction
-    compute_hypothetical_extraction = function() {
+    compute_hypothetical_extraction = function(matrix = "ghosh") {
+      # check matrix argument
+      if (!matrix %in% c("ghosh", "leontief")) {
+        cli::cli_h1("Error in matrix")
+        error("matrix must be one of 'ghosh' or 'leontief'.")
+      }
       # check if arguments are available
       for (matrix_name in c(
-        "technical_coefficients_matrix",
-        "allocation_coefficients_matrix"
+        "technical_coefficients_matrix"
       )) {
         if (is.null(self[[matrix_name]])) {
           cli::cli_h1("Error in {matrix_name}")
           error(paste("You must compute the", matrix_name, "first. Run respective compute_*() method."))
         }
       }
-      for (matrix in c(
+      # check if allocation coefficients matrix is available when using ghosh
+      if (matrix == "ghosh" && is.null(self$allocation_coefficients_matrix)) {
+        cli::cli_h1("Error in allocation_coefficients_matrix")
+        error("You must compute the allocation coefficients matrix first. Run compute_allocation_coeff() method.")
+      }
+      # check if leontief inverse matrix is available when using leontief
+      if (matrix == "leontief" && is.null(self$leontief_inverse_matrix)) {
+        cli::cli_h1("Error in leontief_inverse_matrix")
+        error("You must compute the leontief inverse matrix first. Run compute_leontief_inverse() method.")
+      }
+      for (matrix_name in c(
         "final_demand_matrix",
         "value_added_matrix"
       )) {
@@ -1121,18 +1169,26 @@ iom <- R6Class(
       }
       # save row and column names
       row_names <- rownames(self$technical_coefficients_matrix)
-      # compute backward extraction
+      # compute backward extraction (always uses Leontief)
       extraction_backward <- compute_extraction_backward(
         technical_coefficients_matrix = self$technical_coefficients_matrix,
         final_demand_matrix = self$final_demand_matrix,
         total_production = self$total_production
       )
-      # compute forward extraction
-      extraction_forward <- compute_extraction_forward(
-        allocation_coeff = self$allocation_coefficients_matrix,
-        value_added_matrix = self$value_added_matrix,
-        total_production = self$total_production
-      )
+      # compute forward extraction (choice of matrix)
+      if (matrix == "ghosh") {
+        extraction_forward <- compute_extraction_forward(
+          allocation_coeff = self$allocation_coefficients_matrix,
+          value_added_matrix = self$value_added_matrix,
+          total_production = self$total_production
+        )
+      } else {
+        extraction_forward <- compute_extraction_forward_leontief(
+          leontief_inverse_matrix = self$leontief_inverse_matrix,
+          value_added_matrix = self$value_added_matrix,
+          total_production = self$total_production
+        )
+      }
       # compute total extraction
       extraction_total <- compute_extraction_total(
         backward_linkage_matrix = extraction_backward,
