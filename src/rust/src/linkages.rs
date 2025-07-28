@@ -3,33 +3,29 @@ use rayon::prelude::*;
 use faer::Mat;
 
 #[extendr]
-/// Computes average of all elements of Leontief inverse matrix
-/// @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
-/// @return A single value of average of elements of Leontief inverse matrix.
+/// Computes average of all elements of a nxn matrix
+/// @param matrix A nxn matrix.
+/// @return A single value of average of elements of the matrix.
 /// @noRd
-fn compute_leontief_inverse_average(
-  leontief_inverse_matrix: &[f64]
-) -> f64 {
-  leontief_inverse_matrix.par_iter().sum::<f64>() / (leontief_inverse_matrix.len() as f64)
+fn compute_matrix_average(matrix: &[f64]) -> f64 {
+  matrix.par_iter().sum::<f64>() / (matrix.len() as f64)
 }
 
 #[extendr]
-/// Computes row averages of Leontief inverse matrix
-/// @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
+/// Computes row averages of a nxn matrix
+/// @param matrix A nxn matrix .
 /// @return A vector of row averages.
 /// @noRd
-fn compute_row_average(
-  leontief_inverse_matrix: &[f64]
-) -> Vec<f64> {
+fn compute_row_average(matrix: &[f64]) -> Vec<f64> {
   
   // get dimensions
-  let n = (leontief_inverse_matrix.len() as f64).sqrt() as usize;
+  let n = (matrix.len() as f64).sqrt() as usize;
 
   // convert to faer matrix
-  let leontief_inverse_matrix_faer = Mat::from_fn(n, n, |row, col| leontief_inverse_matrix[col * n + row]);
+  let matrix_faer = Mat::from_fn(n, n, |row, col| matrix[col * n + row]);
 
   // get row means
-  let mut indexed_results: Vec<(usize, f64)> = leontief_inverse_matrix_faer.row_iter()
+  let mut indexed_results: Vec<(usize, f64)> = matrix_faer.row_iter()
   .enumerate()
   .par_bridge()
   .map(|(index, row)| {
@@ -46,18 +42,18 @@ fn compute_row_average(
 }
 
 #[extendr]
-/// Computes column averages of Leontief inverse matrix
-/// @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
+/// Computes column averages of a matrix
+/// @param matrix A nxn matrix.
 /// @return A vector of column averages
 /// @noRd
 fn compute_col_average(
-  leontief_inverse_matrix: &[f64]
+  matrix: &[f64]
 ) -> Vec<f64> {
   
   // get dimensions
-  let n = (leontief_inverse_matrix.len() as f64).sqrt() as usize;
+  let n = (matrix.len() as f64).sqrt() as usize;
 
-  leontief_inverse_matrix
+  matrix
     .par_chunks(n)
     .map(|col| col.iter().sum::<f64>() / n as f64)
     .collect()
@@ -65,21 +61,21 @@ fn compute_col_average(
 
 #[extendr]
 /// @description Computes sensitivity of dispersion
-/// @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
+/// @param matrix A nxn matrix of Leontief or Ghosh inverse.
 /// @return A vector of sensitivity of dispersion.
 /// @noRd
 fn compute_sensitivity_dispersion(
-  leontief_inverse_matrix: &[f64]
+  matrix: &[f64]
 ) -> Vec<f64> {
   
   // get average of the matrix
-  let leontief_average = compute_leontief_inverse_average(leontief_inverse_matrix);
+  let matrix_average = compute_matrix_average(matrix);
   
   // get row averages
-  let rows_average = compute_row_average(leontief_inverse_matrix);
+  let rows_average = compute_row_average(matrix);
 
   // divide each row sum by the average of the matrix
-  rows_average.par_iter().map(|x| x / leontief_average).collect()
+  rows_average.par_iter().map(|x| x / matrix_average).collect()
 }
 
 #[extendr]
@@ -92,7 +88,7 @@ fn compute_power_dispersion(
 ) -> Vec<f64> {
   
   // get average of the matrix
-  let leontief_average = compute_leontief_inverse_average(leontief_inverse_matrix);
+  let leontief_average = compute_matrix_average(leontief_inverse_matrix);
   
   // get column averages
   let cols_average = compute_col_average(leontief_inverse_matrix);
@@ -146,27 +142,25 @@ fn compute_power_dispersion_cv(
 
 #[extendr]
 /// Computes sensitivity of dispersion coefficients of variation
-/// @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
+/// @param leontief_inverse_matrix A nxn matrix of Leontief or Ghosh inverse.
 /// @return A vector of sensitivity of dispersion coefficients of variation.
 /// @noRd
-fn compute_sensitivity_dispersion_cv(
-  leontief_inverse_matrix: &[f64]
-) -> Vec<f64> {
+fn compute_sensitivity_dispersion_cv(matrix: &[f64]) -> Vec<f64> {
   
   // get dimensions
-  let n = (leontief_inverse_matrix.len() as f64).sqrt() as usize;
+  let n = (matrix.len() as f64).sqrt() as usize;
 
   // get rows averages
-  let rows_average = compute_row_average(leontief_inverse_matrix);
+  let rows_average = compute_row_average(matrix);
 
-  // leontief_inverse_matrix - row averages
-  let lim_minus_ra: Vec<f64> = leontief_inverse_matrix.par_iter()
+  // matrix - row averages
+  let matrix_minus_ra: Vec<f64> = matrix.par_iter()
     .enumerate()
     .map(|(i, &value)| value - rows_average[i % n])
     .collect();
 
-  // get column sums of squared elements of lim_minus_ra
-  let mut col_sums = lim_minus_ra.par_chunks(n)
+  // get column sums of squared elements of matrix_minus_ra
+  let mut col_sums = matrix_minus_ra.par_chunks(n)
     .map(|col| col.iter().map(|x| x.powi(2)).sum::<f64>())
     .collect::<Vec<f64>>();
 
