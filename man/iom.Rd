@@ -1012,9 +1012,17 @@ my_iom$field_influence
 Computes the key sectors dataframe, based on it's power and sensitivity of dispersion,
 and populate the \code{key_sectors} field with the resulting \code{(data.frame)}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{iom$compute_key_sectors()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{iom$compute_key_sectors(matrix = "leontief")}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{matrix}}{(\code{matrix})\cr
+Which matrix should be used when computing forward linkage, Leontief or Ghoshian? Defaults to Leontief.}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Details}{
 Increased production from a sector \emph{j} means that the sector \emph{j} will need to
 purchase more goods from other sectors. At the same time, it means that more goods from sector \emph{j} will be

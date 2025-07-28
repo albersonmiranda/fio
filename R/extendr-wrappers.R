@@ -251,10 +251,10 @@ compute_field_influence <- function(tech_coeff_matrix, leontief_inverse_matrix, 
 compute_power_dispersion_cv <- function(leontief_inverse_matrix) .Call(wrap__compute_power_dispersion_cv, leontief_inverse_matrix)
 
 #' Computes sensitivity of dispersion coefficients of variation
-#' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
+#' @param leontief_inverse_matrix A nxn matrix of Leontief or Ghosh inverse.
 #' @return A vector of sensitivity of dispersion coefficients of variation.
 #' @noRd
-compute_sensitivity_dispersion_cv <- function(leontief_inverse_matrix) .Call(wrap__compute_sensitivity_dispersion_cv, leontief_inverse_matrix)
+compute_sensitivity_dispersion_cv <- function(matrix) .Call(wrap__compute_sensitivity_dispersion_cv, matrix)
 
 #' Computes power of dispersion
 #' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
@@ -263,10 +263,10 @@ compute_sensitivity_dispersion_cv <- function(leontief_inverse_matrix) .Call(wra
 compute_power_dispersion <- function(leontief_inverse_matrix) .Call(wrap__compute_power_dispersion, leontief_inverse_matrix)
 
 #' @description Computes sensitivity of dispersion
-#' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
+#' @param matrix A nxn matrix of Leontief or Ghosh inverse.
 #' @return A vector of sensitivity of dispersion.
 #' @noRd
-compute_sensitivity_dispersion <- function(leontief_inverse_matrix) .Call(wrap__compute_sensitivity_dispersion, leontief_inverse_matrix)
+compute_sensitivity_dispersion <- function(matrix) .Call(wrap__compute_sensitivity_dispersion, matrix)
 
 #' Computes allocation coefficients matrix.
 #' 

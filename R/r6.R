@@ -891,6 +891,8 @@ iom <- R6Class(
     #' @description
     #' Computes the key sectors dataframe, based on it's power and sensitivity of dispersion,
     #' and populate the `key_sectors` field with the resulting `(data.frame)`.
+    #' @param matrix (`matrix`)\cr
+    #' Which matrix should be used when computing forward linkage, Leontief or Ghoshian? Defaults to Leontief.
     #' @details
     #' Increased production from a sector *j* means that the sector *j* will need to
     #' purchase more goods from other sectors. At the same time, it means that more goods from sector *j* will be
@@ -921,28 +923,47 @@ iom <- R6Class(
     #' my_iom$compute_key_sectors()
     #' # show the key sectors
     #' my_iom$key_sectors
-    compute_key_sectors = function() {
+    compute_key_sectors = function(matrix = "leontief") {
+      match.arg(matrix, c("ghosh", "leontief"))
       # check if leontief inverse matrix is available
       if (is.null(self$leontief_inverse_matrix)) {
         cli::cli_h1("Error in leontief_inverse_matrix")
         error("You must compute the leontief inverse matrix first. Run compute_leontief_inverse() method.")
       }
+
+      if (matrix == "leontief") {
+        # set matrix
+        forward_linkage_matrix <- self$leontief_inverse_matrix
+      } else if (matrix == "ghosh") {
+        # check if ghosh inverse matrix is available
+        if (is.null(self$ghosh_inverse_matrix)) {
+          cli::cli_h1("Error in ghosh_inverse_matrix")
+          error("You must compute the ghosian inverse matrix first. Run compute_ghosh_inverse() method.")
+        }
+        # set matrix
+        forward_linkage_matrix <- self$ghosh_inverse_matrix
+      }
+
       # power of dispersion
       power_dispersion <- compute_power_dispersion(
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
+
       # sensitivity of dispersion
       sensitivity_dispersion <- compute_sensitivity_dispersion(
-        leontief_inverse_matrix = self$leontief_inverse_matrix
+        matrix = forward_linkage_matrix
       )
+
       # power of dispersion coefficients of variation
       power_dispersion_cv <- compute_power_dispersion_cv(
         leontief_inverse_matrix = self$leontief_inverse_matrix
       )
+
       # sensitivity of dispersion coefficients of variation
       sensitivity_dispersion_cv <- compute_sensitivity_dispersion_cv(
-        leontief_inverse_matrix = self$leontief_inverse_matrix
+        matrix = forward_linkage_matrix
       )
+
       # compute key sectors dataframe
       key_sectors <- data.frame(
         sector = rownames(self$leontief_inverse_matrix),
