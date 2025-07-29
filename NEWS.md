@@ -1,9 +1,12 @@
 # fio (development version)
 
+## ✨ Enhancements
+
+* New param `matrix` to `compute_key_sectors()` and `compute_hypothetical_extraction()` so users can decide if should be used Leontief or Ghosh matrices when computing forward linkages.
 
 ## 🛠️ Other improvements
 
-* Bump `faer` to 0.20.0 (#135).
+* Bump `faer` to 0.22.6 (#143).
 
 # fio 0.1.6
 
