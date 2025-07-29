@@ -1,6 +1,10 @@
 [source.crates-io]
 replace-with = "vendored-sources"
 
+[source."git+https://github.com/albersonmiranda/private_gemm_x86"]
+git = "https://github.com/albersonmiranda/private_gemm_x86"
+replace-with = "vendored-sources"
+
 [source."git+https://github.com/extendr/extendr"]
 git = "https://github.com/extendr/extendr"
 replace-with = "vendored-sources"
