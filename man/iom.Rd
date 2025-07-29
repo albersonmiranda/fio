@@ -1149,9 +1149,17 @@ my_iom$ghosh_inverse_matrix
 Computes total impact after extracting a each sector and populate the \code{hypothetical_extraction} field with the
 resulting \code{(data.frame)}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{iom$compute_hypothetical_extraction()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{iom$compute_hypothetical_extraction(matrix = "ghosh")}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{matrix}}{(\code{matrix})\cr
+Which matrix should be used when computing forward linkage, Leontief or Ghoshian? Defaults to Ghosian.}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Details}{
 Computes impact on demand and supply structures after extracting each
 sector \insertCite{miller_input-output_2009}{fio}.

@@ -938,7 +938,7 @@ iom <- R6Class(
         # check if ghosh inverse matrix is available
         if (is.null(self$ghosh_inverse_matrix)) {
           cli::cli_h1("Error in ghosh_inverse_matrix")
-          error("You must compute the ghosian inverse matrix first. Run compute_ghosh_inverse() method.")
+          error("You must compute the Ghoshian inverse matrix first. Run compute_ghosh_inverse() method.")
         }
         # set matrix
         forward_linkage_matrix <- self$ghosh_inverse_matrix
@@ -1076,6 +1076,8 @@ iom <- R6Class(
     #' @description
     #' Computes total impact after extracting a each sector and populate the `hypothetical_extraction` field with the
     #' resulting `(data.frame)`.
+    #' @param matrix (`matrix`)\cr
+    #' Which matrix should be used when computing forward linkage, Leontief or Ghoshian? Defaults to Ghoshian.
     #' @details
     #' Computes impact on demand and supply structures after extracting each
     #' sector \insertCite{miller_input-output_2009}{fio}.
@@ -1120,17 +1122,28 @@ iom <- R6Class(
     #' my_iom$compute_hypothetical_extraction()
     #' # show results
     #' my_iom$hypothetical_extraction
-    compute_hypothetical_extraction = function() {
-      # check if arguments are available
-      for (matrix_name in c(
-        "technical_coefficients_matrix",
-        "allocation_coefficients_matrix"
-      )) {
-        if (is.null(self[[matrix_name]])) {
-          cli::cli_h1("Error in {matrix_name}")
-          error(paste("You must compute the", matrix_name, "first. Run respective compute_*() method."))
+    compute_hypothetical_extraction = function(matrix = "ghosh") {
+      match.arg(matrix, c("ghosh", "leontief"))
+      # check if Ghoshian inverse matrix is available
+      if (matrix == "ghosh") {
+        for (matrix_name in c(
+          "technical_coefficients_matrix",
+          "allocation_coefficients_matrix"
+        )) {
+          if (is.null(self[[matrix_name]])) {
+            cli::cli_h1("Error in {matrix_name}")
+            error(paste("You must compute the", matrix_name, "first. Run respective compute_*() method."))
+          }
         }
+        forward_linkage_matrix <- self$allocation_coefficients_matrix
+      } else if (matrix == "leontief") {
+        if (is.null(self$technical_coefficients_matrix)) {
+          cli::cli_h1("Error in technical_coefficients_matrix")
+          error("You must compute the technical coefficients matrix first. Run compute_tech_coeff() method.")
+        }
+        forward_linkage_matrix <- self$technical_coefficients_matrix
       }
+
       for (matrix in c(
         "final_demand_matrix",
         "value_added_matrix"
@@ -1150,7 +1163,7 @@ iom <- R6Class(
       )
       # compute forward extraction
       extraction_forward <- compute_extraction_forward(
-        allocation_coeff = self$allocation_coefficients_matrix,
+        matrix = forward_linkage_matrix,
         value_added_matrix = self$value_added_matrix,
         total_production = self$total_production
       )
@@ -1220,7 +1233,7 @@ iom <- R6Class(
         return(alert("0 means all available threads, which is default behavior. Nothing changed"))
       }
 
-      return(set_max_threads(max_threads))
+      set_max_threads(max_threads)
     }
   ),
 

@@ -77,7 +77,7 @@ fn compute_extraction_backward(
 /// @description
 /// Computes impact on supply structure after extracting a given sector \insertCite{miller_input-output_2009}{fio}.
 /// 
-/// @param allocation_coefficients_matrix A nxn matrix of allocation coefficients.
+/// @param matrix A nxn matrix of technical or allocation coefficients.
 /// @param value_added_matrix The value-added matrix.
 /// @param total_production A 1xn vector of total production.
 /// 
@@ -86,13 +86,13 @@ fn compute_extraction_backward(
 /// 
 /// @noRd
 fn compute_extraction_forward(
-  allocation_coefficients_matrix: &[f64],
+  matrix: &[f64],
   value_added_matrix: RMatrix<f64>,
   total_production: &[f64]
 ) -> RMatrix<f64> {
 
   // get dimensions
-  let n = (allocation_coefficients_matrix.len() as f64).sqrt() as usize;
+  let n = (matrix.len() as f64).sqrt() as usize;
   let n_av = value_added_matrix.nrows();
   let m_av = value_added_matrix.ncols();
   
@@ -104,7 +104,7 @@ fn compute_extraction_forward(
 
   // initialize objects
   let mut forward_linkage = Mat::zeros(n, n);
-  let mut allocation_coefficients_matrix_bl = Mat::from_fn(n, n, |row, col| allocation_coefficients_matrix[col * n + row]);
+  let mut matrix_bl = Mat::from_fn(n, n, |row, col| matrix[col * n + row]);
   let identity_matrix: &Mat<f64> = &Mat::identity(n, n);
   let sum_output = total_production.iter().sum::<f64>();
 
@@ -112,15 +112,15 @@ fn compute_extraction_forward(
   for i in 0..n {
     // set j column to zero
     for j in 0..n {
-      allocation_coefficients_matrix_bl[(i, j)] = 0.0;
+      matrix_bl[(i, j)] = 0.0;
     }
-    // calculate new Ghosh matrix
-    let ghosh_matrix = identity_matrix - &allocation_coefficients_matrix_bl;
-    // calculate new Ghosh inverse
-    let lu = ghosh_matrix.partial_piv_lu();
-    let ghosh_inverse = lu.solve(identity_matrix);
+    // calculate new base (Ghosh or Leontief) matrix
+    let base_matrix = identity_matrix - &matrix_bl;
+    // calculate new base inverse
+    let lu = base_matrix.partial_piv_lu();
+    let base_inverse = lu.solve(identity_matrix);
     // calculate new output level
-    let new_output: Mat<f64> = Mat::from_fn(1, n, |_, col| value_added_colsum[col]) * ghosh_inverse;
+    let new_output: Mat<f64> = Mat::from_fn(1, n, |_, col| value_added_colsum[col]) * base_inverse;
     // calculate diff in output
     let diff_output = new_output.col_iter().map(|x| x.iter().sum::<f64>()).sum::<f64>() - &sum_output;
     // store diff in output
@@ -129,7 +129,7 @@ fn compute_extraction_forward(
     forward_linkage[(i, 1)] = diff_output / sum_output;
     // reset j column to original values
     for j in 0..n {
-      allocation_coefficients_matrix_bl[(i, j)] = allocation_coefficients_matrix[j * n + i];
+      matrix_bl[(i, j)] = matrix[j * n + i];
     }
   }
 
