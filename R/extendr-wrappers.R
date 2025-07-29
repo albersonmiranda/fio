@@ -251,10 +251,10 @@ compute_field_influence <- function(tech_coeff_matrix, leontief_inverse_matrix, 
 compute_power_dispersion_cv <- function(leontief_inverse_matrix) .Call(wrap__compute_power_dispersion_cv, leontief_inverse_matrix)
 
 #' Computes sensitivity of dispersion coefficients of variation
-#' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
+#' @param leontief_inverse_matrix A nxn matrix of Leontief or Ghosh inverse.
 #' @return A vector of sensitivity of dispersion coefficients of variation.
 #' @noRd
-compute_sensitivity_dispersion_cv <- function(leontief_inverse_matrix) .Call(wrap__compute_sensitivity_dispersion_cv, leontief_inverse_matrix)
+compute_sensitivity_dispersion_cv <- function(matrix) .Call(wrap__compute_sensitivity_dispersion_cv, matrix)
 
 #' Computes power of dispersion
 #' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
@@ -263,10 +263,10 @@ compute_sensitivity_dispersion_cv <- function(leontief_inverse_matrix) .Call(wra
 compute_power_dispersion <- function(leontief_inverse_matrix) .Call(wrap__compute_power_dispersion, leontief_inverse_matrix)
 
 #' @description Computes sensitivity of dispersion
-#' @param leontief_inverse_matrix A nxn matrix of Leontief inverse.
+#' @param matrix A nxn matrix of Leontief or Ghosh inverse.
 #' @return A vector of sensitivity of dispersion.
 #' @noRd
-compute_sensitivity_dispersion <- function(leontief_inverse_matrix) .Call(wrap__compute_sensitivity_dispersion, leontief_inverse_matrix)
+compute_sensitivity_dispersion <- function(matrix) .Call(wrap__compute_sensitivity_dispersion, matrix)
 
 #' Computes allocation coefficients matrix.
 #' 
@@ -339,7 +339,7 @@ compute_extraction_backward <- function(technical_coefficients_matrix, final_dem
 #' @description
 #' Computes impact on supply structure after extracting a given sector \insertCite{miller_input-output_2009}{fio}.
 #' 
-#' @param allocation_coefficients_matrix A nxn matrix of allocation coefficients.
+#' @param matrix A nxn matrix of technical or allocation coefficients.
 #' @param value_added_matrix The value-added matrix.
 #' @param total_production A 1xn vector of total production.
 #' 
@@ -347,7 +347,7 @@ compute_extraction_backward <- function(technical_coefficients_matrix, final_dem
 #' \insertAllCited{}
 #' 
 #' @noRd
-compute_extraction_forward <- function(allocation_coefficients_matrix, value_added_matrix, total_production) .Call(wrap__compute_extraction_forward, allocation_coefficients_matrix, value_added_matrix, total_production)
+compute_extraction_forward <- function(matrix, value_added_matrix, total_production) .Call(wrap__compute_extraction_forward, matrix, value_added_matrix, total_production)
 
 #' Computes total impact after extracting a given sector.
 #' @param backward_linkage_matrix A nx2 matrix of backward linkage.
