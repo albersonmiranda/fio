@@ -8,3 +8,4 @@ src/Makevars
 src/Makevars.win
 *.tar.gz
 *.Rcheck
+src/Makevars.wasm

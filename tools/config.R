@@ -66,21 +66,26 @@ cfg <- if (is_debug) "debug" else "release"
 # read in the Makevars.in file checking
 is_windows <- .Platform[["OS.type"]] == "windows"
 
-# if windows we replace in the Makevars.win.in
-mv_fp <- ifelse(
-  is_windows,
-  "src/Makevars.win.in",
-  "src/Makevars.in"
-)
+# if windows we replace in the Makevars.win.in,
+# if webR replace in the Makevars.wasm.in
+if (is_windows) {
+  mv_fp <- "src/Makevars.win.in"
+} else if (is_wasm) {
+  mv_fp <- "src/Makevars.wasm.in"
+} else {
+  mv_fp <- "src/Makevars.in"
+}
 
 # set the output file
-mv_ofp <- ifelse(
-  is_windows,
-  "src/Makevars.win",
-  "src/Makevars"
-)
+if (is_windows) {
+  mv_ofp <- "src/Makevars.in"
+} else if (is_wasm) {
+  mv_ofp <- "src/Makevars.wasm"
+} else {
+  mv_ofp <- "src/Makevars"
+}
 
-# delete the existing Makevars{.win}
+# delete the existing Makevars{.win/.wasm}
 if (file.exists(mv_ofp)) {
   message("Cleaning previous `", mv_ofp, "`.")
   invisible(file.remove(mv_ofp))
