@@ -21,3 +21,4 @@
 ^src/rust/target$
 ^src/Makevars$
 ^src/Makevars\.win$
+^src/Makevars\.wasm$
