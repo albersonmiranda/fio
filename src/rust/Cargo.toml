@@ -22,3 +22,7 @@ faer = { version = '0.22.6' }
 [patch.crates-io]
 extendr-api = { git = "https://github.com/extendr/extendr" }
 private-gemm-x86 = { git = "https://github.com/albersonmiranda/private_gemm_x86" }
+
+[profile.release]
+lto = true
+codegen-units = 1
