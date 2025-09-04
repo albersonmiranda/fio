@@ -13,6 +13,11 @@ NULL
 #' @description
 #' Computes technical coefficients matrix.
 #' 
+#' @param intermediate_transactions
+#' A \eqn{n x n} matrix of intermediate transactions.
+#' @param total_production
+#' A \eqn{1 x n} vector of total production.
+#' 
 #' @details
 #' It computes the technical coefficients matrix, a \eqn{n x n} matrix known as `A` matrix which is the column-wise
 #' ratio of intermediate transactions to total production \insertCite{leontief_economia_1983}{fio}.
@@ -22,18 +27,6 @@ NULL
 #'
 #' Underlined Rust code uses Rayon crate to parallelize the computation. So there is no need to use future or
 #' async/await to parallelize.
-#' 
-#' @param intermediate_transactions
-#' A \eqn{n x n} matrix of intermediate transactions.
-#' @param total_production
-#' A \eqn{1 x n} vector of total production.
-#' 
-#' @details
-#' It computes the technical coefficients matrix, which is the columnwise ratio of
-#' intermediate transactions to total production \insertCite{leontief_economia_1983}{fio}.
-#' 
-#' Underlined Rust code uses Rayon crate to parallelize the computation by
-#' default, so there is no need to use future or async/await to parallelize.
 #' 
 #' @return
 #' A \eqn{n x n} matrix of technical coefficients, known as A matrix.
@@ -417,6 +410,28 @@ compute_extraction_total <- function(backward_linkage_matrix, forward_linkage_ma
 #'
 #' @noRd
 set_max_threads <- function(max_threads) invisible(.Call(wrap__set_max_threads, max_threads))
+
+#' @title
+#' Download WIOD tables
+#' @description
+#' Downloads World Input-Output Database tables.
+#' 
+#' @details
+#' It downloads multi-region input-output tables from the World Input-Output Database (WIOD) from University of Groningen, Netherlands.
+#' 
+#' @param year (`string`)\cr
+#' Release year from WIOD. One of "2016", "2013" or "long-run".
+#' @param out_dir (`string`)\cr
+#' Path to download.
+#' 
+#' @return
+#' A message indicating the result of the download operation.
+#' 
+#' @examples
+#' # Download WIOD 2016 tables to temporary directory
+#' fio::download_wiod("2016", getwd())
+#' 
+download_wiod <- function(year, out_dir) .Call(wrap__download_wiod, year, out_dir)
 
 
 # nolint end

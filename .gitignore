@@ -9,3 +9,4 @@ src/Makevars.win
 *.tar.gz
 *.Rcheck
 src/Makevars.wasm
+.DS_Store
