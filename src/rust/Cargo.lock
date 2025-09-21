@@ -369,7 +369,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "778e2ac28f6c47af28e4907f13ffd1e1ddbd400980a9abd7c8df189bf578a5ad"
 dependencies = [
  "libc",
- "windows-sys 0.59.0",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -1529,8 +1529,9 @@ dependencies = [
 
 [[package]]
 name = "private-gemm-x86"
-version = "0.1.14"
-source = "git+https://github.com/albersonmiranda/private_gemm_x86#b0826e17398741ec35e2c2cdbbc250bccf6e83fd"
+version = "0.1.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a7a5e956b0b597524b628273805dc47c5b15c0570f4ebc920f606ff0ecfb0f6b"
 dependencies = [
  "crossbeam",
  "defer",
@@ -1539,7 +1540,6 @@ dependencies = [
  "raw-cpuid",
  "rayon",
  "spindle",
- "sysctl",
 ]
 
 [[package]]
@@ -1805,7 +1805,7 @@ dependencies = [
  "errno",
  "libc",
  "linux-raw-sys",
- "windows-sys 0.59.0",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -2125,7 +2125,7 @@ dependencies = [
  "getrandom 0.3.3",
  "once_cell",
  "rustix",
- "windows-sys 0.59.0",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]

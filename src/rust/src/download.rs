@@ -4,7 +4,7 @@ use std::fs::File;
 use std::io::copy;
 use indicatif::{ProgressBar, ProgressStyle};
 
-#[extendr]
+#[extendr(invisible)]
 /// @title
 /// Download WIOD tables
 /// @description
@@ -28,7 +28,7 @@ use indicatif::{ProgressBar, ProgressStyle};
 fn download_wiod(
   year: &str,
   out_dir: &str,
-) -> Result<String> {
+) -> Result<()> {
 
   let valid_years = vec!["2016", "2013", "long-run"];
   if !valid_years.contains(&year) {
@@ -81,10 +81,12 @@ fn download_wiod(
       pb.finish_with_message("Download failed!");
       format!("Failed to copy content: {}", e)
     })?;
-    
-  pb.finish_with_message("Download successful!");
-  
-  Ok(format!("File saved to: {}", out_path))
+
+  pb.finish_with_message("Done!");
+
+  rprintln!("File successfully saved to: {}", out_path);
+
+  Ok(())
 }
 
 extendr_module! {
