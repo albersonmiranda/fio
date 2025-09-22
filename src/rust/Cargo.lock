@@ -1351,9 +1351,9 @@ dependencies = [
 
 [[package]]
 name = "private-gemm-x86"
-version = "0.1.15"
+version = "0.1.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a7a5e956b0b597524b628273805dc47c5b15c0570f4ebc920f606ff0ecfb0f6b"
+checksum = "2868e6e23764567c8e0896f11912d6c1722b9648158a505eb9ce29c81fa2fb6c"
 dependencies = [
  "crossbeam",
  "defer",
@@ -1362,6 +1362,7 @@ dependencies = [
  "raw-cpuid",
  "rayon",
  "spindle",
+ "sysctl",
 ]
 
 [[package]]
