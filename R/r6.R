@@ -391,6 +391,171 @@ iom <- R6Class(
     },
 
     #' @description
+    #' Closes the model by moving specified sectors from final demand to intermediate transactions.
+    #' @details
+    #' A closed model treats households and/or government as endogenous sectors by moving them
+    #' from final demand to the intermediate transactions matrix, along with their corresponding
+    #' value-added components (wages for households, taxes for government).
+    #' 
+    #' When closing with households:
+    #' - Household consumption becomes a new column in intermediate transactions
+    #' - Wages become a new row in intermediate transactions
+    #' - Both are removed from final demand and value-added matrices respectively
+    #' 
+    #' When closing with government:
+    #' - Government consumption becomes a new column in intermediate transactions  
+    #' - Taxes become a new row in intermediate transactions
+    #' - Both are removed from final demand and value-added matrices respectively
+    #' @param sectors (`character`) Vector specifying which sectors to close.
+    #' Must be one or both of "household" or "government".
+    #' @return Self (invisibly).
+    #' @examples
+    #' # data
+    #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+    #' total_production <- matrix(c(100, 200, 300), 1, 3)
+    #' household_consumption <- matrix(c(10, 20, 30), 3, 1)
+    #' wages <- matrix(c(15, 25, 35), 1, 3)
+    #' # instantiate iom object
+    #' my_iom <- iom$new(
+    #'  "mock",
+    #'  intermediate_transactions,
+    #'  total_production,
+    #'  household_consumption = household_consumption,
+    #'  wages = wages
+    #' )
+    #' # close the model with household sector
+    #' my_iom$close_model("household")
+    close_model = function(sectors) {
+      # validate input
+      valid_sectors <- c("household", "government")
+      
+      if (!is.character(sectors) || length(sectors) == 0) {
+        cli::cli_h1("Error in sectors argument")
+        error("sectors must be a character vector with at least one element.")
+      }
+      
+      if (!all(sectors %in% valid_sectors)) {
+        cli::cli_h1("Error in sectors argument")
+        error(paste("sectors must be one or both of:", paste(valid_sectors, collapse = ", ")))
+      }
+      
+      # remove duplicates
+      sectors <- unique(sectors)
+      
+      # close household sector
+      if ("household" %in% sectors) {
+        if (is.null(self$household_consumption)) {
+          cli::cli_h1("Error: Missing household consumption")
+          error("household_consumption must be present to close household sector.")
+        }
+        if (is.null(self$wages)) {
+          cli::cli_h1("Error: Missing wages")
+          error("wages must be present to close household sector.")
+        }
+        
+        # calculate household total production (sum of household consumption)
+        household_total_production <- sum(self$household_consumption)
+        
+        # add household consumption as new column to intermediate transactions
+        self$intermediate_transactions <- cbind(self$intermediate_transactions, 
+                                              as.vector(self$household_consumption))
+        
+        # add wages as new row to intermediate transactions  
+        self$intermediate_transactions <- rbind(self$intermediate_transactions,
+                                              c(as.vector(self$wages), household_total_production))
+        
+        # update total production to include household sector
+        self$total_production <- cbind(self$total_production, household_total_production)
+        
+        # remove household consumption and wages from their respective matrices
+        self$household_consumption <- NULL
+        self$wages <- NULL
+        
+        # update matrix names if present
+        if (!is.null(colnames(self$intermediate_transactions))) {
+          n_sectors <- ncol(self$intermediate_transactions)
+          colnames(self$intermediate_transactions)[n_sectors] <- "Household"
+        } else {
+          n_sectors <- ncol(self$intermediate_transactions)
+          colnames(self$intermediate_transactions) <- c(paste("Sector", 1:(n_sectors-1)), "Household")
+        }
+        
+        if (!is.null(rownames(self$intermediate_transactions))) {
+          n_sectors <- nrow(self$intermediate_transactions)  
+          rownames(self$intermediate_transactions)[n_sectors] <- "Household"
+        } else {
+          n_sectors <- nrow(self$intermediate_transactions)
+          rownames(self$intermediate_transactions) <- c(paste("Sector", 1:(n_sectors-1)), "Household")
+        }
+        
+        if (!is.null(colnames(self$total_production))) {
+          n_sectors <- ncol(self$total_production)
+          colnames(self$total_production)[n_sectors] <- "Household"  
+        } else {
+          n_sectors <- ncol(self$total_production)
+          colnames(self$total_production) <- c(paste("Sector", 1:(n_sectors-1)), "Household")
+        }
+      }
+      
+      # close government sector
+      if ("government" %in% sectors) {
+        if (is.null(self$government_consumption)) {
+          cli::cli_h1("Error: Missing government consumption")
+          error("government_consumption must be present to close government sector.")
+        }
+        if (is.null(self$taxes)) {
+          cli::cli_h1("Error: Missing taxes")
+          error("taxes must be present to close government sector.")
+        }
+        
+        # calculate government total production (sum of government consumption)
+        government_total_production <- sum(self$government_consumption)
+        
+        # add government consumption as new column to intermediate transactions
+        self$intermediate_transactions <- cbind(self$intermediate_transactions,
+                                              as.vector(self$government_consumption))
+        
+        # add taxes as new row to intermediate transactions
+        self$intermediate_transactions <- rbind(self$intermediate_transactions,
+                                              c(as.vector(self$taxes), government_total_production))
+        
+        # update total production to include government sector
+        self$total_production <- cbind(self$total_production, government_total_production)
+        
+        # remove government consumption and taxes from their respective matrices
+        self$government_consumption <- NULL
+        self$taxes <- NULL
+        
+        # update matrix names if present
+        if (!is.null(colnames(self$intermediate_transactions))) {
+          n_sectors <- ncol(self$intermediate_transactions)
+          colnames(self$intermediate_transactions)[n_sectors] <- "Government"
+        } else {
+          n_sectors <- ncol(self$intermediate_transactions)
+          colnames(self$intermediate_transactions) <- c(paste("Sector", 1:(n_sectors-1)), "Government")
+        }
+        
+        if (!is.null(rownames(self$intermediate_transactions))) {
+          n_sectors <- nrow(self$intermediate_transactions)  
+          rownames(self$intermediate_transactions)[n_sectors] <- "Government"
+        } else {
+          n_sectors <- nrow(self$intermediate_transactions)
+          rownames(self$intermediate_transactions) <- c(paste("Sector", 1:(n_sectors-1)), "Government")
+        }
+        
+        if (!is.null(colnames(self$total_production))) {
+          n_sectors <- ncol(self$total_production)
+          colnames(self$total_production)[n_sectors] <- "Government"  
+        } else {
+          n_sectors <- ncol(self$total_production)
+          colnames(self$total_production) <- c(paste("Sector", 1:(n_sectors-1)), "Government")
+        }
+      }
+      
+      invisible(self)
+    },
+
+    #' @description
     #' Aggregates final demand vectors into the `final_demand_matrix` field.
     #' @details
     #' Some methods, as `$compute_hypothetical_extraction()`, require the final demand and value-added vectors
