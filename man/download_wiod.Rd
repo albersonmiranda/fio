@@ -8,10 +8,10 @@ download_wiod(year = "2016", out_dir = getwd())
 }
 \arguments{
 \item{year}{(\code{string})\cr
-Release year from WIOD. One of "2016", "2013" or "long-run".}
+Release year from WIOD. One of "2016", "2013" or "long-run". Defaults to "2016".}
 
 \item{out_dir}{(\code{string})\cr
-Path to download.}
+Path to download. Defaults to current working directory.}
 }
 \value{
 A message indicating the result of the download operation.
@@ -20,9 +20,11 @@ A message indicating the result of the download operation.
 Downloads World Input-Output Database tables.
 }
 \details{
-It downloads multi-region input-output tables from the World Input-Output Database (WIOD) from University of Groningen, Netherlands.
+Multi-region input-output tables from the World Input-Output Database (WIOD) from University of Groningen, Netherlands.
 }
 \examples{
 # Download WIOD 2016 tables to temporary directory
-fio::download_wiod("2016", getwd())
+\dontrun{
+  fio::download_wiod("2016", getwd())
+}
 }

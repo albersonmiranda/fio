@@ -2,7 +2,8 @@
 
 ## ✨ Enhancements
 
-* New param `matrix` to `compute_key_sectors()` and `compute_hypothetical_extraction()` so users can decide if should be used Leontief or Ghosh matrices when computing forward linkages.
+* New param `matrix` to `compute_key_sectors()` and `compute_hypothetical_extraction()` so users can decide if should be used Leontief or Ghosh matrices when computing forward linkages (#148).
+* New `download_wiod()` function to download World Input-Output Database (WIOD) tables directly from their website (#152).
 
 ## 🛠️ Other improvements
 

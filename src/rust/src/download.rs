@@ -7,23 +7,27 @@ use indicatif::{ProgressBar, ProgressStyle};
 #[extendr(invisible)]
 /// @title
 /// Download WIOD tables
+
 /// @description
 /// Downloads World Input-Output Database tables.
 /// 
 /// @details
-/// It downloads multi-region input-output tables from the World Input-Output Database (WIOD) from University of Groningen, Netherlands.
+/// Multi-region input-output tables from the World Input-Output Database (WIOD) from University of Groningen, Netherlands.
 /// 
 /// @param year (`string`)\cr
-/// Release year from WIOD. One of "2016", "2013" or "long-run".
+/// Release year from WIOD. One of "2016", "2013" or "long-run". Defaults to "2016".
 /// @param out_dir (`string`)\cr
-/// Path to download.
+/// Path to download. Defaults to current working directory.
 /// 
 /// @return
 /// A message indicating the result of the download operation.
 /// 
 /// @examples
 /// # Download WIOD 2016 tables to temporary directory
-/// fio::download_wiod("2016", getwd())
+/// \dontrun{
+///   fio::download_wiod("2016", getwd())
+/// }
+/// @export
 fn download_wiod(
   #[default = r#""2016""#] year: &str,
   #[default = "getwd()"] out_dir: &str,
@@ -48,7 +52,6 @@ fn download_wiod(
   
   let out_path = format!("{}/{}.zip", out_dir, year);
   
-  // Create progress bar with spinner style
   let pb = ProgressBar::new_spinner();
   pb.set_style(
     ProgressStyle::default_spinner()
@@ -60,7 +63,6 @@ fn download_wiod(
   );
   pb.set_message(format!("Downloading WIOD data for year {}", year));
   
-  // Enable steady tick to make spinner move
   pb.enable_steady_tick(std::time::Duration::from_millis(100));
   
   let mut response = get(&url)
