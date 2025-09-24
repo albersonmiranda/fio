@@ -6,6 +6,7 @@ mod leontief;
 mod linkages;
 mod multipliers;
 mod parallel;
+mod download;
 
 use extendr_api::prelude::*;
 
@@ -21,4 +22,5 @@ extendr_module! {
   use ghosh;
   use extraction;
   use parallel;
+  use download;
 }

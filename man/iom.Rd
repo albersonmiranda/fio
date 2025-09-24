@@ -1156,7 +1156,7 @@ resulting \code{(data.frame)}.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{matrix}}{(\code{matrix})\cr
-Which matrix should be used when computing forward linkage, Leontief or Ghoshian? Defaults to Ghosian.}
+Which matrix should be used when computing forward linkage, Leontief or Ghoshian? Defaults to Ghoshian.}
 }
 \if{html}{\out{</div>}}
 }

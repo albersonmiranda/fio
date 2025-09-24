@@ -14,14 +14,16 @@ crate-type = [ 'staticlib' ]
 name = 'fio'
 
 [dependencies]
-extendr-api = '0.8.0'
+extendr-api = '*'
 rayon = '1.10.0'
 num_cpus = '1.16.0'
 faer = { version = '0.22.6' }
+reqwest = { version = "0.12.19", features = ["blocking", "rustls-tls"], default-features = false }
+tokio = { version = "1", features = ["full"] }
+indicatif = { version = "0.18" }
 
 [patch.crates-io]
 extendr-api = { git = "https://github.com/extendr/extendr" }
-private-gemm-x86 = { git = "https://github.com/albersonmiranda/private_gemm_x86" }
 
 [profile.release]
 lto = true
