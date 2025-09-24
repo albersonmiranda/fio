@@ -471,30 +471,33 @@ iom <- R6Class(
         self$household_consumption <- NULL
         self$wages <- NULL
         
-        # update matrix names if present
-        if (!is.null(colnames(self$intermediate_transactions))) {
-          n_sectors <- ncol(self$intermediate_transactions)
-          colnames(self$intermediate_transactions)[n_sectors] <- "Household"
-        } else {
-          n_sectors <- ncol(self$intermediate_transactions)
-          colnames(self$intermediate_transactions) <- c(paste("Sector", 1:(n_sectors-1)), "Household")
-        }
+        # update matrix names 
+        n_cols <- ncol(self$intermediate_transactions)
+        n_rows <- nrow(self$intermediate_transactions)
         
-        if (!is.null(rownames(self$intermediate_transactions))) {
-          n_sectors <- nrow(self$intermediate_transactions)  
-          rownames(self$intermediate_transactions)[n_sectors] <- "Household"
+        # set or update column names
+        if (is.null(colnames(self$intermediate_transactions))) {
+          original_names <- paste("Sector", 1:(n_cols-1))
         } else {
-          n_sectors <- nrow(self$intermediate_transactions)
-          rownames(self$intermediate_transactions) <- c(paste("Sector", 1:(n_sectors-1)), "Household")
+          original_names <- colnames(self$intermediate_transactions)[1:(n_cols-1)]
         }
+        colnames(self$intermediate_transactions) <- c(original_names, "Household")
         
-        if (!is.null(colnames(self$total_production))) {
-          n_sectors <- ncol(self$total_production)
-          colnames(self$total_production)[n_sectors] <- "Household"  
+        # set or update row names
+        if (is.null(rownames(self$intermediate_transactions))) {
+          original_names <- paste("Sector", 1:(n_rows-1))
         } else {
-          n_sectors <- ncol(self$total_production)
-          colnames(self$total_production) <- c(paste("Sector", 1:(n_sectors-1)), "Household")
+          original_names <- rownames(self$intermediate_transactions)[1:(n_rows-1)]
         }
+        rownames(self$intermediate_transactions) <- c(original_names, "Household")
+        
+        # set or update total production column names
+        if (is.null(colnames(self$total_production))) {
+          original_names <- paste("Sector", 1:(n_cols-1))
+        } else {
+          original_names <- colnames(self$total_production)[1:(n_cols-1)]
+        }
+        colnames(self$total_production) <- c(original_names, "Household")
       }
       
       # close government sector
@@ -526,30 +529,33 @@ iom <- R6Class(
         self$government_consumption <- NULL
         self$taxes <- NULL
         
-        # update matrix names if present
-        if (!is.null(colnames(self$intermediate_transactions))) {
-          n_sectors <- ncol(self$intermediate_transactions)
-          colnames(self$intermediate_transactions)[n_sectors] <- "Government"
-        } else {
-          n_sectors <- ncol(self$intermediate_transactions)
-          colnames(self$intermediate_transactions) <- c(paste("Sector", 1:(n_sectors-1)), "Government")
-        }
+        # update matrix names
+        n_cols <- ncol(self$intermediate_transactions) 
+        n_rows <- nrow(self$intermediate_transactions)
         
-        if (!is.null(rownames(self$intermediate_transactions))) {
-          n_sectors <- nrow(self$intermediate_transactions)  
-          rownames(self$intermediate_transactions)[n_sectors] <- "Government"
+        # set or update column names
+        if (is.null(colnames(self$intermediate_transactions))) {
+          original_names <- paste("Sector", 1:(n_cols-1))
         } else {
-          n_sectors <- nrow(self$intermediate_transactions)
-          rownames(self$intermediate_transactions) <- c(paste("Sector", 1:(n_sectors-1)), "Government")
+          original_names <- colnames(self$intermediate_transactions)[1:(n_cols-1)]
         }
+        colnames(self$intermediate_transactions) <- c(original_names, "Government")
         
-        if (!is.null(colnames(self$total_production))) {
-          n_sectors <- ncol(self$total_production)
-          colnames(self$total_production)[n_sectors] <- "Government"  
+        # set or update row names
+        if (is.null(rownames(self$intermediate_transactions))) {
+          original_names <- paste("Sector", 1:(n_rows-1))
         } else {
-          n_sectors <- ncol(self$total_production)
-          colnames(self$total_production) <- c(paste("Sector", 1:(n_sectors-1)), "Government")
+          original_names <- rownames(self$intermediate_transactions)[1:(n_rows-1)]
         }
+        rownames(self$intermediate_transactions) <- c(original_names, "Government")
+        
+        # set or update total production column names
+        if (is.null(colnames(self$total_production))) {
+          original_names <- paste("Sector", 1:(n_cols-1))
+        } else {
+          original_names <- colnames(self$total_production)[1:(n_cols-1)]
+        }
+        colnames(self$total_production) <- c(original_names, "Government")
       }
       
       invisible(self)
