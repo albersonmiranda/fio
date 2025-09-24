@@ -430,8 +430,7 @@ set_max_threads <- function(max_threads) invisible(.Call(wrap__set_max_threads, 
 #' @examples
 #' # Download WIOD 2016 tables to temporary directory
 #' fio::download_wiod("2016", getwd())
-#' 
-download_wiod <- function(year, out_dir) invisible(.Call(wrap__download_wiod, year, out_dir))
+download_wiod <- function(year = "2016", out_dir = getwd()) invisible(.Call(wrap__download_wiod, year, out_dir))
 
 
 # nolint end

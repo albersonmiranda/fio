@@ -4,7 +4,7 @@
 \alias{download_wiod}
 \title{Download WIOD tables}
 \usage{
-download_wiod(year, out_dir)
+download_wiod(year = "2016", out_dir = getwd())
 }
 \arguments{
 \item{year}{(\code{string})\cr
@@ -25,5 +25,4 @@ It downloads multi-region input-output tables from the World Input-Output Databa
 \examples{
 # Download WIOD 2016 tables to temporary directory
 fio::download_wiod("2016", getwd())
-
 }

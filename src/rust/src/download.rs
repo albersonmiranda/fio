@@ -24,10 +24,9 @@ use indicatif::{ProgressBar, ProgressStyle};
 /// @examples
 /// # Download WIOD 2016 tables to temporary directory
 /// fio::download_wiod("2016", getwd())
-/// 
 fn download_wiod(
-  year: &str,
-  out_dir: &str,
+  #[default = r#""2016""#] year: &str,
+  #[default = "getwd()"] out_dir: &str,
 ) -> Result<()> {
 
   let valid_years = vec!["2016", "2013", "long-run"];
