@@ -34,7 +34,7 @@ The present benchmark was conducted on 2025-06-17 on a Macbook Pro M4 (12-core C
 
 This vignette presents a benchmarking analysis comparing the performance of functions from the `fio` package with equivalent base R functions and functions from other packages. The `fio` package provides a set of functions for input-output analysis, a method used in economics to analyze the interdependencies between different sectors of an economy.
 
-Our benchmarking tests show that `fio` package functions are either faster or more memory-efficient than other implementations. This improved performance can make a substantial difference in larger analyses, making the `fio` package a valuable tool for input-output analysis in R.
+Our benchmarking tests show that `fio` package functions are generally faster; reported memory figures come from `bench` and correspond to R-side allocations only. This improved timing performance can make a substantial difference in larger analyses, making the `fio` package a valuable tool for input-output analysis in R.
 
 The tests were run on simulated square matrices, with dimensions ranging from 100x100 up to 2000x2000, and each test was repeated at least 50 times to account for variability. Please note that the results of this benchmarking analysis depend on the specific test datasets used and the hardware on which the algorithms were run. Therefore, the results should be interpreted in the context of these specific conditions.
 
@@ -42,7 +42,9 @@ The tests were run on simulated square matrices, with dimensions ranging from 10
 
 The technical coefficients matrix calculation, a key and initial step in input-output analysis, was tested using the `compute_tech_coeff()` function from the `{fio}` package, equivalent functions from the `{leontief}` package, and a base R implementation. It consists of dividing each $a_{ij}$ element of the intermediate transactions matrix by the corresponding $x_j$ element of the total production vector^[Or equivalently, multiplying the intermediate transactions matrix by a diagonal matrix constructed from the total production vector.].
 
-Results shows that {fio} is generally faster and uses significantly less memory than the other two implementations, especially for larger matrices (≥500x500). The memory usage of {fio} is approximately half that of Base R and 12% of that used by {leontief}.
+Note: the memory figures reported in the `bench` outputs correspond to allocations observed on the R side only; allocations performed inside native code (C++/Rust) are not captured by `bench::mem_alloc` and therefore these numbers may not reflect the full native memory usage of each implementation.
+
+Results show that {fio} is generally faster than the other two implementations, especially for larger matrices (≥500x500). The timing results below illustrate relative speed differences across implementations.
 
 
 ``` r
@@ -106,15 +108,15 @@ ggplot2::autoplot(benchmark_a)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_m4_a-1.png" alt="\label{fig:benchmark_a} For larger matrices (≥500x500), {fio} is generally faster and uses significantly less memory: approximately half that of Base R and 12% of that used by {leontief}."  />
-<p class="caption">\label{fig:benchmark_a} For larger matrices (≥500x500), {fio} is generally faster and uses significantly less memory: approximately half that of Base R and 12% of that used by {leontief}.</p>
+<img src="figure/benchmark_m4_a-1.png" alt="\\label{fig:benchmark_a} For larger matrices (≥500x500), {fio} is generally faster than alternatives."  />
+<p class="caption">\\label{fig:benchmark_a} For larger matrices (≥500x500), {fio} is generally faster than alternatives. Note: reported memory figures are R-side only and may not include native (C++/Rust) allocations.</p>
 </div>
 
 # Leontief inverse matrix
 
 The Leontief matrix ($L$) is obtained by subtracting the technical coefficients matrix ($A$) from the identity matrix ($I$); therefore, it has no null rows or columns. This allows for solving the linear system $L \times L^{-1} = I$ through LU decomposition, which is a more efficient method than direct inverse matrix calculation.
 
-Results shows that while {fio} is slightly slower, it demonstrates superior memory efficiency, using less than half the memory of alternatives.
+Results shows that while {fio} is slightly slower, it demonstrates competitive timing and appears more memory-efficient on the R side; recall that R-side memory is what `bench` measures.
 
 
 ``` r
@@ -178,8 +180,8 @@ ggplot2::autoplot(benchmark_b)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_m4_b-1.png" alt="\label{fig:benchmark_b} While slightly slower, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger."  />
-<p class="caption">\label{fig:benchmark_b} While slightly slower, {fio} demonstrates superior memory efficiency, using less than half the memory of alternatives for matrices 500x500 and larger.</p>
+<img src="figure/benchmark_m4_b-1.png" alt="\\label{fig:benchmark_b} Faster on the R side; reported memory figures are R-side only (see note)."  />
+<p class="caption">\\label{fig:benchmark_b} Faster on the R side; reported memory figures are R-side only (see note).</p>
 </div>
 
 # Sensitivity of dispersion coefficients of variation
@@ -251,15 +253,15 @@ ggplot2::autoplot(benchmark_c)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_m4_c-1.png" alt="\label{fig:benchmark_c} {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 1000x1000 and larger, while memory usage remains comparable."  />
-<p class="caption">\label{fig:benchmark_c} {fio} is substantially faster and more memory-efficient than {leontief} across all tested dimensions. Compared to Base R, {fio} is faster for matrices 1000x1000 and larger, while memory usage remains comparable.</p>
+<img src="figure/benchmark_m4_c-1.png" alt="\\label{fig:benchmark_c} Faster on the R side; reported memory figures are R-side only (see note)."  />
+<p class="caption">\\label{fig:benchmark_c} Faster on the R side; reported memory figures are R-side only (see note).</p>
 </div>
 
 # Field of influence
 
 Since computing the field of influence involves calculating the Leontief inverse matrix for each element of the technical coefficients matrix after an increment, it can be demanding for high-dimensional matrices. Here, we benchmark the base R function and `{fio}`, as there is no similar function in `{leontief}`. For brevity, we limited the matrix dimensions to 200x200 and the number of repetitions to 20.
 
-Results shows that {fio} is considerably faster for smaller matrices, but slightly slower for larger ones. However, it uses significantly less memory across all dimensions. For the 200x200 matrix, {fio} used 625.09KB, while the base R implementation used 83.73GB, which would lead to memory issues for larger matrices and would make it impractical for real-world applications, specially in personal computers with limited memory.
+Results shows that {fio} is considerably faster for smaller matrices, but slightly slower for larger ones. The `bench` summaries report much smaller R-side allocations for `fio` across the tested dimensions. For the 200x200 matrix the `bench` R-side allocation column shows 625.09KB for `fio` and 83.73GB for the base R implementation; keep in mind these figures correspond to R-side allocations only and do not include native allocations inside C++/Rust.
 
 
 ``` r
@@ -343,6 +345,6 @@ ggplot2::autoplot(benchmark_d)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="figure/benchmark_m4_d-1.png" alt="\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior memory-efficiency. It is also faster for smaller matrices."  />
-<p class="caption">\label{fig:benchmark_d} Across all matrix sizes, {fio} demonstrates superior memory-efficiency. It is also faster for smaller matrices.</p>
+<img src="figure/benchmark_m4_d-1.png" alt="\\label{fig:benchmark_d} Superior timing on the R side; reported memory figures are R-side only (see note)."  />
+<p class="caption">\\label{fig:benchmark_d} Superior timing on the R side; reported memory figures are R-side only (see note).</p>
 </div>
