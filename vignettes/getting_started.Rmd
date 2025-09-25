@@ -105,7 +105,7 @@ Now the `technical_coefficients_matrix` slot is filled. You can access the slots
 print(my_iom$technical_coefficients_matrix)
 ```
 
-Other methods available are `compute_leontief_inverse()`, `compute_multiplier_output()`, `compute_influence_field()`, `compute_key_sectors()`, `compute_allocation_coeff()`, `compute_hypothetical_extraction()` and `compute_ghosh_inverse()`. Their names are clear and self explanatory. You can also chain these methods to do all at once:
+Other methods available are `compute_leontief_inverse()`, `compute_multiplier_output()`, `compute_influence_field()`, `compute_key_sectors()`, `compute_allocation_coeff()`, `compute_hypothetical_extraction()`, `compute_ghosh_inverse()`, and `close_model()`. Their names are clear and self explanatory. You can also chain these methods to do all at once:
 
 ```{r chain}
 # Chain methods
