@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fio</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6.9004</span>
       </span>
     </div>
 
@@ -76,7 +76,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Get data ready for input-output analysis</h1>
             
-            <h4 data-toc-skip class="date">September 24, 2025</h4>
+            <h4 data-toc-skip class="date">September 25, 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/albersonmiranda/fio/blob/main/vignettes/getting_started.Rmd" class="external-link"><code>vignettes/getting_started.Rmd</code></a></small>
       <div class="hidden name"><code>getting_started.Rmd</code></div>
@@ -217,6 +217,7 @@ can be filled (or removed) later if needed with <code>add()</code> and
 <span><span class="co">#&gt;     add: function (matrix_name, matrix) </span></span>
 <span><span class="co">#&gt;     allocation_coefficients_matrix: NULL</span></span>
 <span><span class="co">#&gt;     clone: function (deep = FALSE) </span></span>
+<span><span class="co">#&gt;     close_model: function (sectors) </span></span>
 <span><span class="co">#&gt;     compute_allocation_coeff: function () </span></span>
 <span><span class="co">#&gt;     compute_field_influence: function (epsilon) </span></span>
 <span><span class="co">#&gt;     compute_ghosh_inverse: function () </span></span>
@@ -274,6 +275,7 @@ We can compute the technical coefficients matrix by calling the
 <span><span class="co">#&gt;     add: function (matrix_name, matrix) </span></span>
 <span><span class="co">#&gt;     allocation_coefficients_matrix: NULL</span></span>
 <span><span class="co">#&gt;     clone: function (deep = FALSE) </span></span>
+<span><span class="co">#&gt;     close_model: function (sectors) </span></span>
 <span><span class="co">#&gt;     compute_allocation_coeff: function () </span></span>
 <span><span class="co">#&gt;     compute_field_influence: function (epsilon) </span></span>
 <span><span class="co">#&gt;     compute_ghosh_inverse: function () </span></span>
@@ -333,9 +335,10 @@ You can access the slots using the <code>$</code> operator:</p>
 <code>compute_influence_field()</code>,
 <code>compute_key_sectors()</code>,
 <code>compute_allocation_coeff()</code>,
-<code>compute_hypothetical_extraction()</code> and
-<code>compute_ghosh_inverse()</code>. Their names are clear and self
-explanatory. You can also chain these methods to do all at once:</p>
+<code>compute_hypothetical_extraction()</code>,
+<code>compute_ghosh_inverse()</code>, and <code>close_model()</code>.
+Their names are clear and self explanatory. You can also chain these
+methods to do all at once:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Chain methods</span></span>
 <span><span class="va">my_iom</span><span class="op">$</span><span class="fu">compute_tech_coeff</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">compute_leontief_inverse</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">compute_key_sectors</span><span class="op">(</span><span class="op">)</span></span>
