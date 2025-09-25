@@ -118,7 +118,7 @@ print(my_iom$key_sectors)
 
 The `close_model()` method allows you to treat households and/or government as endogenous sectors by moving them from final demand to the intermediate transactions matrix. This is useful for analyzing the economy as a closed system.
 
-```{r closed_model, eval=FALSE}
+```{r closed_model}
 # Create an iom object with household consumption and wages
 my_closed_iom <- fio::iom$new(
   id = "closed_example",

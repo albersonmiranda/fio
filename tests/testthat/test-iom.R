@@ -102,31 +102,31 @@ test_that("close_model with household works correctly", {
   obj <- iom$new("test", intermediate_transactions, total_production)
   obj$add("household_consumption", matrix(c(10, 20, 30), 3, 1))
   obj$add("wages", matrix(c(15, 25, 35), 1, 3))
-  
+
   # Store original dimensions
   original_rows <- nrow(obj$intermediate_transactions)
   original_cols <- ncol(obj$intermediate_transactions)
-  
+
   # Close the model with household
   obj$close_model("household")
-  
+
   # Check that intermediate_transactions expanded by 1 row and 1 column
   expect_equal(nrow(obj$intermediate_transactions), original_rows + 1)
   expect_equal(ncol(obj$intermediate_transactions), original_cols + 1)
-  
+
   # Check that total_production expanded by 1 column
   expect_equal(ncol(obj$total_production), original_cols + 1)
-  
+
   # Check that household consumption was added as last column
   expect_equal(obj$intermediate_transactions[1:3, 4], c(10, 20, 30))
-  
+
   # Check that wages were added as last row (first 3 columns)
   expect_equal(obj$intermediate_transactions[4, 1:3], c(15, 25, 35))
-  
+
   # Check that household total production is sum of consumption
   expect_equal(obj$intermediate_transactions[4, 4], 60) # 10+20+30
   expect_equal(obj$total_production[1, 4], 60)
-  
+
   # Check that household_consumption and wages are removed
   expect_null(obj$household_consumption)
   expect_null(obj$wages)
@@ -137,31 +137,31 @@ test_that("close_model with government works correctly", {
   obj <- iom$new("test", intermediate_transactions, total_production)
   obj$add("government_consumption", matrix(c(5, 15, 25), 3, 1))
   obj$add("taxes", matrix(c(8, 12, 20), 1, 3))
-  
+
   # Store original dimensions
   original_rows <- nrow(obj$intermediate_transactions)
   original_cols <- ncol(obj$intermediate_transactions)
-  
+
   # Close the model with government
   obj$close_model("government")
-  
+
   # Check that intermediate_transactions expanded by 1 row and 1 column
   expect_equal(nrow(obj$intermediate_transactions), original_rows + 1)
   expect_equal(ncol(obj$intermediate_transactions), original_cols + 1)
-  
+
   # Check that total_production expanded by 1 column
   expect_equal(ncol(obj$total_production), original_cols + 1)
-  
+
   # Check that government consumption was added as last column
   expect_equal(obj$intermediate_transactions[1:3, 4], c(5, 15, 25))
-  
+
   # Check that taxes were added as last row (first 3 columns)
   expect_equal(obj$intermediate_transactions[4, 1:3], c(8, 12, 20))
-  
+
   # Check that government total production is sum of consumption
   expect_equal(obj$intermediate_transactions[4, 4], 45) # 5+15+25
   expect_equal(obj$total_production[1, 4], 45)
-  
+
   # Check that government_consumption and taxes are removed
   expect_null(obj$government_consumption)
   expect_null(obj$taxes)
@@ -174,21 +174,21 @@ test_that("close_model with both household and government works correctly", {
   obj$add("wages", matrix(c(15, 25, 35), 1, 3))
   obj$add("government_consumption", matrix(c(5, 15, 25), 3, 1))
   obj$add("taxes", matrix(c(8, 12, 20), 1, 3))
-  
+
   # Store original dimensions
   original_rows <- nrow(obj$intermediate_transactions)
   original_cols <- ncol(obj$intermediate_transactions)
-  
+
   # Close the model with both sectors
   obj$close_model(c("household", "government"))
-  
+
   # Check that intermediate_transactions expanded by 2 rows and 2 columns
   expect_equal(nrow(obj$intermediate_transactions), original_rows + 2)
   expect_equal(ncol(obj$intermediate_transactions), original_cols + 2)
-  
+
   # Check that total_production expanded by 2 columns
   expect_equal(ncol(obj$total_production), original_cols + 2)
-  
+
   # All consumption and value-added vectors should be removed
   expect_null(obj$household_consumption)
   expect_null(obj$wages)
@@ -199,34 +199,34 @@ test_that("close_model with both household and government works correctly", {
 test_that("close_model fails with missing household_consumption", {
   obj <- iom$new("test", intermediate_transactions, total_production)
   obj$add("wages", matrix(c(15, 25, 35), 1, 3))
-  
+
   expect_error(obj$close_model("household"), "household_consumption must be present")
 })
 
 test_that("close_model fails with missing wages", {
   obj <- iom$new("test", intermediate_transactions, total_production)
   obj$add("household_consumption", matrix(c(10, 20, 30), 3, 1))
-  
+
   expect_error(obj$close_model("household"), "wages must be present")
 })
 
 test_that("close_model fails with missing government_consumption", {
   obj <- iom$new("test", intermediate_transactions, total_production)
   obj$add("taxes", matrix(c(8, 12, 20), 1, 3))
-  
+
   expect_error(obj$close_model("government"), "government_consumption must be present")
 })
 
 test_that("close_model fails with missing taxes", {
   obj <- iom$new("test", intermediate_transactions, total_production)
   obj$add("government_consumption", matrix(c(5, 15, 25), 3, 1))
-  
+
   expect_error(obj$close_model("government"), "taxes must be present")
 })
 
 test_that("close_model fails with invalid sectors argument", {
   obj <- iom$new("test", intermediate_transactions, total_production)
-  
+
   expect_error(obj$close_model("invalid"), "sectors must be one or both of")
   expect_error(obj$close_model(c("household", "invalid")), "sectors must be one or both of")
   expect_error(obj$close_model(character(0)), "sectors must be a character vector with at least one element")
