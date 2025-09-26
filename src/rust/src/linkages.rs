@@ -166,7 +166,7 @@ fn compute_sensitivity_dispersion_cv(matrix: &[f64]) -> Vec<f64> {
 
   // multiply col_sums by 1 / (n - 1), take the square root and divide by row averages
   col_sums.par_iter_mut()
-    .map(|x| ((*x * (1.0 / (n as f64 - 1.0))).sqrt()))
+    .map(|x| (*x * (1.0 / (n as f64 - 1.0))).sqrt())
     .zip(rows_average.par_iter())
     .map(|(a, b)| a / b)
     .collect::<Vec<f64>>()

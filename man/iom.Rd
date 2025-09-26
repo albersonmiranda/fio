@@ -69,6 +69,26 @@ my_iom <- iom$new("mock", intermediate_transactions, total_production, exports =
 my_iom$remove("exports")
 
 ## ------------------------------------------------
+## Method `iom$close_model`
+## ------------------------------------------------
+
+# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+household_consumption <- matrix(c(10, 20, 30), 3, 1)
+wages <- matrix(c(15, 25, 35), 1, 3)
+# instantiate iom object
+my_iom <- iom$new(
+ "mock",
+ intermediate_transactions,
+ total_production,
+ household_consumption = household_consumption,
+ wages = wages
+)
+# close the model with household sector
+my_iom$close_model("household")
+
+## ------------------------------------------------
 ## Method `iom$update_final_demand_matrix`
 ## ------------------------------------------------
 
@@ -419,6 +439,7 @@ Absolute and relative backward and forward differences in total output after a h
 \item \href{#method-iom-new}{\code{iom$new()}}
 \item \href{#method-iom-add}{\code{iom$add()}}
 \item \href{#method-iom-remove}{\code{iom$remove()}}
+\item \href{#method-iom-close_model}{\code{iom$close_model()}}
 \item \href{#method-iom-update_final_demand_matrix}{\code{iom$update_final_demand_matrix()}}
 \item \href{#method-iom-update_value_added_matrix}{\code{iom$update_value_added_matrix()}}
 \item \href{#method-iom-compute_tech_coeff}{\code{iom$compute_tech_coeff()}}
@@ -578,6 +599,69 @@ total_production <- matrix(c(100, 200, 300), 1, 3)
 my_iom <- iom$new("mock", intermediate_transactions, total_production, exports = exports_data)
 # Remove the matrix
 my_iom$remove("exports")
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-iom-close_model"></a>}}
+\if{latex}{\out{\hypertarget{method-iom-close_model}{}}}
+\subsection{Method \code{close_model()}}{
+Closes the model by moving specified sectors from final demand to intermediate transactions.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{iom$close_model(sectors)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{sectors}}{(\code{character}) Vector specifying which sectors to close.
+Must be one or both of "household" or "government".}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+A closed model treats households and/or government as endogenous sectors by moving them
+from final demand to the intermediate transactions matrix, along with their corresponding
+value-added components (wages for households, taxes for government).
+
+When closing with households:
+\itemize{
+\item Household consumption becomes a new column in intermediate transactions
+\item Wages become a new row in intermediate transactions
+\item Both are removed from final demand and value-added matrices respectively
+}
+
+When closing with government:
+\itemize{
+\item Government consumption becomes a new column in intermediate transactions
+\item Taxes become a new row in intermediate transactions
+\item Both are removed from final demand and value-added matrices respectively
+}
+}
+
+\subsection{Returns}{
+Self (invisibly).
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{# data
+intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
+total_production <- matrix(c(100, 200, 300), 1, 3)
+household_consumption <- matrix(c(10, 20, 30), 3, 1)
+wages <- matrix(c(15, 25, 35), 1, 3)
+# instantiate iom object
+my_iom <- iom$new(
+ "mock",
+ intermediate_transactions,
+ total_production,
+ household_consumption = household_consumption,
+ wages = wages
+)
+# close the model with household sector
+my_iom$close_model("household")
 }
 \if{html}{\out{</div>}}
 
