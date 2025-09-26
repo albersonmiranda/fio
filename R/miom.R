@@ -112,6 +112,10 @@ miom <- R6Class(
     #' List of international intermediate transaction matrices between countries.
     international_intermediate_transactions = NULL,
 
+    #' @field multiregional_multipliers (`data.frame`)\cr
+    #' Multi-regional output multipliers including intra-regional, inter-regional, and spillover effects.
+    multiregional_multipliers = NULL,
+
     #' @description
     #' Creates a new instance of this [R6][R6::R6Class] class.
     initialize = function(id,
@@ -199,14 +203,46 @@ miom <- R6Class(
       colnames(domestic_prod) <- colnames(self$total_production)[sector_indices]
 
       # Extract other matrices if available
-      domestic_household <- if (!is.null(self$household_consumption)) self$household_consumption[sector_indices, , drop = FALSE] else NULL
-      domestic_government <- if (!is.null(self$government_consumption)) self$government_consumption[sector_indices, , drop = FALSE] else NULL
-      domestic_exports <- if (!is.null(self$exports)) self$exports[sector_indices, , drop = FALSE] else NULL
-      domestic_imports <- if (!is.null(self$imports)) self$imports[, sector_indices, drop = FALSE] else NULL
-      domestic_taxes <- if (!is.null(self$taxes)) self$taxes[, sector_indices, drop = FALSE] else NULL
-      domestic_wages <- if (!is.null(self$wages)) self$wages[, sector_indices, drop = FALSE] else NULL
-      domestic_operating <- if (!is.null(self$operating_income)) self$operating_income[, sector_indices, drop = FALSE] else NULL
-      domestic_occupation <- if (!is.null(self$occupation)) self$occupation[, sector_indices, drop = FALSE] else NULL
+      domestic_household <- if (!is.null(self$household_consumption)) {
+        self$household_consumption[sector_indices, , drop = FALSE]
+      } else {
+        NULL
+      }
+      domestic_government <- if (!is.null(self$government_consumption)) {
+        self$government_consumption[sector_indices, , drop = FALSE]
+      } else {
+        NULL
+      }
+      domestic_exports <- if (!is.null(self$exports)) {
+        self$exports[sector_indices, , drop = FALSE]
+      } else {
+        NULL
+      }
+      domestic_imports <- if (!is.null(self$imports)) {
+        self$imports[, sector_indices, drop = FALSE]
+      } else {
+        NULL
+      }
+      domestic_taxes <- if (!is.null(self$taxes)) {
+        self$taxes[, sector_indices, drop = FALSE]
+      } else {
+        NULL
+      }
+      domestic_wages <- if (!is.null(self$wages)) {
+        self$wages[, sector_indices, drop = FALSE]
+      } else {
+        NULL
+      }
+      domestic_operating <- if (!is.null(self$operating_income)) {
+        self$operating_income[, sector_indices, drop = FALSE]
+      } else {
+        NULL
+      }
+      domestic_occupation <- if (!is.null(self$occupation)) {
+        self$occupation[, sector_indices, drop = FALSE]
+      } else {
+        NULL
+      }
 
       # Create new iom object
       iom$new(
@@ -250,7 +286,7 @@ miom <- R6Class(
       rownames(trade_matrix) <- paste(destination_country, self$sectors, sep = "_")
       colnames(trade_matrix) <- paste(origin_country, self$sectors, sep = "_")
 
-      return(trade_matrix)
+      trade_matrix
     },
 
     #' @description
@@ -289,7 +325,7 @@ miom <- R6Class(
         stringsAsFactors = FALSE
       )
 
-      return(result)
+      result
     },
 
     #' @description
@@ -324,6 +360,216 @@ miom <- R6Class(
       }
 
       invisible(self)
+    },
+
+    #' @description
+    #' Compute multi-regional output multipliers following Miller & Blair (2009).
+    #' This includes intra-regional, inter-regional, and spillover multipliers.
+    #' @return Self (invisibly).
+    compute_multiregional_multipliers = function() {
+      if (is.null(self$technical_coefficients_matrix)) {
+        self$compute_tech_coeff()
+      }
+      if (is.null(self$leontief_inverse_matrix)) {
+        self$compute_leontief_inverse()
+      }
+
+      # Initialize storage for results
+      multiplier_results <- list()
+
+      # For each country r (destination of the shock)
+      for (r in 1:self$n_countries) {
+        country_r <- self$countries[r]
+        r_indices <- ((r - 1) * self$n_sectors + 1):(r * self$n_sectors)
+
+        # For each sector j in country r
+        for (j in 1:self$n_sectors) {
+          sector_j <- self$sectors[j]
+          col_index <- (r - 1) * self$n_sectors + j
+
+          # Extract column j of country r from Leontief inverse
+          leontief_col <- self$leontief_inverse_matrix[, col_index]
+
+          # Intra-regional multiplier (impact within the same region)
+          intra_regional <- sum(leontief_col[r_indices])
+
+          # Inter-regional multipliers (spillover to other regions)
+          inter_regional <- numeric(self$n_countries)
+          names(inter_regional) <- self$countries
+
+          for (s in 1:self$n_countries) {
+            s_indices <- ((s - 1) * self$n_sectors + 1):(s * self$n_sectors)
+            inter_regional[s] <- sum(leontief_col[s_indices])
+          }
+
+          # Total multiplier
+          total_multiplier <- sum(leontief_col)
+
+          # Spillover multiplier (total minus intra-regional)
+          spillover <- total_multiplier - intra_regional
+
+          # Store results
+          result_row <- data.frame(
+            destination_country = country_r,
+            destination_sector = sector_j,
+            destination_label = paste(country_r, sector_j, sep = "_"),
+            intra_regional_multiplier = intra_regional,
+            spillover_multiplier = spillover,
+            total_multiplier = total_multiplier,
+            stringsAsFactors = FALSE
+          )
+
+          # Add inter-regional multipliers as separate columns
+          for (s in 1:self$n_countries) {
+            result_row[[paste0("multiplier_to_", self$countries[s])]] <- inter_regional[s]
+          }
+
+          multiplier_results[[paste(country_r, sector_j, sep = "_")]] <- result_row
+        }
+      }
+
+      # Combine all results
+      self$multiregional_multipliers <- do.call(rbind, multiplier_results)
+      rownames(self$multiregional_multipliers) <- NULL
+
+      invisible(self)
+    },
+
+    #' @description
+    #' Compute spillover effects matrix showing how shocks in each region-sector
+    #' affect output in all other regions.
+    #' @return A matrix of spillover effects.
+    get_spillover_matrix = function() {
+      if (is.null(self$multiregional_multipliers)) {
+        self$compute_multiregional_multipliers()
+      }
+
+      # Create matrix of spillover effects
+      n_total <- self$n_countries * self$n_sectors
+      spillover_matrix <- matrix(0, nrow = n_total, ncol = n_total)
+
+      # Row and column labels
+      labels <- paste(rep(self$countries, each = self$n_sectors),
+                     rep(self$sectors, self$n_countries), sep = "_")
+
+      rownames(spillover_matrix) <- labels
+      colnames(spillover_matrix) <- labels
+
+      # Fill the matrix
+      for (i in seq_len(nrow(self$multiregional_multipliers))) {
+        dest_label <- self$multiregional_multipliers$destination_label[i]
+        col_idx <- which(colnames(spillover_matrix) == dest_label)
+
+        # For each origin country
+        for (s in 1:self$n_countries) {
+          origin_country <- self$countries[s]
+          multiplier_col <- paste0("multiplier_to_", origin_country)
+          multiplier_value <- self$multiregional_multipliers[[multiplier_col]][i]
+
+          # Set values for all sectors in origin country
+          s_indices <- ((s - 1) * self$n_sectors + 1):(s * self$n_sectors)
+          spillover_matrix[s_indices, col_idx] <- multiplier_value / self$n_sectors
+        }
+      }
+
+      spillover_matrix
+    },
+
+    #' @description
+    #' Compute net spillover effects for each country pair.
+    #' @return A matrix showing net spillover effects between countries.
+    get_net_spillover_matrix = function() {
+      if (is.null(self$multiregional_multipliers)) {
+        self$compute_multiregional_multipliers()
+      }
+
+      # Initialize net spillover matrix
+      net_spillover <- matrix(0, nrow = self$n_countries, ncol = self$n_countries)
+      rownames(net_spillover) <- self$countries
+      colnames(net_spillover) <- self$countries
+
+      # Calculate net spillovers between country pairs
+      for (r in 1:self$n_countries) {
+        for (s in 1:self$n_countries) {
+          if (r != s) {
+            # Spillover from country s to country r
+            spillover_s_to_r <- mean(self$multiregional_multipliers[
+              self$multiregional_multipliers$destination_country == self$countries[s],
+              paste0("multiplier_to_", self$countries[r])
+            ])
+
+            # Spillover from country r to country s
+            spillover_r_to_s <- mean(self$multiregional_multipliers[
+              self$multiregional_multipliers$destination_country == self$countries[r],
+              paste0("multiplier_to_", self$countries[s])
+            ])
+
+            # Net spillover (positive means r benefits more from s than vice versa)
+            net_spillover[r, s] <- spillover_s_to_r - spillover_r_to_s
+          }
+        }
+      }
+
+      net_spillover
+    },
+
+    #' @description
+    #' Compute regional self-reliance and interdependence measures.
+    #' @return A data.frame with self-reliance and interdependence measures by country.
+    get_regional_interdependence = function() {
+      if (is.null(self$multiregional_multipliers)) {
+        self$compute_multiregional_multipliers()
+      }
+
+      interdependence_results <- data.frame(
+        country = self$countries,
+        self_reliance = numeric(self$n_countries),
+        total_spillover_out = numeric(self$n_countries),
+        total_spillover_in = numeric(self$n_countries),
+        interdependence_index = numeric(self$n_countries),
+        stringsAsFactors = FALSE
+      )
+
+      for (r in 1:self$n_countries) {
+        country_r <- self$countries[r]
+
+        # Self-reliance: average intra-regional multiplier
+        self_reliance <- mean(self$multiregional_multipliers[
+          self$multiregional_multipliers$destination_country == country_r,
+          "intra_regional_multiplier"
+        ])
+
+        # Total spillover out: average spillover when this country is shocked
+        spillover_out <- mean(self$multiregional_multipliers[
+          self$multiregional_multipliers$destination_country == country_r,
+          "spillover_multiplier"
+        ])
+
+        # Total spillover in: average multiplier effect on this country from other countries
+        spillover_in <- mean(sapply(1:self$n_countries, function(s) {
+          if (s != r) {
+            mean(self$multiregional_multipliers[
+              self$multiregional_multipliers$destination_country == self$countries[s],
+              paste0("multiplier_to_", country_r)
+            ])
+          } else {
+            0
+          }
+        }))
+
+        # Interdependence index: ratio of spillover to self-reliance
+        interdependence_idx <- spillover_out / self_reliance
+
+        interdependence_results[r, ] <- list(
+          country = country_r,
+          self_reliance = self_reliance,
+          total_spillover_out = spillover_out,
+          total_spillover_in = spillover_in,
+          interdependence_index = interdependence_idx
+        )
+      }
+
+      interdependence_results
     }
   ),
 
