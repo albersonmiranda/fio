@@ -60,13 +60,20 @@
 <h2 class="page-header" data-toc-text="development version" id="fio-development-version">fio (development version)<a class="anchor" aria-label="anchor" href="#fio-development-version"></a></h2>
 <div class="section level3">
 <h3 id="id_-enhancements-development-version">✨ Enhancements<a class="anchor" aria-label="anchor" href="#id_-enhancements-development-version"></a></h3>
-<ul><li>New <code>close_model()</code> method to support closed input-output models by moving household and/or government sectors from final demand to intermediate transactions matrix.</li>
+<ul><li>New <code><a href="../reference/miom.html">miom()</a></code> function to create multi-regional input-output models (<a href="https://github.com/albersonmiranda/fio/issues/155" class="external-link">#155</a>).
+<ul><li>New <code>get_bilateral_trade()</code> function to extract bilateral trade flows from multi-regional input-output models.</li>
+<li>New <code>compute_multiregional_multipliers()</code> function to compute intra-regional, inter-regional and spillover multipliers from multi-regional input-output models.</li>
+<li>New <code>get_spillover_matrix()</code> function to show how shocks in one region affect other regions in multi-regional input-output models.</li>
+<li>New <code>get_net_spillover_matrix()</code> function to show net spillover effects between regions pairs in multi-regional input-output models.</li>
+<li>New <code>get_regional_interdependence()</code> function to compute regional self-reliance and interdependence measures in multi-regional input-output models.</li>
+</ul></li>
+<li>New <code>close_model()</code> method to support closed single-region input-output models by moving household and/or government sectors from final demand to intermediate transactions matrix (<a href="https://github.com/albersonmiranda/fio/issues/154" class="external-link">#154</a>).</li>
 <li>New param <code>matrix</code> to <code>compute_key_sectors()</code> and <code>compute_hypothetical_extraction()</code> so users can decide if should be used Leontief or Ghosh matrices when computing forward linkages (<a href="https://github.com/albersonmiranda/fio/issues/148" class="external-link">#148</a>).</li>
 <li>New <code><a href="../reference/download_wiod.html">download_wiod()</a></code> function to download World Input-Output Database (WIOD) tables directly from their website (<a href="https://github.com/albersonmiranda/fio/issues/152" class="external-link">#152</a>).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="id_️-other-improvements-development-version">🛠️ Other improvements<a class="anchor" aria-label="anchor" href="#id_%EF%B8%8F-other-improvements-development-version"></a></h3>
-<ul><li>Bump <code>faer</code> to 0.22.6 (<a href="https://github.com/albersonmiranda/fio/issues/143" class="external-link">#143</a>).</li>
+<ul><li>Bump <code>faer</code> to 0.23.2.</li>
 </ul></div>
 </div>
     <div class="section level2">
