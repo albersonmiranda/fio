@@ -111,6 +111,11 @@ List of domestic intermediate transaction matrices by country.</p></dd>
 List of international intermediate transaction matrices between countries.</p></dd>
 
 
+<dt><code>multiregional_multipliers</code></dt>
+<dd><p>(<code>data.frame</code>)<br>
+Multi-regional output multipliers including intra-regional, inter-regional, and spillover effects.</p></dd>
+
+
 </dl><p></p></div>
     </div>
     <div id="methods">
@@ -125,6 +130,10 @@ List of international intermediate transaction matrices between countries.</p></
 <li><p><a href="#method-miom-get_country_summary"><code>miom$get_country_summary()</code></a></p></li>
 <li><p><a href="#method-miom-compute_multiplier_output"><code>miom$compute_multiplier_output()</code></a></p></li>
 <li><p><a href="#method-miom-compute_key_sectors"><code>miom$compute_key_sectors()</code></a></p></li>
+<li><p><a href="#method-miom-compute_multiregional_multipliers"><code>miom$compute_multiregional_multipliers()</code></a></p></li>
+<li><p><a href="#method-miom-get_spillover_matrix"><code>miom$get_spillover_matrix()</code></a></p></li>
+<li><p><a href="#method-miom-get_net_spillover_matrix"><code>miom$get_net_spillover_matrix()</code></a></p></li>
+<li><p><a href="#method-miom-get_regional_interdependence"><code>miom$get_regional_interdependence()</code></a></p></li>
 <li><p><a href="#method-miom-clone"><code>miom$clone()</code></a></p></li>
 </ul></div><p><details><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="add"><a href="iom.html#method-add"><code>fio::iom$add()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="close_model"><a href="iom.html#method-close_model"><code>fio::iom$close_model()</code></a></span></li>
@@ -337,10 +346,60 @@ Which matrix to use for forward linkage computation: "leontief" or "ghosh".</p><
 <p>Self (invisibly).</p>
 </div>
 
+</div><p></p><hr><a id="method-miom-compute_multiregional_multipliers"></a><div class="section">
+<h3 id="method-compute-multiregional-multipliers-">Method <code>compute_multiregional_multipliers()</code><a class="anchor" aria-label="anchor" href="#method-compute-multiregional-multipliers-"></a></h3>
+<p>Compute multi-regional output multipliers following Miller &amp; Blair (2009).
+This includes intra-regional, inter-regional, and spillover multipliers.</p><div class="section">
+<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">miom</span><span class="op">$</span><span class="fu">compute_multiregional_multipliers</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="returns-5">Returns<a class="anchor" aria-label="anchor" href="#returns-5"></a></h4>
+<p>Self (invisibly).</p>
+</div>
+
+</div><p></p><hr><a id="method-miom-get_spillover_matrix"></a><div class="section">
+<h3 id="method-get-spillover-matrix-">Method <code>get_spillover_matrix()</code><a class="anchor" aria-label="anchor" href="#method-get-spillover-matrix-"></a></h3>
+<p>Compute spillover effects matrix showing how shocks in each region-sector
+affect output in all other regions.</p><div class="section">
+<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">miom</span><span class="op">$</span><span class="fu">get_spillover_matrix</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="returns-6">Returns<a class="anchor" aria-label="anchor" href="#returns-6"></a></h4>
+<p>A matrix of spillover effects.</p>
+</div>
+
+</div><p></p><hr><a id="method-miom-get_net_spillover_matrix"></a><div class="section">
+<h3 id="method-get-net-spillover-matrix-">Method <code>get_net_spillover_matrix()</code><a class="anchor" aria-label="anchor" href="#method-get-net-spillover-matrix-"></a></h3>
+<p>Compute net spillover effects for each country pair.</p><div class="section">
+<h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">miom</span><span class="op">$</span><span class="fu">get_net_spillover_matrix</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="returns-7">Returns<a class="anchor" aria-label="anchor" href="#returns-7"></a></h4>
+<p>A matrix showing net spillover effects between countries.</p>
+</div>
+
+</div><p></p><hr><a id="method-miom-get_regional_interdependence"></a><div class="section">
+<h3 id="method-get-regional-interdependence-">Method <code>get_regional_interdependence()</code><a class="anchor" aria-label="anchor" href="#method-get-regional-interdependence-"></a></h3>
+<p>Compute regional self-reliance and interdependence measures.</p><div class="section">
+<h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">miom</span><span class="op">$</span><span class="fu">get_regional_interdependence</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="returns-8">Returns<a class="anchor" aria-label="anchor" href="#returns-8"></a></h4>
+<p>A data.frame with self-reliance and interdependence measures by country.</p>
+</div>
+
 </div><p></p><hr><a id="method-miom-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
+<h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">miom</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
