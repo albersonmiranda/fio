@@ -3,6 +3,7 @@
 export(download_wiod)
 export(import_element)
 export(iom)
+export(miom)
 import(R6)
 importFrom(Rdpack,reprompt)
 useDynLib(fio, .registration = TRUE)

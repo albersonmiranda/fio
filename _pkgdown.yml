@@ -37,3 +37,8 @@ articles:
       - articles/benchmarking_i7
       - articles/benchmarking_m1
       - articles/benchmarking_m4
+  - title: "Multi-Regional Input-Output"
+    desc: >
+      These vignettes provide an introduction to performing multi-regional input-output analysis using the {fio} package.
+    contents:
+      - multiregional_analysis
