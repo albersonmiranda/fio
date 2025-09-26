@@ -73,6 +73,9 @@ List of domestic intermediate transaction matrices by country.}
 
 \item{\code{international_intermediate_transactions}}{(\code{list})\cr
 List of international intermediate transaction matrices between countries.}
+
+\item{\code{multiregional_multipliers}}{(\code{data.frame})\cr
+Multi-regional output multipliers including intra-regional, inter-regional, and spillover effects.}
 }
 \if{html}{\out{</div>}}
 }
@@ -85,6 +88,10 @@ List of international intermediate transaction matrices between countries.}
 \item \href{#method-miom-get_country_summary}{\code{miom$get_country_summary()}}
 \item \href{#method-miom-compute_multiplier_output}{\code{miom$compute_multiplier_output()}}
 \item \href{#method-miom-compute_key_sectors}{\code{miom$compute_key_sectors()}}
+\item \href{#method-miom-compute_multiregional_multipliers}{\code{miom$compute_multiregional_multipliers()}}
+\item \href{#method-miom-get_spillover_matrix}{\code{miom$get_spillover_matrix()}}
+\item \href{#method-miom-get_net_spillover_matrix}{\code{miom$get_net_spillover_matrix()}}
+\item \href{#method-miom-get_regional_interdependence}{\code{miom$get_regional_interdependence()}}
 \item \href{#method-miom-clone}{\code{miom$clone()}}
 }
 }
@@ -276,6 +283,60 @@ Which matrix to use for forward linkage computation: "leontief" or "ghosh".}
 }
 \subsection{Returns}{
 Self (invisibly).
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-miom-compute_multiregional_multipliers"></a>}}
+\if{latex}{\out{\hypertarget{method-miom-compute_multiregional_multipliers}{}}}
+\subsection{Method \code{compute_multiregional_multipliers()}}{
+Compute multi-regional output multipliers following Miller & Blair (2009).
+This includes intra-regional, inter-regional, and spillover multipliers.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{miom$compute_multiregional_multipliers()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+Self (invisibly).
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-miom-get_spillover_matrix"></a>}}
+\if{latex}{\out{\hypertarget{method-miom-get_spillover_matrix}{}}}
+\subsection{Method \code{get_spillover_matrix()}}{
+Compute spillover effects matrix showing how shocks in each region-sector
+affect output in all other regions.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{miom$get_spillover_matrix()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A matrix of spillover effects.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-miom-get_net_spillover_matrix"></a>}}
+\if{latex}{\out{\hypertarget{method-miom-get_net_spillover_matrix}{}}}
+\subsection{Method \code{get_net_spillover_matrix()}}{
+Compute net spillover effects for each country pair.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{miom$get_net_spillover_matrix()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A matrix showing net spillover effects between countries.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-miom-get_regional_interdependence"></a>}}
+\if{latex}{\out{\hypertarget{method-miom-get_regional_interdependence}{}}}
+\subsection{Method \code{get_regional_interdependence()}}{
+Compute regional self-reliance and interdependence measures.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{miom$get_regional_interdependence()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A data.frame with self-reliance and interdependence measures by country.
 }
 }
 \if{html}{\out{<hr>}}
