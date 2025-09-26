@@ -7,7 +7,8 @@ articles:
   articles/benchmarking_m1: benchmarking_m1.html
   articles/benchmarking_m4: benchmarking_m4.html
   getting_started: getting_started.html
-last_built: 2025-09-25T02:47Z
+  multiregional_analysis: multiregional_analysis.html
+last_built: 2025-09-26T02:45Z
 urls:
   reference: https://albersonmiranda.github.io/fio/reference
   article: https://albersonmiranda.github.io/fio/articles
