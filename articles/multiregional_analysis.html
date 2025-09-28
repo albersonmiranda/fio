@@ -76,7 +76,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Multi-Regional Input-Output Analysis</h1>
             
-            <h4 data-toc-skip class="date">September 26, 2025</h4>
+            <h4 data-toc-skip class="date">September 28, 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/albersonmiranda/fio/blob/main/vignettes/multiregional_analysis.Rmd" class="external-link"><code>vignettes/multiregional_analysis.Rmd</code></a></small>
       <div class="hidden name"><code>multiregional_analysis.Rmd</code></div>
@@ -91,8 +91,6 @@ p.caption {
   text-align: "center";
 }
 </style>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://albersonmiranda.github.io/fio/">fio</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -110,10 +108,6 @@ multiple regions or countries. The <code>miom</code> class in the
 <li>Extract country-specific input-output tables</li>
 <li>Measure regional interdependence</li>
 </ul>
-</div>
-<div class="section level2">
-<h2 id="multi-regional-input-output-framework">Multi-Regional Input-Output Framework<a class="anchor" aria-label="anchor" href="#multi-regional-input-output-framework"></a>
-</h2>
 <p>In a multi-regional system with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math>
 regions and
@@ -123,106 +117,217 @@ sectors per region, the total dimensions of the system are
 The intermediate transactions matrix
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐙</mi><annotation encoding="application/x-tex">\mathbf{Z}</annotation></semantics></math>
 is partitioned as:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐙</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msup><mi>𝐙</mi><mn>11</mn></msup></mtd><mtd columnalign="center" style="text-align: center"><msup><mi>𝐙</mi><mn>12</mn></msup></mtd><mtd columnalign="center" style="text-align: center"><mi>⋯</mi></mtd><mtd columnalign="center" style="text-align: center"><msup><mi>𝐙</mi><mrow><mn>1</mn><mi>R</mi></mrow></msup></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msup><mi>𝐙</mi><mn>21</mn></msup></mtd><mtd columnalign="center" style="text-align: center"><msup><mi>𝐙</mi><mn>22</mn></msup></mtd><mtd columnalign="center" style="text-align: center"><mi>⋯</mi></mtd><mtd columnalign="center" style="text-align: center"><msup><mi>𝐙</mi><mrow><mn>2</mn><mi>R</mi></mrow></msup></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>⋮</mi></mtd><mtd columnalign="center" style="text-align: center"><mi>⋮</mi></mtd><mtd columnalign="center" style="text-align: center"><mo>⋱</mo></mtd><mtd columnalign="center" style="text-align: center"><mi>⋮</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msup><mi>𝐙</mi><mrow><mi>R</mi><mn>1</mn></mrow></msup></mtd><mtd columnalign="center" style="text-align: center"><msup><mi>𝐙</mi><mrow><mi>R</mi><mn>2</mn></mrow></msup></mtd><mtd columnalign="center" style="text-align: center"><mi>⋯</mi></mtd><mtd columnalign="center" style="text-align: center"><msup><mi>𝐙</mi><mrow><mi>R</mi><mi>R</mi></mrow></msup></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbf{Z} = \begin{bmatrix}
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐙</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msup><mi>𝐙</mi><mn>11</mn></msup></mtd><mtd columnalign="center" style="text-align: center"><msup><mi>𝐙</mi><mn>12</mn></msup></mtd><mtd columnalign="center" style="text-align: center"><mi>⋯</mi></mtd><mtd columnalign="center" style="text-align: center"><msup><mi>𝐙</mi><mrow><mn>1</mn><mi>R</mi></mrow></msup></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msup><mi>𝐙</mi><mn>21</mn></msup></mtd><mtd columnalign="center" style="text-align: center"><msup><mi>𝐙</mi><mn>22</mn></msup></mtd><mtd columnalign="center" style="text-align: center"><mi>⋯</mi></mtd><mtd columnalign="center" style="text-align: center"><msup><mi>𝐙</mi><mrow><mn>2</mn><mi>R</mi></mrow></msup></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>⋮</mi></mtd><mtd columnalign="center" style="text-align: center"><mi>⋮</mi></mtd><mtd columnalign="center" style="text-align: center"><mo>⋱</mo></mtd><mtd columnalign="center" style="text-align: center"><mi>⋮</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msup><mi>𝐙</mi><mrow><mi>R</mi><mn>1</mn></mrow></msup></mtd><mtd columnalign="center" style="text-align: center"><msup><mi>𝐙</mi><mrow><mi>R</mi><mn>2</mn></mrow></msup></mtd><mtd columnalign="center" style="text-align: center"><mi>⋯</mi></mtd><mtd columnalign="center" style="text-align: center"><msup><mi>𝐙</mi><mrow><mi>R</mi><mi>R</mi></mrow></msup></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">
+\mathbf{Z} = \begin{bmatrix}
 \mathbf{Z}^{11} &amp; \mathbf{Z}^{12} &amp; \cdots &amp; \mathbf{Z}^{1R} \\
 \mathbf{Z}^{21} &amp; \mathbf{Z}^{22} &amp; \cdots &amp; \mathbf{Z}^{2R} \\
 \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
 \mathbf{Z}^{R1} &amp; \mathbf{Z}^{R2} &amp; \cdots &amp; \mathbf{Z}^{RR}
-\end{bmatrix}</annotation></semantics></math></p>
-<p>Where
+\end{bmatrix}
+</annotation></semantics></math></p>
+<p>where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>𝐙</mi><mrow><mi>r</mi><mi>s</mi></mrow></msup><annotation encoding="application/x-tex">\mathbf{Z}^{rs}</annotation></semantics></math>
 represents intermediate flows from region
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
 to region
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math>.</p>
-<p>The multi-regional Leontief inverse is:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐋</mi><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝐈</mi><mo>−</mo><mi>𝐀</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\mathbf{L} = (\mathbf{I} - \mathbf{A})^{-1}</annotation></semantics></math></p>
-<p>Where
+<p>Computations of the multi-regional Leontief inverse is the same from
+the single-region case:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐋</mi><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝐈</mi><mo>−</mo><mi>𝐀</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">
+\mathbf{L} = (\mathbf{I} - \mathbf{A})^{-1}
+</annotation></semantics></math></p>
+<p>where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐀</mi><annotation encoding="application/x-tex">\mathbf{A}</annotation></semantics></math>
-is the multi-regional technical coefficients matrix.</p>
+is the multi-regional technical coefficients matrix. Therefore, the
+multi-regional input-output class <code>miom</code> is able to inherit
+methods from the <code>iom</code> class, implementing the additional
+functionality needed for multi-regional analysis.</p>
 </div>
 <div class="section level2">
-<h2 id="creating-a-multi-regional-input-output-matrix">Creating a Multi-Regional Input-Output Matrix<a class="anchor" aria-label="anchor" href="#creating-a-multi-regional-input-output-matrix"></a>
+<h2 id="showcasing-the-miom-class-2000-world-economy-example">SHOWCASING THE <code>miom</code> CLASS: 2000 WORLD ECONOMY
+EXAMPLE<a class="anchor" aria-label="anchor" href="#showcasing-the-miom-class-2000-world-economy-example"></a>
 </h2>
-<p>Let’s create a 3-country, 3-sector example representing USA, China,
-and Germany with Agriculture, Manufacturing, and Services sectors.</p>
+<p>The <code>fio</code> package includes the <code>world_2000</code>
+dataset, which contains real multi-regional input-output data for 26
+countries and 23 sectors from the year 2000. This dataset was created
+using element-by-element imports from Excel files with
+<code><a href="../reference/import_element.html">import_element()</a></code> as demonstrated in the <a href="https://github.com/albersonmiranda/fio/blob/main/data-raw/world_2000.R" class="external-link">World
+2000 script</a>.</p>
+<p>Let’s load and examine this real-world dataset:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Load the built-in world_2000 dataset</span></span>
+<span><span class="va">world_2000</span> <span class="op">&lt;-</span> <span class="fu">fio</span><span class="fu">::</span><span class="va"><a href="../reference/world_2000.html">world_2000</a></span></span>
+<span></span>
+<span><span class="co"># Examine the structure</span></span>
+<span><span class="va">world_2000</span><span class="op">$</span><span class="va">n_countries</span></span>
+<span><span class="co">#&gt; [1] 26</span></span>
+<span><span class="va">world_2000</span><span class="op">$</span><span class="va">n_sectors</span></span>
+<span><span class="co">#&gt; [1] 23</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">world_2000</span><span class="op">$</span><span class="va">intermediate_transactions</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 598</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">world_2000</span><span class="op">$</span><span class="va">intermediate_transactions</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 598</span></span>
+<span></span>
+<span><span class="co"># Show the countries and sectors</span></span>
+<span><span class="va">world_2000</span><span class="op">$</span><span class="va">countries</span></span>
+<span><span class="co">#&gt;  [1] "AUS" "AUT" "BEL" "BRA" "CAN" "CHN" "DEU" "DNK" "ESP" "FIN" "FRA" "GBR"</span></span>
+<span><span class="co">#&gt; [13] "GRC" "HKG" "IND" "IRL" "ITA" "JPN" "KOR" "MEX" "NDL" "PRT" "SWE" "TWN"</span></span>
+<span><span class="co">#&gt; [25] "USA" "ROW"</span></span>
+<span><span class="va">world_2000</span><span class="op">$</span><span class="va">sectors</span></span>
+<span><span class="co">#&gt;  [1] "Agriculture, Hunting, Forestry and Fishing" </span></span>
+<span><span class="co">#&gt;  [2] "Mining and Quarrying"                       </span></span>
+<span><span class="co">#&gt;  [3] "Food, Beverages and Tobacco"                </span></span>
+<span><span class="co">#&gt;  [4] "Textiles, leather and footwear"             </span></span>
+<span><span class="co">#&gt;  [5] "Pulp, paper, printing and publishing"       </span></span>
+<span><span class="co">#&gt;  [6] "Coke, refined petroleum and nuclear fuel"   </span></span>
+<span><span class="co">#&gt;  [7] "Chemicals and chemicals products"           </span></span>
+<span><span class="co">#&gt;  [8] "Rubber and plastics"                        </span></span>
+<span><span class="co">#&gt;  [9] "Other non-metallic mineral"                 </span></span>
+<span><span class="co">#&gt; [10] "Basic metals and fabricated metal"          </span></span>
+<span><span class="co">#&gt; [11] "Machinery"                                  </span></span>
+<span><span class="co">#&gt; [12] "Electrical and optical equipment"           </span></span>
+<span><span class="co">#&gt; [13] "Transport equipment"                        </span></span>
+<span><span class="co">#&gt; [14] "Manufacturing, recycling"                   </span></span>
+<span><span class="co">#&gt; [15] "Electricity, gas and water supply"          </span></span>
+<span><span class="co">#&gt; [16] "Construction"                               </span></span>
+<span><span class="co">#&gt; [17] "Wholesale and retail trade"                 </span></span>
+<span><span class="co">#&gt; [18] "Hotels and restaurants"                     </span></span>
+<span><span class="co">#&gt; [19] "Transport and storage"                      </span></span>
+<span><span class="co">#&gt; [20] "Post and telecommunications"                </span></span>
+<span><span class="co">#&gt; [21] "Financial intermediation"                   </span></span>
+<span><span class="co">#&gt; [22] "Real state, renting and business activities"</span></span>
+<span><span class="co">#&gt; [23] "Community, social and personal services"</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">countries</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USA"</span>, <span class="st">"CHN"</span>, <span class="st">"DEU"</span><span class="op">)</span></span>
-<span><span class="va">sectors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Agriculture"</span>, <span class="st">"Manufacturing"</span>, <span class="st">"Services"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">countries</span>, each <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">sectors</span>, <span class="fl">3</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span></span>
-<span><span class="va">labels</span></span>
-<span><span class="co">#&gt; [1] "USA_Agriculture"   "USA_Manufacturing" "USA_Services"     </span></span>
-<span><span class="co">#&gt; [4] "CHN_Agriculture"   "CHN_Manufacturing" "CHN_Services"     </span></span>
-<span><span class="co">#&gt; [7] "DEU_Agriculture"   "DEU_Manufacturing" "DEU_Services"</span></span>
-<span></span>
-<span><span class="va">intermediate_transactions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>  <span class="fl">50</span>, <span class="fl">20</span>, <span class="fl">10</span>,  <span class="fl">5</span>,  <span class="fl">8</span>,  <span class="fl">2</span>,  <span class="fl">3</span>,  <span class="fl">4</span>,  <span class="fl">1</span>,</span>
-<span>  <span class="fl">15</span>, <span class="fl">80</span>, <span class="fl">25</span>,  <span class="fl">8</span>, <span class="fl">12</span>,  <span class="fl">5</span>,  <span class="fl">4</span>,  <span class="fl">6</span>,  <span class="fl">3</span>,</span>
-<span>  <span class="fl">10</span>, <span class="fl">30</span>,<span class="fl">120</span>,  <span class="fl">3</span>,  <span class="fl">7</span>, <span class="fl">15</span>,  <span class="fl">2</span>,  <span class="fl">5</span>, <span class="fl">10</span>,</span>
-<span>   <span class="fl">4</span>,  <span class="fl">6</span>,  <span class="fl">2</span>, <span class="fl">40</span>, <span class="fl">15</span>,  <span class="fl">8</span>,  <span class="fl">2</span>,  <span class="fl">3</span>,  <span class="fl">1</span>,</span>
-<span>   <span class="fl">7</span>, <span class="fl">10</span>,  <span class="fl">5</span>, <span class="fl">20</span>, <span class="fl">70</span>, <span class="fl">20</span>,  <span class="fl">5</span>,  <span class="fl">8</span>,  <span class="fl">4</span>,</span>
-<span>   <span class="fl">5</span>,  <span class="fl">8</span>, <span class="fl">12</span>, <span class="fl">10</span>, <span class="fl">25</span>, <span class="fl">90</span>,  <span class="fl">3</span>,  <span class="fl">6</span>,  <span class="fl">8</span>,</span>
-<span>   <span class="fl">2</span>,  <span class="fl">3</span>,  <span class="fl">1</span>,  <span class="fl">3</span>,  <span class="fl">4</span>,  <span class="fl">2</span>, <span class="fl">30</span>, <span class="fl">12</span>,  <span class="fl">5</span>,</span>
-<span>   <span class="fl">4</span>,  <span class="fl">7</span>,  <span class="fl">3</span>,  <span class="fl">6</span>,  <span class="fl">9</span>,  <span class="fl">4</span>, <span class="fl">15</span>, <span class="fl">60</span>, <span class="fl">15</span>,</span>
-<span>   <span class="fl">3</span>,  <span class="fl">5</span>,  <span class="fl">8</span>,  <span class="fl">4</span>,  <span class="fl">6</span>, <span class="fl">10</span>,  <span class="fl">8</span>, <span class="fl">20</span>, <span class="fl">80</span></span>
-<span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">9</span>, ncol <span class="op">=</span> <span class="fl">9</span>, dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">labels</span>, <span class="va">labels</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">total_production</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">300</span>, <span class="fl">450</span>, <span class="fl">180</span>, <span class="fl">280</span>, <span class="fl">400</span>, <span class="fl">150</span>, <span class="fl">250</span>, <span class="fl">350</span><span class="op">)</span>, </span>
-<span>                          nrow <span class="op">=</span> <span class="fl">1</span>, ncol <span class="op">=</span> <span class="fl">9</span>,</span>
-<span>                          dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="cn">NULL</span>, <span class="va">labels</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">intermediate_transactions</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span>
-<span><span class="co">#&gt;                   USA_Agriculture USA_Manufacturing USA_Services</span></span>
-<span><span class="co">#&gt; USA_Agriculture                50                15           10</span></span>
-<span><span class="co">#&gt; USA_Manufacturing              20                80           30</span></span>
-<span><span class="co">#&gt; USA_Services                   10                25          120</span></span>
-<span><span class="co">#&gt; CHN_Agriculture                 5                 8            3</span></span>
-<span><span class="co">#&gt; CHN_Manufacturing               8                12            7</span></span>
-<span><span class="co">#&gt; CHN_Services                    2                 5           15</span></span>
-<span><span class="co">#&gt;                   CHN_Agriculture CHN_Manufacturing CHN_Services</span></span>
-<span><span class="co">#&gt; USA_Agriculture                 4                 7            5</span></span>
-<span><span class="co">#&gt; USA_Manufacturing               6                10            8</span></span>
-<span><span class="co">#&gt; USA_Services                    2                 5           12</span></span>
-<span><span class="co">#&gt; CHN_Agriculture                40                20           10</span></span>
-<span><span class="co">#&gt; CHN_Manufacturing              15                70           25</span></span>
-<span><span class="co">#&gt; CHN_Services                    8                20           90</span></span>
-<span><span class="va">total_production</span></span>
-<span><span class="co">#&gt;      USA_Agriculture USA_Manufacturing USA_Services CHN_Agriculture</span></span>
-<span><span class="co">#&gt; [1,]             200               300          450             180</span></span>
-<span><span class="co">#&gt;      CHN_Manufacturing CHN_Services DEU_Agriculture DEU_Manufacturing</span></span>
-<span><span class="co">#&gt; [1,]               280          400             150               250</span></span>
-<span><span class="co">#&gt;      DEU_Services</span></span>
-<span><span class="co">#&gt; [1,]          350</span></span></code></pre></div>
-<p>The intermediate transactions matrix shows the flows of goods and
-services between all country-sector combinations. Each row represents a
-purchasing sector, and each column represents a supplying sector. The
-total production vector contains the gross output for each
-country-sector combination.</p>
+<code class="sourceCode R"><span><span class="co"># Show a small subset of transactions (first 6 countries x sectors)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="va">world_2000</span><span class="op">$</span><span class="va">intermediate_transactions</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"Sample of Intermediate Transactions (millions of dollars)"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Sample of Intermediate Transactions (millions of
+dollars)</caption>
+<colgroup>
+<col width="17%">
+<col width="17%">
+<col width="9%">
+<col width="11%">
+<col width="12%">
+<col width="15%">
+<col width="16%">
+</colgroup>
+<thead><tr class="header">
+<th align="left"></th>
+<th align="right">AUS_Agriculture, Hunting, Forestry and Fishing</th>
+<th align="right">AUS_Mining and Quarrying</th>
+<th align="right">AUS_Food, Beverages and Tobacco</th>
+<th align="right">AUS_Textiles, leather and footwear</th>
+<th align="right">AUS_Pulp, paper, printing and publishing</th>
+<th align="right">AUS_Coke, refined petroleum and nuclear fuel</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">AUS_Agriculture, Hunting, Forestry and Fishing</td>
+<td align="right">2976</td>
+<td align="right">16</td>
+<td align="right">8128</td>
+<td align="right">538</td>
+<td align="right">163</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">AUS_Mining and Quarrying</td>
+<td align="right">17</td>
+<td align="right">1881</td>
+<td align="right">117</td>
+<td align="right">11</td>
+<td align="right">34</td>
+<td align="right">3355</td>
+</tr>
+<tr class="odd">
+<td align="left">AUS_Food, Beverages and Tobacco</td>
+<td align="right">796</td>
+<td align="right">33</td>
+<td align="right">3387</td>
+<td align="right">68</td>
+<td align="right">21</td>
+<td align="right">14</td>
+</tr>
+<tr class="even">
+<td align="left">AUS_Textiles, leather and footwear</td>
+<td align="right">25</td>
+<td align="right">15</td>
+<td align="right">54</td>
+<td align="right">565</td>
+<td align="right">29</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">AUS_Pulp, paper, printing and publishing</td>
+<td align="right">92</td>
+<td align="right">75</td>
+<td align="right">834</td>
+<td align="right">56</td>
+<td align="right">2193</td>
+<td align="right">15</td>
+</tr>
+<tr class="even">
+<td align="left">AUS_Coke, refined petroleum and nuclear fuel</td>
+<td align="right">359</td>
+<td align="right">452</td>
+<td align="right">61</td>
+<td align="right">6</td>
+<td align="right">41</td>
+<td align="right">331</td>
+</tr>
+</tbody>
+</table>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">my_miom</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/miom.html">miom</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  id <span class="op">=</span> <span class="st">"three_country_example"</span>,</span>
-<span>  intermediate_transactions <span class="op">=</span> <span class="va">intermediate_transactions</span>,</span>
-<span>  total_production <span class="op">=</span> <span class="va">total_production</span>,</span>
-<span>  countries <span class="op">=</span> <span class="va">countries</span>,</span>
-<span>  sectors <span class="op">=</span> <span class="va">sectors</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">my_miom</span><span class="op">$</span><span class="va">n_countries</span></span>
-<span><span class="co">#&gt; [1] 3</span></span>
-<span><span class="va">my_miom</span><span class="op">$</span><span class="va">n_sectors</span></span>
-<span><span class="co">#&gt; [1] 3</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">my_miom</span><span class="op">$</span><span class="va">intermediate_transactions</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 9 9</span></span></code></pre></div>
-<p>The <code>miom</code> object inherits from the <code>iom</code>
-class, extending it with multi-regional functionality. It automatically
-stores information about the number of countries and sectors, and
-decomposes the transactions into domestic and international
-components.</p>
-</div>
-<div class="section level2">
-<h2 id="multi-regional-multiplier-analysis">Multi-Regional Multiplier Analysis<a class="anchor" aria-label="anchor" href="#multi-regional-multiplier-analysis"></a>
-</h2>
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Show total production for first few country-sectors</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">world_2000</span><span class="op">$</span><span class="va">total_production</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"Sample of Total Production (millions of dollars)"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Sample of Total Production (millions of dollars)</caption>
+<colgroup>
+<col width="20%">
+<col width="11%">
+<col width="14%">
+<col width="15%">
+<col width="18%">
+<col width="20%">
+</colgroup>
+<thead><tr class="header">
+<th align="right">AUS_Agriculture, Hunting, Forestry and Fishing</th>
+<th align="right">AUS_Mining and Quarrying</th>
+<th align="right">AUS_Food, Beverages and Tobacco</th>
+<th align="right">AUS_Textiles, leather and footwear</th>
+<th align="right">AUS_Pulp, paper, printing and publishing</th>
+<th align="right">AUS_Coke, refined petroleum and nuclear fuel</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="right">28170</td>
+<td align="right">35785</td>
+<td align="right">35716</td>
+<td align="right">5857</td>
+<td align="right">15198</td>
+<td align="right">9871</td>
+</tr></tbody>
+</table>
+<p>The intermediate transactions matrix shows the flows of goods and
+services between all country-sector combinations in the global economy.
+The values represent monetary flows in millions of dollars. Each element
+represents purchases of intermediate inputs from the supplying
+country-sector (columns) by the purchasing country-sector (rows). It
+captures the complete structure of intermediate transactions between 26
+countries across 23 economic sectors, providing a comprehensive view of
+global economic interdependencies in the year 2000.</p>
+<div class="section level3">
+<h3 id="multi-regional-multiplier-analysis">Multi-Regional Multiplier Analysis<a class="anchor" aria-label="anchor" href="#multi-regional-multiplier-analysis"></a>
+</h3>
 <p>The <code>miom</code> class computes several types of multipliers
 following Miller &amp; Blair (2009):</p>
 <ul>
@@ -241,20 +346,27 @@ regions</li>
 spillover effects</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">my_miom</span><span class="op">$</span><span class="fu">compute_multiregional_multipliers</span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">world_2000</span><span class="op">$</span><span class="fu">compute_multiregional_multipliers</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">my_miom</span><span class="op">$</span><span class="va">multiregional_multipliers</span>, digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
+<span><span class="co"># Show first 10 rows of multipliers for readability</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="va">world_2000</span><span class="op">$</span><span class="va">multiregional_multipliers</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"Multi-Regional Multipliers (first 10 country-sectors)"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table style="width:100%;" class="table">
+<caption>Multi-Regional Multipliers (first 10 country-sectors)</caption>
 <colgroup>
-<col width="11%">
+<col width="8%">
+<col width="17%">
+<col width="19%">
 <col width="10%">
-<col width="10%">
-<col width="14%">
-<col width="12%">
-<col width="9%">
-<col width="10%">
-<col width="10%">
-<col width="10%">
+<col width="8%">
+<col width="6%">
+<col width="7%">
+<col width="7%">
+<col width="7%">
+<col width="7%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">destination_country</th>
@@ -263,112 +375,135 @@ spillover effects</li>
 <th align="right">intra_regional_multiplier</th>
 <th align="right">spillover_multiplier</th>
 <th align="right">total_multiplier</th>
-<th align="right">multiplier_to_USA</th>
-<th align="right">multiplier_to_CHN</th>
-<th align="right">multiplier_to_DEU</th>
+<th align="right">multiplier_to_AUS</th>
+<th align="right">multiplier_to_AUT</th>
+<th align="right">multiplier_to_BEL</th>
+<th align="right">multiplier_to_BRA</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">USA</td>
-<td align="left">Agriculture</td>
-<td align="left">USA_Agriculture</td>
-<td align="right">1.6922</td>
-<td align="right">0.3282</td>
-<td align="right">2.0203</td>
-<td align="right">1.6922</td>
-<td align="right">0.2105</td>
-<td align="right">0.1176</td>
+<td align="left">AUS</td>
+<td align="left">Agriculture, Hunting, Forestry and Fishing</td>
+<td align="left">AUS_Agriculture, Hunting, Forestry and Fishing</td>
+<td align="right">1.8179</td>
+<td align="right">0.2331</td>
+<td align="right">2.0510</td>
+<td align="right">1.8179</td>
+<td align="right">0.0012</td>
+<td align="right">0.0031</td>
+<td align="right">0.0019</td>
 </tr>
 <tr class="even">
-<td align="left">USA</td>
-<td align="left">Manufacturing</td>
-<td align="left">USA_Manufacturing</td>
-<td align="right">1.6902</td>
-<td align="right">0.3478</td>
-<td align="right">2.0381</td>
-<td align="right">1.6902</td>
-<td align="right">0.2239</td>
-<td align="right">0.1239</td>
+<td align="left">AUS</td>
+<td align="left">Mining and Quarrying</td>
+<td align="left">AUS_Mining and Quarrying</td>
+<td align="right">1.6935</td>
+<td align="right">0.2127</td>
+<td align="right">1.9061</td>
+<td align="right">1.6935</td>
+<td align="right">0.0011</td>
+<td align="right">0.0020</td>
+<td align="right">0.0012</td>
 </tr>
 <tr class="odd">
-<td align="left">USA</td>
-<td align="left">Services</td>
-<td align="left">USA_Services</td>
-<td align="right">1.5893</td>
-<td align="right">0.2541</td>
-<td align="right">1.8434</td>
-<td align="right">1.5893</td>
-<td align="right">0.1528</td>
-<td align="right">0.1013</td>
+<td align="left">AUS</td>
+<td align="left">Food, Beverages and Tobacco</td>
+<td align="left">AUS_Food, Beverages and Tobacco</td>
+<td align="right">2.3286</td>
+<td align="right">0.2703</td>
+<td align="right">2.5990</td>
+<td align="right">2.3286</td>
+<td align="right">0.0015</td>
+<td align="right">0.0030</td>
+<td align="right">0.0027</td>
 </tr>
 <tr class="even">
-<td align="left">CHN</td>
-<td align="left">Agriculture</td>
-<td align="left">CHN_Agriculture</td>
-<td align="right">1.5747</td>
-<td align="right">0.2806</td>
-<td align="right">1.8554</td>
-<td align="right">0.1824</td>
-<td align="right">1.5747</td>
-<td align="right">0.0982</td>
+<td align="left">AUS</td>
+<td align="left">Textiles, leather and footwear</td>
+<td align="left">AUS_Textiles, leather and footwear</td>
+<td align="right">2.0626</td>
+<td align="right">0.4556</td>
+<td align="right">2.5181</td>
+<td align="right">2.0626</td>
+<td align="right">0.0025</td>
+<td align="right">0.0056</td>
+<td align="right">0.0029</td>
 </tr>
 <tr class="odd">
-<td align="left">CHN</td>
-<td align="left">Manufacturing</td>
-<td align="left">CHN_Manufacturing</td>
-<td align="right">1.6615</td>
-<td align="right">0.3741</td>
-<td align="right">2.0356</td>
-<td align="right">0.2191</td>
-<td align="right">1.6615</td>
-<td align="right">0.1550</td>
+<td align="left">AUS</td>
+<td align="left">Pulp, paper, printing and publishing</td>
+<td align="left">AUS_Pulp, paper, printing and publishing</td>
+<td align="right">2.0275</td>
+<td align="right">0.3072</td>
+<td align="right">2.3347</td>
+<td align="right">2.0275</td>
+<td align="right">0.0022</td>
+<td align="right">0.0039</td>
+<td align="right">0.0024</td>
 </tr>
 <tr class="even">
-<td align="left">CHN</td>
-<td align="left">Services</td>
-<td align="left">CHN_Services</td>
-<td align="right">1.4993</td>
-<td align="right">0.2710</td>
-<td align="right">1.7703</td>
-<td align="right">0.1635</td>
-<td align="right">1.4993</td>
-<td align="right">0.1074</td>
+<td align="left">AUS</td>
+<td align="left">Coke, refined petroleum and nuclear fuel</td>
+<td align="left">AUS_Coke, refined petroleum and nuclear fuel</td>
+<td align="right">2.2922</td>
+<td align="right">0.4806</td>
+<td align="right">2.7728</td>
+<td align="right">2.2922</td>
+<td align="right">0.0018</td>
+<td align="right">0.0036</td>
+<td align="right">0.0021</td>
 </tr>
 <tr class="odd">
-<td align="left">DEU</td>
-<td align="left">Agriculture</td>
-<td align="left">DEU_Agriculture</td>
-<td align="right">1.4837</td>
-<td align="right">0.2759</td>
-<td align="right">1.7596</td>
-<td align="right">0.1198</td>
-<td align="right">0.1561</td>
-<td align="right">1.4837</td>
+<td align="left">AUS</td>
+<td align="left">Chemicals and chemicals products</td>
+<td align="left">AUS_Chemicals and chemicals products</td>
+<td align="right">2.1035</td>
+<td align="right">0.5020</td>
+<td align="right">2.6055</td>
+<td align="right">2.1035</td>
+<td align="right">0.0024</td>
+<td align="right">0.0079</td>
+<td align="right">0.0035</td>
 </tr>
 <tr class="even">
-<td align="left">DEU</td>
-<td align="left">Manufacturing</td>
-<td align="left">DEU_Manufacturing</td>
-<td align="right">1.5705</td>
-<td align="right">0.3610</td>
-<td align="right">1.9314</td>
-<td align="right">0.1620</td>
-<td align="right">0.1990</td>
-<td align="right">1.5705</td>
+<td align="left">AUS</td>
+<td align="left">Rubber and plastics</td>
+<td align="left">AUS_Rubber and plastics</td>
+<td align="right">1.9421</td>
+<td align="right">0.4697</td>
+<td align="right">2.4118</td>
+<td align="right">1.9421</td>
+<td align="right">0.0023</td>
+<td align="right">0.0074</td>
+<td align="right">0.0031</td>
 </tr>
 <tr class="odd">
-<td align="left">DEU</td>
-<td align="left">Services</td>
-<td align="left">DEU_Services</td>
-<td align="right">1.4721</td>
-<td align="right">0.2725</td>
-<td align="right">1.7446</td>
-<td align="right">0.1264</td>
-<td align="right">0.1462</td>
-<td align="right">1.4721</td>
+<td align="left">AUS</td>
+<td align="left">Other non-metallic mineral</td>
+<td align="left">AUS_Other non-metallic mineral</td>
+<td align="right">2.0107</td>
+<td align="right">0.3092</td>
+<td align="right">2.3199</td>
+<td align="right">2.0107</td>
+<td align="right">0.0017</td>
+<td align="right">0.0031</td>
+<td align="right">0.0022</td>
+</tr>
+<tr class="even">
+<td align="left">AUS</td>
+<td align="left">Basic metals and fabricated metal</td>
+<td align="left">AUS_Basic metals and fabricated metal</td>
+<td align="right">2.0796</td>
+<td align="right">0.3984</td>
+<td align="right">2.4779</td>
+<td align="right">2.0796</td>
+<td align="right">0.0022</td>
+<td align="right">0.0034</td>
+<td align="right">0.0023</td>
 </tr>
 </tbody>
 </table>
+</div>
 <div class="section level3">
 <h3 id="interpreting-the-multipliers">Interpreting the Multipliers<a class="anchor" aria-label="anchor" href="#interpreting-the-multipliers"></a>
 </h3>
@@ -390,24 +525,54 @@ spillover effects</li>
 each individual country</li>
 </ul>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">usa_agr</span> <span class="op">&lt;-</span> <span class="va">my_miom</span><span class="op">$</span><span class="va">multiregional_multipliers</span><span class="op">[</span></span>
-<span>  <span class="va">my_miom</span><span class="op">$</span><span class="va">multiregional_multipliers</span><span class="op">$</span><span class="va">destination_label</span> <span class="op">==</span> <span class="st">"USA_Agriculture"</span>, <span class="op">]</span></span>
+<code class="sourceCode R"><span><span class="co"># Find an interesting example - let's look at Brazil Agriculture -&gt; to USA</span></span>
+<span><span class="va">bra_agr_index</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"BRA.*Agriculture"</span>, <span class="va">world_2000</span><span class="op">$</span><span class="va">multiregional_multipliers</span><span class="op">$</span><span class="va">destination_label</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span></span>
-<span><span class="va">usa_agr</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"intra_regional_multiplier"</span>, <span class="st">"spillover_multiplier"</span>, <span class="st">"total_multiplier"</span>, </span>
-<span>           <span class="st">"multiplier_to_USA"</span>, <span class="st">"multiplier_to_CHN"</span>, <span class="st">"multiplier_to_DEU"</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="co">#&gt;   intra_regional_multiplier spillover_multiplier total_multiplier</span></span>
-<span><span class="co">#&gt; 1                  1.692157            0.3281581         2.020315</span></span>
-<span><span class="co">#&gt;   multiplier_to_USA multiplier_to_CHN multiplier_to_DEU</span></span>
-<span><span class="co">#&gt; 1          1.692157         0.2105474         0.1176107</span></span></code></pre></div>
-<p>For example, when USA Agriculture receives a $1 increase in final
-demand, it generates $1.6922 of total output in the USA, $0.2105 in
-China, and $0.1176 in Germany. The intra-regional effect is $1.6922,
-while the spillover to other countries totals $0.3282.</p>
+<span><span class="va">bra_agr</span> <span class="op">&lt;-</span> <span class="va">world_2000</span><span class="op">$</span><span class="va">multiregional_multipliers</span><span class="op">[</span><span class="va">bra_agr_index</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="co"># Show key multiplier components</span></span>
+<span><span class="va">multiplier_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"destination_label"</span>, <span class="st">"intra_regional_multiplier"</span>, <span class="st">"spillover_multiplier"</span>, <span class="st">"total_multiplier"</span>, <span class="st">"multiplier_to_USA"</span><span class="op">)</span></span>
+<span><span class="va">available_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="va">multiplier_cols</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">bra_agr</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">bra_agr</span><span class="op">[</span>, <span class="va">available_cols</span><span class="op">]</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"Example: Brazil Agriculture Multipliers"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table style="width:100%;" class="table">
+<caption>Example: Brazil Agriculture Multipliers</caption>
+<colgroup>
+<col width="2%">
+<col width="35%">
+<col width="19%">
+<col width="15%">
+<col width="12%">
+<col width="13%">
+</colgroup>
+<thead><tr class="header">
+<th align="left"></th>
+<th align="left">destination_label</th>
+<th align="right">intra_regional_multiplier</th>
+<th align="right">spillover_multiplier</th>
+<th align="right">total_multiplier</th>
+<th align="right">multiplier_to_USA</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="left">70</td>
+<td align="left">BRA_Agriculture, Hunting, Forestry and Fishing</td>
+<td align="right">1.6809</td>
+<td align="right">0.1691</td>
+<td align="right">1.85</td>
+<td align="right">0.0385</td>
+</tr></tbody>
+</table>
+<p>The multipliers reveal important insights about global economic
+linkages. The intra-regional multiplier shows the domestic effect within
+a country when one of its sectors receives a demand shock, while the
+spillover multiplier captures the total impact on all other
+countries.</p>
 </div>
-</div>
-<div class="section level2">
-<h2 id="regional-interdependence-analysis">Regional Interdependence Analysis<a class="anchor" aria-label="anchor" href="#regional-interdependence-analysis"></a>
-</h2>
+<div class="section level3">
+<h3 id="regional-interdependence-analysis">Regional Interdependence Analysis<a class="anchor" aria-label="anchor" href="#regional-interdependence-analysis"></a>
+</h3>
 <p>Regional interdependence measures help understand the economic
 integration between countries. The
 <code>get_regional_interdependence()</code> method computes several key
@@ -428,7 +593,7 @@ other regions<br>
 self-reliance</li>
 </ul>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">interdependence</span> <span class="op">&lt;-</span> <span class="va">my_miom</span><span class="op">$</span><span class="fu">get_regional_interdependence</span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">interdependence</span> <span class="op">&lt;-</span> <span class="va">world_2000</span><span class="op">$</span><span class="fu">get_regional_interdependence</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">interdependence</span>, digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
@@ -447,103 +612,416 @@ self-reliance</li>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">USA</td>
-<td align="right">1.6572</td>
-<td align="right">0.3100</td>
-<td align="right">0.1081</td>
-<td align="right">0.1871</td>
+<td align="left">AUS</td>
+<td align="right">1.9685</td>
+<td align="right">0.3169</td>
+<td align="right">0.0065</td>
+<td align="right">0.1610</td>
+</tr>
+<tr class="even">
+<td align="left">AUT</td>
+<td align="right">1.6145</td>
+<td align="right">0.4901</td>
+<td align="right">0.0040</td>
+<td align="right">0.3035</td>
+</tr>
+<tr class="odd">
+<td align="left">BEL</td>
+<td align="right">1.6499</td>
+<td align="right">0.7652</td>
+<td align="right">0.0111</td>
+<td align="right">0.4638</td>
+</tr>
+<tr class="even">
+<td align="left">BRA</td>
+<td align="right">1.9189</td>
+<td align="right">0.2328</td>
+<td align="right">0.0041</td>
+<td align="right">0.1213</td>
+</tr>
+<tr class="odd">
+<td align="left">CAN</td>
+<td align="right">1.6504</td>
+<td align="right">0.4281</td>
+<td align="right">0.0076</td>
+<td align="right">0.2594</td>
 </tr>
 <tr class="even">
 <td align="left">CHN</td>
-<td align="right">1.5785</td>
-<td align="right">0.3086</td>
-<td align="right">0.1210</td>
-<td align="right">0.1955</td>
+<td align="right">2.3422</td>
+<td align="right">0.2868</td>
+<td align="right">0.0167</td>
+<td align="right">0.1224</td>
 </tr>
 <tr class="odd">
 <td align="left">DEU</td>
-<td align="right">1.5088</td>
-<td align="right">0.3031</td>
-<td align="right">0.0782</td>
-<td align="right">0.2009</td>
+<td align="right">1.7501</td>
+<td align="right">0.4073</td>
+<td align="right">0.0461</td>
+<td align="right">0.2327</td>
+</tr>
+<tr class="even">
+<td align="left">DNK</td>
+<td align="right">1.5882</td>
+<td align="right">0.5337</td>
+<td align="right">0.0046</td>
+<td align="right">0.3360</td>
+</tr>
+<tr class="odd">
+<td align="left">ESP</td>
+<td align="right">1.8727</td>
+<td align="right">0.4036</td>
+<td align="right">0.0128</td>
+<td align="right">0.2155</td>
+</tr>
+<tr class="even">
+<td align="left">FIN</td>
+<td align="right">1.8149</td>
+<td align="right">0.4446</td>
+<td align="right">0.0052</td>
+<td align="right">0.2450</td>
+</tr>
+<tr class="odd">
+<td align="left">FRA</td>
+<td align="right">1.8701</td>
+<td align="right">0.3976</td>
+<td align="right">0.0259</td>
+<td align="right">0.2126</td>
+</tr>
+<tr class="even">
+<td align="left">GBR</td>
+<td align="right">1.8808</td>
+<td align="right">0.3553</td>
+<td align="right">0.0324</td>
+<td align="right">0.1889</td>
+</tr>
+<tr class="odd">
+<td align="left">GRC</td>
+<td align="right">1.4505</td>
+<td align="right">0.4766</td>
+<td align="right">0.0008</td>
+<td align="right">0.3286</td>
+</tr>
+<tr class="even">
+<td align="left">HKG</td>
+<td align="right">1.4567</td>
+<td align="right">1.0297</td>
+<td align="right">0.0051</td>
+<td align="right">0.7069</td>
+</tr>
+<tr class="odd">
+<td align="left">IND</td>
+<td align="right">1.9303</td>
+<td align="right">0.2934</td>
+<td align="right">0.0031</td>
+<td align="right">0.1520</td>
+</tr>
+<tr class="even">
+<td align="left">IRL</td>
+<td align="right">1.4736</td>
+<td align="right">0.7272</td>
+<td align="right">0.0035</td>
+<td align="right">0.4935</td>
+</tr>
+<tr class="odd">
+<td align="left">ITA</td>
+<td align="right">1.9757</td>
+<td align="right">0.3414</td>
+<td align="right">0.0210</td>
+<td align="right">0.1728</td>
+</tr>
+<tr class="even">
+<td align="left">JPN</td>
+<td align="right">1.9283</td>
+<td align="right">0.1352</td>
+<td align="right">0.0270</td>
+<td align="right">0.0701</td>
+</tr>
+<tr class="odd">
+<td align="left">KOR</td>
+<td align="right">1.9883</td>
+<td align="right">0.4363</td>
+<td align="right">0.0103</td>
+<td align="right">0.2194</td>
+</tr>
+<tr class="even">
+<td align="left">MEX</td>
+<td align="right">1.5625</td>
+<td align="right">0.3543</td>
+<td align="right">0.0026</td>
+<td align="right">0.2267</td>
+</tr>
+<tr class="odd">
+<td align="left">NDL</td>
+<td align="right">1.5793</td>
+<td align="right">0.6539</td>
+<td align="right">0.0170</td>
+<td align="right">0.4141</td>
+</tr>
+<tr class="even">
+<td align="left">PRT</td>
+<td align="right">1.8133</td>
+<td align="right">0.5237</td>
+<td align="right">0.0018</td>
+<td align="right">0.2888</td>
+</tr>
+<tr class="odd">
+<td align="left">SWE</td>
+<td align="right">1.7255</td>
+<td align="right">0.5044</td>
+<td align="right">0.0103</td>
+<td align="right">0.2923</td>
+</tr>
+<tr class="even">
+<td align="left">TWN</td>
+<td align="right">1.6760</td>
+<td align="right">0.5121</td>
+<td align="right">0.0073</td>
+<td align="right">0.3055</td>
+</tr>
+<tr class="odd">
+<td align="left">USA</td>
+<td align="right">1.8780</td>
+<td align="right">0.1924</td>
+<td align="right">0.0656</td>
+<td align="right">0.1024</td>
+</tr>
+<tr class="even">
+<td align="left">ROW</td>
+<td align="right">1.7567</td>
+<td align="right">0.4076</td>
+<td align="right">0.0957</td>
+<td align="right">0.2320</td>
 </tr>
 </tbody>
 </table>
-<p>The results show that USA has the highest self-reliance (1.6572),
-indicating a more self-sufficient economy. Meanwhile, DEU has the
-highest interdependence index (0.2009), suggesting greater integration
+<p>The results show that CHN has the highest self-reliance (2.3422),
+indicating a more self-sufficient economy. Meanwhile, HKG has the
+highest interdependence index (0.7069), suggesting greater integration
 with other economies.</p>
 </div>
-<div class="section level2">
-<h2 id="bilateral-trade-analysis">Bilateral Trade Analysis<a class="anchor" aria-label="anchor" href="#bilateral-trade-analysis"></a>
-</h2>
+<div class="section level3">
+<h3 id="bilateral-trade-analysis">Bilateral Trade Analysis<a class="anchor" aria-label="anchor" href="#bilateral-trade-analysis"></a>
+</h3>
 <p>The <code>miom</code> class allows extraction of bilateral trade
 flows between any two countries using the
 <code>get_bilateral_trade()</code> method:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">usa_to_chn_trade</span> <span class="op">&lt;-</span> <span class="va">my_miom</span><span class="op">$</span><span class="fu">get_bilateral_trade</span><span class="op">(</span><span class="st">"USA"</span>, <span class="st">"CHN"</span><span class="op">)</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">usa_to_chn_trade</span>, digits <span class="op">=</span> <span class="fl">2</span>, </span>
-<span>             caption <span class="op">=</span> <span class="st">"Trade flows from USA to China (by sector)"</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<caption>Trade flows from USA to China (by sector)</caption>
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Get bilateral trade flows</span></span>
+<span><span class="va">trade_flow1</span> <span class="op">&lt;-</span> <span class="va">world_2000</span><span class="op">$</span><span class="fu">get_bilateral_trade</span><span class="op">(</span><span class="st">"BRA"</span>, <span class="st">"USA"</span><span class="op">)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">trade_flow1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Trade flows from"</span>, <span class="st">"BRA"</span>, <span class="st">"to"</span>, <span class="st">"USA"</span>, <span class="st">"(first 10 buying sectors, first 5 supplying sectors)"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table style="width:100%;" class="table">
+<caption>Trade flows from BRA to USA (first 10 buying sectors, first 5
+supplying sectors)</caption>
+<colgroup>
+<col width="20%">
+<col width="20%">
+<col width="11%">
+<col width="14%">
+<col width="15%">
+<col width="18%">
+</colgroup>
 <thead><tr class="header">
 <th align="left"></th>
-<th align="right">USA_Agriculture</th>
-<th align="right">USA_Manufacturing</th>
-<th align="right">USA_Services</th>
+<th align="right">BRA_Agriculture, Hunting, Forestry and Fishing</th>
+<th align="right">BRA_Mining and Quarrying</th>
+<th align="right">BRA_Food, Beverages and Tobacco</th>
+<th align="right">BRA_Textiles, leather and footwear</th>
+<th align="right">BRA_Pulp, paper, printing and publishing</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">CHN_Agriculture</td>
-<td align="right">5</td>
-<td align="right">8</td>
-<td align="right">3</td>
+<td align="left">USA_Agriculture, Hunting, Forestry and Fishing</td>
+<td align="right">18.23</td>
+<td align="right">0.02</td>
+<td align="right">92.85</td>
+<td align="right">1.80</td>
+<td align="right">2.80</td>
 </tr>
 <tr class="even">
-<td align="left">CHN_Manufacturing</td>
-<td align="right">8</td>
-<td align="right">12</td>
-<td align="right">7</td>
+<td align="left">USA_Mining and Quarrying</td>
+<td align="right">5.19</td>
+<td align="right">13.05</td>
+<td align="right">0.47</td>
+<td align="right">0.20</td>
+<td align="right">0.84</td>
 </tr>
 <tr class="odd">
-<td align="left">CHN_Services</td>
-<td align="right">2</td>
-<td align="right">5</td>
-<td align="right">15</td>
+<td align="left">USA_Food, Beverages and Tobacco</td>
+<td align="right">8.45</td>
+<td align="right">0.06</td>
+<td align="right">29.15</td>
+<td align="right">1.99</td>
+<td align="right">0.19</td>
+</tr>
+<tr class="even">
+<td align="left">USA_Textiles, leather and footwear</td>
+<td align="right">1.56</td>
+<td align="right">1.47</td>
+<td align="right">2.02</td>
+<td align="right">131.26</td>
+<td align="right">1.56</td>
+</tr>
+<tr class="odd">
+<td align="left">USA_Pulp, paper, printing and publishing</td>
+<td align="right">0.44</td>
+<td align="right">2.22</td>
+<td align="right">15.41</td>
+<td align="right">8.80</td>
+<td align="right">111.75</td>
+</tr>
+<tr class="even">
+<td align="left">USA_Coke, refined petroleum and nuclear fuel</td>
+<td align="right">10.27</td>
+<td align="right">5.17</td>
+<td align="right">6.30</td>
+<td align="right">2.43</td>
+<td align="right">1.53</td>
+</tr>
+<tr class="odd">
+<td align="left">USA_Chemicals and chemicals products</td>
+<td align="right">467.80</td>
+<td align="right">31.80</td>
+<td align="right">79.89</td>
+<td align="right">138.63</td>
+<td align="right">129.08</td>
+</tr>
+<tr class="even">
+<td align="left">USA_Rubber and plastics</td>
+<td align="right">3.79</td>
+<td align="right">3.62</td>
+<td align="right">20.65</td>
+<td align="right">5.88</td>
+<td align="right">9.43</td>
+</tr>
+<tr class="odd">
+<td align="left">USA_Other non-metallic mineral</td>
+<td align="right">0.58</td>
+<td align="right">1.00</td>
+<td align="right">2.26</td>
+<td align="right">0.21</td>
+<td align="right">0.24</td>
+</tr>
+<tr class="even">
+<td align="left">USA_Basic metals and fabricated metal</td>
+<td align="right">2.62</td>
+<td align="right">11.05</td>
+<td align="right">13.40</td>
+<td align="right">1.16</td>
+<td align="right">4.23</td>
 </tr>
 </tbody>
 </table>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">chn_to_deu_trade</span> <span class="op">&lt;-</span> <span class="va">my_miom</span><span class="op">$</span><span class="fu">get_bilateral_trade</span><span class="op">(</span><span class="st">"CHN"</span>, <span class="st">"DEU"</span><span class="op">)</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">chn_to_deu_trade</span>, digits <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>             caption <span class="op">=</span> <span class="st">"Trade flows from China to Germany (by sector)"</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<caption>Trade flows from China to Germany (by sector)</caption>
+<span><span class="va">trade_flow2</span> <span class="op">&lt;-</span> <span class="va">world_2000</span><span class="op">$</span><span class="fu">get_bilateral_trade</span><span class="op">(</span><span class="st">"USA"</span>, <span class="st">"BRA"</span><span class="op">)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">trade_flow2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Trade flows from"</span>, <span class="st">"USA"</span>, <span class="st">"to"</span>, <span class="st">"BRA"</span>, <span class="st">"(first 10 buying sectors, first 5 supplying sectors)"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table style="width:100%;" class="table">
+<caption>Trade flows from USA to BRA (first 10 buying sectors, first 5
+supplying sectors)</caption>
+<colgroup>
+<col width="20%">
+<col width="20%">
+<col width="11%">
+<col width="14%">
+<col width="15%">
+<col width="18%">
+</colgroup>
 <thead><tr class="header">
 <th align="left"></th>
-<th align="right">CHN_Agriculture</th>
-<th align="right">CHN_Manufacturing</th>
-<th align="right">CHN_Services</th>
+<th align="right">USA_Agriculture, Hunting, Forestry and Fishing</th>
+<th align="right">USA_Mining and Quarrying</th>
+<th align="right">USA_Food, Beverages and Tobacco</th>
+<th align="right">USA_Textiles, leather and footwear</th>
+<th align="right">USA_Pulp, paper, printing and publishing</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">DEU_Agriculture</td>
-<td align="right">2</td>
-<td align="right">5</td>
-<td align="right">3</td>
+<td align="left">BRA_Agriculture, Hunting, Forestry and Fishing</td>
+<td align="right">91.70</td>
+<td align="right">0.08</td>
+<td align="right">211.27</td>
+<td align="right">4.86</td>
+<td align="right">6.39</td>
 </tr>
 <tr class="even">
-<td align="left">DEU_Manufacturing</td>
-<td align="right">3</td>
-<td align="right">8</td>
-<td align="right">6</td>
+<td align="left">BRA_Mining and Quarrying</td>
+<td align="right">1.24</td>
+<td align="right">20.45</td>
+<td align="right">0.88</td>
+<td align="right">0.15</td>
+<td align="right">1.12</td>
 </tr>
 <tr class="odd">
-<td align="left">DEU_Services</td>
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="right">8</td>
+<td align="left">BRA_Food, Beverages and Tobacco</td>
+<td align="right">22.36</td>
+<td align="right">0.12</td>
+<td align="right">145.10</td>
+<td align="right">2.35</td>
+<td align="right">1.80</td>
+</tr>
+<tr class="even">
+<td align="left">BRA_Textiles, leather and footwear</td>
+<td align="right">1.94</td>
+<td align="right">0.19</td>
+<td align="right">1.02</td>
+<td align="right">111.85</td>
+<td align="right">9.46</td>
+</tr>
+<tr class="odd">
+<td align="left">BRA_Pulp, paper, printing and publishing</td>
+<td align="right">1.64</td>
+<td align="right">1.09</td>
+<td align="right">37.91</td>
+<td align="right">4.97</td>
+<td align="right">185.86</td>
+</tr>
+<tr class="even">
+<td align="left">BRA_Coke, refined petroleum and nuclear fuel</td>
+<td align="right">36.13</td>
+<td align="right">19.79</td>
+<td align="right">8.43</td>
+<td align="right">3.78</td>
+<td align="right">15.55</td>
+</tr>
+<tr class="odd">
+<td align="left">BRA_Chemicals and chemicals products</td>
+<td align="right">44.36</td>
+<td align="right">12.97</td>
+<td align="right">18.40</td>
+<td align="right">52.28</td>
+<td align="right">48.02</td>
+</tr>
+<tr class="even">
+<td align="left">BRA_Rubber and plastics</td>
+<td align="right">1.99</td>
+<td align="right">1.11</td>
+<td align="right">15.42</td>
+<td align="right">1.57</td>
+<td align="right">5.05</td>
+</tr>
+<tr class="odd">
+<td align="left">BRA_Other non-metallic mineral</td>
+<td align="right">0.36</td>
+<td align="right">3.31</td>
+<td align="right">12.77</td>
+<td align="right">2.27</td>
+<td align="right">1.04</td>
+</tr>
+<tr class="even">
+<td align="left">BRA_Basic metals and fabricated metal</td>
+<td align="right">7.96</td>
+<td align="right">31.28</td>
+<td align="right">87.30</td>
+<td align="right">11.21</td>
+<td align="right">58.69</td>
 </tr>
 </tbody>
 </table>
@@ -552,135 +1030,2019 @@ country (columns) to the destination country (rows) by sector. The
 values represent the monetary flows of intermediate inputs used in
 production.</p>
 </div>
-<div class="section level2">
-<h2 id="net-spillover-effects">Net Spillover Effects<a class="anchor" aria-label="anchor" href="#net-spillover-effects"></a>
-</h2>
+<div class="section level3">
+<h3 id="spillover-matrix">Spillover Matrix<a class="anchor" aria-label="anchor" href="#spillover-matrix"></a>
+</h3>
+<p>The spillover matrix provides a comprehensive view of how shocks in
+each country-sector affect all other country-sectors in the system:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">spillover_matrix</span> <span class="op">&lt;-</span> <span class="va">world_2000</span><span class="op">$</span><span class="fu">get_spillover_matrix</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>This
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>598</mn><mo>×</mo><mn>598</mn></mrow><annotation encoding="application/x-tex">598 \times 598</annotation></semantics></math>
+matrix contains the complete set of multiplier effects. For example, we
+can examine how a shock to the US electrical sector affects
+manufacturing in other countries:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Effects of a shock to US Electrical sector</span></span>
+<span><span class="va">electrical_effects</span> <span class="op">&lt;-</span> <span class="va">spillover_matrix</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"*_Manufacturing, recycling"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">spillover_matrix</span><span class="op">)</span><span class="op">)</span>, <span class="st">"USA_Electrical and optical equipment"</span><span class="op">]</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="va">electrical_effects</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"Effects of a unit shock to US Electrical sector"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Effects of a unit shock to US Electrical sector</caption>
+<thead><tr class="header">
+<th align="left"></th>
+<th align="right">x</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">AUS_Manufacturing, recycling</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="even">
+<td align="left">AUT_Manufacturing, recycling</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">BEL_Manufacturing, recycling</td>
+<td align="right">1e-04</td>
+</tr>
+<tr class="even">
+<td align="left">BRA_Manufacturing, recycling</td>
+<td align="right">1e-04</td>
+</tr>
+<tr class="odd">
+<td align="left">CAN_Manufacturing, recycling</td>
+<td align="right">1e-03</td>
+</tr>
+<tr class="even">
+<td align="left">CHN_Manufacturing, recycling</td>
+<td align="right">5e-04</td>
+</tr>
+<tr class="odd">
+<td align="left">DEU_Manufacturing, recycling</td>
+<td align="right">1e-04</td>
+</tr>
+<tr class="even">
+<td align="left">DNK_Manufacturing, recycling</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">ESP_Manufacturing, recycling</td>
+<td align="right">1e-04</td>
+</tr>
+<tr class="even">
+<td align="left">FIN_Manufacturing, recycling</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">FRA_Manufacturing, recycling</td>
+<td align="right">2e-04</td>
+</tr>
+<tr class="even">
+<td align="left">GBR_Manufacturing, recycling</td>
+<td align="right">1e-04</td>
+</tr>
+<tr class="odd">
+<td align="left">GRC_Manufacturing, recycling</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="even">
+<td align="left">HKG_Manufacturing, recycling</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">IND_Manufacturing, recycling</td>
+<td align="right">1e-04</td>
+</tr>
+<tr class="even">
+<td align="left">IRL_Manufacturing, recycling</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">ITA_Manufacturing, recycling</td>
+<td align="right">2e-04</td>
+</tr>
+<tr class="even">
+<td align="left">JPN_Manufacturing, recycling</td>
+<td align="right">3e-04</td>
+</tr>
+<tr class="odd">
+<td align="left">KOR_Manufacturing, recycling</td>
+<td align="right">1e-04</td>
+</tr>
+<tr class="even">
+<td align="left">MEX_Manufacturing, recycling</td>
+<td align="right">3e-04</td>
+</tr>
+<tr class="odd">
+<td align="left">NDL_Manufacturing, recycling</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="even">
+<td align="left">PRT_Manufacturing, recycling</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">SWE_Manufacturing, recycling</td>
+<td align="right">1e-04</td>
+</tr>
+<tr class="even">
+<td align="left">TWN_Manufacturing, recycling</td>
+<td align="right">1e-04</td>
+</tr>
+<tr class="odd">
+<td align="left">USA_Manufacturing, recycling</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="even">
+<td align="left">ROW_Manufacturing, recycling</td>
+<td align="right">9e-04</td>
+</tr>
+</tbody>
+</table>
+<p>These values show the output response in each foreign country-sector
+to a unit shock in USA Electrical and optical equipment.</p>
+</div>
+<div class="section level3">
+<h3 id="net-spillover-effects">Net Spillover Effects<a class="anchor" aria-label="anchor" href="#net-spillover-effects"></a>
+</h3>
 <p>Net spillover effects reveal asymmetric economic relationships
 between countries. Positive values indicate that the row country
 benefits more from economic activity in the column country than vice
 versa.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">net_spillover</span> <span class="op">&lt;-</span> <span class="va">my_miom</span><span class="op">$</span><span class="fu">get_net_spillover_matrix</span><span class="op">(</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">net_spillover</span> <span class="op">&lt;-</span> <span class="va">world_2000</span><span class="op">$</span><span class="fu">get_net_spillover_matrix</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">net_spillover</span>, digits <span class="op">=</span> <span class="fl">4</span>, caption <span class="op">=</span> <span class="st">"Net Spillover Effects Matrix"</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
+<table style="width:100%;" class="table">
 <caption>Net Spillover Effects Matrix</caption>
+<colgroup>
+<col width="1%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+</colgroup>
 <thead><tr class="header">
 <th align="left"></th>
-<th align="right">USA</th>
+<th align="right">AUS</th>
+<th align="right">AUT</th>
+<th align="right">BEL</th>
+<th align="right">BRA</th>
+<th align="right">CAN</th>
 <th align="right">CHN</th>
 <th align="right">DEU</th>
+<th align="right">DNK</th>
+<th align="right">ESP</th>
+<th align="right">FIN</th>
+<th align="right">FRA</th>
+<th align="right">GBR</th>
+<th align="right">GRC</th>
+<th align="right">HKG</th>
+<th align="right">IND</th>
+<th align="right">IRL</th>
+<th align="right">ITA</th>
+<th align="right">JPN</th>
+<th align="right">KOR</th>
+<th align="right">MEX</th>
+<th align="right">NDL</th>
+<th align="right">PRT</th>
+<th align="right">SWE</th>
+<th align="right">TWN</th>
+<th align="right">USA</th>
+<th align="right">ROW</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">USA</td>
+<td align="left">AUS</td>
 <td align="right">0.0000</td>
+<td align="right">-0.0128</td>
+<td align="right">0.0161</td>
+<td align="right">0.0185</td>
+<td align="right">-0.0666</td>
+<td align="right">-0.2094</td>
+<td align="right">-0.3254</td>
+<td align="right">0.0054</td>
+<td align="right">-0.0169</td>
+<td align="right">0.1028</td>
+<td align="right">-0.1678</td>
+<td align="right">-0.3081</td>
+<td align="right">0.0373</td>
+<td align="right">0.2802</td>
+<td align="right">0.1332</td>
+<td align="right">0.0170</td>
+<td align="right">-0.1683</td>
+<td align="right">-0.4861</td>
+<td align="right">0.2846</td>
+<td align="right">-0.0004</td>
+<td align="right">0.0029</td>
+<td align="right">0.0107</td>
+<td align="right">-0.0414</td>
+<td align="right">0.6035</td>
+<td align="right">-1.4584</td>
+<td align="right">-1.6443</td>
+</tr>
+<tr class="even">
+<td align="left">AUT</td>
+<td align="right">0.0128</td>
+<td align="right">0.0000</td>
+<td align="right">-0.1123</td>
+<td align="right">-0.0255</td>
+<td align="right">-0.0542</td>
+<td align="right">-0.1683</td>
+<td align="right">-3.4544</td>
+<td align="right">0.0801</td>
+<td align="right">-0.1197</td>
+<td align="right">0.0000</td>
+<td align="right">-0.5047</td>
+<td align="right">-0.3707</td>
+<td align="right">0.1085</td>
+<td align="right">0.0251</td>
+<td align="right">-0.0127</td>
+<td align="right">0.0583</td>
+<td align="right">-0.7356</td>
+<td align="right">-0.3207</td>
+<td align="right">-0.0394</td>
+<td align="right">-0.0077</td>
+<td align="right">-0.2614</td>
+<td align="right">0.0610</td>
+<td align="right">-0.0481</td>
+<td align="right">-0.0705</td>
+<td align="right">-0.8216</td>
+<td align="right">-2.0690</td>
+</tr>
+<tr class="odd">
+<td align="left">BEL</td>
+<td align="right">-0.0161</td>
+<td align="right">0.1123</td>
+<td align="right">0.0000</td>
+<td align="right">-0.1303</td>
+<td align="right">-0.1564</td>
+<td align="right">-0.2612</td>
+<td align="right">-2.1978</td>
+<td align="right">0.3258</td>
+<td align="right">-0.1575</td>
+<td align="right">0.0651</td>
+<td align="right">-1.5795</td>
+<td align="right">-1.3692</td>
+<td align="right">0.2773</td>
+<td align="right">0.1062</td>
+<td align="right">0.0709</td>
+<td align="right">0.0739</td>
+<td align="right">-0.4425</td>
+<td align="right">-0.5333</td>
+<td align="right">-0.0801</td>
+<td align="right">-0.0204</td>
+<td align="right">-1.2560</td>
+<td align="right">0.2428</td>
+<td align="right">-0.0370</td>
+<td align="right">0.0316</td>
+<td align="right">-1.7541</td>
+<td align="right">-2.2477</td>
+</tr>
+<tr class="even">
+<td align="left">BRA</td>
+<td align="right">-0.0185</td>
+<td align="right">0.0255</td>
+<td align="right">0.1303</td>
+<td align="right">0.0000</td>
+<td align="right">-0.0638</td>
+<td align="right">-0.1074</td>
+<td align="right">-0.3114</td>
+<td align="right">0.0543</td>
+<td align="right">-0.0272</td>
+<td align="right">0.0703</td>
+<td align="right">-0.1351</td>
+<td align="right">-0.1205</td>
+<td align="right">0.0703</td>
+<td align="right">0.1400</td>
+<td align="right">-0.0121</td>
+<td align="right">0.0602</td>
+<td align="right">-0.1189</td>
+<td align="right">-0.3053</td>
+<td align="right">-0.0575</td>
+<td align="right">0.0248</td>
+<td align="right">0.1271</td>
+<td align="right">0.1395</td>
+<td align="right">-0.0003</td>
+<td align="right">-0.0139</td>
+<td align="right">-1.1401</td>
+<td align="right">-1.3336</td>
+</tr>
+<tr class="odd">
+<td align="left">CAN</td>
+<td align="right">0.0666</td>
+<td align="right">0.0542</td>
+<td align="right">0.1564</td>
+<td align="right">0.0638</td>
+<td align="right">0.0000</td>
+<td align="right">-0.1215</td>
+<td align="right">-0.1589</td>
+<td align="right">0.0738</td>
+<td align="right">-0.0062</td>
+<td align="right">0.0598</td>
+<td align="right">-0.0793</td>
+<td align="right">-0.3592</td>
+<td align="right">0.0755</td>
+<td align="right">0.4725</td>
+<td align="right">0.0422</td>
+<td align="right">0.2618</td>
+<td align="right">-0.0790</td>
+<td align="right">-0.3763</td>
+<td align="right">0.0299</td>
+<td align="right">0.0400</td>
+<td align="right">0.0914</td>
+<td align="right">0.0575</td>
+<td align="right">0.0410</td>
 <td align="right">-0.0074</td>
-<td align="right">0.0218</td>
+<td align="right">-4.7295</td>
+<td align="right">-0.9500</td>
 </tr>
 <tr class="even">
 <td align="left">CHN</td>
-<td align="right">0.0074</td>
+<td align="right">0.2094</td>
+<td align="right">0.1683</td>
+<td align="right">0.2612</td>
+<td align="right">0.1074</td>
+<td align="right">0.1215</td>
 <td align="right">0.0000</td>
-<td align="right">0.0469</td>
+<td align="right">-0.0647</td>
+<td align="right">0.2008</td>
+<td align="right">0.1432</td>
+<td align="right">0.1481</td>
+<td align="right">0.0488</td>
+<td align="right">0.0196</td>
+<td align="right">0.1972</td>
+<td align="right">3.2840</td>
+<td align="right">0.1929</td>
+<td align="right">0.2366</td>
+<td align="right">0.0578</td>
+<td align="right">-0.9235</td>
+<td align="right">0.0400</td>
+<td align="right">0.1713</td>
+<td align="right">0.2811</td>
+<td align="right">0.1269</td>
+<td align="right">0.0763</td>
+<td align="right">-0.1745</td>
+<td align="right">-0.4623</td>
+<td align="right">-1.0555</td>
 </tr>
 <tr class="odd">
 <td align="left">DEU</td>
-<td align="right">-0.0218</td>
-<td align="right">-0.0469</td>
+<td align="right">0.3254</td>
+<td align="right">3.4544</td>
+<td align="right">2.1978</td>
+<td align="right">0.3114</td>
+<td align="right">0.1589</td>
+<td align="right">0.0647</td>
+<td align="right">0.0000</td>
+<td align="right">2.0943</td>
+<td align="right">0.9054</td>
+<td align="right">1.1904</td>
+<td align="right">0.4801</td>
+<td align="right">0.1591</td>
+<td align="right">1.2163</td>
+<td align="right">0.6132</td>
+<td align="right">0.2229</td>
+<td align="right">0.9037</td>
+<td align="right">0.4094</td>
+<td align="right">-0.2973</td>
+<td align="right">0.1949</td>
+<td align="right">0.2775</td>
+<td align="right">1.4774</td>
+<td align="right">1.4083</td>
+<td align="right">1.6150</td>
+<td align="right">0.8653</td>
+<td align="right">-0.7504</td>
+<td align="right">-1.2917</td>
+</tr>
+<tr class="even">
+<td align="left">DNK</td>
+<td align="right">-0.0054</td>
+<td align="right">-0.0801</td>
+<td align="right">-0.3258</td>
+<td align="right">-0.0543</td>
+<td align="right">-0.0738</td>
+<td align="right">-0.2008</td>
+<td align="right">-2.0943</td>
+<td align="right">0.0000</td>
+<td align="right">-0.1529</td>
+<td align="right">-0.0126</td>
+<td align="right">-0.6395</td>
+<td align="right">-1.0682</td>
+<td align="right">0.0649</td>
+<td align="right">0.0549</td>
+<td align="right">-0.0269</td>
+<td align="right">0.0893</td>
+<td align="right">-0.5411</td>
+<td align="right">-0.2305</td>
+<td align="right">-0.0836</td>
+<td align="right">-0.0077</td>
+<td align="right">-0.5998</td>
+<td align="right">0.0259</td>
+<td align="right">-0.8529</td>
+<td align="right">-0.0162</td>
+<td align="right">-0.7998</td>
+<td align="right">-1.9055</td>
+</tr>
+<tr class="odd">
+<td align="left">ESP</td>
+<td align="right">0.0169</td>
+<td align="right">0.1197</td>
+<td align="right">0.1575</td>
+<td align="right">0.0272</td>
+<td align="right">0.0062</td>
+<td align="right">-0.1432</td>
+<td align="right">-0.9054</td>
+<td align="right">0.1529</td>
+<td align="right">0.0000</td>
+<td align="right">0.0762</td>
+<td align="right">-0.8883</td>
+<td align="right">-0.4055</td>
+<td align="right">0.3551</td>
+<td align="right">0.1613</td>
+<td align="right">-0.0049</td>
+<td align="right">0.2886</td>
+<td align="right">-0.6444</td>
+<td align="right">-0.2458</td>
+<td align="right">-0.0200</td>
+<td align="right">-0.0514</td>
+<td align="right">0.0455</td>
+<td align="right">2.4591</td>
+<td align="right">0.0988</td>
+<td align="right">0.1080</td>
+<td align="right">-0.5864</td>
+<td align="right">-1.8137</td>
+</tr>
+<tr class="even">
+<td align="left">FIN</td>
+<td align="right">-0.1028</td>
+<td align="right">0.0000</td>
+<td align="right">-0.0651</td>
+<td align="right">-0.0703</td>
+<td align="right">-0.0598</td>
+<td align="right">-0.1481</td>
+<td align="right">-1.1904</td>
+<td align="right">0.0126</td>
+<td align="right">-0.0762</td>
+<td align="right">0.0000</td>
+<td align="right">-0.4082</td>
+<td align="right">-0.5926</td>
+<td align="right">0.1242</td>
+<td align="right">0.0389</td>
+<td align="right">-0.0104</td>
+<td align="right">0.0738</td>
+<td align="right">-0.3406</td>
+<td align="right">-0.4668</td>
+<td align="right">-0.0713</td>
+<td align="right">-0.0079</td>
+<td align="right">-0.2015</td>
+<td align="right">0.0461</td>
+<td align="right">-0.3288</td>
+<td align="right">-0.0692</td>
+<td align="right">-0.9072</td>
+<td align="right">-2.3061</td>
+</tr>
+<tr class="odd">
+<td align="left">FRA</td>
+<td align="right">0.1678</td>
+<td align="right">0.5047</td>
+<td align="right">1.5795</td>
+<td align="right">0.1351</td>
+<td align="right">0.0793</td>
+<td align="right">-0.0488</td>
+<td align="right">-0.4801</td>
+<td align="right">0.6395</td>
+<td align="right">0.8883</td>
+<td align="right">0.4082</td>
+<td align="right">0.0000</td>
+<td align="right">-0.1323</td>
+<td align="right">0.7620</td>
+<td align="right">0.4191</td>
+<td align="right">0.1152</td>
+<td align="right">0.8238</td>
+<td align="right">0.0105</td>
+<td align="right">-0.2843</td>
+<td align="right">0.1093</td>
+<td align="right">0.0987</td>
+<td align="right">0.6057</td>
+<td align="right">1.0754</td>
+<td align="right">0.7666</td>
+<td align="right">0.1600</td>
+<td align="right">-0.8321</td>
+<td align="right">-1.2457</td>
+</tr>
+<tr class="even">
+<td align="left">GBR</td>
+<td align="right">0.3081</td>
+<td align="right">0.3707</td>
+<td align="right">1.3692</td>
+<td align="right">0.1205</td>
+<td align="right">0.3592</td>
+<td align="right">-0.0196</td>
+<td align="right">-0.1591</td>
+<td align="right">1.0682</td>
+<td align="right">0.4055</td>
+<td align="right">0.5926</td>
+<td align="right">0.1323</td>
+<td align="right">0.0000</td>
+<td align="right">0.5151</td>
+<td align="right">0.5883</td>
+<td align="right">0.3410</td>
+<td align="right">4.1994</td>
+<td align="right">0.0674</td>
+<td align="right">-0.3685</td>
+<td align="right">0.0660</td>
+<td align="right">0.0746</td>
+<td align="right">1.0018</td>
+<td align="right">0.7635</td>
+<td align="right">1.0191</td>
+<td align="right">0.5895</td>
+<td align="right">-1.0395</td>
+<td align="right">-1.1629</td>
+</tr>
+<tr class="odd">
+<td align="left">GRC</td>
+<td align="right">-0.0373</td>
+<td align="right">-0.1085</td>
+<td align="right">-0.2773</td>
+<td align="right">-0.0703</td>
+<td align="right">-0.0755</td>
+<td align="right">-0.1972</td>
+<td align="right">-1.2163</td>
+<td align="right">-0.0649</td>
+<td align="right">-0.3551</td>
+<td align="right">-0.1242</td>
+<td align="right">-0.7620</td>
+<td align="right">-0.5151</td>
+<td align="right">0.0000</td>
+<td align="right">-0.0519</td>
+<td align="right">-0.0550</td>
+<td align="right">-0.0608</td>
+<td align="right">-1.6529</td>
+<td align="right">-0.2026</td>
+<td align="right">-0.1080</td>
+<td align="right">-0.0129</td>
+<td align="right">-0.4536</td>
+<td align="right">-0.0221</td>
+<td align="right">-0.2269</td>
+<td align="right">-0.0965</td>
+<td align="right">-0.5765</td>
+<td align="right">-3.1367</td>
+</tr>
+<tr class="even">
+<td align="left">HKG</td>
+<td align="right">-0.2802</td>
+<td align="right">-0.0251</td>
+<td align="right">-0.1062</td>
+<td align="right">-0.1400</td>
+<td align="right">-0.4725</td>
+<td align="right">-3.2840</td>
+<td align="right">-0.6132</td>
+<td align="right">-0.0549</td>
+<td align="right">-0.1613</td>
+<td align="right">-0.0389</td>
+<td align="right">-0.4191</td>
+<td align="right">-0.5883</td>
+<td align="right">0.0519</td>
+<td align="right">0.0000</td>
+<td align="right">0.0359</td>
+<td align="right">0.1734</td>
+<td align="right">-0.6494</td>
+<td align="right">-2.3815</td>
+<td align="right">-1.3598</td>
+<td align="right">-0.0428</td>
+<td align="right">-0.3130</td>
+<td align="right">0.0171</td>
+<td align="right">-0.0231</td>
+<td align="right">-0.4679</td>
+<td align="right">-3.2704</td>
+<td align="right">-6.2372</td>
+</tr>
+<tr class="odd">
+<td align="left">IND</td>
+<td align="right">-0.1332</td>
+<td align="right">0.0127</td>
+<td align="right">-0.0709</td>
+<td align="right">0.0121</td>
+<td align="right">-0.0422</td>
+<td align="right">-0.1929</td>
+<td align="right">-0.2229</td>
+<td align="right">0.0269</td>
+<td align="right">0.0049</td>
+<td align="right">0.0104</td>
+<td align="right">-0.1152</td>
+<td align="right">-0.3410</td>
+<td align="right">0.0550</td>
+<td align="right">-0.0359</td>
+<td align="right">0.0000</td>
+<td align="right">0.0811</td>
+<td align="right">-0.0916</td>
+<td align="right">-0.3318</td>
+<td align="right">-0.0870</td>
+<td align="right">0.0157</td>
+<td align="right">-0.0116</td>
+<td align="right">0.0606</td>
+<td align="right">-0.0037</td>
+<td align="right">-0.0025</td>
+<td align="right">-0.5878</td>
+<td align="right">-2.9286</td>
+</tr>
+<tr class="even">
+<td align="left">IRL</td>
+<td align="right">-0.0170</td>
+<td align="right">-0.0583</td>
+<td align="right">-0.0739</td>
+<td align="right">-0.0602</td>
+<td align="right">-0.2618</td>
+<td align="right">-0.2366</td>
+<td align="right">-0.9037</td>
+<td align="right">-0.0893</td>
+<td align="right">-0.2886</td>
+<td align="right">-0.0738</td>
+<td align="right">-0.8238</td>
+<td align="right">-4.1994</td>
+<td align="right">0.0608</td>
+<td align="right">-0.1734</td>
+<td align="right">-0.0811</td>
+<td align="right">0.0000</td>
+<td align="right">-0.5089</td>
+<td align="right">-0.6792</td>
+<td align="right">-0.2360</td>
+<td align="right">-0.0227</td>
+<td align="right">-0.3643</td>
+<td align="right">0.0139</td>
+<td align="right">-0.1881</td>
+<td align="right">-0.1746</td>
+<td align="right">-3.0383</td>
+<td align="right">-2.1441</td>
+</tr>
+<tr class="odd">
+<td align="left">ITA</td>
+<td align="right">0.1683</td>
+<td align="right">0.7356</td>
+<td align="right">0.4425</td>
+<td align="right">0.1189</td>
+<td align="right">0.0790</td>
+<td align="right">-0.0578</td>
+<td align="right">-0.4094</td>
+<td align="right">0.5411</td>
+<td align="right">0.6444</td>
+<td align="right">0.3406</td>
+<td align="right">-0.0105</td>
+<td align="right">-0.0674</td>
+<td align="right">1.6529</td>
+<td align="right">0.6494</td>
+<td align="right">0.0916</td>
+<td align="right">0.5089</td>
+<td align="right">0.0000</td>
+<td align="right">-0.1670</td>
+<td align="right">0.0946</td>
+<td align="right">0.1297</td>
+<td align="right">0.1910</td>
+<td align="right">0.7478</td>
+<td align="right">0.3421</td>
+<td align="right">0.1276</td>
+<td align="right">-0.4831</td>
+<td align="right">-1.6802</td>
+</tr>
+<tr class="even">
+<td align="left">JPN</td>
+<td align="right">0.4861</td>
+<td align="right">0.3207</td>
+<td align="right">0.5333</td>
+<td align="right">0.3053</td>
+<td align="right">0.3763</td>
+<td align="right">0.9235</td>
+<td align="right">0.2973</td>
+<td align="right">0.2305</td>
+<td align="right">0.2458</td>
+<td align="right">0.4668</td>
+<td align="right">0.2843</td>
+<td align="right">0.3685</td>
+<td align="right">0.2026</td>
+<td align="right">2.3815</td>
+<td align="right">0.3318</td>
+<td align="right">0.6792</td>
+<td align="right">0.1670</td>
+<td align="right">0.0000</td>
+<td align="right">1.5110</td>
+<td align="right">0.4463</td>
+<td align="right">0.5557</td>
+<td align="right">0.3128</td>
+<td align="right">0.3421</td>
+<td align="right">1.7225</td>
+<td align="right">-0.0264</td>
+<td align="right">-0.4335</td>
+</tr>
+<tr class="odd">
+<td align="left">KOR</td>
+<td align="right">-0.2846</td>
+<td align="right">0.0394</td>
+<td align="right">0.0801</td>
+<td align="right">0.0575</td>
+<td align="right">-0.0299</td>
+<td align="right">-0.0400</td>
+<td align="right">-0.1949</td>
+<td align="right">0.0836</td>
+<td align="right">0.0200</td>
+<td align="right">0.0713</td>
+<td align="right">-0.1093</td>
+<td align="right">-0.0660</td>
+<td align="right">0.1080</td>
+<td align="right">1.3598</td>
+<td align="right">0.0870</td>
+<td align="right">0.2360</td>
+<td align="right">-0.0946</td>
+<td align="right">-1.5110</td>
+<td align="right">0.0000</td>
+<td align="right">0.1797</td>
+<td align="right">0.0487</td>
+<td align="right">0.1268</td>
+<td align="right">0.0371</td>
+<td align="right">0.2292</td>
+<td align="right">-1.5061</td>
+<td align="right">-2.8225</td>
+</tr>
+<tr class="even">
+<td align="left">MEX</td>
+<td align="right">0.0004</td>
+<td align="right">0.0077</td>
+<td align="right">0.0204</td>
+<td align="right">-0.0248</td>
+<td align="right">-0.0400</td>
+<td align="right">-0.1713</td>
+<td align="right">-0.2775</td>
+<td align="right">0.0077</td>
+<td align="right">0.0514</td>
+<td align="right">0.0079</td>
+<td align="right">-0.0987</td>
+<td align="right">-0.0746</td>
+<td align="right">0.0129</td>
+<td align="right">0.0428</td>
+<td align="right">-0.0157</td>
+<td align="right">0.0227</td>
+<td align="right">-0.1297</td>
+<td align="right">-0.4463</td>
+<td align="right">-0.1797</td>
+<td align="right">0.0000</td>
+<td align="right">0.0109</td>
+<td align="right">0.0932</td>
+<td align="right">-0.0369</td>
+<td align="right">-0.0638</td>
+<td align="right">-4.6417</td>
+<td align="right">-0.6929</td>
+</tr>
+<tr class="odd">
+<td align="left">NDL</td>
+<td align="right">-0.0029</td>
+<td align="right">0.2614</td>
+<td align="right">1.2560</td>
+<td align="right">-0.1271</td>
+<td align="right">-0.0914</td>
+<td align="right">-0.2811</td>
+<td align="right">-1.4774</td>
+<td align="right">0.5998</td>
+<td align="right">-0.0455</td>
+<td align="right">0.2015</td>
+<td align="right">-0.6057</td>
+<td align="right">-1.0018</td>
+<td align="right">0.4536</td>
+<td align="right">0.3130</td>
+<td align="right">0.0116</td>
+<td align="right">0.3643</td>
+<td align="right">-0.1910</td>
+<td align="right">-0.5557</td>
+<td align="right">-0.0487</td>
+<td align="right">-0.0109</td>
+<td align="right">0.0000</td>
+<td align="right">0.3416</td>
+<td align="right">0.1307</td>
+<td align="right">0.3147</td>
+<td align="right">-1.7635</td>
+<td align="right">-2.9057</td>
+</tr>
+<tr class="even">
+<td align="left">PRT</td>
+<td align="right">-0.0107</td>
+<td align="right">-0.0610</td>
+<td align="right">-0.2428</td>
+<td align="right">-0.1395</td>
+<td align="right">-0.0575</td>
+<td align="right">-0.1269</td>
+<td align="right">-1.4083</td>
+<td align="right">-0.0259</td>
+<td align="right">-2.4591</td>
+<td align="right">-0.0461</td>
+<td align="right">-1.0754</td>
+<td align="right">-0.7635</td>
+<td align="right">0.0221</td>
+<td align="right">-0.0171</td>
+<td align="right">-0.0606</td>
+<td align="right">-0.0139</td>
+<td align="right">-0.7478</td>
+<td align="right">-0.3128</td>
+<td align="right">-0.1268</td>
+<td align="right">-0.0932</td>
+<td align="right">-0.3416</td>
+<td align="right">0.0000</td>
+<td align="right">-0.1161</td>
+<td align="right">-0.0513</td>
+<td align="right">-0.5927</td>
+<td align="right">-2.1151</td>
+</tr>
+<tr class="odd">
+<td align="left">SWE</td>
+<td align="right">0.0414</td>
+<td align="right">0.0481</td>
+<td align="right">0.0370</td>
+<td align="right">0.0003</td>
+<td align="right">-0.0410</td>
+<td align="right">-0.0763</td>
+<td align="right">-1.6150</td>
+<td align="right">0.8529</td>
+<td align="right">-0.0988</td>
+<td align="right">0.3288</td>
+<td align="right">-0.7666</td>
+<td align="right">-1.0191</td>
+<td align="right">0.2269</td>
+<td align="right">0.0231</td>
+<td align="right">0.0037</td>
+<td align="right">0.1881</td>
+<td align="right">-0.3421</td>
+<td align="right">-0.3421</td>
+<td align="right">-0.0371</td>
+<td align="right">0.0369</td>
+<td align="right">-0.1307</td>
+<td align="right">0.1161</td>
+<td align="right">0.0000</td>
+<td align="right">-0.0189</td>
+<td align="right">-0.9712</td>
+<td align="right">-1.8780</td>
+</tr>
+<tr class="even">
+<td align="left">TWN</td>
+<td align="right">-0.6035</td>
+<td align="right">0.0705</td>
+<td align="right">-0.0316</td>
+<td align="right">0.0139</td>
+<td align="right">0.0074</td>
+<td align="right">0.1745</td>
+<td align="right">-0.8653</td>
+<td align="right">0.0162</td>
+<td align="right">-0.1080</td>
+<td align="right">0.0692</td>
+<td align="right">-0.1600</td>
+<td align="right">-0.5895</td>
+<td align="right">0.0965</td>
+<td align="right">0.4679</td>
+<td align="right">0.0025</td>
+<td align="right">0.1746</td>
+<td align="right">-0.1276</td>
+<td align="right">-1.7225</td>
+<td align="right">-0.2292</td>
+<td align="right">0.0638</td>
+<td align="right">-0.3147</td>
+<td align="right">0.0513</td>
+<td align="right">0.0189</td>
+<td align="right">0.0000</td>
+<td align="right">-1.2744</td>
+<td align="right">-2.5937</td>
+</tr>
+<tr class="odd">
+<td align="left">USA</td>
+<td align="right">1.4584</td>
+<td align="right">0.8216</td>
+<td align="right">1.7541</td>
+<td align="right">1.1401</td>
+<td align="right">4.7295</td>
+<td align="right">0.4623</td>
+<td align="right">0.7504</td>
+<td align="right">0.7998</td>
+<td align="right">0.5864</td>
+<td align="right">0.9072</td>
+<td align="right">0.8321</td>
+<td align="right">1.0395</td>
+<td align="right">0.5765</td>
+<td align="right">3.2704</td>
+<td align="right">0.5878</td>
+<td align="right">3.0383</td>
+<td align="right">0.4831</td>
+<td align="right">0.0264</td>
+<td align="right">1.5061</td>
+<td align="right">4.6417</td>
+<td align="right">1.7635</td>
+<td align="right">0.5927</td>
+<td align="right">0.9712</td>
+<td align="right">1.2744</td>
+<td align="right">0.0000</td>
+<td align="right">0.7676</td>
+</tr>
+<tr class="even">
+<td align="left">ROW</td>
+<td align="right">1.6443</td>
+<td align="right">2.0690</td>
+<td align="right">2.2477</td>
+<td align="right">1.3336</td>
+<td align="right">0.9500</td>
+<td align="right">1.0555</td>
+<td align="right">1.2917</td>
+<td align="right">1.9055</td>
+<td align="right">1.8137</td>
+<td align="right">2.3061</td>
+<td align="right">1.2457</td>
+<td align="right">1.1629</td>
+<td align="right">3.1367</td>
+<td align="right">6.2372</td>
+<td align="right">2.9286</td>
+<td align="right">2.1441</td>
+<td align="right">1.6802</td>
+<td align="right">0.4335</td>
+<td align="right">2.8225</td>
+<td align="right">0.6929</td>
+<td align="right">2.9057</td>
+<td align="right">2.1151</td>
+<td align="right">1.8780</td>
+<td align="right">2.5937</td>
+<td align="right">-0.7676</td>
 <td align="right">0.0000</td>
 </tr>
 </tbody>
 </table>
-<p>The interpretation is straightforward: - Positive values: row country
-benefits more from column country - Negative values: column country
-benefits more from row country<br>
-- Values close to zero: symmetric spillover relationship</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">max_abs_spillover</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">net_spillover</span><span class="op">)</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">net_spillover</span><span class="op">)</span><span class="op">)</span>, arr.ind <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">max_row</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">net_spillover</span><span class="op">)</span><span class="op">[</span><span class="va">max_abs_spillover</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">max_col</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">net_spillover</span><span class="op">)</span><span class="op">[</span><span class="va">max_abs_spillover</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">max_value</span> <span class="op">&lt;-</span> <span class="va">net_spillover</span><span class="op">[</span><span class="va">max_abs_spillover</span><span class="op">]</span></span></code></pre></div>
-<p>The strongest asymmetric relationship is from CHN to DEU with a net
-spillover of -0.0469, 0.0469.</p>
+<p>The interpretation is straightforward:</p>
+<ul>
+<li>Positive values: row country benefits more from column country</li>
+<li>Negative values: column country benefits more from row country<br>
+</li>
+<li>Values close to zero: symmetric spillover relationship</li>
+</ul>
+<p>For example, the USA has positive net spillover effects with every
+other country, indicating it generally benefits more from economic
+interactions with the world.</p>
 </div>
-<div class="section level2">
-<h2 id="extracting-country-specific-input-output-tables">Extracting Country-Specific Input-Output Tables<a class="anchor" aria-label="anchor" href="#extracting-country-specific-input-output-tables"></a>
-</h2>
-<p>The <code>extract_country()</code> method allows you to extract
-domestic input-output tables for individual countries from the
-multi-regional system:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">usa_iom</span> <span class="op">&lt;-</span> <span class="va">my_miom</span><span class="op">$</span><span class="fu">extract_country</span><span class="op">(</span><span class="st">"USA"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">usa_iom</span><span class="op">$</span><span class="va">id</span></span>
-<span><span class="co">#&gt; [1] "three_country_example_USA"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">usa_iom</span><span class="op">$</span><span class="va">intermediate_transactions</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 3 3</span></span></code></pre></div>
-<p>The extracted <code>iom</code> object contains only the domestic
-transactions for the specified country:</p>
+<div class="section level3">
+<h3 id="key-sectors-analysis">Key Sectors Analysis<a class="anchor" aria-label="anchor" href="#key-sectors-analysis"></a>
+</h3>
+<p>Key sectors analysis identifies sectors with strong backward and
+forward linkages in the multi-regional system:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">usa_iom</span><span class="op">$</span><span class="va">intermediate_transactions</span>, digits <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>             caption <span class="op">=</span> <span class="st">"USA Domestic Intermediate Transactions"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">world_2000</span><span class="op">$</span><span class="fu">compute_key_sectors</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">key_sectors_table</span> <span class="op">&lt;-</span> <span class="va">world_2000</span><span class="op">$</span><span class="va">key_sectors</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"country"</span>, <span class="st">"sector_name"</span>,</span>
+<span>  <span class="st">"power_dispersion"</span>, <span class="st">"sensitivity_dispersion"</span>, <span class="st">"key_sectors"</span></span>
+<span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">key_sectors_table</span><span class="op">)</span>, digits <span class="op">=</span> <span class="fl">4</span>, caption <span class="op">=</span> <span class="st">"Key Sectors Analysis"</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
-<caption>USA Domestic Intermediate Transactions</caption>
+<caption>Key Sectors Analysis</caption>
+<colgroup>
+<col width="6%">
+<col width="37%">
+<col width="14%">
+<col width="20%">
+<col width="20%">
+</colgroup>
 <thead><tr class="header">
-<th align="left"></th>
-<th align="right">USA_Agriculture</th>
-<th align="right">USA_Manufacturing</th>
-<th align="right">USA_Services</th>
+<th align="left">country</th>
+<th align="left">sector_name</th>
+<th align="right">power_dispersion</th>
+<th align="right">sensitivity_dispersion</th>
+<th align="left">key_sectors</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">USA_Agriculture</td>
-<td align="right">50</td>
-<td align="right">15</td>
-<td align="right">10</td>
+<td align="left">AUS</td>
+<td align="left">Agriculture, Hunting, Forestry and Fishing</td>
+<td align="right">0.9231</td>
+<td align="right">0.9372</td>
+<td align="left">Non-Key Sector</td>
 </tr>
 <tr class="even">
-<td align="left">USA_Manufacturing</td>
-<td align="right">20</td>
-<td align="right">80</td>
-<td align="right">30</td>
+<td align="left">AUS</td>
+<td align="left">Mining and Quarrying</td>
+<td align="right">0.8579</td>
+<td align="right">1.3972</td>
+<td align="left">Strong Forward Linkage</td>
 </tr>
 <tr class="odd">
-<td align="left">USA_Services</td>
-<td align="right">10</td>
-<td align="right">25</td>
-<td align="right">120</td>
+<td align="left">AUS</td>
+<td align="left">Food, Beverages and Tobacco</td>
+<td align="right">1.1698</td>
+<td align="right">0.7489</td>
+<td align="left">Strong Backward Linkage</td>
+</tr>
+<tr class="even">
+<td align="left">AUS</td>
+<td align="left">Textiles, leather and footwear</td>
+<td align="right">1.1334</td>
+<td align="right">0.5495</td>
+<td align="left">Strong Backward Linkage</td>
+</tr>
+<tr class="odd">
+<td align="left">AUS</td>
+<td align="left">Pulp, paper, printing and publishing</td>
+<td align="right">1.0508</td>
+<td align="right">0.7826</td>
+<td align="left">Strong Backward Linkage</td>
+</tr>
+<tr class="even">
+<td align="left">AUS</td>
+<td align="left">Coke, refined petroleum and nuclear fuel</td>
+<td align="right">1.2480</td>
+<td align="right">0.6396</td>
+<td align="left">Strong Backward Linkage</td>
 </tr>
 </tbody>
 </table>
+<p>Key sectors are defined as those with above-average values in both
+power dispersion (backward linkages) and sensitivity dispersion (forward
+linkages). If both values exceed 1, the sector is classified as a key
+sector.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">usa_iom</span><span class="op">$</span><span class="va">total_production</span>, digits <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>             caption <span class="op">=</span> <span class="st">"USA Total Production"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">key_sectors_table</span>, <span class="va">key_sectors</span> <span class="op">==</span> <span class="st">"Key Sector"</span><span class="op">)</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"World Key Sectors"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <table class="table">
-<caption>USA Total Production</caption>
+<caption>World Key Sectors</caption>
+<colgroup>
+<col width="3%">
+<col width="7%">
+<col width="40%">
+<col width="15%">
+<col width="21%">
+<col width="11%">
+</colgroup>
 <thead><tr class="header">
-<th align="right">USA_Agriculture</th>
-<th align="right">USA_Manufacturing</th>
-<th align="right">USA_Services</th>
+<th align="left"></th>
+<th align="left">country</th>
+<th align="left">sector_name</th>
+<th align="right">power_dispersion</th>
+<th align="right">sensitivity_dispersion</th>
+<th align="left">key_sectors</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">10</td>
+<td align="left">AUS</td>
+<td align="left">Basic metals and fabricated metal</td>
+<td align="right">1.1153</td>
+<td align="right">1.1820</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">19</td>
+<td align="left">AUS</td>
+<td align="left">Transport and storage</td>
+<td align="right">1.0424</td>
+<td align="right">1.3665</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">63</td>
+<td align="left">BEL</td>
+<td align="left">Wholesale and retail trade</td>
+<td align="right">1.0474</td>
+<td align="right">2.1698</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">65</td>
+<td align="left">BEL</td>
+<td align="left">Transport and storage</td>
+<td align="right">1.1411</td>
+<td align="right">1.5131</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">76</td>
+<td align="left">BRA</td>
+<td align="left">Chemicals and chemicals products</td>
+<td align="right">1.1417</td>
+<td align="right">1.2050</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">79</td>
+<td align="left">BRA</td>
+<td align="left">Basic metals and fabricated metal</td>
+<td align="right">1.0736</td>
+<td align="right">1.1132</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">119</td>
+<td align="left">CHN</td>
+<td align="left">Textiles, leather and footwear</td>
+<td align="right">1.3286</td>
+<td align="right">1.1093</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">120</td>
+<td align="left">CHN</td>
+<td align="left">Pulp, paper, printing and publishing</td>
+<td align="right">1.2516</td>
+<td align="right">1.0303</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">122</td>
+<td align="left">CHN</td>
+<td align="left">Chemicals and chemicals products</td>
+<td align="right">1.3459</td>
+<td align="right">1.9790</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">123</td>
+<td align="left">CHN</td>
+<td align="left">Rubber and plastics</td>
+<td align="right">1.4161</td>
+<td align="right">1.0886</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">125</td>
+<td align="left">CHN</td>
+<td align="left">Basic metals and fabricated metal</td>
+<td align="right">1.4585</td>
+<td align="right">2.4764</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">126</td>
+<td align="left">CHN</td>
+<td align="left">Machinery</td>
+<td align="right">1.3794</td>
+<td align="right">1.2067</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">127</td>
+<td align="left">CHN</td>
+<td align="left">Electrical and optical equipment</td>
+<td align="right">1.4747</td>
+<td align="right">1.6025</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">129</td>
+<td align="left">CHN</td>
+<td align="left">Manufacturing, recycling</td>
+<td align="right">1.2086</td>
+<td align="right">1.0453</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">130</td>
+<td align="left">CHN</td>
+<td align="left">Electricity, gas and water supply</td>
+<td align="right">1.2553</td>
+<td align="right">1.7450</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">132</td>
+<td align="left">CHN</td>
+<td align="left">Wholesale and retail trade</td>
+<td align="right">1.0484</td>
+<td align="right">2.1414</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">134</td>
+<td align="left">CHN</td>
+<td align="left">Transport and storage</td>
+<td align="right">1.0038</td>
+<td align="right">1.5373</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">145</td>
+<td align="left">DEU</td>
+<td align="left">Chemicals and chemicals products</td>
+<td align="right">1.0474</td>
+<td align="right">2.2578</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">146</td>
+<td align="left">DEU</td>
+<td align="left">Rubber and plastics</td>
+<td align="right">1.0202</td>
+<td align="right">1.0244</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">148</td>
+<td align="left">DEU</td>
+<td align="left">Basic metals and fabricated metal</td>
+<td align="right">1.0454</td>
+<td align="right">2.4121</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">149</td>
+<td align="left">DEU</td>
+<td align="left">Machinery</td>
+<td align="right">1.0253</td>
+<td align="right">1.3351</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">150</td>
+<td align="left">DEU</td>
+<td align="left">Electrical and optical equipment</td>
+<td align="right">1.0221</td>
+<td align="right">1.6899</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">151</td>
+<td align="left">DEU</td>
+<td align="left">Transport equipment</td>
+<td align="right">1.2205</td>
+<td align="right">1.5320</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">157</td>
+<td align="left">DEU</td>
+<td align="left">Transport and storage</td>
+<td align="right">1.0201</td>
+<td align="right">1.9335</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">180</td>
+<td align="left">DNK</td>
+<td align="left">Transport and storage</td>
+<td align="right">1.1129</td>
+<td align="right">1.1100</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">191</td>
+<td align="left">ESP</td>
+<td align="left">Chemicals and chemicals products</td>
+<td align="right">1.1491</td>
+<td align="right">1.1413</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">194</td>
+<td align="left">ESP</td>
+<td align="left">Basic metals and fabricated metal</td>
+<td align="right">1.1418</td>
+<td align="right">1.6170</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">203</td>
+<td align="left">ESP</td>
+<td align="left">Transport and storage</td>
+<td align="right">1.0117</td>
+<td align="right">1.4705</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">212</td>
+<td align="left">FIN</td>
+<td align="left">Pulp, paper, printing and publishing</td>
+<td align="right">1.0648</td>
+<td align="right">1.2643</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">217</td>
+<td align="left">FIN</td>
+<td align="left">Basic metals and fabricated metal</td>
+<td align="right">1.1967</td>
+<td align="right">1.1400</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">219</td>
+<td align="left">FIN</td>
+<td align="left">Electrical and optical equipment</td>
+<td align="right">1.1325</td>
+<td align="right">1.0286</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">235</td>
+<td align="left">FRA</td>
+<td align="left">Pulp, paper, printing and publishing</td>
+<td align="right">1.0948</td>
+<td align="right">1.0433</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">237</td>
+<td align="left">FRA</td>
+<td align="left">Chemicals and chemicals products</td>
+<td align="right">1.1763</td>
+<td align="right">1.4539</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">240</td>
+<td align="left">FRA</td>
+<td align="left">Basic metals and fabricated metal</td>
+<td align="right">1.0929</td>
+<td align="right">1.6608</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">242</td>
+<td align="left">FRA</td>
+<td align="left">Electrical and optical equipment</td>
+<td align="right">1.1437</td>
+<td align="right">1.1142</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">243</td>
+<td align="left">FRA</td>
+<td align="left">Transport equipment</td>
+<td align="right">1.3170</td>
+<td align="right">1.0230</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">260</td>
+<td align="left">GBR</td>
+<td align="left">Chemicals and chemicals products</td>
+<td align="right">1.0925</td>
+<td align="right">1.4232</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">263</td>
+<td align="left">GBR</td>
+<td align="left">Basic metals and fabricated metal</td>
+<td align="right">1.0614</td>
+<td align="right">1.4967</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">265</td>
+<td align="left">GBR</td>
+<td align="left">Electrical and optical equipment</td>
+<td align="right">1.1180</td>
+<td align="right">1.1481</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">268</td>
+<td align="left">GBR</td>
+<td align="left">Electricity, gas and water supply</td>
+<td align="right">1.1078</td>
+<td align="right">1.2209</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">269</td>
+<td align="left">GBR</td>
+<td align="left">Construction</td>
+<td align="right">1.0719</td>
+<td align="right">1.0766</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">274</td>
+<td align="left">GBR</td>
+<td align="left">Financial intermediation</td>
+<td align="right">1.0443</td>
+<td align="right">1.7971</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">302</td>
+<td align="left">HKG</td>
+<td align="left">Food, Beverages and Tobacco</td>
+<td align="right">1.1664</td>
+<td align="right">1.6876</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">328</td>
+<td align="left">IND</td>
+<td align="left">Coke, refined petroleum and nuclear fuel</td>
+<td align="right">1.0923</td>
+<td align="right">1.0242</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">329</td>
+<td align="left">IND</td>
+<td align="left">Chemicals and chemicals products</td>
+<td align="right">1.2440</td>
+<td align="right">1.2686</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">332</td>
+<td align="left">IND</td>
+<td align="left">Basic metals and fabricated metal</td>
+<td align="right">1.2139</td>
+<td align="right">1.4188</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">337</td>
+<td align="left">IND</td>
+<td align="left">Electricity, gas and water supply</td>
+<td align="right">1.0560</td>
+<td align="right">1.3664</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">341</td>
+<td align="left">IND</td>
+<td align="left">Transport and storage</td>
+<td align="right">1.0298</td>
+<td align="right">1.3372</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">364</td>
+<td align="left">IRL</td>
+<td align="left">Transport and storage</td>
+<td align="right">1.1478</td>
+<td align="right">1.0157</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">372</td>
+<td align="left">ITA</td>
+<td align="left">Textiles, leather and footwear</td>
+<td align="right">1.2000</td>
+<td align="right">1.0926</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">375</td>
+<td align="left">ITA</td>
+<td align="left">Chemicals and chemicals products</td>
+<td align="right">1.2347</td>
+<td align="right">1.2772</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">378</td>
+<td align="left">ITA</td>
+<td align="left">Basic metals and fabricated metal</td>
+<td align="right">1.1569</td>
+<td align="right">1.8881</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">379</td>
+<td align="left">ITA</td>
+<td align="left">Machinery</td>
+<td align="right">1.1753</td>
+<td align="right">1.0061</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">380</td>
+<td align="left">ITA</td>
+<td align="left">Electrical and optical equipment</td>
+<td align="right">1.1478</td>
+<td align="right">1.0112</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">383</td>
+<td align="left">ITA</td>
+<td align="left">Electricity, gas and water supply</td>
+<td align="right">1.0292</td>
+<td align="right">1.0177</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">387</td>
+<td align="left">ITA</td>
+<td align="left">Transport and storage</td>
+<td align="right">1.0400</td>
+<td align="right">1.7155</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">398</td>
+<td align="left">JPN</td>
+<td align="left">Chemicals and chemicals products</td>
+<td align="right">1.0680</td>
+<td align="right">2.0598</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">399</td>
+<td align="left">JPN</td>
+<td align="left">Rubber and plastics</td>
+<td align="right">1.0769</td>
+<td align="right">1.0362</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">401</td>
+<td align="left">JPN</td>
+<td align="left">Basic metals and fabricated metal</td>
+<td align="right">1.0922</td>
+<td align="right">2.2050</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">403</td>
+<td align="left">JPN</td>
+<td align="left">Electrical and optical equipment</td>
+<td align="right">1.0510</td>
+<td align="right">1.9391</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">404</td>
+<td align="left">JPN</td>
+<td align="left">Transport equipment</td>
+<td align="right">1.2852</td>
+<td align="right">1.3949</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">419</td>
+<td align="left">KOR</td>
+<td align="left">Pulp, paper, printing and publishing</td>
+<td align="right">1.2710</td>
+<td align="right">1.0932</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">420</td>
+<td align="left">KOR</td>
+<td align="left">Coke, refined petroleum and nuclear fuel</td>
+<td align="right">1.1157</td>
+<td align="right">1.2112</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">421</td>
+<td align="left">KOR</td>
+<td align="left">Chemicals and chemicals products</td>
+<td align="right">1.3239</td>
+<td align="right">1.8206</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">424</td>
+<td align="left">KOR</td>
+<td align="left">Basic metals and fabricated metal</td>
+<td align="right">1.3695</td>
+<td align="right">1.7999</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">426</td>
+<td align="left">KOR</td>
+<td align="left">Electrical and optical equipment</td>
+<td align="right">1.2945</td>
+<td align="right">1.3842</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">433</td>
+<td align="left">KOR</td>
+<td align="left">Transport and storage</td>
+<td align="right">1.0373</td>
+<td align="right">1.1349</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">467</td>
+<td align="left">NDL</td>
+<td align="left">Chemicals and chemicals products</td>
+<td align="right">1.1497</td>
+<td align="right">1.1829</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">498</td>
+<td align="left">PRT</td>
+<td align="left">Electricity, gas and water supply</td>
+<td align="right">1.0681</td>
+<td align="right">1.1445</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">511</td>
+<td align="left">SWE</td>
+<td align="left">Pulp, paper, printing and publishing</td>
+<td align="right">1.0473</td>
+<td align="right">1.0424</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">516</td>
+<td align="left">SWE</td>
+<td align="left">Basic metals and fabricated metal</td>
+<td align="right">1.0984</td>
+<td align="right">1.1055</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">525</td>
+<td align="left">SWE</td>
+<td align="left">Transport and storage</td>
+<td align="right">1.1136</td>
+<td align="right">1.9434</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">536</td>
+<td align="left">TWN</td>
+<td align="left">Chemicals and chemicals products</td>
+<td align="right">1.2469</td>
+<td align="right">1.2143</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">539</td>
+<td align="left">TWN</td>
+<td align="left">Basic metals and fabricated metal</td>
+<td align="right">1.2025</td>
+<td align="right">1.3962</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">541</td>
+<td align="left">TWN</td>
+<td align="left">Electrical and optical equipment</td>
+<td align="right">1.2224</td>
+<td align="right">1.1953</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">553</td>
+<td align="left">USA</td>
+<td align="left">Agriculture, Hunting, Forestry and Fishing</td>
+<td align="right">1.0012</td>
+<td align="right">1.2661</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">556</td>
+<td align="left">USA</td>
+<td align="left">Textiles, leather and footwear</td>
+<td align="right">1.0948</td>
+<td align="right">1.0618</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">560</td>
+<td align="left">USA</td>
+<td align="left">Rubber and plastics</td>
+<td align="right">1.0316</td>
+<td align="right">1.0854</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">563</td>
+<td align="left">USA</td>
+<td align="left">Machinery</td>
+<td align="right">1.0216</td>
+<td align="right">1.3285</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">565</td>
+<td align="left">USA</td>
+<td align="left">Transport equipment</td>
+<td align="right">1.1251</td>
+<td align="right">1.7447</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">578</td>
+<td align="left">ROW</td>
+<td align="left">Food, Beverages and Tobacco</td>
+<td align="right">1.0529</td>
+<td align="right">1.5380</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">579</td>
+<td align="left">ROW</td>
+<td align="left">Textiles, leather and footwear</td>
+<td align="right">1.1340</td>
+<td align="right">1.1697</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">580</td>
+<td align="left">ROW</td>
+<td align="left">Pulp, paper, printing and publishing</td>
+<td align="right">1.0485</td>
+<td align="right">1.2715</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">581</td>
+<td align="left">ROW</td>
+<td align="left">Coke, refined petroleum and nuclear fuel</td>
+<td align="right">1.1331</td>
+<td align="right">2.2760</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">582</td>
+<td align="left">ROW</td>
+<td align="left">Chemicals and chemicals products</td>
+<td align="right">1.0845</td>
+<td align="right">2.6993</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">583</td>
+<td align="left">ROW</td>
+<td align="left">Rubber and plastics</td>
+<td align="right">1.1301</td>
+<td align="right">1.1152</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">584</td>
+<td align="left">ROW</td>
+<td align="left">Other non-metallic mineral</td>
+<td align="right">1.0302</td>
+<td align="right">1.0963</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">585</td>
+<td align="left">ROW</td>
+<td align="left">Basic metals and fabricated metal</td>
+<td align="right">1.1366</td>
+<td align="right">3.2848</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">587</td>
+<td align="left">ROW</td>
+<td align="left">Electrical and optical equipment</td>
+<td align="right">1.1871</td>
+<td align="right">1.6445</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="even">
+<td align="left">588</td>
+<td align="left">ROW</td>
+<td align="left">Transport equipment</td>
+<td align="right">1.2550</td>
+<td align="right">1.0977</td>
+<td align="left">Key Sector</td>
+</tr>
+<tr class="odd">
+<td align="left">589</td>
+<td align="left">ROW</td>
+<td align="left">Manufacturing, recycling</td>
+<td align="right">1.0453</td>
+<td align="right">1.0622</td>
+<td align="left">Key Sector</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="extracting-country-specific-input-output-tables">Extracting Country-Specific Input-Output Tables<a class="anchor" aria-label="anchor" href="#extracting-country-specific-input-output-tables"></a>
+</h3>
+<p>Lastly, one can obtain single-region <code>iom</code> objects from
+the multi-regional system. The <code>extract_country()</code> method
+allows you to extract domestic input-output tables for individual
+countries from the multi-regional system:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Extract domestic economy for deutschland in the dataset</span></span>
+<span><span class="va">deutsch_iom</span> <span class="op">&lt;-</span> <span class="va">world_2000</span><span class="op">$</span><span class="fu">extract_country</span><span class="op">(</span><span class="st">"DEU"</span><span class="op">)</span></span></code></pre></div>
+<p>The extracted <code>iom</code> object contains only the domestic
+transactions for the specified country:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Show a subset of the domestic intermediate transactions</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">deutsch_iom</span><span class="op">$</span><span class="va">intermediate_transactions</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Deutschland Domestic Intermediate Transactions (first 8x8 sectors, millions USD)"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Deutschland Domestic Intermediate Transactions (first 8x8
+sectors, millions USD)</caption>
+<colgroup>
+<col width="14%">
+<col width="14%">
+<col width="7%">
+<col width="9%">
+<col width="10%">
+<col width="12%">
+<col width="13%">
+<col width="11%">
+<col width="7%">
+</colgroup>
+<thead><tr class="header">
+<th align="left"></th>
+<th align="right">DEU_Agriculture, Hunting, Forestry and Fishing</th>
+<th align="right">DEU_Mining and Quarrying</th>
+<th align="right">DEU_Food, Beverages and Tobacco</th>
+<th align="right">DEU_Textiles, leather and footwear</th>
+<th align="right">DEU_Pulp, paper, printing and publishing</th>
+<th align="right">DEU_Coke, refined petroleum and nuclear fuel</th>
+<th align="right">DEU_Chemicals and chemicals products</th>
+<th align="right">DEU_Rubber and plastics</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">DEU_Agriculture, Hunting, Forestry and Fishing</td>
+<td align="right">1667</td>
+<td align="right">18</td>
+<td align="right">20853</td>
+<td align="right">247</td>
+<td align="right">285</td>
+<td align="right">10</td>
+<td align="right">158</td>
+<td align="right">160</td>
+</tr>
+<tr class="even">
+<td align="left">DEU_Mining and Quarrying</td>
+<td align="right">37</td>
+<td align="right">68</td>
+<td align="right">52</td>
+<td align="right">9</td>
+<td align="right">42</td>
+<td align="right">1201</td>
+<td align="right">145</td>
+<td align="right">12</td>
+</tr>
+<tr class="odd">
+<td align="left">DEU_Food, Beverages and Tobacco</td>
+<td align="right">2655</td>
+<td align="right">21</td>
+<td align="right">9895</td>
+<td align="right">156</td>
+<td align="right">89</td>
+<td align="right">74</td>
+<td align="right">926</td>
+<td align="right">105</td>
+</tr>
+<tr class="even">
+<td align="left">DEU_Textiles, leather and footwear</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">4</td>
+<td align="right">279</td>
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">16</td>
+<td align="right">22</td>
+</tr>
+<tr class="odd">
+<td align="left">DEU_Pulp, paper, printing and publishing</td>
+<td align="right">74</td>
+<td align="right">74</td>
+<td align="right">1757</td>
+<td align="right">393</td>
+<td align="right">12433</td>
+<td align="right">117</td>
+<td align="right">1426</td>
+<td align="right">392</td>
+</tr>
+<tr class="even">
+<td align="left">DEU_Coke, refined petroleum and nuclear fuel</td>
+<td align="right">365</td>
+<td align="right">31</td>
+<td align="right">214</td>
+<td align="right">62</td>
+<td align="right">96</td>
+<td align="right">799</td>
+<td align="right">925</td>
+<td align="right">100</td>
+</tr>
+<tr class="odd">
+<td align="left">DEU_Chemicals and chemicals products</td>
+<td align="right">806</td>
+<td align="right">68</td>
+<td align="right">544</td>
+<td align="right">871</td>
+<td align="right">847</td>
+<td align="right">292</td>
+<td align="right">6702</td>
+<td align="right">2698</td>
+</tr>
+<tr class="even">
+<td align="left">DEU_Rubber and plastics</td>
+<td align="right">147</td>
+<td align="right">56</td>
+<td align="right">874</td>
+<td align="right">190</td>
+<td align="right">470</td>
+<td align="right">62</td>
+<td align="right">1012</td>
+<td align="right">2122</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Show total production</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">deutsch_iom</span><span class="op">$</span><span class="va">total_production</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Deutschland Total Production (first 12 sectors, millions USD)"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Deutschland Total Production (first 12 sectors, millions
+USD)</caption>
+<colgroup>
+<col width="11%">
+<col width="6%">
+<col width="7%">
+<col width="8%">
+<col width="10%">
+<col width="11%">
+<col width="9%">
+<col width="5%">
+<col width="7%">
+<col width="9%">
+<col width="3%">
+<col width="9%">
+</colgroup>
+<thead><tr class="header">
+<th align="right">DEU_Agriculture, Hunting, Forestry and Fishing</th>
+<th align="right">DEU_Mining and Quarrying</th>
+<th align="right">DEU_Food, Beverages and Tobacco</th>
+<th align="right">DEU_Textiles, leather and footwear</th>
+<th align="right">DEU_Pulp, paper, printing and publishing</th>
+<th align="right">DEU_Coke, refined petroleum and nuclear fuel</th>
+<th align="right">DEU_Chemicals and chemicals products</th>
+<th align="right">DEU_Rubber and plastics</th>
+<th align="right">DEU_Other non-metallic mineral</th>
+<th align="right">DEU_Basic metals and fabricated metal</th>
+<th align="right">DEU_Machinery</th>
+<th align="right">DEU_Electrical and optical equipment</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">200</td>
-<td align="right">300</td>
-<td align="right">450</td>
+<td align="right">44318</td>
+<td align="right">11871</td>
+<td align="right">117494</td>
+<td align="right">27820</td>
+<td align="right">77379</td>
+<td align="right">35496</td>
+<td align="right">110737</td>
+<td align="right">46673</td>
+<td align="right">35857</td>
+<td align="right">135138</td>
+<td align="right">142012</td>
+<td align="right">154388</td>
 </tr></tbody>
 </table>
 <p>You can then perform standard input-output analysis on the domestic
 economy:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">usa_iom</span><span class="op">$</span><span class="fu">compute_tech_coeff</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">compute_leontief_inverse</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">compute_multiplier_output</span><span class="op">(</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">deutsch_iom</span><span class="op">$</span><span class="fu">compute_tech_coeff</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">compute_leontief_inverse</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">compute_multiplier_output</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">usa_iom</span><span class="op">$</span><span class="va">multiplier_output</span>, digits <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>             caption <span class="op">=</span> <span class="st">"USA Domestic Output Multipliers"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">deutsch_iom</span><span class="op">$</span><span class="va">multiplier_output</span>, <span class="fl">12</span><span class="op">)</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Deutschland Domestic Output Multipliers (first 12 sectors)"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <table class="table">
-<caption>USA Domestic Output Multipliers</caption>
+<caption>Deutschland Domestic Output Multipliers (first 12
+sectors)</caption>
 <colgroup>
-<col width="24%">
-<col width="24%">
-<col width="24%">
-<col width="27%">
+<col width="45%">
+<col width="17%">
+<col width="17%">
+<col width="19%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">sector</th>
@@ -690,256 +3052,86 @@ economy:</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">USA_Agriculture</td>
-<td align="right">1.6582</td>
-<td align="right">0.4000</td>
-<td align="right">1.2582</td>
+<td align="left">DEU_Agriculture, Hunting, Forestry and Fishing</td>
+<td align="right">1.6908</td>
+<td align="right">0.4146</td>
+<td align="right">1.2762</td>
 </tr>
 <tr class="even">
-<td align="left">USA_Manufacturing</td>
-<td align="right">1.6545</td>
-<td align="right">0.4000</td>
-<td align="right">1.2545</td>
+<td align="left">DEU_Mining and Quarrying</td>
+<td align="right">1.7559</td>
+<td align="right">0.4657</td>
+<td align="right">1.2902</td>
 </tr>
 <tr class="odd">
-<td align="left">USA_Services</td>
-<td align="right">1.5643</td>
-<td align="right">0.3556</td>
-<td align="right">1.2087</td>
+<td align="left">DEU_Food, Beverages and Tobacco</td>
+<td align="right">2.0067</td>
+<td align="right">0.5981</td>
+<td align="right">1.4086</td>
+</tr>
+<tr class="even">
+<td align="left">DEU_Textiles, leather and footwear</td>
+<td align="right">1.6419</td>
+<td align="right">0.3961</td>
+<td align="right">1.2458</td>
+</tr>
+<tr class="odd">
+<td align="left">DEU_Pulp, paper, printing and publishing</td>
+<td align="right">1.7893</td>
+<td align="right">0.4791</td>
+<td align="right">1.3102</td>
+</tr>
+<tr class="even">
+<td align="left">DEU_Coke, refined petroleum and nuclear fuel</td>
+<td align="right">1.7602</td>
+<td align="right">0.4592</td>
+<td align="right">1.3010</td>
+</tr>
+<tr class="odd">
+<td align="left">DEU_Chemicals and chemicals products</td>
+<td align="right">1.7729</td>
+<td align="right">0.4766</td>
+<td align="right">1.2963</td>
+</tr>
+<tr class="even">
+<td align="left">DEU_Rubber and plastics</td>
+<td align="right">1.7117</td>
+<td align="right">0.4319</td>
+<td align="right">1.2798</td>
+</tr>
+<tr class="odd">
+<td align="left">DEU_Other non-metallic mineral</td>
+<td align="right">1.7336</td>
+<td align="right">0.4434</td>
+<td align="right">1.2902</td>
+</tr>
+<tr class="even">
+<td align="left">DEU_Basic metals and fabricated metal</td>
+<td align="right">1.7580</td>
+<td align="right">0.4514</td>
+<td align="right">1.3065</td>
+</tr>
+<tr class="odd">
+<td align="left">DEU_Machinery</td>
+<td align="right">1.7582</td>
+<td align="right">0.4518</td>
+<td align="right">1.3064</td>
+</tr>
+<tr class="even">
+<td align="left">DEU_Electrical and optical equipment</td>
+<td align="right">1.7421</td>
+<td align="right">0.4492</td>
+<td align="right">1.2928</td>
 </tr>
 </tbody>
 </table>
-<p>These domestic multipliers capture only the within-country effects,
-excluding international spillovers that would be present in the full
-multi-regional analysis.</p>
+</div>
 </div>
 <div class="section level2">
-<h2 id="advanced-analysis-spillover-matrix">Advanced Analysis: Spillover Matrix<a class="anchor" aria-label="anchor" href="#advanced-analysis-spillover-matrix"></a>
+<h2 id="references">REFERENCES<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<p>The spillover matrix provides a comprehensive view of how shocks in
-each country-sector affect all other country-sectors in the system:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">spillover_matrix</span> <span class="op">&lt;-</span> <span class="va">my_miom</span><span class="op">$</span><span class="fu">get_spillover_matrix</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">spillover_matrix</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 9 9</span></span></code></pre></div>
-<p>This 9 × 9 matrix contains the complete set of multiplier effects.
-For example, we can examine how a shock to USA Agriculture affects other
-countries:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">usa_agr_effects</span> <span class="op">&lt;-</span> <span class="va">spillover_matrix</span><span class="op">[</span>, <span class="st">"USA_Agriculture"</span><span class="op">]</span></span>
-<span><span class="va">other_country_effects</span> <span class="op">&lt;-</span> <span class="va">usa_agr_effects</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"^USA_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">usa_agr_effects</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">other_country_effects</span>, <span class="fl">6</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   CHN_Agriculture CHN_Manufacturing      CHN_Services   DEU_Agriculture </span></span>
-<span><span class="co">#&gt;        0.07018246        0.07018246        0.07018246        0.03920358 </span></span>
-<span><span class="co">#&gt; DEU_Manufacturing      DEU_Services </span></span>
-<span><span class="co">#&gt;        0.03920358        0.03920358</span></span></code></pre></div>
-<p>These values show the output response in each foreign country-sector
-to a unit shock in USA Agriculture.</p>
-</div>
-<div class="section level2">
-<h2 id="key-sectors-analysis">Key Sectors Analysis<a class="anchor" aria-label="anchor" href="#key-sectors-analysis"></a>
-</h2>
-<p>Key sectors analysis identifies sectors with strong backward and
-forward linkages in the multi-regional system:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">my_miom</span><span class="op">$</span><span class="fu">compute_key_sectors</span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">key_sectors_table</span> <span class="op">&lt;-</span> <span class="va">my_miom</span><span class="op">$</span><span class="va">key_sectors</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sector"</span>, <span class="st">"country"</span>, <span class="st">"sector_name"</span>, </span>
-<span>                                            <span class="st">"power_dispersion"</span>, <span class="st">"sensitivity_dispersion"</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">key_sectors_table</span>, digits <span class="op">=</span> <span class="fl">4</span>, caption <span class="op">=</span> <span class="st">"Key Sectors Analysis"</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<caption>Key Sectors Analysis</caption>
-<colgroup>
-<col width="22%">
-<col width="10%">
-<col width="17%">
-<col width="21%">
-<col width="28%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">sector</th>
-<th align="left">country</th>
-<th align="left">sector_name</th>
-<th align="right">power_dispersion</th>
-<th align="right">sensitivity_dispersion</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">USA_Agriculture</td>
-<td align="left">USA</td>
-<td align="left">Agriculture</td>
-<td align="right">1.0697</td>
-<td align="right">0.9436</td>
-</tr>
-<tr class="even">
-<td align="left">USA_Manufacturing</td>
-<td align="left">USA</td>
-<td align="left">Manufacturing</td>
-<td align="right">1.0791</td>
-<td align="right">1.1515</td>
-</tr>
-<tr class="odd">
-<td align="left">USA_Services</td>
-<td align="left">USA</td>
-<td align="left">Services</td>
-<td align="right">0.9760</td>
-<td align="right">1.0524</td>
-</tr>
-<tr class="even">
-<td align="left">CHN_Agriculture</td>
-<td align="left">CHN</td>
-<td align="left">Agriculture</td>
-<td align="right">0.9823</td>
-<td align="right">0.9615</td>
-</tr>
-<tr class="odd">
-<td align="left">CHN_Manufacturing</td>
-<td align="left">CHN</td>
-<td align="left">Manufacturing</td>
-<td align="right">1.0778</td>
-<td align="right">1.1286</td>
-</tr>
-<tr class="even">
-<td align="left">CHN_Services</td>
-<td align="left">CHN</td>
-<td align="left">Services</td>
-<td align="right">0.9373</td>
-<td align="right">0.9935</td>
-</tr>
-<tr class="odd">
-<td align="left">DEU_Agriculture</td>
-<td align="left">DEU</td>
-<td align="left">Agriculture</td>
-<td align="right">0.9316</td>
-<td align="right">0.8539</td>
-</tr>
-<tr class="even">
-<td align="left">DEU_Manufacturing</td>
-<td align="left">DEU</td>
-<td align="left">Manufacturing</td>
-<td align="right">1.0226</td>
-<td align="right">1.0083</td>
-</tr>
-<tr class="odd">
-<td align="left">DEU_Services</td>
-<td align="left">DEU</td>
-<td align="left">Services</td>
-<td align="right">0.9237</td>
-<td align="right">0.9066</td>
-</tr>
-</tbody>
-</table>
-<p>Key sectors are typically defined as those with above-average values
-in both power dispersion (backward linkages) and sensitivity dispersion
-(forward linkages):</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mean_power</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">my_miom</span><span class="op">$</span><span class="va">key_sectors</span><span class="op">$</span><span class="va">power_dispersion</span><span class="op">)</span></span>
-<span><span class="va">mean_sensitivity</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">my_miom</span><span class="op">$</span><span class="va">key_sectors</span><span class="op">$</span><span class="va">sensitivity_dispersion</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">key_sectors_identified</span> <span class="op">&lt;-</span> <span class="va">my_miom</span><span class="op">$</span><span class="va">key_sectors</span><span class="op">[</span></span>
-<span>  <span class="va">my_miom</span><span class="op">$</span><span class="va">key_sectors</span><span class="op">$</span><span class="va">power_dispersion</span> <span class="op">&gt;</span> <span class="va">mean_power</span> <span class="op">&amp;</span> </span>
-<span>  <span class="va">my_miom</span><span class="op">$</span><span class="va">key_sectors</span><span class="op">$</span><span class="va">sensitivity_dispersion</span> <span class="op">&gt;</span> <span class="va">mean_sensitivity</span>, </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sector"</span>, <span class="st">"country"</span>, <span class="st">"sector_name"</span><span class="op">)</span></span>
-<span><span class="op">]</span></span>
-<span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">key_sectors_identified</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">key_sectors_identified</span>, caption <span class="op">=</span> <span class="st">"Identified Key Sectors"</span><span class="op">)</span></span>
-<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>  <span class="cn">NULL</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<table class="table">
-<caption>Identified Key Sectors</caption>
-<thead><tr class="header">
-<th align="left"></th>
-<th align="left">sector</th>
-<th align="left">country</th>
-<th align="left">sector_name</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">2</td>
-<td align="left">USA_Manufacturing</td>
-<td align="left">USA</td>
-<td align="left">Manufacturing</td>
-</tr>
-<tr class="even">
-<td align="left">5</td>
-<td align="left">CHN_Manufacturing</td>
-<td align="left">CHN</td>
-<td align="left">Manufacturing</td>
-</tr>
-<tr class="odd">
-<td align="left">8</td>
-<td align="left">DEU_Manufacturing</td>
-<td align="left">DEU</td>
-<td align="left">Manufacturing</td>
-</tr>
-</tbody>
-</table>
-<p>The analysis identifies 3 key sectors with above-average linkages in
-both dimensions.</p>
-</div>
-<div class="section level2">
-<h2 id="summary-and-conclusions">Summary and Conclusions<a class="anchor" aria-label="anchor" href="#summary-and-conclusions"></a>
-</h2>
-<p>This vignette demonstrated the key functionalities of multi-regional
-input-output analysis using the <code>miom</code> class:</p>
-<ol style="list-style-type: decimal">
-<li>
-<strong>Multi-regional multipliers</strong>: Quantify how economic
-shocks propagate within and across regions</li>
-<li>
-<strong>Interdependence measures</strong>: Assess the degree of
-economic integration between countries</li>
-<li>
-<strong>Bilateral trade analysis</strong>: Extract specific trade
-relationships between country pairs</li>
-<li>
-<strong>Spillover effects</strong>: Measure asymmetric economic
-relationships</li>
-<li>
-<strong>Country extraction</strong>: Analyze domestic economies
-within the multi-regional framework</li>
-<li>
-<strong>Key sectors identification</strong>: Find sectors with
-strong backward and forward linkages</li>
-</ol>
-<div class="section level3">
-<h3 id="key-insights-from-the-example">Key Insights from the Example<a class="anchor" aria-label="anchor" href="#key-insights-from-the-example"></a>
-</h3>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">avg_intra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">my_miom</span><span class="op">$</span><span class="va">multiregional_multipliers</span><span class="op">$</span><span class="va">intra_regional_multiplier</span><span class="op">)</span></span>
-<span><span class="va">avg_spillover</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">my_miom</span><span class="op">$</span><span class="va">multiregional_multipliers</span><span class="op">$</span><span class="va">spillover_multiplier</span><span class="op">)</span></span>
-<span><span class="va">most_self_reliant</span> <span class="op">&lt;-</span> <span class="va">interdependence</span><span class="op">$</span><span class="va">country</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.max</a></span><span class="op">(</span><span class="va">interdependence</span><span class="op">$</span><span class="va">self_reliance</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="va">max_self_reliance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">interdependence</span><span class="op">$</span><span class="va">self_reliance</span><span class="op">)</span></span>
-<span><span class="va">most_interdependent</span> <span class="op">&lt;-</span> <span class="va">interdependence</span><span class="op">$</span><span class="va">country</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.max</a></span><span class="op">(</span><span class="va">interdependence</span><span class="op">$</span><span class="va">interdependence_index</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="va">max_interdependence</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">interdependence</span><span class="op">$</span><span class="va">interdependence_index</span><span class="op">)</span></span></code></pre></div>
-<p>The analysis reveals several important characteristics of our
-three-country system:</p>
-<ul>
-<li>The average intra-regional multiplier is 1.5815, indicating the
-typical within-country effect of economic shocks</li>
-<li>The average spillover multiplier is 0.3072, showing the extent of
-cross-border economic integration</li>
-<li>USA exhibits the highest self-reliance (1.6572), suggesting stronger
-domestic production chains</li>
-<li>DEU shows the highest interdependence index (0.2009), indicating
-greater sensitivity to international economic conditions</li>
-</ul>
-<p>These measures provide valuable insights for understanding regional
-economic integration and the potential impacts of economic policies or
-external shocks across the multi-regional system.</p>
-</div>
-<div class="section level3">
-<h3 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h3>
-<p>Miller, R. E., &amp; Blair, P. D. (2009). <em>Input-output analysis:
-foundations and extensions</em>. Cambridge University Press.</p>
-<p>The methodology implemented in the <code>miom</code> class follows
-the multi-regional input-output framework described in Chapter 3 of
-Miller &amp; Blair (2009), with extensions for spillover analysis and
-regional interdependence measures.</p>
-</div>
+<p>Miller, Ronald E., and Peter D. Blair. Input-Output Analysis:
+Foundations and Extensions. 2nd ed. Cambridge University Press, 2009. <a href="https://doi.org/10.1017/CBO9780511626982" class="external-link uri">https://doi.org/10.1017/CBO9780511626982</a>.</p>
 </div>
   </div>
 

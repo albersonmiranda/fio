@@ -362,7 +362,8 @@ This includes intra-regional, inter-regional, and spillover multipliers.</p><div
 </div><p></p><hr><a id="method-miom-get_spillover_matrix"></a><div class="section">
 <h3 id="method-get-spillover-matrix-">Method <code>get_spillover_matrix()</code><a class="anchor" aria-label="anchor" href="#method-get-spillover-matrix-"></a></h3>
 <p>Compute spillover effects matrix showing how shocks in each region-sector
-affect output in all other regions.</p><div class="section">
+affect output in all other regions. Returns the inter-regional elements
+from the Leontief inverse matrix (excluding intra-regional effects).</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">miom</span><span class="op">$</span><span class="fu">get_spillover_matrix</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
@@ -374,7 +375,10 @@ affect output in all other regions.</p><div class="section">
 
 </div><p></p><hr><a id="method-miom-get_net_spillover_matrix"></a><div class="section">
 <h3 id="method-get-net-spillover-matrix-">Method <code>get_net_spillover_matrix()</code><a class="anchor" aria-label="anchor" href="#method-get-net-spillover-matrix-"></a></h3>
-<p>Compute net spillover effects for each country pair.</p><div class="section">
+<p>Compute net spillover effects for each country pair. Net spillover represents
+the difference in total spillover effects between country pairs, showing
+which country benefits more from economic shocks in the other. Uses the
+spillover matrix (Leontief inverse with intra-regional effects set to zero).</p><div class="section">
 <h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">miom</span><span class="op">$</span><span class="fu">get_net_spillover_matrix</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
