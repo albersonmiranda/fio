@@ -19,3 +19,4 @@
 #' \item{\code{countries}}{Vector with country names.}
 #' \item{\code{sectors}}{Vector with sector names.}
 #' }
+"world_2000"
