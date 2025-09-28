@@ -31,6 +31,7 @@ Depends:
     R (>= 4.2)
 SystemRequirements: Cargo (Rust's package manager), rustc >= 1.84, xz
 LazyData: true
+LazyDataCompression: bzip2
 Imports: 
     cli,
     clipr,

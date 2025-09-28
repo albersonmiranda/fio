@@ -27,7 +27,7 @@ Import data from a input-output matrix (IOM) from Excel format.
 # Excel file with IOM data
 path_to_xlsx <- system.file("extdata", "iom/br/2020.xlsx", package = "fio")
 # Import IOM data
-intermediate_transactions = import_element(
+intermediate_transactions <- import_element(
   file = path_to_xlsx,
   sheet = "iom",
   range = "D6:BB56",

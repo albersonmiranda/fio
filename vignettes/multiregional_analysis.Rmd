@@ -1,7 +1,10 @@
 ---
 title: "Multi-Regional Input-Output Analysis"
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: true
 vignette: >
   %\VignetteIndexEntry{Multi-Regional Input-Output Analysis}
   %\VignetteEngine{knitr::rmarkdown}
@@ -24,10 +27,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(fio)
-```
-
 # Introduction
 
 Multi-Regional Input-Output (MRIO) analysis extends traditional input-output analysis to capture economic interdependencies between multiple regions or countries. The `miom` class in the `fio` package implements the methodology described in Miller & Blair (2009) for analyzing multi-regional economic systems.
@@ -40,75 +39,67 @@ This vignette demonstrates how to:
 - Extract country-specific input-output tables
 - Measure regional interdependence
 
-# Multi-Regional Input-Output Framework
-
 In a multi-regional system with $R$ regions and $N$ sectors per region, the total dimensions of the system are $RN \times RN$. The intermediate transactions matrix $\mathbf{Z}$ is partitioned as:
 
-$$\mathbf{Z} = \begin{bmatrix}
+$$
+\mathbf{Z} = \begin{bmatrix}
 \mathbf{Z}^{11} & \mathbf{Z}^{12} & \cdots & \mathbf{Z}^{1R} \\
 \mathbf{Z}^{21} & \mathbf{Z}^{22} & \cdots & \mathbf{Z}^{2R} \\
 \vdots & \vdots & \ddots & \vdots \\
 \mathbf{Z}^{R1} & \mathbf{Z}^{R2} & \cdots & \mathbf{Z}^{RR}
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
-Where $\mathbf{Z}^{rs}$ represents intermediate flows from region $s$ to region $r$.
+\noindent where $\mathbf{Z}^{rs}$ represents intermediate flows from region $s$ to region $r$.
 
-The multi-regional Leontief inverse is:
+Computations of the multi-regional Leontief inverse is the same from the single-region case:
 
-$$\mathbf{L} = (\mathbf{I} - \mathbf{A})^{-1}$$
+$$
+\mathbf{L} = (\mathbf{I} - \mathbf{A})^{-1}
+$$
 
-Where $\mathbf{A}$ is the multi-regional technical coefficients matrix.
+\noindent where $\mathbf{A}$ is the multi-regional technical coefficients matrix. Therefore, the multi-regional input-output class `miom` is able to inherit methods from the `iom` class, implementing the additional functionality needed for multi-regional analysis.
 
-# Creating a Multi-Regional Input-Output Matrix
+# SHOWCASING THE `miom` CLASS: 2000 WORLD ECONOMY EXAMPLE
 
-Let's create a 3-country, 3-sector example representing USA, China, and Germany with Agriculture, Manufacturing, and Services sectors.
+The `fio` package includes the `world_2000` dataset, which contains real multi-regional input-output data for 26 countries and 23 sectors from the year 2000. This dataset was created using element-by-element imports from Excel files with `import_element()` as demonstrated in the [World 2000 script](https://github.com/albersonmiranda/fio/blob/main/data-raw/world_2000.R).
 
-```{r create_miom}
-countries <- c("USA", "CHN", "DEU")
-sectors <- c("Agriculture", "Manufacturing", "Services")
+Let's load and examine this real-world dataset:
 
-labels <- paste(rep(countries, each = 3), rep(sectors, 3), sep = "_")
-labels
+```{r world_data}
+# Load the built-in world_2000 dataset
+world_2000 <- fio::world_2000
 
-intermediate_transactions <- matrix(c(
-  50, 20, 10,  5,  8,  2,  3,  4,  1,
-  15, 80, 25,  8, 12,  5,  4,  6,  3,
-  10, 30,120,  3,  7, 15,  2,  5, 10,
-   4,  6,  2, 40, 15,  8,  2,  3,  1,
-   7, 10,  5, 20, 70, 20,  5,  8,  4,
-   5,  8, 12, 10, 25, 90,  3,  6,  8,
-   2,  3,  1,  3,  4,  2, 30, 12,  5,
-   4,  7,  3,  6,  9,  4, 15, 60, 15,
-   3,  5,  8,  4,  6, 10,  8, 20, 80
-), nrow = 9, ncol = 9, dimnames = list(labels, labels))
+# Examine the structure
+world_2000$n_countries
+world_2000$n_sectors
+nrow(world_2000$intermediate_transactions)
+ncol(world_2000$intermediate_transactions)
 
-total_production <- matrix(c(200, 300, 450, 180, 280, 400, 150, 250, 350), 
-                          nrow = 1, ncol = 9,
-                          dimnames = list(NULL, labels))
-
-intermediate_transactions[1:6, 1:6]
-total_production
+# Show the countries and sectors
+world_2000$countries
+world_2000$sectors
 ```
 
-The intermediate transactions matrix shows the flows of goods and services between all country-sector combinations. Each row represents a purchasing sector, and each column represents a supplying sector. The total production vector contains the gross output for each country-sector combination.
-
-```{r create_miom_object}
-my_miom <- miom$new(
-  id = "three_country_example",
-  intermediate_transactions = intermediate_transactions,
-  total_production = total_production,
-  countries = countries,
-  sectors = sectors
+```{r examine_transactions}
+# Show a small subset of transactions (first 6 countries x sectors)
+knitr::kable(
+  world_2000$intermediate_transactions[1:6, 1:6],
+  digits = 0,
+  caption = "Sample of Intermediate Transactions (millions of dollars)"
 )
 
-my_miom$n_countries
-my_miom$n_sectors
-dim(my_miom$intermediate_transactions)
+# Show total production for first few country-sectors
+knitr::kable(
+  t(world_2000$total_production[1, 1:6]),
+  digits = 0,
+  caption = "Sample of Total Production (millions of dollars)"
+)
 ```
 
-The `miom` object inherits from the `iom` class, extending it with multi-regional functionality. It automatically stores information about the number of countries and sectors, and decomposes the transactions into domestic and international components.
+The intermediate transactions matrix shows the flows of goods and services between all country-sector combinations in the global economy. The values represent monetary flows in millions of dollars. Each element represents purchases of intermediate inputs from the supplying country-sector (columns) by the purchasing country-sector (rows). It captures the complete structure of intermediate transactions between 26 countries across 23 economic sectors, providing a comprehensive view of global economic interdependencies in the year 2000.
 
-# Multi-Regional Multiplier Analysis
+## Multi-Regional Multiplier Analysis
 
 The `miom` class computes several types of multipliers following Miller & Blair (2009):
 
@@ -118,9 +109,14 @@ The `miom` class computes several types of multipliers following Miller & Blair 
 - **Total multipliers**: Sum of intra-regional and spillover effects
 
 ```{r compute_multipliers}
-my_miom$compute_multiregional_multipliers()
+world_2000$compute_multiregional_multipliers()
 
-knitr::kable(my_miom$multiregional_multipliers, digits = 4)
+# Show first 10 rows of multipliers for readability
+knitr::kable(
+  world_2000$multiregional_multipliers[1:10, 1:10],
+  digits = 4,
+  caption = "Multi-Regional Multipliers (first 10 country-sectors)"
+)
 ```
 
 ## Interpreting the Multipliers
@@ -133,16 +129,23 @@ The multipliers table shows several key measures for each country-sector combina
 - **Multiplier to [Country]**: The specific effect on each individual country
 
 ```{r interpret_multipliers}
-usa_agr <- my_miom$multiregional_multipliers[
-  my_miom$multiregional_multipliers$destination_label == "USA_Agriculture", ]
+# Find an interesting example - let's look at Brazil Agriculture -> to USA
+bra_agr_index <- which(grepl("BRA.*Agriculture", world_2000$multiregional_multipliers$destination_label))[1]
 
-usa_agr[, c("intra_regional_multiplier", "spillover_multiplier", "total_multiplier", 
-           "multiplier_to_USA", "multiplier_to_CHN", "multiplier_to_DEU")]
+bra_agr <- world_2000$multiregional_multipliers[bra_agr_index, ]
+
+# Show key multiplier components
+multiplier_cols <- c("destination_label", "intra_regional_multiplier", "spillover_multiplier", "total_multiplier", "multiplier_to_USA")
+available_cols <- intersect(multiplier_cols, names(bra_agr))
+knitr::kable(bra_agr[, available_cols],
+  digits = 4,
+  caption = "Example: Brazil Agriculture Multipliers"
+)
 ```
 
-For example, when USA Agriculture receives a $1 increase in final demand, it generates $`r round(usa_agr$multiplier_to_USA, 4)` of total output in the USA, $`r round(usa_agr$multiplier_to_CHN, 4)` in China, and $`r round(usa_agr$multiplier_to_DEU, 4)` in Germany. The intra-regional effect is $`r round(usa_agr$intra_regional_multiplier, 4)`, while the spillover to other countries totals $`r round(usa_agr$spillover_multiplier, 4)`.
+The multipliers reveal important insights about global economic linkages. The intra-regional multiplier shows the domestic effect within a country when one of its sectors receives a demand shock, while the spillover multiplier captures the total impact on all other countries.
 
-# Regional Interdependence Analysis
+## Regional Interdependence Analysis
 
 Regional interdependence measures help understand the economic integration between countries. The `get_regional_interdependence()` method computes several key indicators:
 
@@ -152,168 +155,134 @@ Regional interdependence measures help understand the economic integration betwe
 - **Interdependence index**: Ratio of spillover to self-reliance
 
 ```{r interdependence}
-interdependence <- my_miom$get_regional_interdependence()
+interdependence <- world_2000$get_regional_interdependence()
 knitr::kable(interdependence, digits = 4)
 ```
 
 The results show that `r interdependence$country[which.max(interdependence$self_reliance)]` has the highest self-reliance (`r round(max(interdependence$self_reliance), 4)`), indicating a more self-sufficient economy. Meanwhile, `r interdependence$country[which.max(interdependence$interdependence_index)]` has the highest interdependence index (`r round(max(interdependence$interdependence_index), 4)`), suggesting greater integration with other economies.
 
-# Bilateral Trade Analysis
+## Bilateral Trade Analysis
 
 The `miom` class allows extraction of bilateral trade flows between any two countries using the `get_bilateral_trade()` method:
 
 ```{r bilateral_trade}
-usa_to_chn_trade <- my_miom$get_bilateral_trade("USA", "CHN")
-knitr::kable(usa_to_chn_trade, digits = 2, 
-             caption = "Trade flows from USA to China (by sector)")
 
-chn_to_deu_trade <- my_miom$get_bilateral_trade("CHN", "DEU")
-knitr::kable(chn_to_deu_trade, digits = 2,
-             caption = "Trade flows from China to Germany (by sector)")
+# Get bilateral trade flows
+trade_flow1 <- world_2000$get_bilateral_trade("BRA", "USA")
+knitr::kable(trade_flow1[1:10, 1:5],
+  digits = 2,
+  caption = paste("Trade flows from", "BRA", "to", "USA", "(first 10 buying sectors, first 5 supplying sectors)")
+)
+
+trade_flow2 <- world_2000$get_bilateral_trade("USA", "BRA")
+knitr::kable(trade_flow2[1:10, 1:5],
+  digits = 2,
+  caption = paste("Trade flows from", "USA", "to", "BRA", "(first 10 buying sectors, first 5 supplying sectors)")
+)
 ```
 
 These matrices show the intermediate goods flows from the origin country (columns) to the destination country (rows) by sector. The values represent the monetary flows of intermediate inputs used in production.
 
-# Net Spillover Effects
-
-Net spillover effects reveal asymmetric economic relationships between countries. Positive values indicate that the row country benefits more from economic activity in the column country than vice versa.
-
-```{r net_spillover}
-net_spillover <- my_miom$get_net_spillover_matrix()
-knitr::kable(net_spillover, digits = 4, caption = "Net Spillover Effects Matrix")
-```
-
-The interpretation is straightforward:
-- Positive values: row country benefits more from column country
-- Negative values: column country benefits more from row country  
-- Values close to zero: symmetric spillover relationship
-
-```{r max_spillover}
-max_abs_spillover <- which(abs(net_spillover) == max(abs(net_spillover)), arr.ind = TRUE)
-max_row <- rownames(net_spillover)[max_abs_spillover[1]]
-max_col <- colnames(net_spillover)[max_abs_spillover[2]]
-max_value <- net_spillover[max_abs_spillover]
-```
-
-The strongest asymmetric relationship is from `r max_col` to `r max_row` with a net spillover of `r round(max_value, 4)`.
-
-# Extracting Country-Specific Input-Output Tables
-
-The `extract_country()` method allows you to extract domestic input-output tables for individual countries from the multi-regional system:
-
-```{r extract_country}
-usa_iom <- my_miom$extract_country("USA")
-
-usa_iom$id
-dim(usa_iom$intermediate_transactions)
-```
-
-The extracted `iom` object contains only the domestic transactions for the specified country:
-
-```{r usa_tables}
-knitr::kable(usa_iom$intermediate_transactions, digits = 2,
-             caption = "USA Domestic Intermediate Transactions")
-
-knitr::kable(usa_iom$total_production, digits = 2,
-             caption = "USA Total Production")
-```
-
-You can then perform standard input-output analysis on the domestic economy:
-
-```{r usa_multipliers}
-usa_iom$compute_tech_coeff()$compute_leontief_inverse()$compute_multiplier_output()
-
-knitr::kable(usa_iom$multiplier_output, digits = 4,
-             caption = "USA Domestic Output Multipliers")
-```
-
-These domestic multipliers capture only the within-country effects, excluding international spillovers that would be present in the full multi-regional analysis.
-
-# Advanced Analysis: Spillover Matrix
+## Spillover Matrix
 
 The spillover matrix provides a comprehensive view of how shocks in each country-sector affect all other country-sectors in the system:
 
 ```{r spillover_matrix}
-spillover_matrix <- my_miom$get_spillover_matrix()
-dim(spillover_matrix)
+spillover_matrix <- world_2000$get_spillover_matrix()
 ```
 
-This `r dim(spillover_matrix)[1]` × `r dim(spillover_matrix)[2]` matrix contains the complete set of multiplier effects. For example, we can examine how a shock to USA Agriculture affects other countries:
+This $598 \times 598$ matrix contains the complete set of multiplier effects. For example, we can examine how a shock to the US electrical sector affects manufacturing in other countries:
 
-```{r usa_agr_effects}
-usa_agr_effects <- spillover_matrix[, "USA_Agriculture"]
-other_country_effects <- usa_agr_effects[!grepl("^USA_", names(usa_agr_effects))]
-head(other_country_effects, 6)
+```{r us_effects}
+
+# Effects of a shock to US Electrical sector
+electrical_effects <- spillover_matrix[grepl("*_Manufacturing, recycling", rownames(spillover_matrix)), "USA_Electrical and optical equipment"]
+knitr::kable(
+  electrical_effects,
+  digits = 4,
+  caption = "Effects of a unit shock to US Electrical sector"
+)
 ```
 
-These values show the output response in each foreign country-sector to a unit shock in USA Agriculture.
+These values show the output response in each foreign country-sector to a unit shock in USA Electrical and optical equipment.
 
-# Key Sectors Analysis
+## Net Spillover Effects
+
+Net spillover effects reveal asymmetric economic relationships between countries. Positive values indicate that the row country benefits more from economic activity in the column country than vice versa.
+
+```{r net_spillover}
+net_spillover <- world_2000$get_net_spillover_matrix()
+knitr::kable(net_spillover, digits = 4, caption = "Net Spillover Effects Matrix")
+```
+
+The interpretation is straightforward:
+
+- Positive values: row country benefits more from column country
+- Negative values: column country benefits more from row country  
+- Values close to zero: symmetric spillover relationship
+
+For example, the USA has positive net spillover effects with every other country, indicating it generally benefits more from economic interactions with the world.
+
+## Key Sectors Analysis
 
 Key sectors analysis identifies sectors with strong backward and forward linkages in the multi-regional system:
 
 ```{r key_sectors}
-my_miom$compute_key_sectors()
+world_2000$compute_key_sectors()
 
-key_sectors_table <- my_miom$key_sectors[, c("sector", "country", "sector_name", 
-                                            "power_dispersion", "sensitivity_dispersion")]
-knitr::kable(key_sectors_table, digits = 4, caption = "Key Sectors Analysis")
+key_sectors_table <- world_2000$key_sectors[, c(
+  "country", "sector_name",
+  "power_dispersion", "sensitivity_dispersion", "key_sectors"
+)]
+knitr::kable(head(key_sectors_table), digits = 4, caption = "Key Sectors Analysis")
 ```
 
-Key sectors are typically defined as those with above-average values in both power dispersion (backward linkages) and sensitivity dispersion (forward linkages):
+Key sectors are defined as those with above-average values in both power dispersion (backward linkages) and sensitivity dispersion (forward linkages). If both values exceed 1, the sector is classified as a key sector.
 
 ```{r identify_key_sectors}
-mean_power <- mean(my_miom$key_sectors$power_dispersion)
-mean_sensitivity <- mean(my_miom$key_sectors$sensitivity_dispersion)
-
-key_sectors_identified <- my_miom$key_sectors[
-  my_miom$key_sectors$power_dispersion > mean_power & 
-  my_miom$key_sectors$sensitivity_dispersion > mean_sensitivity, 
-  c("sector", "country", "sector_name")
-]
-
-if (nrow(key_sectors_identified) > 0) {
-  knitr::kable(key_sectors_identified, caption = "Identified Key Sectors")
-} else {
-  NULL
-}
+knitr::kable(
+  subset(key_sectors_table, key_sectors == "Key Sector"),
+  digits = 4,
+  caption = "World Key Sectors"
+)
 ```
 
-`r if (nrow(key_sectors_identified) > 0) { paste("The analysis identifies", nrow(key_sectors_identified), "key sectors with above-average linkages in both dimensions.") } else { "No sectors meet the criteria for key sectors with the current thresholds, suggesting a relatively balanced linkage structure across the multi-regional system." }`
+## Extracting Country-Specific Input-Output Tables
 
-# Summary and Conclusions
+Lastly, one can obtain single-region `iom` objects from the multi-regional system. The `extract_country()` method allows you to extract domestic input-output tables for individual countries from the multi-regional system:
 
-This vignette demonstrated the key functionalities of multi-regional input-output analysis using the `miom` class:
-
-1. **Multi-regional multipliers**: Quantify how economic shocks propagate within and across regions
-2. **Interdependence measures**: Assess the degree of economic integration between countries
-3. **Bilateral trade analysis**: Extract specific trade relationships between country pairs
-4. **Spillover effects**: Measure asymmetric economic relationships
-5. **Country extraction**: Analyze domestic economies within the multi-regional framework
-6. **Key sectors identification**: Find sectors with strong backward and forward linkages
-
-## Key Insights from the Example
-
-```{r summary_insights}
-avg_intra <- mean(my_miom$multiregional_multipliers$intra_regional_multiplier)
-avg_spillover <- mean(my_miom$multiregional_multipliers$spillover_multiplier)
-most_self_reliant <- interdependence$country[which.max(interdependence$self_reliance)]
-max_self_reliance <- max(interdependence$self_reliance)
-most_interdependent <- interdependence$country[which.max(interdependence$interdependence_index)]
-max_interdependence <- max(interdependence$interdependence_index)
+```{r extract_country}
+# Extract domestic economy for deutschland in the dataset
+deutsch_iom <- world_2000$extract_country("DEU")
 ```
 
-The analysis reveals several important characteristics of our three-country system:
+The extracted `iom` object contains only the domestic transactions for the specified country:
 
-- The average intra-regional multiplier is `r round(avg_intra, 4)`, indicating the typical within-country effect of economic shocks
-- The average spillover multiplier is `r round(avg_spillover, 4)`, showing the extent of cross-border economic integration
-- `r most_self_reliant` exhibits the highest self-reliance (`r round(max_self_reliance, 4)`), suggesting stronger domestic production chains
-- `r most_interdependent` shows the highest interdependence index (`r round(max_interdependence, 4)`), indicating greater sensitivity to international economic conditions
+```{r country_tables}
+# Show a subset of the domestic intermediate transactions
+knitr::kable(deutsch_iom$intermediate_transactions[1:8, 1:8],
+  digits = 0,
+  caption = paste("Deutschland Domestic Intermediate Transactions (first 8x8 sectors, millions USD)")
+)
 
-These measures provide valuable insights for understanding regional economic integration and the potential impacts of economic policies or external shocks across the multi-regional system.
+# Show total production
+knitr::kable(t(deutsch_iom$total_production[1, 1:12]),
+  digits = 0,
+  caption = paste("Deutschland Total Production (first 12 sectors, millions USD)")
+)
+```
 
-## References
+You can then perform standard input-output analysis on the domestic economy:
 
-Miller, R. E., & Blair, P. D. (2009). *Input-output analysis: foundations and extensions*. Cambridge University Press.
+```{r country_analysis}
+deutsch_iom$compute_tech_coeff()$compute_leontief_inverse()$compute_multiplier_output()
 
-The methodology implemented in the `miom` class follows the multi-regional input-output framework described in Chapter 3 of Miller & Blair (2009), with extensions for spillover analysis and regional interdependence measures.
+knitr::kable(head(deutsch_iom$multiplier_output, 12),
+  digits = 4,
+  caption = paste("Deutschland Domestic Output Multipliers (first 12 sectors)")
+)
+```
+
+# REFERENCES
+
+Miller, Ronald E., and Peter D. Blair. Input-Output Analysis: Foundations and Extensions. 2nd ed. Cambridge University Press, 2009. https://doi.org/10.1017/CBO9780511626982.

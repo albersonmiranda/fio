@@ -29,6 +29,11 @@ articles:
       These vignettes provide an introduction to performing input-output analysis using the {fio} package.
     contents:
       - getting_started
+  - title: "Multi-Regional Input-Output"
+    desc: >
+      These vignettes provide an introduction to performing multi-regional input-output analysis using the {fio} package.
+    contents:
+      - multiregional_analysis
   - title: "Performance"
     desc: >
       {fio} isn't only friendly, it's also fast. Here we show how it compares to base R and other packages.
@@ -37,8 +42,3 @@ articles:
       - articles/benchmarking_i7
       - articles/benchmarking_m1
       - articles/benchmarking_m4
-  - title: "Multi-Regional Input-Output"
-    desc: >
-      These vignettes provide an introduction to performing multi-regional input-output analysis using the {fio} package.
-    contents:
-      - multiregional_analysis

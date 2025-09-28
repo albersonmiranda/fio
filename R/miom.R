@@ -437,51 +437,35 @@ miom <- R6Class(
 
     #' @description
     #' Compute spillover effects matrix showing how shocks in each region-sector
-    #' affect output in all other regions.
+    #' affect output in all other regions. Returns the inter-regional elements
+    #' from the Leontief inverse matrix (excluding intra-regional effects).
     #' @return A matrix of spillover effects.
     get_spillover_matrix = function() {
-      if (is.null(self$multiregional_multipliers)) {
-        self$compute_multiregional_multipliers()
+      if (is.null(self$leontief_inverse_matrix)) {
+        self$compute_leontief_inverse()
       }
 
-      # Create matrix of spillover effects
-      n_total <- self$n_countries * self$n_sectors
-      spillover_matrix <- matrix(0, nrow = n_total, ncol = n_total)
 
-      # Row and column labels
-      labels <- paste(rep(self$countries, each = self$n_sectors),
-                     rep(self$sectors, self$n_countries), sep = "_")
+      spillover_matrix <- self$leontief_inverse_matrix
 
-      rownames(spillover_matrix) <- labels
-      colnames(spillover_matrix) <- labels
-
-      # Fill the matrix
-      for (i in seq_len(nrow(self$multiregional_multipliers))) {
-        dest_label <- self$multiregional_multipliers$destination_label[i]
-        col_idx <- which(colnames(spillover_matrix) == dest_label)
-
-        # For each origin country
-        for (s in 1:self$n_countries) {
-          origin_country <- self$countries[s]
-          multiplier_col <- paste0("multiplier_to_", origin_country)
-          multiplier_value <- self$multiregional_multipliers[[multiplier_col]][i]
-
-          # Set values for all sectors in origin country
-          s_indices <- ((s - 1) * self$n_sectors + 1):(s * self$n_sectors)
-          spillover_matrix[s_indices, col_idx] <- multiplier_value / self$n_sectors
-        }
+      # Set intra-regional effects to zero
+      for (r in 1:self$n_countries) {
+        r_indices <- ((r - 1) * self$n_sectors + 1):(r * self$n_sectors)
+        spillover_matrix[r_indices, r_indices] <- 0
       }
 
       spillover_matrix
     },
 
     #' @description
-    #' Compute net spillover effects for each country pair.
+    #' Compute net spillover effects for each country pair. Net spillover represents
+    #' the difference in total spillover effects between country pairs, showing
+    #' which country benefits more from economic shocks in the other. Uses the
+    #' spillover matrix (Leontief inverse with intra-regional effects set to zero).
     #' @return A matrix showing net spillover effects between countries.
     get_net_spillover_matrix = function() {
-      if (is.null(self$multiregional_multipliers)) {
-        self$compute_multiregional_multipliers()
-      }
+      # Get the spillover matrix
+      spillover_matrix <- self$get_spillover_matrix()
 
       # Initialize net spillover matrix
       net_spillover <- matrix(0, nrow = self$n_countries, ncol = self$n_countries)
@@ -492,19 +476,19 @@ miom <- R6Class(
       for (r in 1:self$n_countries) {
         for (s in 1:self$n_countries) {
           if (r != s) {
-            # Spillover from country s to country r
-            spillover_s_to_r <- mean(self$multiregional_multipliers[
-              self$multiregional_multipliers$destination_country == self$countries[s],
-              paste0("multiplier_to_", self$countries[r])
-            ])
+            # Indices for countries r and s
+            r_indices <- ((r - 1) * self$n_sectors + 1):(r * self$n_sectors)
+            s_indices <- ((s - 1) * self$n_sectors + 1):(s * self$n_sectors)
 
-            # Spillover from country r to country s
-            spillover_r_to_s <- mean(self$multiregional_multipliers[
-              self$multiregional_multipliers$destination_country == self$countries[r],
-              paste0("multiplier_to_", self$countries[s])
-            ])
+            # Total spillover from shocks in country s to country r
+            # (sum of spillover matrix elements from s-sectors to r-sectors)
+            spillover_s_to_r <- sum(spillover_matrix[r_indices, s_indices])
 
-            # Net spillover (positive means r benefits more from s than vice versa)
+            # Total spillover from shocks in country r to country s
+            # (sum of spillover matrix elements from r-sectors to s-sectors)
+            spillover_r_to_s <- sum(spillover_matrix[s_indices, r_indices])
+
+            # Net spillover (positive means r benefits more from shocks in s than vice versa)
             net_spillover[r, s] <- spillover_s_to_r - spillover_r_to_s
           }
         }

@@ -304,7 +304,8 @@ Self (invisibly).
 \if{latex}{\out{\hypertarget{method-miom-get_spillover_matrix}{}}}
 \subsection{Method \code{get_spillover_matrix()}}{
 Compute spillover effects matrix showing how shocks in each region-sector
-affect output in all other regions.
+affect output in all other regions. Returns the inter-regional elements
+from the Leontief inverse matrix (excluding intra-regional effects).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{miom$get_spillover_matrix()}\if{html}{\out{</div>}}
 }
@@ -317,7 +318,10 @@ A matrix of spillover effects.
 \if{html}{\out{<a id="method-miom-get_net_spillover_matrix"></a>}}
 \if{latex}{\out{\hypertarget{method-miom-get_net_spillover_matrix}{}}}
 \subsection{Method \code{get_net_spillover_matrix()}}{
-Compute net spillover effects for each country pair.
+Compute net spillover effects for each country pair. Net spillover represents
+the difference in total spillover effects between country pairs, showing
+which country benefits more from economic shocks in the other. Uses the
+spillover matrix (Leontief inverse with intra-regional effects set to zero).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{miom$get_net_spillover_matrix()}\if{html}{\out{</div>}}
 }
