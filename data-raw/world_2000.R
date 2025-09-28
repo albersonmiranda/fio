@@ -166,4 +166,4 @@ world_2000$update_final_demand_matrix()
 world_2000$update_value_added_matrix()
 
 # Save data
-usethis::use_data(world_2000, overwrite = TRUE, compress = "zstd")
+usethis::use_data(world_2000, overwrite = TRUE)
