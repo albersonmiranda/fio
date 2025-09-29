@@ -92,7 +92,7 @@ jobs:
         shell: pwsh
         run: |
           Invoke-WebRequest -Uri "https://cran.r-project.org/bin/windows/base/R-4.5.1-win.exe" -OutFile "R.exe"
-          Invoke-WebRequest -Uri "https://cloud.r-project.org/bin/windows/Rtools/rtools45/files/rtools45-aarch64-6608-6492.exee" -OutFile "rtools.exe"
+          Invoke-WebRequest -Uri "https://cloud.r-project.org/bin/windows/Rtools/rtools45/files/rtools45-aarch64-6608-6492.exe" -OutFile "rtools.exe"
 
       - name: Install R
         shell: cmd
