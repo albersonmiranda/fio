@@ -104,8 +104,8 @@ jobs:
       
       - name: Setup R packages
         run: |
-          R -e 'install.packages(c("remotes", "rcmdcheck"), repos = "https://cloud.r-project.org")'
-          R -e 'remotes::install_deps(dependencies = TRUE)'
+          Rscript -e 'install.packages(c("remotes", "rcmdcheck"), repos = "https://cloud.r-project.org")'
+          Rscript -e 'remotes::install_deps(dependencies = TRUE)'
       
       - name: Add R and RTools to PATH
         shell: cmd
