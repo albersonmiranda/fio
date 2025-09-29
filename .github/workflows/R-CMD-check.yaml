@@ -41,9 +41,6 @@ jobs:
           - {os: windows-2025,  r: 'release'}
           - {os: windows-2025,  r: 'devel'}
           - {os: windows-2025,  r: 'oldrel-1'}
-          - {os: windows-11-arm,r: 'oldrel-1'}
-          - {os: windows-11-arm,r: 'release'}
-          - {os: windows-11-arm,r: 'devel'}
           - {os: ubuntu-24.04-arm, r: 'release'}
           - {os: ubuntu-24.04-arm, r: 'devel'}
           - {os: ubuntu-24.04,  r: 'devel'}
@@ -73,6 +70,47 @@ jobs:
         with:
           extra-packages: any::rcmdcheck
           needs: check
+
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+
+  Windows-ARM:
+    if: '! github.event.pull_request.draft'
+    runs-on: windows-11-arm
+
+    name: Windows ARM - R Release
+
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download R
+        run: |
+          wget "https://cran.r-project.org/bin/windows/base/R-4.5.1-win.exe" -OutFile "R.exe"
+          wget "https://cloud.r-project.org/bin/windows/Rtools/rtools45/files/rtools45-aarch64-6608-6492.exee" -OutFile "rtools.exe"
+
+      - name: Install R
+        shell: cmd
+        run: start /wait "" R.exe /SILENT
+
+      - name: Install RTools
+        shell: cmd
+        run: start /wait "" rtools.exe /SILENT
+      
+      - name: Setup R packages
+        run: |
+          R -e 'install.packages(c("remotes", "rcmdcheck"), repos = "https://cloud.r-project.org")'
+          R -e 'remotes::install_deps(dependencies = TRUE)'
+      
+      - name: Add R and RTools to PATH
+        shell: cmd
+        run: |
+          echo C:\Program Files\R\R-devel\bin>>%GITHUB_PATH%
+          echo C:\rtools44\usr\bin>>%GITHUB_PATH%
 
       - uses: r-lib/actions/check-r-package@v2
         with:
