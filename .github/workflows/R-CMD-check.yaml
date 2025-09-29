@@ -101,8 +101,6 @@ jobs:
       - name: Install RTools
         shell: cmd
         run: start /wait "" rtools.exe /SILENT
-      
-      - uses: actions-rust-lang/setup-rust-toolchain@v1
 
       - name: Setup R packages
         run: |
