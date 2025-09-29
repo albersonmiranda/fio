@@ -76,48 +76,6 @@ jobs:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
 
-  Windows-ARM:
-    if: '! github.event.pull_request.draft'
-    runs-on: windows-11-arm
-
-    name: Windows ARM - R Release
-
-    strategy:
-      fail-fast: false
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download R
-        shell: pwsh
-        run: |
-          Invoke-WebRequest -Uri "https://cran.r-project.org/bin/windows/base/R-4.5.1-win.exe" -OutFile "R.exe"
-          Invoke-WebRequest -Uri "https://cloud.r-project.org/bin/windows/Rtools/rtools45/files/rtools45-aarch64-6608-6492.exe" -OutFile "rtools.exe"
-
-      - name: Install R
-        shell: cmd
-        run: start /wait "" R.exe /SILENT
-
-      - name: Install RTools
-        shell: cmd
-        run: start /wait "" rtools.exe /SILENT
-
-      - name: Setup R packages
-        run: |
-          Rscript -e 'install.packages(c("remotes", "rcmdcheck"), repos = "https://cloud.r-project.org")'
-          Rscript -e 'remotes::install_deps(dependencies = TRUE)'
-      
-      - name: Add R and RTools to PATH
-        shell: cmd
-        run: |
-          echo C:\Program Files\R\R-4.5.1\bin>>%GITHUB_PATH%
-          echo C:\rtools45\>>%GITHUB_PATH%
-
-      - uses: r-lib/actions/check-r-package@v2
-        with:
-          upload-snapshots: true
-          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
-
   Fedora:
     if: '! github.event.pull_request.draft'
     runs-on: ubuntu-latest
