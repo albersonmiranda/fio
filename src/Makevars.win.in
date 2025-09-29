@@ -1,4 +1,6 @@
-ifeq ($(PROCESSOR_ARCHITECTURE),/ARM64)
+
+DETECTED_ARCH := $(shell echo $$PROCESSOR_ARCHITECTURE)
+ifeq ($(DETECTED_ARCH),ARM64)
   TARGET = aarch64-pc-windows-gnu
 else
   TARGET = $(subst 64,x86_64,$(subst 32,i686,$(WIN)))-pc-windows-gnu
@@ -19,6 +21,14 @@ CARGOTMP = $(CURDIR)/.cargo
 VENDOR_DIR = vendor
 
 $(STATLIB):
+	@echo "=== Build Configuration ==="
+	@echo "Building for target: $(TARGET)"
+	@echo "PROCESSOR_ARCHITECTURE: $(PROCESSOR_ARCHITECTURE)"
+	@echo "DETECTED_ARCH: $(DETECTED_ARCH)"
+	@echo "WIN: $(WIN)"
+	@echo "TARGET_DIR: $(TARGET_DIR)"
+	@echo "LIBDIR: $(LIBDIR)"
+	@echo "=========================="
 	mkdir -p $(TARGET_DIR)/libgcc_mock
 	touch $(TARGET_DIR)/libgcc_mock/libgcc_eh.a
 
