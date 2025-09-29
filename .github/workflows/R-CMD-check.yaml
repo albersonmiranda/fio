@@ -102,6 +102,8 @@ jobs:
         shell: cmd
         run: start /wait "" rtools.exe /SILENT
       
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      
       - name: Setup R packages
         run: |
           Rscript -e 'install.packages(c("remotes", "rcmdcheck"), repos = "https://cloud.r-project.org")'
