@@ -2,7 +2,7 @@
 #' R6 class for multi-regional input-output matrix
 #'
 #' @description
-#' R6 class for multi-regional input-output matrix (MIOM). This class inherits from the
+#' R6 class for multi-regional input-output matrix (MRIO). This class inherits from the
 #' `iom` class and extends its functionality to handle multi-regional input-output tables
 #' such as the World Input-Output Database (WIOD) and EXIOBASE tables.
 #'
@@ -10,33 +10,33 @@
 #' Identifier for the multi-regional input-output matrix.
 #' @param intermediate_transactions (`matrix`)\cr
 #' Multi-regional intermediate transactions matrix. Rows and columns should follow
-#' the structure: Country1_Sector1, Country1_Sector2, ..., Country2_Sector1, etc.
+#' the structure: Country1_Sector1, Country1_Sector2, ..., Country2_Sector1 etc.
 #' @param total_production (`matrix`)\cr
 #' Total production vector by country and sector.
 #' @param countries (`character`)\cr
-#' Vector of country names/codes in the matrix.
+#' Vector of region names in the matrix.
 #' @param sectors (`character`)\cr
-#' Vector of sector names/codes in the matrix.
+#' Vector of sector names in the matrix.
 #' @param household_consumption (`matrix`)\cr
-#' Household consumption vector by country and sector.
+#' Household consumption vector by region and sector.
 #' @param government_consumption (`matrix`)\cr
-#' Government consumption vector by country and sector.
+#' Government consumption vector by region and sector.
 #' @param exports (`matrix`)\cr
-#' Exports vector by country and sector.
+#' Exports vector by region and sector.
 #' @param final_demand_others (`matrix`)\cr
 #' Other vectors of final demand that doesn't have dedicated slots.
 #' @param imports (`matrix`)\cr
-#' Imports vector by country and sector.
+#' Imports vector by region and sector.
 #' @param taxes (`matrix`)\cr
-#' Taxes vector by country and sector.
+#' Taxes vector by region and sector.
 #' @param wages (`matrix`)\cr
-#' Wages vector by country and sector.
+#' Wages vector by region and sector.
 #' @param operating_income (`matrix`)\cr
-#' Operating income vector by country and sector.
+#' Operating income vector by region and sector.
 #' @param value_added_others (`matrix`)\cr
 #' Other vectors of value-added that doesn't have dedicated slots.
 #' @param occupation (`matrix`)\cr
-#' Occupation matrix by country and sector.
+#' Occupation matrix by region and sector.
 #'
 #' @return A new instance of the `miom` class.
 #'
@@ -85,15 +85,15 @@ miom <- R6Class(
   inherit = iom,
   public = list(
     #' @field countries (`character`)\cr
-    #' Vector of country names/codes.
+    #' Vector of region names.
     countries = NULL,
 
     #' @field sectors (`character`)\cr
-    #' Vector of sector names/codes.
+    #' Vector of sector names.
     sectors = NULL,
 
     #' @field n_countries (`integer`)\cr
-    #' Number of countries in the matrix.
+    #' Number of regions in the matrix.
     n_countries = NULL,
 
     #' @field n_sectors (`integer`)\cr
@@ -101,15 +101,15 @@ miom <- R6Class(
     n_sectors = NULL,
 
     #' @field bilateral_trade (`list`)\cr
-    #' Bilateral trade flows between countries by sector.
+    #' Bilateral trade flows between regions by sector.
     bilateral_trade = NULL,
 
     #' @field domestic_intermediate_transactions (`list`)\cr
-    #' List of domestic intermediate transaction matrices by country.
+    #' List of domestic intermediate transaction matrices by region.
     domestic_intermediate_transactions = NULL,
 
     #' @field international_intermediate_transactions (`list`)\cr
-    #' List of international intermediate transaction matrices between countries.
+    #' List of international intermediate transaction matrices between regions.
     international_intermediate_transactions = NULL,
 
     #' @field multiregional_multipliers (`data.frame`)\cr
