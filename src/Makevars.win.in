@@ -1,7 +1,11 @@
 
 DETECTED_ARCH := $(shell echo $$PROCESSOR_ARCHITECTURE)
+R_ARCH := $(shell echo $$R_PKG_TARGET_ARCH)
+
 ifeq ($(DETECTED_ARCH),ARM64)
-  TARGET = aarch64-pc-windows-gnu
+  TARGET = aarch64-pc-windows-gnullvm
+else ifeq ($(R_ARCH),ARM64)
+  TARGET = aarch64-pc-windows-gnullvm
 else
   TARGET = $(subst 64,x86_64,$(subst 32,i686,$(WIN)))-pc-windows-gnu
 endif
@@ -23,9 +27,9 @@ VENDOR_DIR = vendor
 $(STATLIB):
 	@echo "=== Build Configuration ==="
 	@echo "Building for target: $(TARGET)"
-	@echo "PROCESSOR_ARCHITECTURE: $(PROCESSOR_ARCHITECTURE)"
-	@echo "DETECTED_ARCH: $(DETECTED_ARCH)"
-	@echo "WIN: $(WIN)"
+	@echo "R_PKG_TARGET_ARCH env: $(R_ARCH)"
+	@echo "PROCESSOR_ARCHITECTURE env: $(DETECTED_ARCH)"
+	@echo "WIN variable: $(WIN)"
 	@echo "TARGET_DIR: $(TARGET_DIR)"
 	@echo "LIBDIR: $(LIBDIR)"
 	@echo "=========================="

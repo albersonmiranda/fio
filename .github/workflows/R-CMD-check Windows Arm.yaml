@@ -46,12 +46,12 @@ jobs:
         shell: pwsh
         run: |
           Write-Host "Downloading Rust installer for ARM64..."
-          rustup default stable-aarch64-pc-windows-gnu
+          rustup default stable-aarch64-pc-windows-gnullvm
           
           Write-Host "Verifying Rust installation..."
-          & "$env:USERPROFILE\.cargo\bin\rustc.exe" --version
-          & "$env:USERPROFILE\.cargo\bin\cargo.exe" --version
-          & "$env:USERPROFILE\.cargo\bin\rustup.exe" target list --installed
+          rustc --version
+          cargo --version
+          rustup target list --installed
 
       - name: Add Rust to PATH
         shell: pwsh
@@ -68,7 +68,7 @@ jobs:
           Write-Host "=== Build Environment Verification ==="
           Write-Host "Architecture: $env:PROCESSOR_ARCHITECTURE"
           Write-Host "R Version:"
-          & R --version
+          & "C:\Program Files\R\R-4.5.1\bin\R.exe" --version
           Write-Host "RTools Path:"
           if (Test-Path "C:\rtools45\usr\bin\gcc.exe") {
             Write-Host "GCC found at C:\rtools45\usr\bin\gcc.exe"
