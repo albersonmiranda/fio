@@ -11,7 +11,7 @@ on:
       - synchronize
       - ready_for_review
 
-name: R-CMD-check
+name: R-CMD-check-Windows-Arm
 
 permissions: read-all
 
@@ -46,15 +46,7 @@ jobs:
         shell: pwsh
         run: |
           Write-Host "Downloading Rust installer for ARM64..."
-          Invoke-WebRequest -Uri "https://win.rustup.rs/aarch64" -OutFile "rustup-init.exe"
-          
-          Write-Host "Installing Rust..."
-          .\rustup-init.exe -y --default-toolchain stable
-          
-          $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("PATH","User")
-          
-          Write-Host "Adding ARM64 target..."
-          & "$env:USERPROFILE\.cargo\bin\rustup.exe" target add aarch64-pc-windows-gnu
+          rustup default stable-aarch64-pc-windows-gnu
           
           Write-Host "Verifying Rust installation..."
           & "$env:USERPROFILE\.cargo\bin\rustc.exe" --version
@@ -76,7 +68,7 @@ jobs:
           Write-Host "=== Build Environment Verification ==="
           Write-Host "Architecture: $env:PROCESSOR_ARCHITECTURE"
           Write-Host "R Version:"
-          & "C:\Program Files\R\R-4.5.1\bin\R.exe" --version
+          & R --version
           Write-Host "RTools Path:"
           if (Test-Path "C:\rtools45\usr\bin\gcc.exe") {
             Write-Host "GCC found at C:\rtools45\usr\bin\gcc.exe"
