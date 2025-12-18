@@ -1,0 +1,213 @@
+---
+title: "WIOD 2014 Analysis"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float:
+      collapsed: false
+      toc_levels: 2
+    number_sections: true
+    highlight: zenburn
+    code_folding: show
+    fig_caption: true
+    df_print: paged 
+---
+
+<!-- This is a precomputing script. To run it, `knitr::knit("vignettes/articles/wiod_2014_analysis_orig.Rmd.orig", output = "vignettes/articles/wiod_2014_analysis.Rmd")` -->
+
+<style>
+p.caption {
+  font-size: 0.6em;
+  text-align: "center";
+}
+</style>
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.align = "center",
+  fig.output = "70%"
+)
+```
+
+# Introduction
+
+This vignette demonstrates how to use the `fio` package to analyze the World Input-Output Database (WIOD) 2014 (2016 release). We will use `fio` to download the data, parse it, create a Multi-Regional Input-Output Matrix (`miom`) object, and perform various analyses including technical coefficients, Leontief inverse, multipliers, bilateral trade, and spillover effects.
+
+# Data
+
+We download the data from the WIOD website and parse it to create a Multi-Regional Input-Output Matrix (`miom`) object.
+
+```{r download, eval = FALSE}
+# download wiod 2016 release
+fio::download_wiod(year = 2016)
+```
+
+This downloads a zip file with the WIOD 2016 release, containing IOTs from 2000 to 2014. We'll use the 2014 IOTs for this analysis.
+
+# Creating the MIOM Object
+
+We parse the `wiot` object to create the `miom` object. Calling `names()` we find that the `wiot` object has the following columns:
+
+- IndustryCode
+- IndustryDescription
+- Country
+- RNr
+- Year
+
+Then the intermediate transactions matrix, followed by the final demand matrix.
+
+```{r data}
+# load the data
+load("WIOT2014_October16_ROW.RData")
+
+# columns
+names(wiot)
+```
+
+Expanding the `Country` column, we find that it has 45 unique values, corresponding to the 44 countries in the WIOD 2014 release plus a "Total" row. The `IndustryDescription` column has 56 unique values, corresponding to the 56 sectors in the WIOD 2014 release, plus a total row for the intermediate transactions matrix and the Value Added matrix.
+
+```{r}
+# unique countries
+unique(wiot$Country)
+
+# unique sectors
+unique(wiot$IndustryDescription)
+
+# structure
+n_countries <- 44
+n_sectors <- 56
+n_interm <- n_countries * n_sectors
+
+# extract intermediate transactions matrix
+Z <- as.matrix(wiot[1:n_interm, 6:(5 + n_interm)])
+
+# total production vector
+x <- as.numeric(wiot[1:n_interm, ncol(wiot)])
+
+# fix zeros to avoid division by zero (NaNs in Leontief Inverse)
+# since Z columns are 0 where x is 0, setting x=1 results in A=0/1=0, which is correct
+x[x == 0] <- 1
+
+x <- matrix(x, nrow = 1)
+
+# extract countries and sectors
+countries_long <- as.character(wiot$Country[1:n_interm])
+sectors_long <- as.character(wiot$IndustryCode[1:n_interm])
+
+# get unique values respecting order
+countries <- unique(countries_long)
+sectors <- unique(sectors_long)
+
+# validating dimensions
+if (length(countries) != n_countries) stop("Number of extracted countries does not match expected 44.")
+if (length(sectors) != n_sectors) stop("Number of extracted sectors does not match expected 56.")
+
+# create miom object
+wiod_miom <- fio::miom$new(
+  id = "wiod_2014",
+  intermediate_transactions = Z,
+  total_production = x,
+  countries = countries,
+  sectors = sectors
+)
+
+print(wiod_miom)
+```
+
+# Analysis
+
+## Technical Coefficients
+
+Compute the technical coefficients matrix ($A$).
+
+```{r tech_coeff}
+wiod_miom$compute_tech_coeff()
+
+# inspect a small corner of the matrix
+wiod_miom$technical_coefficients_matrix[1:5, 1:5]
+```
+
+## Leontief Inverse
+
+Compute the Leontief inverse matrix ($L = (I-A)^{-1}$).
+
+```{r leontief}
+wiod_miom$compute_leontief_inverse()
+
+# inspect a small corner of the matrix
+wiod_miom$leontief_inverse_matrix[1:5, 1:5]
+```
+
+## Multipliers
+
+Compute multi-regional multipliers.
+
+```{r multipliers}
+wiod_miom$compute_multiregional_multipliers()
+multipliers <- wiod_miom$multiregional_multipliers
+head(multipliers)
+
+# summary of simple multipliers by country
+wiod_miom$get_country_summary()
+```
+
+## Bilateral Trade
+
+Analyze bilateral trade between two specific countries, e.g., USA and CHN.
+
+```{r bilateral}
+# check if USA and CHN are in countries list
+if ("USA" %in% wiod_miom$countries && "CHN" %in% wiod_miom$countries) {
+  trade_usa_chn <- wiod_miom$get_bilateral_trade(origin = "USA", destination = "CHN")
+  # show first few rows/cols
+  trade_usa_chn[1:5, 1:5]
+
+  # total exports from USA to China by sector (aggregated over destination sectors)
+  # this sums the rows of the bilateral trade matrix (which is dest x origin)
+  # wait, get_bilateral_trade returns: rows = Dest_Sector, cols = Origin_Sector
+  # so colSums gives total imports of Dest from Origin_Sector.
+  # rowSums gives total exports from Origin to Dest_Sector? No.
+
+  # matrix is M[dest, origin].
+  # sum over rows (dest) = total exports of Origin_Sector to Dest.
+  exports_by_sector <- colSums(trade_usa_chn)
+  head(exports_by_sector)
+}
+```
+
+## Spillover Effects
+
+Compute the spillover matrix and net spillover matrix.
+
+```{r spillover}
+spillover_matrix <- wiod_miom$get_spillover_matrix()
+
+# inspect
+spillover_matrix[1:5, 1:5]
+
+net_spillover <- wiod_miom$get_net_spillover_matrix()
+
+# inspect a subset
+net_spillover[1:10, 1:10]
+```
+
+## Regional Interdependence
+
+Compute regional interdependence measures.
+
+```{r interdependence}
+interdep <- wiod_miom$get_regional_interdependence()
+print(interdep)
+
+# visualize interdependence index
+library(ggplot2)
+ggplot(interdep, aes(x = reorder(country, interdependence_index), y = interdependence_index)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(title = "Regional Interdependence Index", x = "Country", y = "Index") +
+  theme_minimal()
+```

@@ -1,0 +1,1610 @@
+---
+title: "WIOD 2014 Analysis"
+date: 'dezembro 18, 2025'
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float:
+      collapsed: false
+      toc_levels: 2
+    number_sections: true
+    highlight: zenburn
+    code_folding: show
+    fig_caption: true
+    df_print: paged 
+---
+
+<!-- This is a precomputing script. To run it, `knitr::knit("vignettes/articles/wiod_2014_analysis_orig.Rmd.orig", output = "vignettes/articles/wiod_2014_analysis.Rmd")` -->
+
+<style>
+p.caption {
+  font-size: 0.6em;
+  text-align: "center";
+}
+</style>
+
+
+
+# Introduction
+
+This vignette demonstrates how to use the `fio` package to analyze the World Input-Output Database (WIOD) 2014 (2016 release). We will use `fio` to download the data, parse it, create a Multi-Regional Input-Output Matrix (`miom`) object, and perform various analyses including technical coefficients, Leontief inverse, multipliers, bilateral trade, and spillover effects.
+
+# Data
+
+We download the data from the WIOD website and parse it to create a Multi-Regional Input-Output Matrix (`miom`) object.
+
+
+``` r
+# download wiod 2016 release
+fio::download_wiod(year = 2016)
+```
+
+This downloads a zip file with the WIOD 2016 release, containing IOTs from 2000 to 2014. We'll use the 2014 IOTs for this analysis.
+
+# Creating the MIOM Object
+
+We parse the `wiot` object to create the `miom` object. Calling `names()` we find that the `wiot` object has the following columns:
+
+- IndustryCode
+- IndustryDescription
+- Country
+- RNr
+- Year
+
+Then the intermediate transactions matrix, followed by the final demand matrix.
+
+
+``` r
+# load the data
+load("WIOT2014_October16_ROW.RData")
+
+# columns
+names(wiot)
+#>    [1] "IndustryCode"        "IndustryDescription" "Country"            
+#>    [4] "RNr"                 "Year"                "AUS1"               
+#>    [7] "AUS2"                "AUS3"                "AUS4"               
+#>   [10] "AUS5"                "AUS6"                "AUS7"               
+#>   [13] "AUS8"                "AUS9"                "AUS10"              
+#>   [16] "AUS11"               "AUS12"               "AUS13"              
+#>   [19] "AUS14"               "AUS15"               "AUS16"              
+#>   [22] "AUS17"               "AUS18"               "AUS19"              
+#>   [25] "AUS20"               "AUS21"               "AUS22"              
+#>   [28] "AUS23"               "AUS24"               "AUS25"              
+#>   [31] "AUS26"               "AUS27"               "AUS28"              
+#>   [34] "AUS29"               "AUS30"               "AUS31"              
+#>   [37] "AUS32"               "AUS33"               "AUS34"              
+#>   [40] "AUS35"               "AUS36"               "AUS37"              
+#>   [43] "AUS38"               "AUS39"               "AUS40"              
+#>   [46] "AUS41"               "AUS42"               "AUS43"              
+#>   [49] "AUS44"               "AUS45"               "AUS46"              
+#>   [52] "AUS47"               "AUS48"               "AUS49"              
+#>   [55] "AUS50"               "AUS51"               "AUS52"              
+#>   [58] "AUS53"               "AUS54"               "AUS55"              
+#>   [61] "AUS56"               "AUT1"                "AUT2"               
+#>   [64] "AUT3"                "AUT4"                "AUT5"               
+#>   [67] "AUT6"                "AUT7"                "AUT8"               
+#>   [70] "AUT9"                "AUT10"               "AUT11"              
+#>   [73] "AUT12"               "AUT13"               "AUT14"              
+#>   [76] "AUT15"               "AUT16"               "AUT17"              
+#>   [79] "AUT18"               "AUT19"               "AUT20"              
+#>   [82] "AUT21"               "AUT22"               "AUT23"              
+#>   [85] "AUT24"               "AUT25"               "AUT26"              
+#>   [88] "AUT27"               "AUT28"               "AUT29"              
+#>   [91] "AUT30"               "AUT31"               "AUT32"              
+#>   [94] "AUT33"               "AUT34"               "AUT35"              
+#>   [97] "AUT36"               "AUT37"               "AUT38"              
+#>  [100] "AUT39"               "AUT40"               "AUT41"              
+#>  [103] "AUT42"               "AUT43"               "AUT44"              
+#>  [106] "AUT45"               "AUT46"               "AUT47"              
+#>  [109] "AUT48"               "AUT49"               "AUT50"              
+#>  [112] "AUT51"               "AUT52"               "AUT53"              
+#>  [115] "AUT54"               "AUT55"               "AUT56"              
+#>  [118] "BEL1"                "BEL2"                "BEL3"               
+#>  [121] "BEL4"                "BEL5"                "BEL6"               
+#>  [124] "BEL7"                "BEL8"                "BEL9"               
+#>  [127] "BEL10"               "BEL11"               "BEL12"              
+#>  [130] "BEL13"               "BEL14"               "BEL15"              
+#>  [133] "BEL16"               "BEL17"               "BEL18"              
+#>  [136] "BEL19"               "BEL20"               "BEL21"              
+#>  [139] "BEL22"               "BEL23"               "BEL24"              
+#>  [142] "BEL25"               "BEL26"               "BEL27"              
+#>  [145] "BEL28"               "BEL29"               "BEL30"              
+#>  [148] "BEL31"               "BEL32"               "BEL33"              
+#>  [151] "BEL34"               "BEL35"               "BEL36"              
+#>  [154] "BEL37"               "BEL38"               "BEL39"              
+#>  [157] "BEL40"               "BEL41"               "BEL42"              
+#>  [160] "BEL43"               "BEL44"               "BEL45"              
+#>  [163] "BEL46"               "BEL47"               "BEL48"              
+#>  [166] "BEL49"               "BEL50"               "BEL51"              
+#>  [169] "BEL52"               "BEL53"               "BEL54"              
+#>  [172] "BEL55"               "BEL56"               "BGR1"               
+#>  [175] "BGR2"                "BGR3"                "BGR4"               
+#>  [178] "BGR5"                "BGR6"                "BGR7"               
+#>  [181] "BGR8"                "BGR9"                "BGR10"              
+#>  [184] "BGR11"               "BGR12"               "BGR13"              
+#>  [187] "BGR14"               "BGR15"               "BGR16"              
+#>  [190] "BGR17"               "BGR18"               "BGR19"              
+#>  [193] "BGR20"               "BGR21"               "BGR22"              
+#>  [196] "BGR23"               "BGR24"               "BGR25"              
+#>  [199] "BGR26"               "BGR27"               "BGR28"              
+#>  [202] "BGR29"               "BGR30"               "BGR31"              
+#>  [205] "BGR32"               "BGR33"               "BGR34"              
+#>  [208] "BGR35"               "BGR36"               "BGR37"              
+#>  [211] "BGR38"               "BGR39"               "BGR40"              
+#>  [214] "BGR41"               "BGR42"               "BGR43"              
+#>  [217] "BGR44"               "BGR45"               "BGR46"              
+#>  [220] "BGR47"               "BGR48"               "BGR49"              
+#>  [223] "BGR50"               "BGR51"               "BGR52"              
+#>  [226] "BGR53"               "BGR54"               "BGR55"              
+#>  [229] "BGR56"               "BRA1"                "BRA2"               
+#>  [232] "BRA3"                "BRA4"                "BRA5"               
+#>  [235] "BRA6"                "BRA7"                "BRA8"               
+#>  [238] "BRA9"                "BRA10"               "BRA11"              
+#>  [241] "BRA12"               "BRA13"               "BRA14"              
+#>  [244] "BRA15"               "BRA16"               "BRA17"              
+#>  [247] "BRA18"               "BRA19"               "BRA20"              
+#>  [250] "BRA21"               "BRA22"               "BRA23"              
+#>  [253] "BRA24"               "BRA25"               "BRA26"              
+#>  [256] "BRA27"               "BRA28"               "BRA29"              
+#>  [259] "BRA30"               "BRA31"               "BRA32"              
+#>  [262] "BRA33"               "BRA34"               "BRA35"              
+#>  [265] "BRA36"               "BRA37"               "BRA38"              
+#>  [268] "BRA39"               "BRA40"               "BRA41"              
+#>  [271] "BRA42"               "BRA43"               "BRA44"              
+#>  [274] "BRA45"               "BRA46"               "BRA47"              
+#>  [277] "BRA48"               "BRA49"               "BRA50"              
+#>  [280] "BRA51"               "BRA52"               "BRA53"              
+#>  [283] "BRA54"               "BRA55"               "BRA56"              
+#>  [286] "CAN1"                "CAN2"                "CAN3"               
+#>  [289] "CAN4"                "CAN5"                "CAN6"               
+#>  [292] "CAN7"                "CAN8"                "CAN9"               
+#>  [295] "CAN10"               "CAN11"               "CAN12"              
+#>  [298] "CAN13"               "CAN14"               "CAN15"              
+#>  [301] "CAN16"               "CAN17"               "CAN18"              
+#>  [304] "CAN19"               "CAN20"               "CAN21"              
+#>  [307] "CAN22"               "CAN23"               "CAN24"              
+#>  [310] "CAN25"               "CAN26"               "CAN27"              
+#>  [313] "CAN28"               "CAN29"               "CAN30"              
+#>  [316] "CAN31"               "CAN32"               "CAN33"              
+#>  [319] "CAN34"               "CAN35"               "CAN36"              
+#>  [322] "CAN37"               "CAN38"               "CAN39"              
+#>  [325] "CAN40"               "CAN41"               "CAN42"              
+#>  [328] "CAN43"               "CAN44"               "CAN45"              
+#>  [331] "CAN46"               "CAN47"               "CAN48"              
+#>  [334] "CAN49"               "CAN50"               "CAN51"              
+#>  [337] "CAN52"               "CAN53"               "CAN54"              
+#>  [340] "CAN55"               "CAN56"               "CHE1"               
+#>  [343] "CHE2"                "CHE3"                "CHE4"               
+#>  [346] "CHE5"                "CHE6"                "CHE7"               
+#>  [349] "CHE8"                "CHE9"                "CHE10"              
+#>  [352] "CHE11"               "CHE12"               "CHE13"              
+#>  [355] "CHE14"               "CHE15"               "CHE16"              
+#>  [358] "CHE17"               "CHE18"               "CHE19"              
+#>  [361] "CHE20"               "CHE21"               "CHE22"              
+#>  [364] "CHE23"               "CHE24"               "CHE25"              
+#>  [367] "CHE26"               "CHE27"               "CHE28"              
+#>  [370] "CHE29"               "CHE30"               "CHE31"              
+#>  [373] "CHE32"               "CHE33"               "CHE34"              
+#>  [376] "CHE35"               "CHE36"               "CHE37"              
+#>  [379] "CHE38"               "CHE39"               "CHE40"              
+#>  [382] "CHE41"               "CHE42"               "CHE43"              
+#>  [385] "CHE44"               "CHE45"               "CHE46"              
+#>  [388] "CHE47"               "CHE48"               "CHE49"              
+#>  [391] "CHE50"               "CHE51"               "CHE52"              
+#>  [394] "CHE53"               "CHE54"               "CHE55"              
+#>  [397] "CHE56"               "CHN1"                "CHN2"               
+#>  [400] "CHN3"                "CHN4"                "CHN5"               
+#>  [403] "CHN6"                "CHN7"                "CHN8"               
+#>  [406] "CHN9"                "CHN10"               "CHN11"              
+#>  [409] "CHN12"               "CHN13"               "CHN14"              
+#>  [412] "CHN15"               "CHN16"               "CHN17"              
+#>  [415] "CHN18"               "CHN19"               "CHN20"              
+#>  [418] "CHN21"               "CHN22"               "CHN23"              
+#>  [421] "CHN24"               "CHN25"               "CHN26"              
+#>  [424] "CHN27"               "CHN28"               "CHN29"              
+#>  [427] "CHN30"               "CHN31"               "CHN32"              
+#>  [430] "CHN33"               "CHN34"               "CHN35"              
+#>  [433] "CHN36"               "CHN37"               "CHN38"              
+#>  [436] "CHN39"               "CHN40"               "CHN41"              
+#>  [439] "CHN42"               "CHN43"               "CHN44"              
+#>  [442] "CHN45"               "CHN46"               "CHN47"              
+#>  [445] "CHN48"               "CHN49"               "CHN50"              
+#>  [448] "CHN51"               "CHN52"               "CHN53"              
+#>  [451] "CHN54"               "CHN55"               "CHN56"              
+#>  [454] "CYP1"                "CYP2"                "CYP3"               
+#>  [457] "CYP4"                "CYP5"                "CYP6"               
+#>  [460] "CYP7"                "CYP8"                "CYP9"               
+#>  [463] "CYP10"               "CYP11"               "CYP12"              
+#>  [466] "CYP13"               "CYP14"               "CYP15"              
+#>  [469] "CYP16"               "CYP17"               "CYP18"              
+#>  [472] "CYP19"               "CYP20"               "CYP21"              
+#>  [475] "CYP22"               "CYP23"               "CYP24"              
+#>  [478] "CYP25"               "CYP26"               "CYP27"              
+#>  [481] "CYP28"               "CYP29"               "CYP30"              
+#>  [484] "CYP31"               "CYP32"               "CYP33"              
+#>  [487] "CYP34"               "CYP35"               "CYP36"              
+#>  [490] "CYP37"               "CYP38"               "CYP39"              
+#>  [493] "CYP40"               "CYP41"               "CYP42"              
+#>  [496] "CYP43"               "CYP44"               "CYP45"              
+#>  [499] "CYP46"               "CYP47"               "CYP48"              
+#>  [502] "CYP49"               "CYP50"               "CYP51"              
+#>  [505] "CYP52"               "CYP53"               "CYP54"              
+#>  [508] "CYP55"               "CYP56"               "CZE1"               
+#>  [511] "CZE2"                "CZE3"                "CZE4"               
+#>  [514] "CZE5"                "CZE6"                "CZE7"               
+#>  [517] "CZE8"                "CZE9"                "CZE10"              
+#>  [520] "CZE11"               "CZE12"               "CZE13"              
+#>  [523] "CZE14"               "CZE15"               "CZE16"              
+#>  [526] "CZE17"               "CZE18"               "CZE19"              
+#>  [529] "CZE20"               "CZE21"               "CZE22"              
+#>  [532] "CZE23"               "CZE24"               "CZE25"              
+#>  [535] "CZE26"               "CZE27"               "CZE28"              
+#>  [538] "CZE29"               "CZE30"               "CZE31"              
+#>  [541] "CZE32"               "CZE33"               "CZE34"              
+#>  [544] "CZE35"               "CZE36"               "CZE37"              
+#>  [547] "CZE38"               "CZE39"               "CZE40"              
+#>  [550] "CZE41"               "CZE42"               "CZE43"              
+#>  [553] "CZE44"               "CZE45"               "CZE46"              
+#>  [556] "CZE47"               "CZE48"               "CZE49"              
+#>  [559] "CZE50"               "CZE51"               "CZE52"              
+#>  [562] "CZE53"               "CZE54"               "CZE55"              
+#>  [565] "CZE56"               "DEU1"                "DEU2"               
+#>  [568] "DEU3"                "DEU4"                "DEU5"               
+#>  [571] "DEU6"                "DEU7"                "DEU8"               
+#>  [574] "DEU9"                "DEU10"               "DEU11"              
+#>  [577] "DEU12"               "DEU13"               "DEU14"              
+#>  [580] "DEU15"               "DEU16"               "DEU17"              
+#>  [583] "DEU18"               "DEU19"               "DEU20"              
+#>  [586] "DEU21"               "DEU22"               "DEU23"              
+#>  [589] "DEU24"               "DEU25"               "DEU26"              
+#>  [592] "DEU27"               "DEU28"               "DEU29"              
+#>  [595] "DEU30"               "DEU31"               "DEU32"              
+#>  [598] "DEU33"               "DEU34"               "DEU35"              
+#>  [601] "DEU36"               "DEU37"               "DEU38"              
+#>  [604] "DEU39"               "DEU40"               "DEU41"              
+#>  [607] "DEU42"               "DEU43"               "DEU44"              
+#>  [610] "DEU45"               "DEU46"               "DEU47"              
+#>  [613] "DEU48"               "DEU49"               "DEU50"              
+#>  [616] "DEU51"               "DEU52"               "DEU53"              
+#>  [619] "DEU54"               "DEU55"               "DEU56"              
+#>  [622] "DNK1"                "DNK2"                "DNK3"               
+#>  [625] "DNK4"                "DNK5"                "DNK6"               
+#>  [628] "DNK7"                "DNK8"                "DNK9"               
+#>  [631] "DNK10"               "DNK11"               "DNK12"              
+#>  [634] "DNK13"               "DNK14"               "DNK15"              
+#>  [637] "DNK16"               "DNK17"               "DNK18"              
+#>  [640] "DNK19"               "DNK20"               "DNK21"              
+#>  [643] "DNK22"               "DNK23"               "DNK24"              
+#>  [646] "DNK25"               "DNK26"               "DNK27"              
+#>  [649] "DNK28"               "DNK29"               "DNK30"              
+#>  [652] "DNK31"               "DNK32"               "DNK33"              
+#>  [655] "DNK34"               "DNK35"               "DNK36"              
+#>  [658] "DNK37"               "DNK38"               "DNK39"              
+#>  [661] "DNK40"               "DNK41"               "DNK42"              
+#>  [664] "DNK43"               "DNK44"               "DNK45"              
+#>  [667] "DNK46"               "DNK47"               "DNK48"              
+#>  [670] "DNK49"               "DNK50"               "DNK51"              
+#>  [673] "DNK52"               "DNK53"               "DNK54"              
+#>  [676] "DNK55"               "DNK56"               "ESP1"               
+#>  [679] "ESP2"                "ESP3"                "ESP4"               
+#>  [682] "ESP5"                "ESP6"                "ESP7"               
+#>  [685] "ESP8"                "ESP9"                "ESP10"              
+#>  [688] "ESP11"               "ESP12"               "ESP13"              
+#>  [691] "ESP14"               "ESP15"               "ESP16"              
+#>  [694] "ESP17"               "ESP18"               "ESP19"              
+#>  [697] "ESP20"               "ESP21"               "ESP22"              
+#>  [700] "ESP23"               "ESP24"               "ESP25"              
+#>  [703] "ESP26"               "ESP27"               "ESP28"              
+#>  [706] "ESP29"               "ESP30"               "ESP31"              
+#>  [709] "ESP32"               "ESP33"               "ESP34"              
+#>  [712] "ESP35"               "ESP36"               "ESP37"              
+#>  [715] "ESP38"               "ESP39"               "ESP40"              
+#>  [718] "ESP41"               "ESP42"               "ESP43"              
+#>  [721] "ESP44"               "ESP45"               "ESP46"              
+#>  [724] "ESP47"               "ESP48"               "ESP49"              
+#>  [727] "ESP50"               "ESP51"               "ESP52"              
+#>  [730] "ESP53"               "ESP54"               "ESP55"              
+#>  [733] "ESP56"               "EST1"                "EST2"               
+#>  [736] "EST3"                "EST4"                "EST5"               
+#>  [739] "EST6"                "EST7"                "EST8"               
+#>  [742] "EST9"                "EST10"               "EST11"              
+#>  [745] "EST12"               "EST13"               "EST14"              
+#>  [748] "EST15"               "EST16"               "EST17"              
+#>  [751] "EST18"               "EST19"               "EST20"              
+#>  [754] "EST21"               "EST22"               "EST23"              
+#>  [757] "EST24"               "EST25"               "EST26"              
+#>  [760] "EST27"               "EST28"               "EST29"              
+#>  [763] "EST30"               "EST31"               "EST32"              
+#>  [766] "EST33"               "EST34"               "EST35"              
+#>  [769] "EST36"               "EST37"               "EST38"              
+#>  [772] "EST39"               "EST40"               "EST41"              
+#>  [775] "EST42"               "EST43"               "EST44"              
+#>  [778] "EST45"               "EST46"               "EST47"              
+#>  [781] "EST48"               "EST49"               "EST50"              
+#>  [784] "EST51"               "EST52"               "EST53"              
+#>  [787] "EST54"               "EST55"               "EST56"              
+#>  [790] "FIN1"                "FIN2"                "FIN3"               
+#>  [793] "FIN4"                "FIN5"                "FIN6"               
+#>  [796] "FIN7"                "FIN8"                "FIN9"               
+#>  [799] "FIN10"               "FIN11"               "FIN12"              
+#>  [802] "FIN13"               "FIN14"               "FIN15"              
+#>  [805] "FIN16"               "FIN17"               "FIN18"              
+#>  [808] "FIN19"               "FIN20"               "FIN21"              
+#>  [811] "FIN22"               "FIN23"               "FIN24"              
+#>  [814] "FIN25"               "FIN26"               "FIN27"              
+#>  [817] "FIN28"               "FIN29"               "FIN30"              
+#>  [820] "FIN31"               "FIN32"               "FIN33"              
+#>  [823] "FIN34"               "FIN35"               "FIN36"              
+#>  [826] "FIN37"               "FIN38"               "FIN39"              
+#>  [829] "FIN40"               "FIN41"               "FIN42"              
+#>  [832] "FIN43"               "FIN44"               "FIN45"              
+#>  [835] "FIN46"               "FIN47"               "FIN48"              
+#>  [838] "FIN49"               "FIN50"               "FIN51"              
+#>  [841] "FIN52"               "FIN53"               "FIN54"              
+#>  [844] "FIN55"               "FIN56"               "FRA1"               
+#>  [847] "FRA2"                "FRA3"                "FRA4"               
+#>  [850] "FRA5"                "FRA6"                "FRA7"               
+#>  [853] "FRA8"                "FRA9"                "FRA10"              
+#>  [856] "FRA11"               "FRA12"               "FRA13"              
+#>  [859] "FRA14"               "FRA15"               "FRA16"              
+#>  [862] "FRA17"               "FRA18"               "FRA19"              
+#>  [865] "FRA20"               "FRA21"               "FRA22"              
+#>  [868] "FRA23"               "FRA24"               "FRA25"              
+#>  [871] "FRA26"               "FRA27"               "FRA28"              
+#>  [874] "FRA29"               "FRA30"               "FRA31"              
+#>  [877] "FRA32"               "FRA33"               "FRA34"              
+#>  [880] "FRA35"               "FRA36"               "FRA37"              
+#>  [883] "FRA38"               "FRA39"               "FRA40"              
+#>  [886] "FRA41"               "FRA42"               "FRA43"              
+#>  [889] "FRA44"               "FRA45"               "FRA46"              
+#>  [892] "FRA47"               "FRA48"               "FRA49"              
+#>  [895] "FRA50"               "FRA51"               "FRA52"              
+#>  [898] "FRA53"               "FRA54"               "FRA55"              
+#>  [901] "FRA56"               "GBR1"                "GBR2"               
+#>  [904] "GBR3"                "GBR4"                "GBR5"               
+#>  [907] "GBR6"                "GBR7"                "GBR8"               
+#>  [910] "GBR9"                "GBR10"               "GBR11"              
+#>  [913] "GBR12"               "GBR13"               "GBR14"              
+#>  [916] "GBR15"               "GBR16"               "GBR17"              
+#>  [919] "GBR18"               "GBR19"               "GBR20"              
+#>  [922] "GBR21"               "GBR22"               "GBR23"              
+#>  [925] "GBR24"               "GBR25"               "GBR26"              
+#>  [928] "GBR27"               "GBR28"               "GBR29"              
+#>  [931] "GBR30"               "GBR31"               "GBR32"              
+#>  [934] "GBR33"               "GBR34"               "GBR35"              
+#>  [937] "GBR36"               "GBR37"               "GBR38"              
+#>  [940] "GBR39"               "GBR40"               "GBR41"              
+#>  [943] "GBR42"               "GBR43"               "GBR44"              
+#>  [946] "GBR45"               "GBR46"               "GBR47"              
+#>  [949] "GBR48"               "GBR49"               "GBR50"              
+#>  [952] "GBR51"               "GBR52"               "GBR53"              
+#>  [955] "GBR54"               "GBR55"               "GBR56"              
+#>  [958] "GRC1"                "GRC2"                "GRC3"               
+#>  [961] "GRC4"                "GRC5"                "GRC6"               
+#>  [964] "GRC7"                "GRC8"                "GRC9"               
+#>  [967] "GRC10"               "GRC11"               "GRC12"              
+#>  [970] "GRC13"               "GRC14"               "GRC15"              
+#>  [973] "GRC16"               "GRC17"               "GRC18"              
+#>  [976] "GRC19"               "GRC20"               "GRC21"              
+#>  [979] "GRC22"               "GRC23"               "GRC24"              
+#>  [982] "GRC25"               "GRC26"               "GRC27"              
+#>  [985] "GRC28"               "GRC29"               "GRC30"              
+#>  [988] "GRC31"               "GRC32"               "GRC33"              
+#>  [991] "GRC34"               "GRC35"               "GRC36"              
+#>  [994] "GRC37"               "GRC38"               "GRC39"              
+#>  [997] "GRC40"               "GRC41"               "GRC42"              
+#> [1000] "GRC43"               "GRC44"               "GRC45"              
+#> [1003] "GRC46"               "GRC47"               "GRC48"              
+#> [1006] "GRC49"               "GRC50"               "GRC51"              
+#> [1009] "GRC52"               "GRC53"               "GRC54"              
+#> [1012] "GRC55"               "GRC56"               "HRV1"               
+#> [1015] "HRV2"                "HRV3"                "HRV4"               
+#> [1018] "HRV5"                "HRV6"                "HRV7"               
+#> [1021] "HRV8"                "HRV9"                "HRV10"              
+#> [1024] "HRV11"               "HRV12"               "HRV13"              
+#> [1027] "HRV14"               "HRV15"               "HRV16"              
+#> [1030] "HRV17"               "HRV18"               "HRV19"              
+#> [1033] "HRV20"               "HRV21"               "HRV22"              
+#> [1036] "HRV23"               "HRV24"               "HRV25"              
+#> [1039] "HRV26"               "HRV27"               "HRV28"              
+#> [1042] "HRV29"               "HRV30"               "HRV31"              
+#> [1045] "HRV32"               "HRV33"               "HRV34"              
+#> [1048] "HRV35"               "HRV36"               "HRV37"              
+#> [1051] "HRV38"               "HRV39"               "HRV40"              
+#> [1054] "HRV41"               "HRV42"               "HRV43"              
+#> [1057] "HRV44"               "HRV45"               "HRV46"              
+#> [1060] "HRV47"               "HRV48"               "HRV49"              
+#> [1063] "HRV50"               "HRV51"               "HRV52"              
+#> [1066] "HRV53"               "HRV54"               "HRV55"              
+#> [1069] "HRV56"               "HUN1"                "HUN2"               
+#> [1072] "HUN3"                "HUN4"                "HUN5"               
+#> [1075] "HUN6"                "HUN7"                "HUN8"               
+#> [1078] "HUN9"                "HUN10"               "HUN11"              
+#> [1081] "HUN12"               "HUN13"               "HUN14"              
+#> [1084] "HUN15"               "HUN16"               "HUN17"              
+#> [1087] "HUN18"               "HUN19"               "HUN20"              
+#> [1090] "HUN21"               "HUN22"               "HUN23"              
+#> [1093] "HUN24"               "HUN25"               "HUN26"              
+#> [1096] "HUN27"               "HUN28"               "HUN29"              
+#> [1099] "HUN30"               "HUN31"               "HUN32"              
+#> [1102] "HUN33"               "HUN34"               "HUN35"              
+#> [1105] "HUN36"               "HUN37"               "HUN38"              
+#> [1108] "HUN39"               "HUN40"               "HUN41"              
+#> [1111] "HUN42"               "HUN43"               "HUN44"              
+#> [1114] "HUN45"               "HUN46"               "HUN47"              
+#> [1117] "HUN48"               "HUN49"               "HUN50"              
+#> [1120] "HUN51"               "HUN52"               "HUN53"              
+#> [1123] "HUN54"               "HUN55"               "HUN56"              
+#> [1126] "IDN1"                "IDN2"                "IDN3"               
+#> [1129] "IDN4"                "IDN5"                "IDN6"               
+#> [1132] "IDN7"                "IDN8"                "IDN9"               
+#> [1135] "IDN10"               "IDN11"               "IDN12"              
+#> [1138] "IDN13"               "IDN14"               "IDN15"              
+#> [1141] "IDN16"               "IDN17"               "IDN18"              
+#> [1144] "IDN19"               "IDN20"               "IDN21"              
+#> [1147] "IDN22"               "IDN23"               "IDN24"              
+#> [1150] "IDN25"               "IDN26"               "IDN27"              
+#> [1153] "IDN28"               "IDN29"               "IDN30"              
+#> [1156] "IDN31"               "IDN32"               "IDN33"              
+#> [1159] "IDN34"               "IDN35"               "IDN36"              
+#> [1162] "IDN37"               "IDN38"               "IDN39"              
+#> [1165] "IDN40"               "IDN41"               "IDN42"              
+#> [1168] "IDN43"               "IDN44"               "IDN45"              
+#> [1171] "IDN46"               "IDN47"               "IDN48"              
+#> [1174] "IDN49"               "IDN50"               "IDN51"              
+#> [1177] "IDN52"               "IDN53"               "IDN54"              
+#> [1180] "IDN55"               "IDN56"               "IND1"               
+#> [1183] "IND2"                "IND3"                "IND4"               
+#> [1186] "IND5"                "IND6"                "IND7"               
+#> [1189] "IND8"                "IND9"                "IND10"              
+#> [1192] "IND11"               "IND12"               "IND13"              
+#> [1195] "IND14"               "IND15"               "IND16"              
+#> [1198] "IND17"               "IND18"               "IND19"              
+#> [1201] "IND20"               "IND21"               "IND22"              
+#> [1204] "IND23"               "IND24"               "IND25"              
+#> [1207] "IND26"               "IND27"               "IND28"              
+#> [1210] "IND29"               "IND30"               "IND31"              
+#> [1213] "IND32"               "IND33"               "IND34"              
+#> [1216] "IND35"               "IND36"               "IND37"              
+#> [1219] "IND38"               "IND39"               "IND40"              
+#> [1222] "IND41"               "IND42"               "IND43"              
+#> [1225] "IND44"               "IND45"               "IND46"              
+#> [1228] "IND47"               "IND48"               "IND49"              
+#> [1231] "IND50"               "IND51"               "IND52"              
+#> [1234] "IND53"               "IND54"               "IND55"              
+#> [1237] "IND56"               "IRL1"                "IRL2"               
+#> [1240] "IRL3"                "IRL4"                "IRL5"               
+#> [1243] "IRL6"                "IRL7"                "IRL8"               
+#> [1246] "IRL9"                "IRL10"               "IRL11"              
+#> [1249] "IRL12"               "IRL13"               "IRL14"              
+#> [1252] "IRL15"               "IRL16"               "IRL17"              
+#> [1255] "IRL18"               "IRL19"               "IRL20"              
+#> [1258] "IRL21"               "IRL22"               "IRL23"              
+#> [1261] "IRL24"               "IRL25"               "IRL26"              
+#> [1264] "IRL27"               "IRL28"               "IRL29"              
+#> [1267] "IRL30"               "IRL31"               "IRL32"              
+#> [1270] "IRL33"               "IRL34"               "IRL35"              
+#> [1273] "IRL36"               "IRL37"               "IRL38"              
+#> [1276] "IRL39"               "IRL40"               "IRL41"              
+#> [1279] "IRL42"               "IRL43"               "IRL44"              
+#> [1282] "IRL45"               "IRL46"               "IRL47"              
+#> [1285] "IRL48"               "IRL49"               "IRL50"              
+#> [1288] "IRL51"               "IRL52"               "IRL53"              
+#> [1291] "IRL54"               "IRL55"               "IRL56"              
+#> [1294] "ITA1"                "ITA2"                "ITA3"               
+#> [1297] "ITA4"                "ITA5"                "ITA6"               
+#> [1300] "ITA7"                "ITA8"                "ITA9"               
+#> [1303] "ITA10"               "ITA11"               "ITA12"              
+#> [1306] "ITA13"               "ITA14"               "ITA15"              
+#> [1309] "ITA16"               "ITA17"               "ITA18"              
+#> [1312] "ITA19"               "ITA20"               "ITA21"              
+#> [1315] "ITA22"               "ITA23"               "ITA24"              
+#> [1318] "ITA25"               "ITA26"               "ITA27"              
+#> [1321] "ITA28"               "ITA29"               "ITA30"              
+#> [1324] "ITA31"               "ITA32"               "ITA33"              
+#> [1327] "ITA34"               "ITA35"               "ITA36"              
+#> [1330] "ITA37"               "ITA38"               "ITA39"              
+#> [1333] "ITA40"               "ITA41"               "ITA42"              
+#> [1336] "ITA43"               "ITA44"               "ITA45"              
+#> [1339] "ITA46"               "ITA47"               "ITA48"              
+#> [1342] "ITA49"               "ITA50"               "ITA51"              
+#> [1345] "ITA52"               "ITA53"               "ITA54"              
+#> [1348] "ITA55"               "ITA56"               "JPN1"               
+#> [1351] "JPN2"                "JPN3"                "JPN4"               
+#> [1354] "JPN5"                "JPN6"                "JPN7"               
+#> [1357] "JPN8"                "JPN9"                "JPN10"              
+#> [1360] "JPN11"               "JPN12"               "JPN13"              
+#> [1363] "JPN14"               "JPN15"               "JPN16"              
+#> [1366] "JPN17"               "JPN18"               "JPN19"              
+#> [1369] "JPN20"               "JPN21"               "JPN22"              
+#> [1372] "JPN23"               "JPN24"               "JPN25"              
+#> [1375] "JPN26"               "JPN27"               "JPN28"              
+#> [1378] "JPN29"               "JPN30"               "JPN31"              
+#> [1381] "JPN32"               "JPN33"               "JPN34"              
+#> [1384] "JPN35"               "JPN36"               "JPN37"              
+#> [1387] "JPN38"               "JPN39"               "JPN40"              
+#> [1390] "JPN41"               "JPN42"               "JPN43"              
+#> [1393] "JPN44"               "JPN45"               "JPN46"              
+#> [1396] "JPN47"               "JPN48"               "JPN49"              
+#> [1399] "JPN50"               "JPN51"               "JPN52"              
+#> [1402] "JPN53"               "JPN54"               "JPN55"              
+#> [1405] "JPN56"               "KOR1"                "KOR2"               
+#> [1408] "KOR3"                "KOR4"                "KOR5"               
+#> [1411] "KOR6"                "KOR7"                "KOR8"               
+#> [1414] "KOR9"                "KOR10"               "KOR11"              
+#> [1417] "KOR12"               "KOR13"               "KOR14"              
+#> [1420] "KOR15"               "KOR16"               "KOR17"              
+#> [1423] "KOR18"               "KOR19"               "KOR20"              
+#> [1426] "KOR21"               "KOR22"               "KOR23"              
+#> [1429] "KOR24"               "KOR25"               "KOR26"              
+#> [1432] "KOR27"               "KOR28"               "KOR29"              
+#> [1435] "KOR30"               "KOR31"               "KOR32"              
+#> [1438] "KOR33"               "KOR34"               "KOR35"              
+#> [1441] "KOR36"               "KOR37"               "KOR38"              
+#> [1444] "KOR39"               "KOR40"               "KOR41"              
+#> [1447] "KOR42"               "KOR43"               "KOR44"              
+#> [1450] "KOR45"               "KOR46"               "KOR47"              
+#> [1453] "KOR48"               "KOR49"               "KOR50"              
+#> [1456] "KOR51"               "KOR52"               "KOR53"              
+#> [1459] "KOR54"               "KOR55"               "KOR56"              
+#> [1462] "LTU1"                "LTU2"                "LTU3"               
+#> [1465] "LTU4"                "LTU5"                "LTU6"               
+#> [1468] "LTU7"                "LTU8"                "LTU9"               
+#> [1471] "LTU10"               "LTU11"               "LTU12"              
+#> [1474] "LTU13"               "LTU14"               "LTU15"              
+#> [1477] "LTU16"               "LTU17"               "LTU18"              
+#> [1480] "LTU19"               "LTU20"               "LTU21"              
+#> [1483] "LTU22"               "LTU23"               "LTU24"              
+#> [1486] "LTU25"               "LTU26"               "LTU27"              
+#> [1489] "LTU28"               "LTU29"               "LTU30"              
+#> [1492] "LTU31"               "LTU32"               "LTU33"              
+#> [1495] "LTU34"               "LTU35"               "LTU36"              
+#> [1498] "LTU37"               "LTU38"               "LTU39"              
+#> [1501] "LTU40"               "LTU41"               "LTU42"              
+#> [1504] "LTU43"               "LTU44"               "LTU45"              
+#> [1507] "LTU46"               "LTU47"               "LTU48"              
+#> [1510] "LTU49"               "LTU50"               "LTU51"              
+#> [1513] "LTU52"               "LTU53"               "LTU54"              
+#> [1516] "LTU55"               "LTU56"               "LUX1"               
+#> [1519] "LUX2"                "LUX3"                "LUX4"               
+#> [1522] "LUX5"                "LUX6"                "LUX7"               
+#> [1525] "LUX8"                "LUX9"                "LUX10"              
+#> [1528] "LUX11"               "LUX12"               "LUX13"              
+#> [1531] "LUX14"               "LUX15"               "LUX16"              
+#> [1534] "LUX17"               "LUX18"               "LUX19"              
+#> [1537] "LUX20"               "LUX21"               "LUX22"              
+#> [1540] "LUX23"               "LUX24"               "LUX25"              
+#> [1543] "LUX26"               "LUX27"               "LUX28"              
+#> [1546] "LUX29"               "LUX30"               "LUX31"              
+#> [1549] "LUX32"               "LUX33"               "LUX34"              
+#> [1552] "LUX35"               "LUX36"               "LUX37"              
+#> [1555] "LUX38"               "LUX39"               "LUX40"              
+#> [1558] "LUX41"               "LUX42"               "LUX43"              
+#> [1561] "LUX44"               "LUX45"               "LUX46"              
+#> [1564] "LUX47"               "LUX48"               "LUX49"              
+#> [1567] "LUX50"               "LUX51"               "LUX52"              
+#> [1570] "LUX53"               "LUX54"               "LUX55"              
+#> [1573] "LUX56"               "LVA1"                "LVA2"               
+#> [1576] "LVA3"                "LVA4"                "LVA5"               
+#> [1579] "LVA6"                "LVA7"                "LVA8"               
+#> [1582] "LVA9"                "LVA10"               "LVA11"              
+#> [1585] "LVA12"               "LVA13"               "LVA14"              
+#> [1588] "LVA15"               "LVA16"               "LVA17"              
+#> [1591] "LVA18"               "LVA19"               "LVA20"              
+#> [1594] "LVA21"               "LVA22"               "LVA23"              
+#> [1597] "LVA24"               "LVA25"               "LVA26"              
+#> [1600] "LVA27"               "LVA28"               "LVA29"              
+#> [1603] "LVA30"               "LVA31"               "LVA32"              
+#> [1606] "LVA33"               "LVA34"               "LVA35"              
+#> [1609] "LVA36"               "LVA37"               "LVA38"              
+#> [1612] "LVA39"               "LVA40"               "LVA41"              
+#> [1615] "LVA42"               "LVA43"               "LVA44"              
+#> [1618] "LVA45"               "LVA46"               "LVA47"              
+#> [1621] "LVA48"               "LVA49"               "LVA50"              
+#> [1624] "LVA51"               "LVA52"               "LVA53"              
+#> [1627] "LVA54"               "LVA55"               "LVA56"              
+#> [1630] "MEX1"                "MEX2"                "MEX3"               
+#> [1633] "MEX4"                "MEX5"                "MEX6"               
+#> [1636] "MEX7"                "MEX8"                "MEX9"               
+#> [1639] "MEX10"               "MEX11"               "MEX12"              
+#> [1642] "MEX13"               "MEX14"               "MEX15"              
+#> [1645] "MEX16"               "MEX17"               "MEX18"              
+#> [1648] "MEX19"               "MEX20"               "MEX21"              
+#> [1651] "MEX22"               "MEX23"               "MEX24"              
+#> [1654] "MEX25"               "MEX26"               "MEX27"              
+#> [1657] "MEX28"               "MEX29"               "MEX30"              
+#> [1660] "MEX31"               "MEX32"               "MEX33"              
+#> [1663] "MEX34"               "MEX35"               "MEX36"              
+#> [1666] "MEX37"               "MEX38"               "MEX39"              
+#> [1669] "MEX40"               "MEX41"               "MEX42"              
+#> [1672] "MEX43"               "MEX44"               "MEX45"              
+#> [1675] "MEX46"               "MEX47"               "MEX48"              
+#> [1678] "MEX49"               "MEX50"               "MEX51"              
+#> [1681] "MEX52"               "MEX53"               "MEX54"              
+#> [1684] "MEX55"               "MEX56"               "MLT1"               
+#> [1687] "MLT2"                "MLT3"                "MLT4"               
+#> [1690] "MLT5"                "MLT6"                "MLT7"               
+#> [1693] "MLT8"                "MLT9"                "MLT10"              
+#> [1696] "MLT11"               "MLT12"               "MLT13"              
+#> [1699] "MLT14"               "MLT15"               "MLT16"              
+#> [1702] "MLT17"               "MLT18"               "MLT19"              
+#> [1705] "MLT20"               "MLT21"               "MLT22"              
+#> [1708] "MLT23"               "MLT24"               "MLT25"              
+#> [1711] "MLT26"               "MLT27"               "MLT28"              
+#> [1714] "MLT29"               "MLT30"               "MLT31"              
+#> [1717] "MLT32"               "MLT33"               "MLT34"              
+#> [1720] "MLT35"               "MLT36"               "MLT37"              
+#> [1723] "MLT38"               "MLT39"               "MLT40"              
+#> [1726] "MLT41"               "MLT42"               "MLT43"              
+#> [1729] "MLT44"               "MLT45"               "MLT46"              
+#> [1732] "MLT47"               "MLT48"               "MLT49"              
+#> [1735] "MLT50"               "MLT51"               "MLT52"              
+#> [1738] "MLT53"               "MLT54"               "MLT55"              
+#> [1741] "MLT56"               "NLD1"                "NLD2"               
+#> [1744] "NLD3"                "NLD4"                "NLD5"               
+#> [1747] "NLD6"                "NLD7"                "NLD8"               
+#> [1750] "NLD9"                "NLD10"               "NLD11"              
+#> [1753] "NLD12"               "NLD13"               "NLD14"              
+#> [1756] "NLD15"               "NLD16"               "NLD17"              
+#> [1759] "NLD18"               "NLD19"               "NLD20"              
+#> [1762] "NLD21"               "NLD22"               "NLD23"              
+#> [1765] "NLD24"               "NLD25"               "NLD26"              
+#> [1768] "NLD27"               "NLD28"               "NLD29"              
+#> [1771] "NLD30"               "NLD31"               "NLD32"              
+#> [1774] "NLD33"               "NLD34"               "NLD35"              
+#> [1777] "NLD36"               "NLD37"               "NLD38"              
+#> [1780] "NLD39"               "NLD40"               "NLD41"              
+#> [1783] "NLD42"               "NLD43"               "NLD44"              
+#> [1786] "NLD45"               "NLD46"               "NLD47"              
+#> [1789] "NLD48"               "NLD49"               "NLD50"              
+#> [1792] "NLD51"               "NLD52"               "NLD53"              
+#> [1795] "NLD54"               "NLD55"               "NLD56"              
+#> [1798] "NOR1"                "NOR2"                "NOR3"               
+#> [1801] "NOR4"                "NOR5"                "NOR6"               
+#> [1804] "NOR7"                "NOR8"                "NOR9"               
+#> [1807] "NOR10"               "NOR11"               "NOR12"              
+#> [1810] "NOR13"               "NOR14"               "NOR15"              
+#> [1813] "NOR16"               "NOR17"               "NOR18"              
+#> [1816] "NOR19"               "NOR20"               "NOR21"              
+#> [1819] "NOR22"               "NOR23"               "NOR24"              
+#> [1822] "NOR25"               "NOR26"               "NOR27"              
+#> [1825] "NOR28"               "NOR29"               "NOR30"              
+#> [1828] "NOR31"               "NOR32"               "NOR33"              
+#> [1831] "NOR34"               "NOR35"               "NOR36"              
+#> [1834] "NOR37"               "NOR38"               "NOR39"              
+#> [1837] "NOR40"               "NOR41"               "NOR42"              
+#> [1840] "NOR43"               "NOR44"               "NOR45"              
+#> [1843] "NOR46"               "NOR47"               "NOR48"              
+#> [1846] "NOR49"               "NOR50"               "NOR51"              
+#> [1849] "NOR52"               "NOR53"               "NOR54"              
+#> [1852] "NOR55"               "NOR56"               "POL1"               
+#> [1855] "POL2"                "POL3"                "POL4"               
+#> [1858] "POL5"                "POL6"                "POL7"               
+#> [1861] "POL8"                "POL9"                "POL10"              
+#> [1864] "POL11"               "POL12"               "POL13"              
+#> [1867] "POL14"               "POL15"               "POL16"              
+#> [1870] "POL17"               "POL18"               "POL19"              
+#> [1873] "POL20"               "POL21"               "POL22"              
+#> [1876] "POL23"               "POL24"               "POL25"              
+#> [1879] "POL26"               "POL27"               "POL28"              
+#> [1882] "POL29"               "POL30"               "POL31"              
+#> [1885] "POL32"               "POL33"               "POL34"              
+#> [1888] "POL35"               "POL36"               "POL37"              
+#> [1891] "POL38"               "POL39"               "POL40"              
+#> [1894] "POL41"               "POL42"               "POL43"              
+#> [1897] "POL44"               "POL45"               "POL46"              
+#> [1900] "POL47"               "POL48"               "POL49"              
+#> [1903] "POL50"               "POL51"               "POL52"              
+#> [1906] "POL53"               "POL54"               "POL55"              
+#> [1909] "POL56"               "PRT1"                "PRT2"               
+#> [1912] "PRT3"                "PRT4"                "PRT5"               
+#> [1915] "PRT6"                "PRT7"                "PRT8"               
+#> [1918] "PRT9"                "PRT10"               "PRT11"              
+#> [1921] "PRT12"               "PRT13"               "PRT14"              
+#> [1924] "PRT15"               "PRT16"               "PRT17"              
+#> [1927] "PRT18"               "PRT19"               "PRT20"              
+#> [1930] "PRT21"               "PRT22"               "PRT23"              
+#> [1933] "PRT24"               "PRT25"               "PRT26"              
+#> [1936] "PRT27"               "PRT28"               "PRT29"              
+#> [1939] "PRT30"               "PRT31"               "PRT32"              
+#> [1942] "PRT33"               "PRT34"               "PRT35"              
+#> [1945] "PRT36"               "PRT37"               "PRT38"              
+#> [1948] "PRT39"               "PRT40"               "PRT41"              
+#> [1951] "PRT42"               "PRT43"               "PRT44"              
+#> [1954] "PRT45"               "PRT46"               "PRT47"              
+#> [1957] "PRT48"               "PRT49"               "PRT50"              
+#> [1960] "PRT51"               "PRT52"               "PRT53"              
+#> [1963] "PRT54"               "PRT55"               "PRT56"              
+#> [1966] "ROU1"                "ROU2"                "ROU3"               
+#> [1969] "ROU4"                "ROU5"                "ROU6"               
+#> [1972] "ROU7"                "ROU8"                "ROU9"               
+#> [1975] "ROU10"               "ROU11"               "ROU12"              
+#> [1978] "ROU13"               "ROU14"               "ROU15"              
+#> [1981] "ROU16"               "ROU17"               "ROU18"              
+#> [1984] "ROU19"               "ROU20"               "ROU21"              
+#> [1987] "ROU22"               "ROU23"               "ROU24"              
+#> [1990] "ROU25"               "ROU26"               "ROU27"              
+#> [1993] "ROU28"               "ROU29"               "ROU30"              
+#> [1996] "ROU31"               "ROU32"               "ROU33"              
+#> [1999] "ROU34"               "ROU35"               "ROU36"              
+#> [2002] "ROU37"               "ROU38"               "ROU39"              
+#> [2005] "ROU40"               "ROU41"               "ROU42"              
+#> [2008] "ROU43"               "ROU44"               "ROU45"              
+#> [2011] "ROU46"               "ROU47"               "ROU48"              
+#> [2014] "ROU49"               "ROU50"               "ROU51"              
+#> [2017] "ROU52"               "ROU53"               "ROU54"              
+#> [2020] "ROU55"               "ROU56"               "RUS1"               
+#> [2023] "RUS2"                "RUS3"                "RUS4"               
+#> [2026] "RUS5"                "RUS6"                "RUS7"               
+#> [2029] "RUS8"                "RUS9"                "RUS10"              
+#> [2032] "RUS11"               "RUS12"               "RUS13"              
+#> [2035] "RUS14"               "RUS15"               "RUS16"              
+#> [2038] "RUS17"               "RUS18"               "RUS19"              
+#> [2041] "RUS20"               "RUS21"               "RUS22"              
+#> [2044] "RUS23"               "RUS24"               "RUS25"              
+#> [2047] "RUS26"               "RUS27"               "RUS28"              
+#> [2050] "RUS29"               "RUS30"               "RUS31"              
+#> [2053] "RUS32"               "RUS33"               "RUS34"              
+#> [2056] "RUS35"               "RUS36"               "RUS37"              
+#> [2059] "RUS38"               "RUS39"               "RUS40"              
+#> [2062] "RUS41"               "RUS42"               "RUS43"              
+#> [2065] "RUS44"               "RUS45"               "RUS46"              
+#> [2068] "RUS47"               "RUS48"               "RUS49"              
+#> [2071] "RUS50"               "RUS51"               "RUS52"              
+#> [2074] "RUS53"               "RUS54"               "RUS55"              
+#> [2077] "RUS56"               "SVK1"                "SVK2"               
+#> [2080] "SVK3"                "SVK4"                "SVK5"               
+#> [2083] "SVK6"                "SVK7"                "SVK8"               
+#> [2086] "SVK9"                "SVK10"               "SVK11"              
+#> [2089] "SVK12"               "SVK13"               "SVK14"              
+#> [2092] "SVK15"               "SVK16"               "SVK17"              
+#> [2095] "SVK18"               "SVK19"               "SVK20"              
+#> [2098] "SVK21"               "SVK22"               "SVK23"              
+#> [2101] "SVK24"               "SVK25"               "SVK26"              
+#> [2104] "SVK27"               "SVK28"               "SVK29"              
+#> [2107] "SVK30"               "SVK31"               "SVK32"              
+#> [2110] "SVK33"               "SVK34"               "SVK35"              
+#> [2113] "SVK36"               "SVK37"               "SVK38"              
+#> [2116] "SVK39"               "SVK40"               "SVK41"              
+#> [2119] "SVK42"               "SVK43"               "SVK44"              
+#> [2122] "SVK45"               "SVK46"               "SVK47"              
+#> [2125] "SVK48"               "SVK49"               "SVK50"              
+#> [2128] "SVK51"               "SVK52"               "SVK53"              
+#> [2131] "SVK54"               "SVK55"               "SVK56"              
+#> [2134] "SVN1"                "SVN2"                "SVN3"               
+#> [2137] "SVN4"                "SVN5"                "SVN6"               
+#> [2140] "SVN7"                "SVN8"                "SVN9"               
+#> [2143] "SVN10"               "SVN11"               "SVN12"              
+#> [2146] "SVN13"               "SVN14"               "SVN15"              
+#> [2149] "SVN16"               "SVN17"               "SVN18"              
+#> [2152] "SVN19"               "SVN20"               "SVN21"              
+#> [2155] "SVN22"               "SVN23"               "SVN24"              
+#> [2158] "SVN25"               "SVN26"               "SVN27"              
+#> [2161] "SVN28"               "SVN29"               "SVN30"              
+#> [2164] "SVN31"               "SVN32"               "SVN33"              
+#> [2167] "SVN34"               "SVN35"               "SVN36"              
+#> [2170] "SVN37"               "SVN38"               "SVN39"              
+#> [2173] "SVN40"               "SVN41"               "SVN42"              
+#> [2176] "SVN43"               "SVN44"               "SVN45"              
+#> [2179] "SVN46"               "SVN47"               "SVN48"              
+#> [2182] "SVN49"               "SVN50"               "SVN51"              
+#> [2185] "SVN52"               "SVN53"               "SVN54"              
+#> [2188] "SVN55"               "SVN56"               "SWE1"               
+#> [2191] "SWE2"                "SWE3"                "SWE4"               
+#> [2194] "SWE5"                "SWE6"                "SWE7"               
+#> [2197] "SWE8"                "SWE9"                "SWE10"              
+#> [2200] "SWE11"               "SWE12"               "SWE13"              
+#> [2203] "SWE14"               "SWE15"               "SWE16"              
+#> [2206] "SWE17"               "SWE18"               "SWE19"              
+#> [2209] "SWE20"               "SWE21"               "SWE22"              
+#> [2212] "SWE23"               "SWE24"               "SWE25"              
+#> [2215] "SWE26"               "SWE27"               "SWE28"              
+#> [2218] "SWE29"               "SWE30"               "SWE31"              
+#> [2221] "SWE32"               "SWE33"               "SWE34"              
+#> [2224] "SWE35"               "SWE36"               "SWE37"              
+#> [2227] "SWE38"               "SWE39"               "SWE40"              
+#> [2230] "SWE41"               "SWE42"               "SWE43"              
+#> [2233] "SWE44"               "SWE45"               "SWE46"              
+#> [2236] "SWE47"               "SWE48"               "SWE49"              
+#> [2239] "SWE50"               "SWE51"               "SWE52"              
+#> [2242] "SWE53"               "SWE54"               "SWE55"              
+#> [2245] "SWE56"               "TUR1"                "TUR2"               
+#> [2248] "TUR3"                "TUR4"                "TUR5"               
+#> [2251] "TUR6"                "TUR7"                "TUR8"               
+#> [2254] "TUR9"                "TUR10"               "TUR11"              
+#> [2257] "TUR12"               "TUR13"               "TUR14"              
+#> [2260] "TUR15"               "TUR16"               "TUR17"              
+#> [2263] "TUR18"               "TUR19"               "TUR20"              
+#> [2266] "TUR21"               "TUR22"               "TUR23"              
+#> [2269] "TUR24"               "TUR25"               "TUR26"              
+#> [2272] "TUR27"               "TUR28"               "TUR29"              
+#> [2275] "TUR30"               "TUR31"               "TUR32"              
+#> [2278] "TUR33"               "TUR34"               "TUR35"              
+#> [2281] "TUR36"               "TUR37"               "TUR38"              
+#> [2284] "TUR39"               "TUR40"               "TUR41"              
+#> [2287] "TUR42"               "TUR43"               "TUR44"              
+#> [2290] "TUR45"               "TUR46"               "TUR47"              
+#> [2293] "TUR48"               "TUR49"               "TUR50"              
+#> [2296] "TUR51"               "TUR52"               "TUR53"              
+#> [2299] "TUR54"               "TUR55"               "TUR56"              
+#> [2302] "TWN1"                "TWN2"                "TWN3"               
+#> [2305] "TWN4"                "TWN5"                "TWN6"               
+#> [2308] "TWN7"                "TWN8"                "TWN9"               
+#> [2311] "TWN10"               "TWN11"               "TWN12"              
+#> [2314] "TWN13"               "TWN14"               "TWN15"              
+#> [2317] "TWN16"               "TWN17"               "TWN18"              
+#> [2320] "TWN19"               "TWN20"               "TWN21"              
+#> [2323] "TWN22"               "TWN23"               "TWN24"              
+#> [2326] "TWN25"               "TWN26"               "TWN27"              
+#> [2329] "TWN28"               "TWN29"               "TWN30"              
+#> [2332] "TWN31"               "TWN32"               "TWN33"              
+#> [2335] "TWN34"               "TWN35"               "TWN36"              
+#> [2338] "TWN37"               "TWN38"               "TWN39"              
+#> [2341] "TWN40"               "TWN41"               "TWN42"              
+#> [2344] "TWN43"               "TWN44"               "TWN45"              
+#> [2347] "TWN46"               "TWN47"               "TWN48"              
+#> [2350] "TWN49"               "TWN50"               "TWN51"              
+#> [2353] "TWN52"               "TWN53"               "TWN54"              
+#> [2356] "TWN55"               "TWN56"               "USA1"               
+#> [2359] "USA2"                "USA3"                "USA4"               
+#> [2362] "USA5"                "USA6"                "USA7"               
+#> [2365] "USA8"                "USA9"                "USA10"              
+#> [2368] "USA11"               "USA12"               "USA13"              
+#> [2371] "USA14"               "USA15"               "USA16"              
+#> [2374] "USA17"               "USA18"               "USA19"              
+#> [2377] "USA20"               "USA21"               "USA22"              
+#> [2380] "USA23"               "USA24"               "USA25"              
+#> [2383] "USA26"               "USA27"               "USA28"              
+#> [2386] "USA29"               "USA30"               "USA31"              
+#> [2389] "USA32"               "USA33"               "USA34"              
+#> [2392] "USA35"               "USA36"               "USA37"              
+#> [2395] "USA38"               "USA39"               "USA40"              
+#> [2398] "USA41"               "USA42"               "USA43"              
+#> [2401] "USA44"               "USA45"               "USA46"              
+#> [2404] "USA47"               "USA48"               "USA49"              
+#> [2407] "USA50"               "USA51"               "USA52"              
+#> [2410] "USA53"               "USA54"               "USA55"              
+#> [2413] "USA56"               "ROW1"                "ROW2"               
+#> [2416] "ROW3"                "ROW4"                "ROW5"               
+#> [2419] "ROW6"                "ROW7"                "ROW8"               
+#> [2422] "ROW9"                "ROW10"               "ROW11"              
+#> [2425] "ROW12"               "ROW13"               "ROW14"              
+#> [2428] "ROW15"               "ROW16"               "ROW17"              
+#> [2431] "ROW18"               "ROW19"               "ROW20"              
+#> [2434] "ROW21"               "ROW22"               "ROW23"              
+#> [2437] "ROW24"               "ROW25"               "ROW26"              
+#> [2440] "ROW27"               "ROW28"               "ROW29"              
+#> [2443] "ROW30"               "ROW31"               "ROW32"              
+#> [2446] "ROW33"               "ROW34"               "ROW35"              
+#> [2449] "ROW36"               "ROW37"               "ROW38"              
+#> [2452] "ROW39"               "ROW40"               "ROW41"              
+#> [2455] "ROW42"               "ROW43"               "ROW44"              
+#> [2458] "ROW45"               "ROW46"               "ROW47"              
+#> [2461] "ROW48"               "ROW49"               "ROW50"              
+#> [2464] "ROW51"               "ROW52"               "ROW53"              
+#> [2467] "ROW54"               "ROW55"               "ROW56"              
+#> [2470] "AUS57"               "AUS58"               "AUS59"              
+#> [2473] "AUS60"               "AUS61"               "AUT57"              
+#> [2476] "AUT58"               "AUT59"               "AUT60"              
+#> [2479] "AUT61"               "BEL57"               "BEL58"              
+#> [2482] "BEL59"               "BEL60"               "BEL61"              
+#> [2485] "BGR57"               "BGR58"               "BGR59"              
+#> [2488] "BGR60"               "BGR61"               "BRA57"              
+#> [2491] "BRA58"               "BRA59"               "BRA60"              
+#> [2494] "BRA61"               "CAN57"               "CAN58"              
+#> [2497] "CAN59"               "CAN60"               "CAN61"              
+#> [2500] "CHE57"               "CHE58"               "CHE59"              
+#> [2503] "CHE60"               "CHE61"               "CHN57"              
+#> [2506] "CHN58"               "CHN59"               "CHN60"              
+#> [2509] "CHN61"               "CYP57"               "CYP58"              
+#> [2512] "CYP59"               "CYP60"               "CYP61"              
+#> [2515] "CZE57"               "CZE58"               "CZE59"              
+#> [2518] "CZE60"               "CZE61"               "DEU57"              
+#> [2521] "DEU58"               "DEU59"               "DEU60"              
+#> [2524] "DEU61"               "DNK57"               "DNK58"              
+#> [2527] "DNK59"               "DNK60"               "DNK61"              
+#> [2530] "ESP57"               "ESP58"               "ESP59"              
+#> [2533] "ESP60"               "ESP61"               "EST57"              
+#> [2536] "EST58"               "EST59"               "EST60"              
+#> [2539] "EST61"               "FIN57"               "FIN58"              
+#> [2542] "FIN59"               "FIN60"               "FIN61"              
+#> [2545] "FRA57"               "FRA58"               "FRA59"              
+#> [2548] "FRA60"               "FRA61"               "GBR57"              
+#> [2551] "GBR58"               "GBR59"               "GBR60"              
+#> [2554] "GBR61"               "GRC57"               "GRC58"              
+#> [2557] "GRC59"               "GRC60"               "GRC61"              
+#> [2560] "HRV57"               "HRV58"               "HRV59"              
+#> [2563] "HRV60"               "HRV61"               "HUN57"              
+#> [2566] "HUN58"               "HUN59"               "HUN60"              
+#> [2569] "HUN61"               "IDN57"               "IDN58"              
+#> [2572] "IDN59"               "IDN60"               "IDN61"              
+#> [2575] "IND57"               "IND58"               "IND59"              
+#> [2578] "IND60"               "IND61"               "IRL57"              
+#> [2581] "IRL58"               "IRL59"               "IRL60"              
+#> [2584] "IRL61"               "ITA57"               "ITA58"              
+#> [2587] "ITA59"               "ITA60"               "ITA61"              
+#> [2590] "JPN57"               "JPN58"               "JPN59"              
+#> [2593] "JPN60"               "JPN61"               "KOR57"              
+#> [2596] "KOR58"               "KOR59"               "KOR60"              
+#> [2599] "KOR61"               "LTU57"               "LTU58"              
+#> [2602] "LTU59"               "LTU60"               "LTU61"              
+#> [2605] "LUX57"               "LUX58"               "LUX59"              
+#> [2608] "LUX60"               "LUX61"               "LVA57"              
+#> [2611] "LVA58"               "LVA59"               "LVA60"              
+#> [2614] "LVA61"               "MEX57"               "MEX58"              
+#> [2617] "MEX59"               "MEX60"               "MEX61"              
+#> [2620] "MLT57"               "MLT58"               "MLT59"              
+#> [2623] "MLT60"               "MLT61"               "NLD57"              
+#> [2626] "NLD58"               "NLD59"               "NLD60"              
+#> [2629] "NLD61"               "NOR57"               "NOR58"              
+#> [2632] "NOR59"               "NOR60"               "NOR61"              
+#> [2635] "POL57"               "POL58"               "POL59"              
+#> [2638] "POL60"               "POL61"               "PRT57"              
+#> [2641] "PRT58"               "PRT59"               "PRT60"              
+#> [2644] "PRT61"               "ROU57"               "ROU58"              
+#> [2647] "ROU59"               "ROU60"               "ROU61"              
+#> [2650] "RUS57"               "RUS58"               "RUS59"              
+#> [2653] "RUS60"               "RUS61"               "SVK57"              
+#> [2656] "SVK58"               "SVK59"               "SVK60"              
+#> [2659] "SVK61"               "SVN57"               "SVN58"              
+#> [2662] "SVN59"               "SVN60"               "SVN61"              
+#> [2665] "SWE57"               "SWE58"               "SWE59"              
+#> [2668] "SWE60"               "SWE61"               "TUR57"              
+#> [2671] "TUR58"               "TUR59"               "TUR60"              
+#> [2674] "TUR61"               "TWN57"               "TWN58"              
+#> [2677] "TWN59"               "TWN60"               "TWN61"              
+#> [2680] "USA57"               "USA58"               "USA59"              
+#> [2683] "USA60"               "USA61"               "ROW57"              
+#> [2686] "ROW58"               "ROW59"               "ROW60"              
+#> [2689] "ROW61"               "TOT"
+```
+
+Expanding the `Country` column, we find that it has 45 unique values, corresponding to the 44 countries in the WIOD 2014 release plus a "Total" row. The `IndustryDescription` column has 56 unique values, corresponding to the 56 sectors in the WIOD 2014 release, plus a total row for the intermediate transactions matrix and the Value Added matrix.
+
+
+``` r
+# unique countries
+unique(wiot$Country)
+#>  [1] "AUS" "AUT" "BEL" "BGR" "BRA" "CAN" "CHE" "CHN" "CYP" "CZE" "DEU" "DNK"
+#> [13] "ESP" "EST" "FIN" "FRA" "GBR" "GRC" "HRV" "HUN" "IDN" "IND" "IRL" "ITA"
+#> [25] "JPN" "KOR" "LTU" "LUX" "LVA" "MEX" "MLT" "NLD" "NOR" "POL" "PRT" "ROU"
+#> [37] "RUS" "SVK" "SVN" "SWE" "TUR" "TWN" "USA" "ROW" "TOT"
+
+# unique sectors
+unique(wiot$IndustryDescription)
+#>  [1] "Crop and animal production, hunting and related service activities"                                                                                 
+#>  [2] "Forestry and logging"                                                                                                                               
+#>  [3] "Fishing and aquaculture"                                                                                                                            
+#>  [4] "Mining and quarrying"                                                                                                                               
+#>  [5] "Manufacture of food products, beverages and tobacco products"                                                                                       
+#>  [6] "Manufacture of textiles, wearing apparel and leather products"                                                                                      
+#>  [7] "Manufacture of wood and of products of wood and cork, except furniture; manufacture of articles of straw and plaiting materials"                    
+#>  [8] "Manufacture of paper and paper products"                                                                                                            
+#>  [9] "Printing and reproduction of recorded media"                                                                                                        
+#> [10] "Manufacture of coke and refined petroleum products "                                                                                                
+#> [11] "Manufacture of chemicals and chemical products "                                                                                                    
+#> [12] "Manufacture of basic pharmaceutical products and pharmaceutical preparations"                                                                       
+#> [13] "Manufacture of rubber and plastic products"                                                                                                         
+#> [14] "Manufacture of other non-metallic mineral products"                                                                                                 
+#> [15] "Manufacture of basic metals"                                                                                                                        
+#> [16] "Manufacture of fabricated metal products, except machinery and equipment"                                                                           
+#> [17] "Manufacture of computer, electronic and optical products"                                                                                           
+#> [18] "Manufacture of electrical equipment"                                                                                                                
+#> [19] "Manufacture of machinery and equipment n.e.c."                                                                                                      
+#> [20] "Manufacture of motor vehicles, trailers and semi-trailers"                                                                                          
+#> [21] "Manufacture of other transport equipment"                                                                                                           
+#> [22] "Manufacture of furniture; other manufacturing"                                                                                                      
+#> [23] "Repair and installation of machinery and equipment"                                                                                                 
+#> [24] "Electricity, gas, steam and air conditioning supply"                                                                                                
+#> [25] "Water collection, treatment and supply"                                                                                                             
+#> [26] "Sewerage; waste collection, treatment and disposal activities; materials recovery; remediation activities and other waste management services "     
+#> [27] "Construction"                                                                                                                                       
+#> [28] "Wholesale and retail trade and repair of motor vehicles and motorcycles"                                                                            
+#> [29] "Wholesale trade, except of motor vehicles and motorcycles"                                                                                          
+#> [30] "Retail trade, except of motor vehicles and motorcycles"                                                                                             
+#> [31] "Land transport and transport via pipelines"                                                                                                         
+#> [32] "Water transport"                                                                                                                                    
+#> [33] "Air transport"                                                                                                                                      
+#> [34] "Warehousing and support activities for transportation"                                                                                              
+#> [35] "Postal and courier activities"                                                                                                                      
+#> [36] "Accommodation and food service activities"                                                                                                          
+#> [37] "Publishing activities"                                                                                                                              
+#> [38] "Motion picture, video and television programme production, sound recording and music publishing activities; programming and broadcasting activities"
+#> [39] "Telecommunications"                                                                                                                                 
+#> [40] "Computer programming, consultancy and related activities; information service activities"                                                           
+#> [41] "Financial service activities, except insurance and pension funding"                                                                                 
+#> [42] "Insurance, reinsurance and pension funding, except compulsory social security"                                                                      
+#> [43] "Activities auxiliary to financial services and insurance activities"                                                                                
+#> [44] "Real estate activities"                                                                                                                             
+#> [45] "Legal and accounting activities; activities of head offices; management consultancy activities"                                                     
+#> [46] "Architectural and engineering activities; technical testing and analysis"                                                                           
+#> [47] "Scientific research and development"                                                                                                                
+#> [48] "Advertising and market research"                                                                                                                    
+#> [49] "Other professional, scientific and technical activities; veterinary activities"                                                                     
+#> [50] "Administrative and support service activities"                                                                                                      
+#> [51] "Public administration and defence; compulsory social security"                                                                                      
+#> [52] "Education"                                                                                                                                          
+#> [53] "Human health and social work activities"                                                                                                            
+#> [54] "Other service activities"                                                                                                                           
+#> [55] "Activities of households as employers; undifferentiated goods- and services-producing activities of households for own use"                         
+#> [56] "Activities of extraterritorial organizations and bodies"                                                                                            
+#> [57] "Total intermediate consumption"                                                                                                                     
+#> [58] "taxes less subsidies on products"                                                                                                                   
+#> [59] "Cif/ fob adjustments on exports"                                                                                                                    
+#> [60] "Direct purchases abroad by residents"                                                                                                               
+#> [61] "Purchases on the domestic territory by non-residents "                                                                                              
+#> [62] "Value added at basic prices"                                                                                                                        
+#> [63] "International Transport Margins"                                                                                                                    
+#> [64] "Output at basic prices"
+
+# structure
+n_countries <- 44
+n_sectors <- 56
+n_interm <- n_countries * n_sectors
+
+# extract intermediate transactions matrix
+Z <- as.matrix(wiot[1:n_interm, 6:(5 + n_interm)])
+
+# total production vector
+x <- as.numeric(wiot[1:n_interm, ncol(wiot)])
+
+# fix zeros to avoid division by zero (NaNs in Leontief Inverse)
+# since Z columns are 0 where x is 0, setting x=1 results in A=0/1=0, which is correct
+x[x == 0] <- 1
+
+x <- matrix(x, nrow = 1)
+
+# extract countries and sectors
+countries_long <- as.character(wiot$Country[1:n_interm])
+sectors_long <- as.character(wiot$IndustryCode[1:n_interm])
+
+# get unique values respecting order
+countries <- unique(countries_long)
+sectors <- unique(sectors_long)
+
+# validating dimensions
+if (length(countries) != n_countries) stop("Number of extracted countries does not match expected 44.")
+if (length(sectors) != n_sectors) stop("Number of extracted sectors does not match expected 56.")
+
+# create miom object
+wiod_miom <- fio::miom$new(
+  id = "wiod_2014",
+  intermediate_transactions = Z,
+  total_production = x,
+  countries = countries,
+  sectors = sectors
+)
+
+print(wiod_miom)
+#> <miom>
+#>   Inherits from: <iom>
+#>   Public:
+#>     add: function (matrix_name, matrix) 
+#>     allocation_coefficients_matrix: NULL
+#>     bilateral_trade: NULL
+#>     clone: function (deep = FALSE) 
+#>     close_model: function (sectors) 
+#>     compute_allocation_coeff: function () 
+#>     compute_field_influence: function (epsilon) 
+#>     compute_ghosh_inverse: function () 
+#>     compute_hypothetical_extraction: function (matrix = "ghosh") 
+#>     compute_key_sectors: function (matrix = "leontief") 
+#>     compute_leontief_inverse: function () 
+#>     compute_multiplier_employment: function () 
+#>     compute_multiplier_output: function () 
+#>     compute_multiplier_taxes: function () 
+#>     compute_multiplier_wages: function () 
+#>     compute_multiregional_multipliers: function () 
+#>     compute_tech_coeff: function () 
+#>     countries: AUS AUT BEL BGR BRA CAN CHE CHN CYP CZE DEU DNK ESP EST  ...
+#>     domestic_intermediate_transactions: list
+#>     exports: NULL
+#>     extract_country: function (country) 
+#>     field_influence: NULL
+#>     final_demand_matrix: NULL
+#>     final_demand_others: NULL
+#>     get_bilateral_trade: function (origin_country, destination_country) 
+#>     get_country_summary: function () 
+#>     get_net_spillover_matrix: function () 
+#>     get_regional_interdependence: function () 
+#>     get_spillover_matrix: function () 
+#>     ghosh_inverse_matrix: NULL
+#>     government_consumption: NULL
+#>     household_consumption: NULL
+#>     hypothetical_extraction: NULL
+#>     id: wiod_2014
+#>     imports: NULL
+#>     initialize: function (id, intermediate_transactions, total_production, countries, 
+#>     intermediate_transactions: 12924.1796913047 83.0296371764357 19.1477309183893 115.9 ...
+#>     international_intermediate_transactions: list
+#>     key_sectors: NULL
+#>     leontief_inverse_matrix: NULL
+#>     multiplier_employment: NULL
+#>     multiplier_output: NULL
+#>     multiplier_taxes: NULL
+#>     multiplier_wages: NULL
+#>     multiregional_multipliers: NULL
+#>     n_countries: 44
+#>     n_sectors: 56
+#>     occupation: NULL
+#>     operating_income: NULL
+#>     remove: function (matrix_name) 
+#>     sectors: A01 A02 A03 B C10-C12 C13-C15 C16 C17 C18 C19 C20 C21 C2 ...
+#>     set_max_threads: function (max_threads) 
+#>     taxes: NULL
+#>     technical_coefficients_matrix: NULL
+#>     total_production: 70292.0344922962 2585.37968548282 3175.04439635749 17198 ...
+#>     update_final_demand_matrix: function () 
+#>     update_value_added_matrix: function () 
+#>     value_added_matrix: NULL
+#>     value_added_others: NULL
+#>     wages: NULL
+#>   Private:
+#>     decompose_transactions: function () 
+#>     ensure_labels: function (intermediate_transactions, total_production) 
+#>     iom_elements: function ()
+```
+
+# Analysis
+
+## Technical Coefficients
+
+Compute the technical coefficients matrix ($A$).
+
+
+``` r
+wiod_miom$compute_tech_coeff()
+
+# inspect a small corner of the matrix
+wiod_miom$technical_coefficients_matrix[1:5, 1:5]
+#>           AUS1         AUS2         AUS3         AUS4         AUS5
+#> 1 0.1838640720 4.349621e-02 0.0719613440 3.133357e-03 3.010553e-01
+#> 2 0.0011812098 7.793824e-02 0.0000602552 9.995446e-05 3.169105e-05
+#> 3 0.0002724026 4.173170e-07 0.0060177743 2.458415e-05 3.785148e-03
+#> 4 0.0016492601 2.688347e-04 0.0018659508 2.611876e-02 3.971178e-03
+#> 5 0.0226318757 3.403999e-04 0.0133984772 1.180404e-03 1.299549e-01
+```
+
+## Leontief Inverse
+
+Compute the Leontief inverse matrix ($L = (I-A)^{-1}$).
+
+
+``` r
+wiod_miom$compute_leontief_inverse()
+
+# inspect a small corner of the matrix
+wiod_miom$leontief_inverse_matrix[1:5, 1:5]
+#>           AUS1         AUS2        AUS3         AUS4        AUS5
+#> 1 1.2407423187 5.973791e-02 0.097460580 0.0078478729 0.432622975
+#> 2 0.0021694662 1.084703e+00 0.000448754 0.0005569042 0.001053428
+#> 3 0.0006396819 8.298081e-05 1.006266345 0.0001902368 0.004765386
+#> 4 0.0168505348 5.076858e-02 0.025603805 1.0412554156 0.016683166
+#> 5 0.0360356137 3.166686e-03 0.020243954 0.0057830393 1.165478279
+```
+
+## Multipliers
+
+Compute multi-regional multipliers.
+
+
+``` r
+wiod_miom$compute_multiregional_multipliers()
+multipliers <- wiod_miom$multiregional_multipliers
+head(multipliers)
+#>   destination_country destination_sector destination_label
+#> 1                 AUS                A01           AUS_A01
+#> 2                 AUS                A02           AUS_A02
+#> 3                 AUS                A03           AUS_A03
+#> 4                 AUS                  B             AUS_B
+#> 5                 AUS            C10-C12       AUS_C10-C12
+#> 6                 AUS            C13-C15       AUS_C13-C15
+#>   intra_regional_multiplier spillover_multiplier total_multiplier
+#> 1                  1.943062            0.2969466         2.240008
+#> 2                  1.452797            0.4038390         1.856636
+#> 3                  1.535429            0.3813972         1.916826
+#> 4                  1.653958            0.3058091         1.959768
+#> 5                  2.288854            0.3186925         2.607547
+#> 6                  1.726600            0.5277454         2.254345
+#>   multiplier_to_AUS multiplier_to_AUT multiplier_to_BEL multiplier_to_BGR
+#> 1          1.943062      0.0009241692       0.002758861      0.0001238116
+#> 2          1.452797      0.0004372143       0.001138277      0.0001227772
+#> 3          1.535429      0.0012504465       0.001887738      0.0001406286
+#> 4          1.653958      0.0010232152       0.002402344      0.0001165439
+#> 5          2.288854      0.0013064230       0.002666766      0.0001519445
+#> 6          1.726600      0.0013017656       0.002629641      0.0002094356
+#>   multiplier_to_BRA multiplier_to_CAN multiplier_to_CHE multiplier_to_CHN
+#> 1       0.002276453       0.002771944       0.002982965        0.04971349
+#> 2       0.002676284       0.002427337       0.001218991        0.02613814
+#> 3       0.002319685       0.003668137       0.002666579        0.06304876
+#> 4       0.001817263       0.002696675       0.002281610        0.05344938
+#> 5       0.003045518       0.003435303       0.002693924        0.05536673
+#> 6       0.004632305       0.003806831       0.002422397        0.18135595
+#>   multiplier_to_CYP multiplier_to_CZE multiplier_to_DEU multiplier_to_DNK
+#> 1      2.775959e-05      0.0004224850       0.009478387      0.0009231147
+#> 2      3.198655e-05      0.0002227801       0.004368811      0.0005384190
+#> 3      3.109951e-05      0.0005965222       0.012158630      0.0010177472
+#> 4      2.906959e-05      0.0004841475       0.009504670      0.0008636884
+#> 5      3.022388e-05      0.0005136122       0.010170511      0.0010293537
+#> 6      3.465058e-05      0.0006358798       0.011412754      0.0010622292
+#>   multiplier_to_ESP multiplier_to_EST multiplier_to_FIN multiplier_to_FRA
+#> 1       0.002176144      8.083161e-05      0.0007182112       0.004602542
+#> 2       0.001460222      4.782012e-05      0.0003500961       0.002384622
+#> 3       0.002796333      6.898651e-05      0.0009674640       0.005649331
+#> 4       0.002074164      9.024358e-05      0.0008258744       0.004164778
+#> 5       0.002618653      8.443963e-05      0.0017046651       0.005234284
+#> 6       0.003699904      8.351721e-05      0.0008525216       0.006244268
+#>   multiplier_to_GBR multiplier_to_GRC multiplier_to_HRV multiplier_to_HUN
+#> 1       0.006945507      0.0002709420      8.485303e-05      0.0002725895
+#> 2       0.003647983      0.0003542640      1.151910e-04      0.0001591836
+#> 3       0.008261048      0.0003092300      1.044330e-04      0.0004127322
+#> 4       0.006770037      0.0002829849      8.861917e-05      0.0003007200
+#> 5       0.007406232      0.0003147103      9.637737e-05      0.0003496159
+#> 6       0.011737611      0.0003638989      1.088962e-04      0.0003397050
+#>   multiplier_to_IDN multiplier_to_IND multiplier_to_IRL multiplier_to_ITA
+#> 1       0.006373683       0.003840025      0.0010433081       0.004595336
+#> 2       0.012283637       0.003665256      0.0005213547       0.001946442
+#> 3       0.008055881       0.004402301      0.0007378384       0.009458692
+#> 4       0.006280513       0.003310474      0.0007770404       0.006327202
+#> 5       0.007585796       0.004531884      0.0011274920       0.005464752
+#> 6       0.010122973       0.018431872      0.0010179443       0.011518541
+#>   multiplier_to_JPN multiplier_to_KOR multiplier_to_LTU multiplier_to_LUX
+#> 1        0.01133541        0.01315437      9.383210e-05      0.0003387792
+#> 2        0.02128126        0.03406184      8.935646e-05      0.0004072236
+#> 3        0.01784399        0.01966472      9.016333e-05      0.0003754964
+#> 4        0.01153816        0.01165849      9.319060e-05      0.0003575600
+#> 5        0.01147847        0.01112882      1.065749e-04      0.0003734229
+#> 6        0.01035669        0.01909961      1.506659e-04      0.0004563254
+#>   multiplier_to_LVA multiplier_to_MEX multiplier_to_MLT multiplier_to_NLD
+#> 1      4.805329e-05       0.001573719      2.260833e-05       0.003611187
+#> 2      4.739492e-05       0.001209909      2.042198e-05       0.002051420
+#> 3      5.278813e-05       0.001909338      2.425943e-05       0.003552115
+#> 4      4.874760e-05       0.001420833      2.272002e-05       0.003264924
+#> 5      6.106668e-05       0.001590505      2.357628e-05       0.003997279
+#> 6      7.591093e-05       0.001740457      2.873606e-05       0.003506302
+#>   multiplier_to_NOR multiplier_to_POL multiplier_to_PRT multiplier_to_ROU
+#> 1       0.001158450      0.0007449103      0.0003033162      0.0002377749
+#> 2       0.001697678      0.0004490915      0.0002491883      0.0002075623
+#> 3       0.001535203      0.0010631416      0.0003507277      0.0003252080
+#> 4       0.001194689      0.0008902345      0.0003214690      0.0002699144
+#> 5       0.001131026      0.0008921955      0.0003729214      0.0002936487
+#> 6       0.001094653      0.0010713108      0.0012683477      0.0003957417
+#>   multiplier_to_RUS multiplier_to_SVK multiplier_to_SVN multiplier_to_SWE
+#> 1       0.004922003      0.0002892057      9.400659e-05      0.0017867783
+#> 2       0.013434710      0.0001360349      6.321230e-05      0.0008649097
+#> 3       0.006865531      0.0002745919      1.487642e-04      0.0023605457
+#> 4       0.006046886      0.0002679674      1.175375e-04      0.0018720401
+#> 5       0.004555407      0.0003063588      1.267838e-04      0.0020996779
+#> 6       0.004538042      0.0003017015      1.266656e-04      0.0022650560
+#>   multiplier_to_TUR multiplier_to_TWN multiplier_to_USA multiplier_to_ROW
+#> 1      0.0011047479       0.005965797        0.02604875         0.1207055
+#> 2      0.0009797962       0.012001196        0.01339803         0.2349317
+#> 3      0.0016449284       0.008984176        0.03218315         0.1521381
+#> 4      0.0012925722       0.005672950        0.02340328         0.1300937
+#> 5      0.0014436772       0.005543222        0.02719302         0.1290457
+#> 6      0.0065184793       0.010121129        0.02608771         0.1645163
+
+# summary of simple multipliers by country
+wiod_miom$get_country_summary()
+#>    country multiplier_simple_mean multiplier_simple_sum multiplier_simple_sd
+#> 1      AUS               2.059444             115.32887            0.5286893
+#> 2      AUT               2.197637             123.06768            0.4594470
+#> 3      BEL               2.337291             130.88832            0.4807025
+#> 4      BGR               2.302660             128.94898            0.4971555
+#> 5      BRA               1.855324             103.89814            0.5501174
+#> 6      CAN               2.108827             118.09430            0.5340617
+#> 7      CHE               2.089600             117.01762            0.5500224
+#> 8      CHN               2.572424             144.05577            0.9026179
+#> 9      CYP               2.075184             116.21033            0.5207413
+#> 10     CZE               2.389257             133.79839            0.4531277
+#> 11     DEU               2.094890             117.31385            0.4296699
+#> 12     DNK               2.136404             119.63863            0.4413923
+#> 13     ESP               2.168283             121.42386            0.5331024
+#> 14     EST               2.275109             127.40609            0.5011790
+#> 15     FIN               2.189053             122.58695            0.4597874
+#> 16     FRA               2.190604             122.67383            0.4657943
+#> 17     GBR               2.097224             117.44453            0.4245538
+#> 18     GRC               1.906824             106.78213            0.4294008
+#> 19     HRV               2.050698             114.83906            0.3895920
+#> 20     HUN               2.195959             122.97370            0.5031122
+#> 21     IDN               1.897032             106.23380            0.5749050
+#> 22     IND               1.798571             100.71997            0.7130320
+#> 23     IRL               1.991669             111.53346            0.4593722
+#> 24     ITA               2.244525             125.69342            0.5668888
+#> 25     JPN               2.099949             117.59717            0.5870561
+#> 26     KOR               2.396479             134.20284            0.5895838
+#> 27     LTU               1.905340             106.69906            0.3897351
+#> 28     LUX               2.256960             126.38977            0.6069931
+#> 29     LVA               2.277365             127.53244            0.4919037
+#> 30     MEX               1.888046             105.73058            0.5134985
+#> 31     MLT               2.445577             136.95233            0.5991034
+#> 32     NLD               2.183777             122.29151            0.4918711
+#> 33     NOR               2.036868             114.06460            0.4057917
+#> 34     POL               2.191662             122.73309            0.4659280
+#> 35     PRT               2.158953             120.90138            0.5136721
+#> 36     ROU               2.146740             120.21745            0.4294959
+#> 37     ROW               2.425472             135.82643            0.6231174
+#> 38     RUS               1.697147              95.04021            0.6557177
+#> 39     SVK               2.233522             125.07722            0.5206769
+#> 40     SVN               2.195134             122.92752            0.4549377
+#> 41     SWE               2.084764             116.74678            0.4572012
+#> 42     TUR               1.931434             108.16030            0.6183051
+#> 43     TWN               2.353178             131.77796            0.6831262
+#> 44     USA               1.968826             110.25423            0.3831758
+#>    multiplier_direct_mean multiplier_direct_sum multiplier_direct_sd
+#> 1               0.4634548              25.95347            0.2210916
+#> 2               0.5274088              29.53489            0.1823711
+#> 3               0.5705468              31.95062            0.1833494
+#> 4               0.5444802              30.49089            0.1913925
+#> 5               0.4085393              22.87820            0.2443644
+#> 6               0.4847580              27.14645            0.2177967
+#> 7               0.4759913              26.65551            0.2246538
+#> 8               0.5285805              29.60051            0.2804314
+#> 9               0.4651514              26.04848            0.2166702
+#> 10              0.5683148              31.82563            0.1704444
+#> 11              0.5051221              28.28684            0.1710627
+#> 12              0.5179266              29.00389            0.1845329
+#> 13              0.5098436              28.55124            0.1970098
+#> 14              0.5431742              30.41776            0.1869269
+#> 15              0.5215762              29.20826            0.1821999
+#> 16              0.5283461              29.58738            0.1875087
+#> 17              0.4995706              27.97596            0.1657784
+#> 18              0.4718180              26.42181            0.1980097
+#> 19              0.4906760              27.47786            0.1614403
+#> 20              0.5200324              29.12182            0.1853569
+#> 21              0.4112426              23.02959            0.2460278
+#> 22              0.3577596              20.03454            0.3075679
+#> 23              0.4726003              26.46562            0.1960911
+#> 24              0.5343323              29.92261            0.2156932
+#> 25              0.4781882              26.77854            0.2265308
+#> 26              0.5366267              30.05109            0.2005033
+#> 27              0.4207426              23.56159            0.1603094
+#> 28              0.5379669              30.12615            0.2503362
+#> 29              0.5267513              29.49807            0.1844874
+#> 30              0.4445117              24.89266            0.2294671
+#> 31              0.5654713              31.66639            0.2191826
+#> 32              0.5155459              28.87057            0.1840442
+#> 33              0.4965577              27.80723            0.1932755
+#> 34              0.5158620              28.88827            0.1823632
+#> 35              0.5116325              28.65142            0.1914568
+#> 36              0.4963158              27.79368            0.1770900
+#> 37              0.5637251              31.56860            0.2193993
+#> 38              0.3125308              17.50173            0.2856812
+#> 39              0.5223184              29.24983            0.1882459
+#> 40              0.5167453              28.93774            0.1730295
+#> 41              0.4978477              27.87947            0.1964317
+#> 42              0.4147050              23.22348            0.2555282
+#> 43              0.5225322              29.26180            0.2189672
+#> 44              0.4757405              26.64147            0.1570377
+#>    multiplier_indirect_mean multiplier_indirect_sum multiplier_indirect_sd
+#> 1                  1.595989                89.37540              0.3132792
+#> 2                  1.670228                93.53279              0.2824143
+#> 3                  1.766745                98.93770              0.3025478
+#> 4                  1.758180                98.45809              0.3102728
+#> 5                  1.446785                81.01994              0.3106439
+#> 6                  1.624069                90.94785              0.3222676
+#> 7                  1.613609                90.36211              0.3308386
+#> 8                  2.043844               114.45526              0.6295754
+#> 9                  1.610033                90.16186              0.3151930
+#> 10                 1.820942               101.97276              0.2883791
+#> 11                 1.589768                89.02701              0.2640468
+#> 12                 1.618477                90.63474              0.2702931
+#> 13                 1.658440                92.87262              0.3433670
+#> 14                 1.731935                96.98833              0.3199271
+#> 15                 1.667476                93.37868              0.2822491
+#> 16                 1.662258                93.08645              0.2839664
+#> 17                 1.597653                89.46858              0.2651035
+#> 18                 1.435006                80.36032              0.2450676
+#> 19                 1.560022                87.36120              0.2344153
+#> 20                 1.675926                93.85188              0.3252045
+#> 21                 1.485790                83.20422              0.3379542
+#> 22                 1.440811                80.68543              0.4132435
+#> 23                 1.519069                85.06784              0.2701229
+#> 24                 1.710193                95.77081              0.3572023
+#> 25                 1.621761                90.81863              0.3716032
+#> 26                 1.859853               104.15175              0.3962250
+#> 27                 1.484598                83.13747              0.2383128
+#> 28                 1.718993                96.26362              0.3641433
+#> 29                 1.750614                98.03436              0.3120286
+#> 30                 1.443534                80.83793              0.2949739
+#> 31                 1.880106               105.28594              0.3854595
+#> 32                 1.668231                93.42094              0.3136666
+#> 33                 1.540310                86.25737              0.2214755
+#> 34                 1.675800                93.84481              0.2886215
+#> 35                 1.647321                92.24996              0.3308059
+#> 36                 1.650424                92.42377              0.2564010
+#> 37                 1.861747               104.25783              0.4121330
+#> 38                 1.384616                77.53848              0.3727750
+#> 39                 1.711203                95.82739              0.3410645
+#> 40                 1.678389                93.98979              0.2880304
+#> 41                 1.586916                88.86731              0.2653788
+#> 42                 1.516729                84.93682              0.3693283
+#> 43                 1.830646               102.51615              0.4762566
+#> 44                 1.493085                83.61276              0.2321731
+```
+
+## Bilateral Trade
+
+Analyze bilateral trade between two specific countries, e.g., USA and CHN.
+
+
+``` r
+# check if USA and CHN are in countries list
+if ("USA" %in% wiod_miom$countries && "CHN" %in% wiod_miom$countries) {
+  trade_usa_chn <- wiod_miom$get_bilateral_trade(origin = "USA", destination = "CHN")
+  # show first few rows/cols
+  trade_usa_chn[1:5, 1:5]
+
+  # total exports from USA to China by sector (aggregated over destination sectors)
+  # this sums the rows of the bilateral trade matrix (which is dest x origin)
+  # wait, get_bilateral_trade returns: rows = Dest_Sector, cols = Origin_Sector
+  # so colSums gives total imports of Dest from Origin_Sector.
+  # rowSums gives total exports from Origin to Dest_Sector? No.
+
+  # matrix is M[dest, origin].
+  # sum over rows (dest) = total exports of Origin_Sector to Dest.
+  exports_by_sector <- colSums(trade_usa_chn)
+  head(exports_by_sector)
+}
+#>     USA_A01     USA_A02     USA_A03       USA_B USA_C10-C12 USA_C13-C15 
+#>  1346.70809    90.20986    55.09193  1995.00225  3482.28374  1296.73154
+```
+
+## Spillover Effects
+
+Compute the spillover matrix and net spillover matrix.
+
+
+``` r
+spillover_matrix <- wiod_miom$get_spillover_matrix()
+
+# inspect
+spillover_matrix[1:5, 1:5]
+#>   AUS1 AUS2 AUS3 AUS4 AUS5
+#> 1    0    0    0    0    0
+#> 2    0    0    0    0    0
+#> 3    0    0    0    0    0
+#> 4    0    0    0    0    0
+#> 5    0    0    0    0    0
+
+net_spillover <- wiod_miom$get_net_spillover_matrix()
+
+# inspect a subset
+net_spillover[1:10, 1:10]
+#>              AUS         AUT         BEL        BGR          BRA         CAN
+#> AUS  0.000000000  0.03308871  0.02910521  0.2802544 -0.009619304 -0.06790634
+#> AUT -0.033088705  0.00000000 -0.24427666  0.7102411 -0.078103459 -0.04387404
+#> BEL -0.029105206  0.24427666  0.00000000  0.4287889 -0.327193252 -0.29693186
+#> BGR -0.280254380 -0.71024114 -0.42878894  0.0000000 -0.259914966 -0.20550396
+#> BRA  0.009619304  0.07810346  0.32719325  0.2599150  0.000000000  0.12553149
+#> CAN  0.067906336  0.04387404  0.29693186  0.2055040 -0.125531485  0.00000000
+#> CHE  0.015465872  0.05324425  0.34593311  0.3131248 -0.021995623  0.02625571
+#> CHN  3.471572275  1.55788114  3.01111906  2.2935853  1.730436753  3.06593128
+#> CYP -0.124012173 -0.37236993 -0.54590031 -0.1078680 -0.203786011 -0.19815408
+#> CZE -0.078564130 -0.22511351 -0.32289790  0.4794011 -0.087302183 -0.08434043
+#>             CHE       CHN       CYP         CZE
+#> AUS -0.01546587 -3.471572 0.1240122  0.07856413
+#> AUT -0.05324425 -1.557881 0.3723699  0.22511351
+#> BEL -0.34593311 -3.011119 0.5459003  0.32289790
+#> BGR -0.31312482 -2.293585 0.1078680 -0.47940107
+#> BRA  0.02199562 -1.730437 0.2037860  0.08730218
+#> CAN -0.02625571 -3.065931 0.1981541  0.08434043
+#> CHE  0.00000000 -1.294078 0.4090038  0.26664486
+#> CHN  1.29407847  0.000000 3.2602694  3.42797913
+#> CYP -0.40900384 -3.260269 0.0000000 -0.20672085
+#> CZE -0.26664486 -3.427979 0.2067209  0.00000000
+```
+
+## Regional Interdependence
+
+Compute regional interdependence measures.
+
+
+``` r
+interdep <- wiod_miom$get_regional_interdependence()
+print(interdep)
+#>    country self_reliance total_spillover_out total_spillover_in
+#> 1      AUS      1.696224           0.3632201       0.0040162983
+#> 2      AUT      1.586058           0.6115791       0.0090095852
+#> 3      BEL      1.495057           0.8422347       0.0114892560
+#> 4      BGR      1.595982           0.7066787       0.0014007742
+#> 5      BRA      1.618409           0.2369146       0.0043294183
+#> 6      CAN      1.646627           0.4621996       0.0051182683
+#> 7      CHE      1.625249           0.4643511       0.0070199791
+#> 8      CHN      2.340102           0.2323227       0.0506299644
+#> 9      CYP      1.387663           0.6875217       0.0013510276
+#> 10     CZE      1.665298           0.7239595       0.0066892623
+#> 11     DEU      1.642981           0.4519089       0.0576191529
+#> 12     DNK      1.517992           0.6184119       0.0043113174
+#> 13     ESP      1.725480           0.4428036       0.0116828177
+#> 14     EST      1.480984           0.7941247       0.0016056681
+#> 15     FIN      1.629016           0.5600363       0.0060023444
+#> 16     FRA      1.689994           0.5006097       0.0212039849
+#> 17     GBR      1.675807           0.4214164       0.0234390351
+#> 18     GRC      1.539636           0.3671881       0.0023126137
+#> 19     HRV      1.491285           0.5594125       0.0012672109
+#> 20     HUN      1.410111           0.7858478       0.0038462582
+#> 21     IDN      1.530838           0.3661947       0.0028966474
+#> 22     IND      1.517515           0.2810557       0.0050358306
+#> 23     IRL      1.273685           0.7179835       0.0035625521
+#> 24     ITA      1.807899           0.4366263       0.0234877501
+#> 25     JPN      1.755295           0.3446541       0.0118213256
+#> 26     KOR      1.854094           0.5423851       0.0106088918
+#> 27     LTU      1.350929           0.5544117       0.0022257098
+#> 28     LUX      1.224515           1.0324453       0.0041747256
+#> 29     LVA      1.624611           0.6527536       0.0017624301
+#> 30     MEX      1.472021           0.4160249       0.0020104733
+#> 31     MLT      1.374231           1.0713464       0.0005224297
+#> 32     NLD      1.466945           0.7168318       0.0166233196
+#> 33     NOR      1.600207           0.4366607       0.0062282462
+#> 34     POL      1.645235           0.5464274       0.0117964860
+#> 35     PRT      1.619023           0.5399305       0.0016871450
+#> 36     ROU      1.647438           0.4993024       0.0033268831
+#> 37     RUS      1.523961           0.1731858       0.0236021049
+#> 38     SVK      1.549752           0.6837695       0.0030367532
+#> 39     SVN      1.528439           0.6666951       0.0015945661
+#> 40     SWE      1.585521           0.4992427       0.0105977444
+#> 41     TUR      1.521307           0.4101273       0.0062323422
+#> 42     TWN      1.629496           0.7236817       0.0047127057
+#> 43     USA      1.731486           0.2373394       0.0410605451
+#> 44     ROW      1.884311           0.5411612       0.1107522191
+#>    interdependence_index
+#> 1              0.2141345
+#> 2              0.3855969
+#> 3              0.5633463
+#> 4              0.4427862
+#> 5              0.1463873
+#> 6              0.2806948
+#> 7              0.2857107
+#> 8              0.0992789
+#> 9              0.4954531
+#> 10             0.4347328
+#> 11             0.2750542
+#> 12             0.4073881
+#> 13             0.2566264
+#> 14             0.5362142
+#> 15             0.3437880
+#> 16             0.2962197
+#> 17             0.2514706
+#> 18             0.2384903
+#> 19             0.3751211
+#> 20             0.5572950
+#> 21             0.2392120
+#> 22             0.1852078
+#> 23             0.5637055
+#> 24             0.2415103
+#> 25             0.1963510
+#> 26             0.2925338
+#> 27             0.4103930
+#> 28             0.8431464
+#> 29             0.4017907
+#> 30             0.2826216
+#> 31             0.7795970
+#> 32             0.4886562
+#> 33             0.2728776
+#> 34             0.3321273
+#> 35             0.3334916
+#> 36             0.3030782
+#> 37             0.1136419
+#> 38             0.4412121
+#> 39             0.4361934
+#> 40             0.3148761
+#> 41             0.2695889
+#> 42             0.4441138
+#> 43             0.1370727
+#> 44             0.2871932
+
+# visualize interdependence index
+library(ggplot2)
+ggplot(interdep, aes(x = reorder(country, interdependence_index), y = interdependence_index)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(title = "Regional Interdependence Index", x = "Country", y = "Index") +
+  theme_minimal()
+```
+
+<div class="figure" style="text-align: center">
+<img src="figure/interdependence-1.png" alt="plot of chunk interdependence"  />
+<p class="caption">plot of chunk interdependence</p>
+</div>

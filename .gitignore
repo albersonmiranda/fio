@@ -10,3 +10,4 @@ src/Makevars.win
 *.Rcheck
 src/Makevars.wasm
 .DS_Store
+*.RData
