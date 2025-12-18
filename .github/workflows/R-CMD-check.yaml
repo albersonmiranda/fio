@@ -26,15 +26,15 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macos-15,      r: 'devel'}
-          - {os: macos-15,      r: 'release'}
-          - {os: macos-15,      r: 'oldrel-1'}
-          - {os: macos-14,      r: 'release'}
-          - {os: macos-14,      r: 'devel'}
-          - {os: macos-14,      r: 'oldrel-1'}
-          - {os: macos-13,      r: 'release'}
-          - {os: macos-13,      r: 'devel'}
-          - {os: macos-13,      r: 'oldrel-1'}
+          - {os: macos-26,      r: 'release'}
+          - {os: macos-26,      r: 'devel'}
+          - {os: macos-26,      r: 'oldrel-1'}
+          - {os: macos-25,      r: 'release'}
+          - {os: macos-25,      r: 'devel'}
+          - {os: macos-25,      r: 'oldrel-1'}
+          - {os: macos-24,      r: 'release'}
+          - {os: macos-24,      r: 'devel'}
+          - {os: macos-24,      r: 'oldrel-1'}
           - {os: windows-2022,  r: 'release'}
           - {os: windows-2022,  r: 'devel'}
           - {os: windows-2022,  r: 'oldrel-1'}
@@ -89,6 +89,7 @@ jobs:
           - {image: 'fedora:40'}
           - {image: 'fedora:41'}
           - {image: 'fedora:42'}
+          - {image: 'fedora:43'}
     container:
       image: ${{ matrix.config.image }}
 
