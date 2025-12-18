@@ -2,7 +2,6 @@
 
 export(download_wiod)
 export(import_element)
-export(import_miom)
 export(iom)
 export(miom)
 import(R6)
