@@ -7,7 +7,7 @@
 A new instance of the \code{miom} class.
 }
 \description{
-R6 class for multi-regional input-output matrix (MIOM). This class inherits from the
+R6 class for multi-regional input-output matrix (MRIO). This class inherits from the
 \code{iom} class and extends its functionality to handle multi-regional input-output tables
 such as the World Input-Output Database (WIOD) and EXIOBASE tables.
 }
@@ -54,25 +54,25 @@ my_miom <- miom$new(
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{countries}}{(\code{character})\cr
-Vector of country names/codes.}
+Vector of region names.}
 
 \item{\code{sectors}}{(\code{character})\cr
-Vector of sector names/codes.}
+Vector of sector names.}
 
 \item{\code{n_countries}}{(\code{integer})\cr
-Number of countries in the matrix.}
+Number of regions in the matrix.}
 
 \item{\code{n_sectors}}{(\code{integer})\cr
 Number of sectors per country.}
 
 \item{\code{bilateral_trade}}{(\code{list})\cr
-Bilateral trade flows between countries by sector.}
+Bilateral trade flows between regions by sector.}
 
 \item{\code{domestic_intermediate_transactions}}{(\code{list})\cr
-List of domestic intermediate transaction matrices by country.}
+List of domestic intermediate transaction matrices by region.}
 
 \item{\code{international_intermediate_transactions}}{(\code{list})\cr
-List of international intermediate transaction matrices between countries.}
+List of international intermediate transaction matrices between regions.}
 
 \item{\code{multiregional_multipliers}}{(\code{data.frame})\cr
 Multi-regional output multipliers including intra-regional, inter-regional, and spillover effects.}
@@ -149,46 +149,46 @@ Identifier for the multi-regional input-output matrix.}
 
 \item{\code{intermediate_transactions}}{(\code{matrix})\cr
 Multi-regional intermediate transactions matrix. Rows and columns should follow
-the structure: Country1_Sector1, Country1_Sector2, ..., Country2_Sector1, etc.}
+the structure: Country1_Sector1, Country1_Sector2, ..., Country2_Sector1 etc.}
 
 \item{\code{total_production}}{(\code{matrix})\cr
 Total production vector by country and sector.}
 
 \item{\code{countries}}{(\code{character})\cr
-Vector of country names/codes in the matrix.}
+Vector of region names in the matrix.}
 
 \item{\code{sectors}}{(\code{character})\cr
-Vector of sector names/codes in the matrix.}
+Vector of sector names in the matrix.}
 
 \item{\code{household_consumption}}{(\code{matrix})\cr
-Household consumption vector by country and sector.}
+Household consumption vector by region and sector.}
 
 \item{\code{government_consumption}}{(\code{matrix})\cr
-Government consumption vector by country and sector.}
+Government consumption vector by region and sector.}
 
 \item{\code{exports}}{(\code{matrix})\cr
-Exports vector by country and sector.}
+Exports vector by region and sector.}
 
 \item{\code{final_demand_others}}{(\code{matrix})\cr
 Other vectors of final demand that doesn't have dedicated slots.}
 
 \item{\code{imports}}{(\code{matrix})\cr
-Imports vector by country and sector.}
+Imports vector by region and sector.}
 
 \item{\code{taxes}}{(\code{matrix})\cr
-Taxes vector by country and sector.}
+Taxes vector by region and sector.}
 
 \item{\code{wages}}{(\code{matrix})\cr
-Wages vector by country and sector.}
+Wages vector by region and sector.}
 
 \item{\code{operating_income}}{(\code{matrix})\cr
-Operating income vector by country and sector.}
+Operating income vector by region and sector.}
 
 \item{\code{value_added_others}}{(\code{matrix})\cr
 Other vectors of value-added that doesn't have dedicated slots.}
 
 \item{\code{occupation}}{(\code{matrix})\cr
-Occupation matrix by country and sector.}
+Occupation matrix by region and sector.}
 }
 \if{html}{\out{</div>}}
 }
