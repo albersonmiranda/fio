@@ -8,7 +8,8 @@ articles:
   articles/benchmarking_m4: benchmarking_m4.html
   getting_started: getting_started.html
   multiregional_analysis: multiregional_analysis.html
-last_built: 2025-12-18T20:23Z
+  articles/wiod_2014_analysis: wiod_2014_analysis.html
+last_built: 2025-12-19T10:50Z
 urls:
   reference: https://albersonmiranda.github.io/fio/reference
   article: https://albersonmiranda.github.io/fio/articles
