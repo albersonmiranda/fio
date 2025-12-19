@@ -415,18 +415,18 @@ set_max_threads <- function(max_threads) invisible(.Call(wrap__set_max_threads, 
 #' Download WIOD tables
 #' @description
 #' Downloads World Input-Output Database tables.
-#' 
+#'
 #' @details
 #' Multi-region input-output tables from the World Input-Output Database (WIOD) from University of Groningen, Netherlands.
-#' 
+#'
 #' @param year (`string`)\cr
 #' Release year from WIOD. One of "2016", "2013" or "long-run". Defaults to "2016".
 #' @param out_dir (`string`)\cr
 #' Path to download. Defaults to current working directory.
-#' 
+#'
 #' @return
 #' A message indicating the result of the download operation.
-#' 
+#'
 #' @examples
 #' # Download WIOD 2016 tables to temporary directory
 #' \dontrun{
