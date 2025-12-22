@@ -2,7 +2,7 @@
 
 
 # set colnames and rownames of a matrix or data frame
-set_colnames = function(vec) {
+set_colnames <- function(vec) {
   if (!is.null(vec)) {
     # ensure vec is a matrix or data frame
     if (!is.matrix(vec) && !is.data.frame(vec)) {
@@ -18,10 +18,10 @@ set_colnames = function(vec) {
     }
   }
 
-  return(vec)
+  vec
 }
 
-set_rownames = function(vec) {
+set_rownames <- function(vec) {
   if (!is.null(vec)) {
     # ensure vec is a matrix or data frame
     if (!is.matrix(vec) && !is.data.frame(vec)) {
@@ -37,7 +37,7 @@ set_rownames = function(vec) {
     }
   }
 
-  return(vec)
+  vec
 }
 
 # check for empty URLs in a file
@@ -50,5 +50,5 @@ check_empty_urls <- function(file_path) {
   empty_urls <- grep(empty_url_pattern, content, value = TRUE)
 
   # Return all found empty URLs
-  return(empty_urls)
+  empty_urls
 }
