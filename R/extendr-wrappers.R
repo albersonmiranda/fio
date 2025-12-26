@@ -112,26 +112,23 @@ compute_multiplier_output_indirect <- function(technical_coefficients_matrix, le
 
 #' @description
 #' Computes requirements for a given value-added vector (direct multiplier).
-#' 
+#'
 #' @details
 #' For others value-added components that doesn't get dedicated slots in the input-output table,
 #' users can calculate multipliers by:
-#' 
+#'
 #' 1. computing the requirements for a given value-added vector;
 #' 2. computing the generator matrix for a given value-added vector;
 #' 3. and, finally, computing the multiplier for a given value-added vector.
-#' 
+#'
 #' Current implementation follows \insertCite{vale_alise_2020}{fio}.
-#' 
+#'
 #' @param value_added_element A value-added vector.
 #' @param total_production The total production vector.
 #' @return A 1xn vector of a given value-added coefficients.
-#' 
+#'
 #' @references \insertAllCited{}
-#' 
-#' @seealso
-#' [compute_multiplier_value_added()] for computing multipliers.
-#' 
+#'
 #' @examples
 #' # data
 #' transporation_revenue <- c(100, 200, 300)
@@ -139,7 +136,7 @@ compute_multiplier_output_indirect <- function(technical_coefficients_matrix, le
 #' # compute requirements
 #' reqs <- compute_requirements_value_added(transporation_revenue, total_production)
 #' reqs
-#' 
+#'
 #' @noRd
 compute_requirements_value_added <- function(value_added_element, total_production) .Call(wrap__compute_requirements_value_added, value_added_element, total_production)
 
@@ -152,27 +149,24 @@ compute_generator_value_added <- function(value_added_requirements, leontief_inv
 
 #' @description
 #' Computes multiplier for a given value-added vector.
-#' 
+#'
 #' @details
 #' For others value-added components that doesn't get dedicated slots in the input-output table,
 #' users can calculate multipliers by:
-#' 
+#'
 #' 1. computing the requirements for a given value-added vector;
 #' 2. computing the generator matrix for a given value-added vector;
 #' 3. and, finally, computing the multiplier for a given value-added vector.
-#' 
+#'
 #' Current implementation follows \insertCite{vale_alise_2020}{fio}.
-#' 
+#'
 #' @param value_added_requirements The coefficients for a given value-added vector.
 #' @param leontief_inverse_matrix The open model Leontief inverse matrix.
-#' 
+#'
 #' @return A 1xn vector of a given value-added multipliers.
-#' 
+#'
 #' @references \insertAllCited{}
-#' 
-#' @seealso
-#' [compute_requirements_value_added] for computing multipliers.
-#' 
+#'
 #' @examples
 #' # data
 #' intermediate_transactions <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), 3, 3)
@@ -187,7 +181,7 @@ compute_generator_value_added <- function(value_added_requirements, leontief_inv
 #' # get multipliers
 #' multipliers <- compute_multiplier_value_added(reqs, leontief_inverse)
 #' multipliers
-#' 
+#'
 #' @noRd
 compute_multiplier_value_added <- function(value_added_requirements, leontief_inverse_matrix) .Call(wrap__compute_multiplier_value_added, value_added_requirements, leontief_inverse_matrix)
 
