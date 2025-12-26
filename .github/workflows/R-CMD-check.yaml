@@ -17,7 +17,7 @@ permissions: read-all
 
 jobs:
   R-CMD-check:
-    if: '! github.event.pull_request.draft'
+    if: "! github.event.pull_request.draft"
     runs-on: ${{ matrix.config.os }}
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
@@ -26,29 +26,29 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macos-26,      r: 'release'}
-          - {os: macos-26,      r: 'devel'}
-          - {os: macos-26,      r: 'oldrel-1'}
-          - {os: macos-25,      r: 'release'}
-          - {os: macos-25,      r: 'devel'}
-          - {os: macos-25,      r: 'oldrel-1'}
-          - {os: macos-24,      r: 'release'}
-          - {os: macos-24,      r: 'devel'}
-          - {os: macos-24,      r: 'oldrel-1'}
-          - {os: windows-2022,  r: 'release'}
-          - {os: windows-2022,  r: 'devel'}
-          - {os: windows-2022,  r: 'oldrel-1'}
-          - {os: windows-2025,  r: 'release'}
-          - {os: windows-2025,  r: 'devel'}
-          - {os: windows-2025,  r: 'oldrel-1'}
-          - {os: ubuntu-24.04-arm, r: 'release'}
-          - {os: ubuntu-24.04-arm, r: 'devel'}
-          - {os: ubuntu-24.04,  r: 'devel'}
-          - {os: ubuntu-24.04,  r: 'release'}
-          - {os: ubuntu-24.04,  r: 'oldrel-1'}
-          - {os: ubuntu-22.04,  r: 'devel'}
-          - {os: ubuntu-22.04,  r: 'release'}
-          - {os: ubuntu-22.04,  r: 'oldrel-1'}
+          - { os: macos-26, r: "release" }
+          - { os: macos-26, r: "devel" }
+          - { os: macos-26, r: "oldrel-1" }
+          - { os: macos-15, r: "release" }
+          - { os: macos-15, r: "devel" }
+          - { os: macos-15, r: "oldrel-1" }
+          - { os: macos-14, r: "release" }
+          - { os: macos-14, r: "devel" }
+          - { os: macos-14, r: "oldrel-1" }
+          - { os: windows-2022, r: "release" }
+          - { os: windows-2022, r: "devel" }
+          - { os: windows-2022, r: "oldrel-1" }
+          - { os: windows-2025, r: "release" }
+          - { os: windows-2025, r: "devel" }
+          - { os: windows-2025, r: "oldrel-1" }
+          - { os: ubuntu-24.04-arm, r: "release" }
+          - { os: ubuntu-24.04-arm, r: "devel" }
+          - { os: ubuntu-24.04, r: "devel" }
+          - { os: ubuntu-24.04, r: "release" }
+          - { os: ubuntu-24.04, r: "oldrel-1" }
+          - { os: ubuntu-22.04, r: "devel" }
+          - { os: ubuntu-22.04, r: "release" }
+          - { os: ubuntu-22.04, r: "oldrel-1" }
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -77,7 +77,7 @@ jobs:
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
 
   Fedora:
-    if: '! github.event.pull_request.draft'
+    if: "! github.event.pull_request.draft"
     runs-on: ubuntu-latest
 
     name: ${{ matrix.config.image }} - dnf repo R version
@@ -86,10 +86,10 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {image: 'fedora:40'}
-          - {image: 'fedora:41'}
-          - {image: 'fedora:42'}
-          - {image: 'fedora:43'}
+          - { image: "fedora:40" }
+          - { image: "fedora:41" }
+          - { image: "fedora:42" }
+          - { image: "fedora:43" }
     container:
       image: ${{ matrix.config.image }}
 
@@ -104,7 +104,7 @@ jobs:
         run: |
           R -e 'install.packages(c("remotes", "rcmdcheck"), repos = "https://cloud.r-project.org")'
           R -e 'remotes::install_deps(dependencies = TRUE)'
-      
+
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
