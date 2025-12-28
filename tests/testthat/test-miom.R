@@ -23,6 +23,26 @@ total_production <- matrix(c(100, 120, 80, 110),
   dimnames = list(NULL, labels)
 )
 
+test_that("miom class defenses", {
+  # missing countries
+  expect_error(miom$new(
+    id = "test_miom",
+    intermediate_transactions = intermediate_transactions,
+    total_production = total_production,
+    countries = 2,
+    sectors = sectors
+  ), "countries must be a non-empty character vector")
+
+  # missing sectors
+  expect_error(miom$new(
+    id = "test_miom",
+    intermediate_transactions = intermediate_transactions,
+    total_production = total_production,
+    countries = countries,
+    sectors = 2
+  ), "sectors must be a non-empty character vector")
+})
+
 test_that("miom class can be instantiated", {
   # Create MIOM instance
   my_miom <- miom$new(
@@ -50,8 +70,7 @@ test_that("miom functionality", {
   world_2000$compute_multiregional_multipliers()
   multipliers <- world_2000$multiregional_multipliers
 
-  expect_false(is.null(multipliers))
-  expect_equal(nrow(multipliers), world_2000$n_countries * world_2000$n_sectors)
+  expect_snapshot(multipliers)
 
   # Check consistency: Total = Intra + Spillover
   diffs <- abs(multipliers$total_multiplier - (multipliers$intra_regional_multiplier + multipliers$spillover_multiplier))
@@ -59,16 +78,12 @@ test_that("miom functionality", {
 
   # Regional Interdependence
   interdependence <- world_2000$get_regional_interdependence()
-  expect_equal(nrow(interdependence), world_2000$n_countries)
-  expect_true(all(c("self_reliance", "interdependence_index") %in% names(interdependence)))
+  expect_snapshot(interdependence)
 
   # Bilateral Trade
   # BRA to USA
   trade_bra_usa <- world_2000$get_bilateral_trade("BRA", "USA")
-  expect_equal(nrow(trade_bra_usa), world_2000$n_sectors)
-  expect_equal(ncol(trade_bra_usa), world_2000$n_sectors)
-  expect_true(all(grepl("USA", rownames(trade_bra_usa))))
-  expect_true(all(grepl("BRA", colnames(trade_bra_usa))))
+  expect_snapshot(trade_bra_usa)
 
   # Spillover Matrix
   spillover_matrix <- world_2000$get_spillover_matrix()
@@ -91,6 +106,7 @@ test_that("miom functionality", {
   deu_iom <- world_2000$extract_country("DEU")
   expect_s3_class(deu_iom, "iom")
   expect_equal(deu_iom$id, paste0(world_2000$id, "_DEU"))
+  expect_error(world_2000$extract_country("HELLO"), "Country HELLO not found in the matrix")
 
   # Check production matches
   deu_idx <- which(world_2000$countries == "DEU")
