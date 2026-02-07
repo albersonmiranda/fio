@@ -18,7 +18,7 @@ status](https://www.r-pkg.org/badges/version/fio)](https://CRAN.R-project.org/pa
 coverage](https://codecov.io/gh/albersonmiranda/fio/branch/main/graph/badge.svg)](https://app.codecov.io/gh/albersonmiranda/fio?branch=main)
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/fio)](https://CRAN.R-project.org/package=fio)
 [![DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/albersonmiranda/fio)
-[![extendr](https://img.shields.io/badge/extendr-*-276DC2)](https://extendr.github.io/extendr/extendr_api/)
+[![extendr](https://img.shields.io/badge/extendr-%5E0.8.1-276DC2)](https://extendr.github.io/extendr/extendr_api/)
 <!-- badges: end -->
 
 `{fio}` (*Friendly Input-Output*) is a R package designed for economic
