@@ -44,7 +44,7 @@ fn compute_tech_coeff(
   // see https://github.com/extendr/extendr/discussions/804
   intermediate_transactions: &[f64],
   total_production: &[f64],
-) -> RArray<f64, 2> {
+) -> RArray<f64, [usize;2]> {
   
   // get dimensions (square root of length)
   let n = (intermediate_transactions.len() as f64).sqrt() as usize;
@@ -103,7 +103,7 @@ fn compute_tech_coeff(
 /// 
 /// @noRd
 
-fn compute_leontief_inverse(tech_coeff: &[f64]) -> RArray<f64, 2> {
+fn compute_leontief_inverse(tech_coeff: &[f64]) -> RArray<f64, [usize;2]> {
 
   // get dimensions
   let n = (tech_coeff.len() as f64).sqrt() as usize;

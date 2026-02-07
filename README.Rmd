@@ -25,36 +25,12 @@ Friendly & Fast Input-Output Analysis <img src="man/figures/leontief.jpg" align=
 [![Codecov test coverage](https://codecov.io/gh/albersonmiranda/fio/branch/main/graph/badge.svg)](https://app.codecov.io/gh/albersonmiranda/fio?branch=main)
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/fio)](https://CRAN.R-project.org/package=fio)
 [![DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/albersonmiranda/fio)
-[![extendr](https://img.shields.io/badge/extendr-*-276DC2)](https://extendr.github.io/extendr/extendr_api/)
+[![extendr](https://img.shields.io/badge/extendr-^0.8.1-276DC2)](https://extendr.github.io/extendr/extendr_api/)
 <!-- badges: end -->
 
 `{fio}` (*Friendly Input-Output*) is a R package designed for economic input-output analysis that combines user-friendly interfaces with high-performance computation. It provides tools for analyzing both single-region and multi-regional economic systems through a hybrid architecture that pairs R's accessibility with [Rust's](https://www.rust-lang.org/) computational efficiency.
 
 The package is optimized for speed and efficiency. It leverages the [R6 class](https://r6.r-lib.org/) for clean, memory-efficient object-oriented programming. Furthermore, all linear algebra computations are implemented using [faer](https://docs.rs/faer/latest/faer/) Rust crate to achieve highly optimized performance.
-
-## Installation
-
-### CRAN Release
-
-You can install the latest release of {fio} from CRAN with:
-
-```r
-install.packages("fio")
-```
-
-### Development version
-
-If you prefer compiling from source, [Rust](https://www.rust-lang.org/) is required to be installed on your system. You can install Rust from your OS package manager or, preferably, from [official installer](https://www.rust-lang.org/tools/install).
-
-or the precompiled master branch from R-Universe:
-
-```r
-install.packages("fio", repos = c("https://albersonmiranda.r-universe.dev", "https://cloud.r-project.org"))
-```
-
-## Getting Started
-
-If you are just getting started with `{fio}`, we recommend you to read the [vignettes](https://albersonmiranda.github.io/fio/articles/index.html) for a comprehensive overview of the package.
 
 ## Input-Output Analysis?
 
@@ -85,6 +61,30 @@ Both approaches rely on matrix algebra operations implemented in Rust for comput
   - Country extraction for single-region analysis from multi-region data
 
 {fio} also includes 2 built-in datasets --- `br_2020` for single-region and `world_2000` for multi-region analysis --- and a utility function to download input-output data from University of Groningen's [World Input-Output Database (WIOD)](https://www.rug.nl/ggdc/valuechain/wiod/?lang=en).
+
+## Installation
+
+### CRAN Release
+
+You can install the latest release of {fio} from CRAN with:
+
+```r
+install.packages("fio")
+```
+
+### Development version
+
+If you prefer compiling from source, [Rust](https://www.rust-lang.org/) is required to be installed on your system. You can install Rust from your OS package manager or, preferably, from [official installer](https://www.rust-lang.org/tools/install).
+
+or the precompiled master branch from R-Universe:
+
+```r
+install.packages("fio", repos = c("https://albersonmiranda.r-universe.dev", "https://cloud.r-project.org"))
+```
+
+## Getting Started
+
+If you are just getting started with `{fio}`, we recommend you to read the [vignettes](https://albersonmiranda.github.io/fio/articles/index.html) for a comprehensive overview of the package.
 
 ## Single-region input-output analysis
 
@@ -130,8 +130,18 @@ miom_world <- fio::world_2000
 # get bilateral trade (from -> to)
 miom_world$get_bilateral_trade("BRA", "CHN")[1:5, 1:2]
 
-# calculate multi-regional multipliers
+# compute multi-regional multipliers
 miom_world$compute_multiregional_multipliers()
+
+# show multipliers for specific country-sector pairs
+# example: Chemicals from Brazil to China and US
+bra_chemicals_index <- which(grepl("BRA.*Chemicals", miom_world$multiregional_multipliers$destination_label))[1]
+bra_chemicals <- miom_world$multiregional_multipliers[bra_chemicals_index, ]
+
+# Show key multiplier components
+multiplier_cols <- c("destination_label", "intra_regional_multiplier", "spillover_multiplier", "total_multiplier", "multiplier_to_CHN", "multiplier_to_USA")
+available_cols <- intersect(multiplier_cols, names(bra_chemicals))
+bra_chemicals[, available_cols]
 
 # get regional interdependence
 miom_world$get_regional_interdependence() |> head()

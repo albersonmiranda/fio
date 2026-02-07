@@ -4,7 +4,8 @@ use reqwest::blocking::get;
 use std::fs::File;
 use std::io::copy;
 
-#[extendr(invisible)]
+// #[extendr(invisible)] when new extendr version is released
+#[extendr]
 /// @title
 /// Download WIOD tables
 

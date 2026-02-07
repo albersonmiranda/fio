@@ -33,7 +33,7 @@ use rayon::prelude::*;
 fn compute_allocation_coeff(
   intermediate_transactions: &[f64],
   total_production: &[f64],
-) -> RArray<f64, 2> {
+) -> RArray<f64, [usize;2]> {
   
   // get dimensions (square root of length)
   let n = (intermediate_transactions.len() as f64).sqrt() as usize;
@@ -66,7 +66,7 @@ fn compute_allocation_coeff(
 /// \insertAllCited{}
 /// 
 /// @noRd
-fn compute_ghosh_inverse(allocation_coeff: &[f64]) -> RArray<f64, 2> {
+fn compute_ghosh_inverse(allocation_coeff: &[f64]) -> RArray<f64, [usize;2]> {
 
   // get dimensions
   let n = (allocation_coeff.len() as f64).sqrt() as usize;
