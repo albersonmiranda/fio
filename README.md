@@ -35,36 +35,6 @@ computations are implemented using
 [faer](https://docs.rs/faer/latest/faer/) Rust crate to achieve highly
 optimized performance.
 
-## Installation
-
-### CRAN Release
-
-You can install the latest release of {fio} from CRAN with:
-
-``` r
-install.packages("fio")
-```
-
-### Development version
-
-If you prefer compiling from source, [Rust](https://www.rust-lang.org/)
-is required to be installed on your system. You can install Rust from
-your OS package manager or, preferably, from [official
-installer](https://www.rust-lang.org/tools/install).
-
-or the precompiled master branch from R-Universe:
-
-``` r
-install.packages("fio", repos = c("https://albersonmiranda.r-universe.dev", "https://cloud.r-project.org"))
-```
-
-## Getting Started
-
-If you are just getting started with `{fio}`, we recommend you to read
-the
-[vignettes](https://albersonmiranda.github.io/fio/articles/index.html)
-for a comprehensive overview of the package.
-
 ## Input-Output Analysis?
 
 Input-output analysis is a quantitative economic technique that examines
@@ -112,6 +82,36 @@ and `world_2000` for multi-region analysis — and a utility function to
 download input-output data from University of Groningen’s [World
 Input-Output Database
 (WIOD)](https://www.rug.nl/ggdc/valuechain/wiod/?lang=en).
+
+## Installation
+
+### CRAN Release
+
+You can install the latest release of {fio} from CRAN with:
+
+``` r
+install.packages("fio")
+```
+
+### Development version
+
+If you prefer compiling from source, [Rust](https://www.rust-lang.org/)
+is required to be installed on your system. You can install Rust from
+your OS package manager or, preferably, from [official
+installer](https://www.rust-lang.org/tools/install).
+
+or the precompiled master branch from R-Universe:
+
+``` r
+install.packages("fio", repos = c("https://albersonmiranda.r-universe.dev", "https://cloud.r-project.org"))
+```
+
+## Getting Started
+
+If you are just getting started with `{fio}`, we recommend you to read
+the
+[vignettes](https://albersonmiranda.github.io/fio/articles/index.html)
+for a comprehensive overview of the package.
 
 ## Single-region input-output analysis
 
@@ -244,8 +244,22 @@ miom_world$get_bilateral_trade("BRA", "CHN")[1:5, 1:2]
 #> CHN_Textiles, leather and footwear                          0.129627291
 #> CHN_Pulp, paper, printing and publishing                    0.015560710
 
-# calculate multi-regional multipliers
+# compute multi-regional multipliers
 miom_world$compute_multiregional_multipliers()
+
+# show multipliers for specific country-sector pairs
+# example: Chemicals from Brazil to China and US
+bra_chemicals_index <- which(grepl("BRA.*Chemicals", miom_world$multiregional_multipliers$destination_label))[1]
+bra_chemicals <- miom_world$multiregional_multipliers[bra_chemicals_index, ]
+
+# Show key multiplier components
+multiplier_cols <- c("destination_label", "intra_regional_multiplier", "spillover_multiplier", "total_multiplier", "multiplier_to_CHN", "multiplier_to_USA")
+available_cols <- intersect(multiplier_cols, names(bra_chemicals))
+bra_chemicals[, available_cols]
+#>                       destination_label intra_regional_multiplier
+#> 76 BRA_Chemicals and chemicals products                  2.165192
+#>    spillover_multiplier total_multiplier multiplier_to_CHN multiplier_to_USA
+#> 76            0.3714218         2.536614        0.01258698        0.08826115
 
 # get regional interdependence
 miom_world$get_regional_interdependence() |> head()
