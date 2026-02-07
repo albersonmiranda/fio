@@ -24,11 +24,13 @@ Friendly & Fast Input-Output Analysis <img src="man/figures/leontief.jpg" align=
 [![R-CMD-check](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/albersonmiranda/fio/branch/main/graph/badge.svg)](https://app.codecov.io/gh/albersonmiranda/fio?branch=main)
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/fio)](https://CRAN.R-project.org/package=fio)
+[![DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/albersonmiranda/fio)
+[![extendr](https://img.shields.io/badge/extendr-*-276DC2)](https://extendr.github.io/extendr/extendr_api/)
 <!-- badges: end -->
 
-`{fio}` (*Friendly Input-Output*) is a R package designed for input-output analysis, emphasizing usability for Excel users and performance. It includes an [RStudio Addin](https://rstudio.github.io/rstudioaddins/) and a suite of functions for straightforward import of input-output tables from Excel, either programmatically or directly from the clipboard.
+`{fio}` (*Friendly Input-Output*) is a R package designed for economic input-output analysis that combines user-friendly interfaces with high-performance computation. It provides tools for analyzing both single-region and multi-regional economic systems through a hybrid architecture that pairs R's accessibility with [Rust's](https://www.rust-lang.org/) computational efficiency.
 
-The package is optimized for speed and efficiency. It leverages the [R6 class](https://r6.r-lib.org/) for clean, memory-efficient object-oriented programming. Furthermore, all linear algebra computations are implemented in [Rust](https://www.rust-lang.org/) to achieve highly optimized performance.
+The package is optimized for speed and efficiency. It leverages the [R6 class](https://r6.r-lib.org/) for clean, memory-efficient object-oriented programming. Furthermore, all linear algebra computations are implemented using [faer](https://docs.rs/faer/latest/faer/) Rust crate to achieve highly optimized performance.
 
 ## Installation
 
@@ -40,46 +42,82 @@ You can install the latest release of {fio} from CRAN with:
 install.packages("fio")
 ```
 
-### R-universe version
+### Development version
 
-You can install the latest version from the [main branch](https://github.com/albersonmiranda/fio/tree/main), using the precompiled binaries available on [R-universe](https://albersonmiranda.r-universe.dev/fio):
+If you prefer compiling from source, [Rust](https://www.rust-lang.org/) is required to be installed on your system. You can install Rust from your OS package manager or, preferably, from [official installer](https://www.rust-lang.org/tools/install).
+
+or the precompiled master branch from R-Universe:
 
 ```r
 install.packages("fio", repos = c("https://albersonmiranda.r-universe.dev", "https://cloud.r-project.org"))
 ```
 
-### Development version
-
-For the cutting-edge development branches from Github (other than the main branch), you'll need to compile it from source. This requires [Rust](https://www.rust-lang.org/) to be installed on your system. You can install Rust using the following commands:
-
-- Debian/Ubuntu: `sudo apt install cargo`
-- Fedora/CentOS: `sudo dnf install cargo`
-- macOS: `brew install rust`
-- Windows: https://www.rust-lang.org/tools/install
-
 ## Getting Started
 
 If you are just getting started with `{fio}`, we recommend you to read the [vignettes](https://albersonmiranda.github.io/fio/articles/index.html) for a comprehensive overview of the package.
 
-## Single-region input-output analysis
+## Input-Output Analysis?
 
-Calculate Leontief's inverse from brazilian 2020 input-output matrix:
+Input-output analysis is a quantitative economic technique that examines inter-industry relationships within an economy. Developed by the Russian-American economist Wassily Leontief, it models how the output of one industry serves as input to other industries, allowing analysts to trace the ripple effects of changes in production, demand, or policy throughout an economic system.
+
+The fio package implements input-output analysis using two computational
+paradigms:
+
+- Demand-side (Leontief) model: Traces how changes in final demand propagate backward through supply chains, calculating the total production required across all sectors to satisfy a given level of final demand.
+- Supply-side (Ghosh) model: Traces how changes in primary inputs propagate forward through production chains, analyzing how changes in value-added components affect sectoral outputs.
+
+Both approaches rely on matrix algebra operations implemented in Rust for computational efficiency, with R6 classes providing the R user-facing interface.
+
+## Features
+
+{fio} is able to:
+
+- Single-region capabilities:
+  - Compute core matrices (technical and allocation coefficients, Leontief and Ghoshian inverses)
+  - Multipliers (output, employment, wages, taxes)
+  - Structural Analysis (key sectors, field of influence, hypothetical extraction)
+  - Model closure (household and government)
+- Multi-region inherits all single-region capabilities and adds:
+  - Bilateral trade
+  - Multi-regional multipliers
+  - Spillover matrices
+  - Regional interdependence
+  - Country extraction for single-region analysis from multi-region data
+
+{fio} also includes 2 built-in datasets --- `br_2020` for single-region and `world_2000` for multi-region analysis --- and a utility function to download input-output data from University of Groningen's [World Input-Output Database (WIOD)](https://www.rug.nl/ggdc/valuechain/wiod/?lang=en).
+
+## Single-region input-output analysis
 
 ```{r example}
 # load included dataset
 iom_br <- fio::br_2020
 
-# calculate technical coefficients matrix
+# compute technical coefficients matrix
 iom_br$compute_tech_coeff()
 
-# calculate Leontief's inverse
+# compute Leontief's inverse
 iom_br$compute_leontief_inverse()
+
+# key sectors
+iom_br$compute_key_sectors()
+iom_br$key_sectors |> head()
+
+# hypothetical extraction
+iom_br$compute_allocation_coeff()
+iom_br$compute_hypothetical_extraction()
+iom_br$hypothetical_extraction |> head()
+
+# field of influence
+iom_br$compute_field_influence(epsilon = 0.001)
+iom_br$field_influence[1:5, 1:5]
+
+# closed model
+iom_br$close_model("household")
+iom_br$compute_tech_coeff()
+iom_br$compute_leontief_inverse()
+iom_br$compute_key_sectors()
+iom_br$key_sectors |> tail() # household consumption is a key sector!
 ```
-
-And pronto! `r emoji::emoji("tada")`, you're all good to carry on with your analysis. You can evoke the Data Viewer to inspect the results with `iom_br$technical_coefficients_matrix |> View()` and `iom_br$leontief_inverse_matrix |> View()`.
-
-![](man/figures/example_leontief_inverse.png)
-*<small>Leontief's inverse from brazilian 2020 input-output matrix</small>*
 
 ## Multi-region input-output analysis
 
@@ -89,14 +127,17 @@ Calculate multi-regional multipliers and interdependence from the 2000 World Inp
 # load included dataset
 miom_world <- fio::world_2000
 
+# get bilateral trade (from -> to)
+miom_world$get_bilateral_trade("BRA", "CHN")[1:5, 1:2]
+
 # calculate multi-regional multipliers
 miom_world$compute_multiregional_multipliers()
 
 # get regional interdependence
-miom_world$get_regional_interdependence()
+miom_world$get_regional_interdependence() |> head()
 
 # get country summary
-miom_world$get_country_summary()
+miom_world$get_country_summary() |> head()
 ```
 ## Related tools
 
