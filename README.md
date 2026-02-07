@@ -18,7 +18,7 @@ status](https://www.r-pkg.org/badges/version/fio)](https://CRAN.R-project.org/pa
 coverage](https://codecov.io/gh/albersonmiranda/fio/branch/main/graph/badge.svg)](https://app.codecov.io/gh/albersonmiranda/fio?branch=main)
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/fio)](https://CRAN.R-project.org/package=fio)
 [![DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/albersonmiranda/fio)
-[![extendr](https://img.shields.io/badge/extendr-%5E0.8.1-276DC2)](https://extendr.github.io/extendr/extendr_api/)
+[![extendr](https://img.shields.io/badge/extendr-%5E0.8.1-276DC2)](https://extendr.rs/extendr/extendr_api/)
 <!-- badges: end -->
 
 `{fio}` (*Friendly Input-Output*) is a R package designed for economic
@@ -26,7 +26,7 @@ input-output analysis that combines user-friendly interfaces with
 high-performance computation. It provides tools for analyzing both
 single-region and multi-regional economic systems through a hybrid
 architecture that pairs R’s accessibility with
-[Rust’s](https://www.rust-lang.org/) computational efficiency.
+[Rust’s](https://rust-lang.org/) computational efficiency.
 
 The package is optimized for speed and efficiency. It leverages the [R6
 class](https://r6.r-lib.org/) for clean, memory-efficient
@@ -95,10 +95,10 @@ install.packages("fio")
 
 ### Development version
 
-If you prefer compiling from source, [Rust](https://www.rust-lang.org/)
-is required to be installed on your system. You can install Rust from
-your OS package manager or, preferably, from [official
-installer](https://www.rust-lang.org/tools/install).
+If you prefer compiling from source, [Rust](https://rust-lang.org/) is
+required to be installed on your system. You can install Rust from your
+OS package manager or, preferably, from [official
+installer](https://rust-lang.org/tools/install/).
 
 or the precompiled master branch from R-Universe:
 

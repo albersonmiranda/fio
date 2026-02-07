@@ -1,4 +1,4 @@
-# fio (development version)
+# fio 1.0.0
 
 ## ✨ Enhancements
 
@@ -11,10 +11,6 @@
 * New `close_model()` method to support closed single-region input-output models by moving household and/or government sectors from final demand to intermediate transactions matrix (#154).
 * New param `matrix` to `compute_key_sectors()` and `compute_hypothetical_extraction()` so users can decide if should be used Leontief or Ghosh matrices when computing forward linkages (#148).
 * New `download_wiod()` function to download World Input-Output Database (WIOD) tables directly from their website (#152).
-
-## 🛠️ Other improvements
-
-* Bump `faer` to 0.23.2.
 
 # fio 0.1.6
 
