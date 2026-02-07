@@ -81,8 +81,44 @@
 <p>Friendly &amp; Fast Input-Output Analysis <img src="reference/figures/leontief.jpg" align="right" width="240px" style="margin-left: 20px;"></p>
 <!-- badges: start -->
 
-<p><a href="https://albersonmiranda.github.io/fio/">fio</a> (<em>Friendly Input-Output</em>) is a R package designed for input-output analysis, emphasizing usability for Excel users and performance. It includes an <a href="https://rstudio.github.io/rstudioaddins/" class="external-link">RStudio Addin</a> and a suite of functions for straightforward import of input-output tables from Excel, either programmatically or directly from the clipboard.</p>
-<p>The package is optimized for speed and efficiency. It leverages the <a href="https://r6.r-lib.org/" class="external-link">R6 class</a> for clean, memory-efficient object-oriented programming. Furthermore, all linear algebra computations are implemented in <a href="https://www.rust-lang.org/" class="external-link">Rust</a> to achieve highly optimized performance.</p>
+<p><a href="https://albersonmiranda.github.io/fio/">fio</a> (<em>Friendly Input-Output</em>) is a R package designed for economic input-output analysis that combines user-friendly interfaces with high-performance computation. It provides tools for analyzing both single-region and multi-regional economic systems through a hybrid architecture that pairs R’s accessibility with <a href="https://www.rust-lang.org/" class="external-link">Rust’s</a> computational efficiency.</p>
+<p>The package is optimized for speed and efficiency. It leverages the <a href="https://r6.r-lib.org/" class="external-link">R6 class</a> for clean, memory-efficient object-oriented programming. Furthermore, all linear algebra computations are implemented using <a href="https://docs.rs/faer/latest/faer/" class="external-link">faer</a> Rust crate to achieve highly optimized performance.</p>
+<div class="section level2">
+<h2 id="input-output-analysis">Input-Output Analysis?<a class="anchor" aria-label="anchor" href="#input-output-analysis"></a>
+</h2>
+<p>Input-output analysis is a quantitative economic technique that examines inter-industry relationships within an economy. Developed by the Russian-American economist Wassily Leontief, it models how the output of one industry serves as input to other industries, allowing analysts to trace the ripple effects of changes in production, demand, or policy throughout an economic system.</p>
+<p>The fio package implements input-output analysis using two computational paradigms:</p>
+<ul>
+<li>Demand-side (Leontief) model: Traces how changes in final demand propagate backward through supply chains, calculating the total production required across all sectors to satisfy a given level of final demand.</li>
+<li>Supply-side (Ghosh) model: Traces how changes in primary inputs propagate forward through production chains, analyzing how changes in value-added components affect sectoral outputs.</li>
+</ul>
+<p>Both approaches rely on matrix algebra operations implemented in Rust for computational efficiency, with R6 classes providing the R user-facing interface.</p>
+</div>
+<div class="section level2">
+<h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
+</h2>
+<p>{fio} is able to:</p>
+<ul>
+<li>Single-region capabilities:
+<ul>
+<li>Compute core matrices (technical and allocation coefficients, Leontief and Ghoshian inverses)</li>
+<li>Multipliers (output, employment, wages, taxes)</li>
+<li>Structural Analysis (key sectors, field of influence, hypothetical extraction)</li>
+<li>Model closure (household and government)</li>
+</ul>
+</li>
+<li>Multi-region inherits all single-region capabilities and adds:
+<ul>
+<li>Bilateral trade</li>
+<li>Multi-regional multipliers</li>
+<li>Spillover matrices</li>
+<li>Regional interdependence</li>
+<li>Country extraction for single-region analysis from multi-region data</li>
+</ul>
+</li>
+</ul>
+<p>{fio} also includes 2 built-in datasets — <code>br_2020</code> for single-region and <code>world_2000</code> for multi-region analysis — and a utility function to download input-output data from University of Groningen’s <a href="https://www.rug.nl/ggdc/valuechain/wiod/?lang=en" class="external-link">World Input-Output Database (WIOD)</a>.</p>
+</div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -94,26 +130,12 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"fio"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="r-universe-version">R-universe version<a class="anchor" aria-label="anchor" href="#r-universe-version"></a>
-</h3>
-<p>You can install the latest version from the <a href="https://github.com/albersonmiranda/fio/tree/main" class="external-link">main branch</a>, using the precompiled binaries available on <a href="https://albersonmiranda.r-universe.dev/fio" class="external-link">R-universe</a>:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"fio"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"https://albersonmiranda.r-universe.dev"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
 <h3 id="development-version">Development version<a class="anchor" aria-label="anchor" href="#development-version"></a>
 </h3>
-<p>For the cutting-edge development branches from Github (other than the main branch), you’ll need to compile it from source. This requires <a href="https://www.rust-lang.org/" class="external-link">Rust</a> to be installed on your system. You can install Rust using the following commands:</p>
-<ul>
-<li>Debian/Ubuntu: <code>sudo apt install cargo</code>
-</li>
-<li>Fedora/CentOS: <code>sudo dnf install cargo</code>
-</li>
-<li>macOS: <code>brew install rust</code>
-</li>
-<li>Windows: <a href="https://www.rust-lang.org/tools/install" class="external-link uri">https://www.rust-lang.org/tools/install</a>
-</li>
-</ul>
+<p>If you prefer compiling from source, <a href="https://www.rust-lang.org/" class="external-link">Rust</a> is required to be installed on your system. You can install Rust from your OS package manager or, preferably, from <a href="https://www.rust-lang.org/tools/install" class="external-link">official installer</a>.</p>
+<p>or the precompiled master branch from R-Universe:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"fio"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"https://albersonmiranda.r-universe.dev"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -124,18 +146,109 @@
 <div class="section level2">
 <h2 id="single-region-input-output-analysis">Single-region input-output analysis<a class="anchor" aria-label="anchor" href="#single-region-input-output-analysis"></a>
 </h2>
-<p>Calculate Leontief’s inverse from brazilian 2020 input-output matrix:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load included dataset</span></span>
 <span><span class="va">iom_br</span> <span class="op">&lt;-</span> <span class="fu">fio</span><span class="fu">::</span><span class="va"><a href="reference/br_2020.html">br_2020</a></span></span>
 <span></span>
-<span><span class="co"># calculate technical coefficients matrix</span></span>
+<span><span class="co"># compute technical coefficients matrix</span></span>
 <span><span class="va">iom_br</span><span class="op">$</span><span class="fu">compute_tech_coeff</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># calculate Leontief's inverse</span></span>
-<span><span class="va">iom_br</span><span class="op">$</span><span class="fu">compute_leontief_inverse</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>And pronto! 🎉, you’re all good to carry on with your analysis. You can evoke the Data Viewer to inspect the results with <code>iom_br$technical_coefficients_matrix |&gt; View()</code> and <code>iom_br$leontief_inverse_matrix |&gt; View()</code>.</p>
-<p><img src="reference/figures/example_leontief_inverse.png"><em><small>Leontief’s inverse from brazilian 2020 input-output matrix</small></em></p>
+<span><span class="co"># compute Leontief's inverse</span></span>
+<span><span class="va">iom_br</span><span class="op">$</span><span class="fu">compute_leontief_inverse</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># key sectors</span></span>
+<span><span class="va">iom_br</span><span class="op">$</span><span class="fu">compute_key_sectors</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">iom_br</span><span class="op">$</span><span class="va">key_sectors</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                               sector power_dispersion sensitivity_dispersion</span></span>
+<span><span class="co">#&gt; 1 Agriculture, forestry, and logging        0.8682901              1.5528270</span></span>
+<span><span class="co">#&gt; 2              Livestock and fishing        0.9667243              0.7724195</span></span>
+<span><span class="co">#&gt; 3                Oil and natural gas        1.0229545              1.1077440</span></span>
+<span><span class="co">#&gt; 4                           Iron ore        0.8988597              0.8340117</span></span>
+<span><span class="co">#&gt; 5          Other extractive industry        1.0470158              0.7947658</span></span>
+<span><span class="co">#&gt; 6                 Food and beverages        1.2759523              1.2776693</span></span>
+<span><span class="co">#&gt;   power_dispersion_cv sensitivity_dispersion_cv             key_sectors</span></span>
+<span><span class="co">#&gt; 1            5.134611                  2.449116  Strong Forward Linkage</span></span>
+<span><span class="co">#&gt; 2            4.173404                  5.193911          Non-Key Sector</span></span>
+<span><span class="co">#&gt; 3            3.960120                  3.513779              Key Sector</span></span>
+<span><span class="co">#&gt; 4            4.423694                  4.636574          Non-Key Sector</span></span>
+<span><span class="co">#&gt; 5            3.761186                  4.933658 Strong Backward Linkage</span></span>
+<span><span class="co">#&gt; 6            3.519630                  3.474199              Key Sector</span></span>
+<span></span>
+<span><span class="co"># hypothetical extraction</span></span>
+<span><span class="va">iom_br</span><span class="op">$</span><span class="fu">compute_allocation_coeff</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">iom_br</span><span class="op">$</span><span class="fu">compute_hypothetical_extraction</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">iom_br</span><span class="op">$</span><span class="va">hypothetical_extraction</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                                    backward_absolute backward_relative</span></span>
+<span><span class="co">#&gt; Agriculture, forestry, and logging        -358764.14      -0.026962180</span></span>
+<span><span class="co">#&gt; Livestock and fishing                     -172937.80      -0.012996785</span></span>
+<span><span class="co">#&gt; Oil and natural gas                       -214364.61      -0.016110131</span></span>
+<span><span class="co">#&gt; Iron ore                                  -106984.50      -0.008040200</span></span>
+<span><span class="co">#&gt; Other extractive industry                  -44124.08      -0.003316055</span></span>
+<span><span class="co">#&gt; Food and beverages                       -1150341.99      -0.086451585</span></span>
+<span><span class="co">#&gt;                                    forward_absolute forward_relative</span></span>
+<span><span class="co">#&gt; Agriculture, forestry, and logging       -398083.76     -0.029917166</span></span>
+<span><span class="co">#&gt; Livestock and fishing                    -202488.89     -0.015217636</span></span>
+<span><span class="co">#&gt; Oil and natural gas                      -319722.18     -0.024028063</span></span>
+<span><span class="co">#&gt; Iron ore                                  -96680.46     -0.007265821</span></span>
+<span><span class="co">#&gt; Other extractive industry                 -70594.98     -0.005305421</span></span>
+<span><span class="co">#&gt; Food and beverages                       -357953.32     -0.026901245</span></span>
+<span><span class="co">#&gt;                                    total_absolute total_relative</span></span>
+<span><span class="co">#&gt; Agriculture, forestry, and logging      -756847.9   -0.056879346</span></span>
+<span><span class="co">#&gt; Livestock and fishing                   -375426.7   -0.028214420</span></span>
+<span><span class="co">#&gt; Oil and natural gas                     -534086.8   -0.040138194</span></span>
+<span><span class="co">#&gt; Iron ore                                -203665.0   -0.015306021</span></span>
+<span><span class="co">#&gt; Other extractive industry               -114719.1   -0.008621475</span></span>
+<span><span class="co">#&gt; Food and beverages                     -1508295.3   -0.113352829</span></span>
+<span></span>
+<span><span class="co"># field of influence</span></span>
+<span><span class="va">iom_br</span><span class="op">$</span><span class="fu">compute_field_influence</span><span class="op">(</span>epsilon <span class="op">=</span> <span class="fl">0.001</span><span class="op">)</span></span>
+<span><span class="va">iom_br</span><span class="op">$</span><span class="va">field_influence</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
+<span><span class="co">#&gt;                                    Agriculture, forestry, and logging</span></span>
+<span><span class="co">#&gt; Agriculture, forestry, and logging                           1.687863</span></span>
+<span><span class="co">#&gt; Livestock and fishing                                        1.800221</span></span>
+<span><span class="co">#&gt; Oil and natural gas                                          1.774443</span></span>
+<span><span class="co">#&gt; Iron ore                                                     1.669759</span></span>
+<span><span class="co">#&gt; Other extractive industry                                    1.762653</span></span>
+<span><span class="co">#&gt;                                    Livestock and fishing Oil and natural gas</span></span>
+<span><span class="co">#&gt; Agriculture, forestry, and logging              1.282227            1.357990</span></span>
+<span><span class="co">#&gt; Livestock and fishing                           1.372254            1.450645</span></span>
+<span><span class="co">#&gt; Oil and natural gas                             1.349964            1.432484</span></span>
+<span><span class="co">#&gt; Iron ore                                        1.270325            1.345621</span></span>
+<span><span class="co">#&gt; Other extractive industry                       1.340999            1.420446</span></span>
+<span><span class="co">#&gt;                                    Iron ore Other extractive industry</span></span>
+<span><span class="co">#&gt; Agriculture, forestry, and logging 1.253284                  1.233775</span></span>
+<span><span class="co">#&gt; Livestock and fishing              1.338806                  1.317962</span></span>
+<span><span class="co">#&gt; Oil and natural gas                1.319714                  1.299181</span></span>
+<span><span class="co">#&gt; Iron ore                           1.244176                  1.222513</span></span>
+<span><span class="co">#&gt; Other extractive industry          1.310923                  1.293003</span></span>
+<span></span>
+<span><span class="co"># closed model</span></span>
+<span><span class="va">iom_br</span><span class="op">$</span><span class="fu">close_model</span><span class="op">(</span><span class="st">"household"</span><span class="op">)</span></span>
+<span><span class="va">iom_br</span><span class="op">$</span><span class="fu">compute_tech_coeff</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">iom_br</span><span class="op">$</span><span class="fu">compute_leontief_inverse</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">iom_br</span><span class="op">$</span><span class="fu">compute_key_sectors</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">iom_br</span><span class="op">$</span><span class="va">key_sectors</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># household consumption is a key sector!</span></span>
+<span><span class="co">#&gt;                                            sector power_dispersion</span></span>
+<span><span class="co">#&gt; 47 Services provided to families and associations         1.734435</span></span>
+<span><span class="co">#&gt; 48                              Domestic services         5.588961</span></span>
+<span><span class="co">#&gt; 49                               Public education         4.622521</span></span>
+<span><span class="co">#&gt; 50                                  Public health         3.305240</span></span>
+<span><span class="co">#&gt; 51      Public administration and social security         3.454131</span></span>
+<span><span class="co">#&gt; 52                                      Household         6.361264</span></span>
+<span><span class="co">#&gt;    sensitivity_dispersion power_dispersion_cv sensitivity_dispersion_cv</span></span>
+<span><span class="co">#&gt; 47             0.63892457           -3.322009                -9.4001887</span></span>
+<span><span class="co">#&gt; 48            -0.09106979           -1.116853               144.2065445</span></span>
+<span><span class="co">#&gt; 49            -0.75064844           -1.395006                14.7113147</span></span>
+<span><span class="co">#&gt; 50            -0.74714756           -1.907591                11.2344617</span></span>
+<span><span class="co">#&gt; 51            -0.59207449           -1.793077                14.3456558</span></span>
+<span><span class="co">#&gt; 52            46.33444701           -7.959814                -0.2588016</span></span>
+<span><span class="co">#&gt;                key_sectors</span></span>
+<span><span class="co">#&gt; 47 Strong Backward Linkage</span></span>
+<span><span class="co">#&gt; 48 Strong Backward Linkage</span></span>
+<span><span class="co">#&gt; 49 Strong Backward Linkage</span></span>
+<span><span class="co">#&gt; 50 Strong Backward Linkage</span></span>
+<span><span class="co">#&gt; 51 Strong Backward Linkage</span></span>
+<span><span class="co">#&gt; 52              Key Sector</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="multi-region-input-output-analysis">Multi-region input-output analysis<a class="anchor" aria-label="anchor" href="#multi-region-input-output-analysis"></a>
@@ -145,149 +258,78 @@
 <code class="sourceCode R"><span><span class="co"># load included dataset</span></span>
 <span><span class="va">miom_world</span> <span class="op">&lt;-</span> <span class="fu">fio</span><span class="fu">::</span><span class="va"><a href="reference/world_2000.html">world_2000</a></span></span>
 <span></span>
-<span><span class="co"># calculate multi-regional multipliers</span></span>
+<span><span class="co"># get bilateral trade (from -&gt; to)</span></span>
+<span><span class="va">miom_world</span><span class="op">$</span><span class="fu">get_bilateral_trade</span><span class="op">(</span><span class="st">"BRA"</span>, <span class="st">"CHN"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span></span>
+<span><span class="co">#&gt;                                                BRA_Agriculture, Hunting, Forestry and Fishing</span></span>
+<span><span class="co">#&gt; CHN_Agriculture, Hunting, Forestry and Fishing                                    0.868486382</span></span>
+<span><span class="co">#&gt; CHN_Mining and Quarrying                                                          0.677175460</span></span>
+<span><span class="co">#&gt; CHN_Food, Beverages and Tobacco                                                   0.784219678</span></span>
+<span><span class="co">#&gt; CHN_Textiles, leather and footwear                                                0.137408834</span></span>
+<span><span class="co">#&gt; CHN_Pulp, paper, printing and publishing                                          0.003052195</span></span>
+<span><span class="co">#&gt;                                                BRA_Mining and Quarrying</span></span>
+<span><span class="co">#&gt; CHN_Agriculture, Hunting, Forestry and Fishing              0.001110208</span></span>
+<span><span class="co">#&gt; CHN_Mining and Quarrying                                    1.703217354</span></span>
+<span><span class="co">#&gt; CHN_Food, Beverages and Tobacco                             0.005707213</span></span>
+<span><span class="co">#&gt; CHN_Textiles, leather and footwear                          0.129627291</span></span>
+<span><span class="co">#&gt; CHN_Pulp, paper, printing and publishing                    0.015560710</span></span>
+<span></span>
+<span><span class="co"># compute multi-regional multipliers</span></span>
 <span><span class="va">miom_world</span><span class="op">$</span><span class="fu">compute_multiregional_multipliers</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># show multipliers for specific country-sector pairs</span></span>
+<span><span class="co"># example: Chemicals from Brazil to China and US</span></span>
+<span><span class="va">bra_chemicals_index</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"BRA.*Chemicals"</span>, <span class="va">miom_world</span><span class="op">$</span><span class="va">multiregional_multipliers</span><span class="op">$</span><span class="va">destination_label</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">bra_chemicals</span> <span class="op">&lt;-</span> <span class="va">miom_world</span><span class="op">$</span><span class="va">multiregional_multipliers</span><span class="op">[</span><span class="va">bra_chemicals_index</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="co"># Show key multiplier components</span></span>
+<span><span class="va">multiplier_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"destination_label"</span>, <span class="st">"intra_regional_multiplier"</span>, <span class="st">"spillover_multiplier"</span>, <span class="st">"total_multiplier"</span>, <span class="st">"multiplier_to_CHN"</span>, <span class="st">"multiplier_to_USA"</span><span class="op">)</span></span>
+<span><span class="va">available_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="va">multiplier_cols</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">bra_chemicals</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">bra_chemicals</span><span class="op">[</span>, <span class="va">available_cols</span><span class="op">]</span></span>
+<span><span class="co">#&gt;                       destination_label intra_regional_multiplier</span></span>
+<span><span class="co">#&gt; 76 BRA_Chemicals and chemicals products                  2.165192</span></span>
+<span><span class="co">#&gt;    spillover_multiplier total_multiplier multiplier_to_CHN multiplier_to_USA</span></span>
+<span><span class="co">#&gt; 76            0.3714218         2.536614        0.01258698        0.08826115</span></span>
+<span></span>
 <span><span class="co"># get regional interdependence</span></span>
-<span><span class="va">miom_world</span><span class="op">$</span><span class="fu">get_regional_interdependence</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    country self_reliance total_spillover_out total_spillover_in</span></span>
-<span><span class="co">#&gt; 1      AUS      1.968515           0.3168527       0.0065116342</span></span>
-<span><span class="co">#&gt; 2      AUT      1.614535           0.4900724       0.0040486980</span></span>
-<span><span class="co">#&gt; 3      BEL      1.649908           0.7652207       0.0111482277</span></span>
-<span><span class="co">#&gt; 4      BRA      1.918948           0.2328115       0.0040658244</span></span>
-<span><span class="co">#&gt; 5      CAN      1.650380           0.4280919       0.0076344511</span></span>
-<span><span class="co">#&gt; 6      CHN      2.342241           0.2867934       0.0167357151</span></span>
-<span><span class="co">#&gt; 7      DEU      1.750123           0.4072660       0.0461095519</span></span>
-<span><span class="co">#&gt; 8      DNK      1.588219           0.5336860       0.0045789821</span></span>
-<span><span class="co">#&gt; 9      ESP      1.872652           0.4035966       0.0127873685</span></span>
-<span><span class="co">#&gt; 10     FIN      1.814946           0.4446499       0.0051829261</span></span>
-<span><span class="co">#&gt; 11     FRA      1.870104           0.3975701       0.0258689073</span></span>
-<span><span class="co">#&gt; 12     GBR      1.880823           0.3553086       0.0323988530</span></span>
-<span><span class="co">#&gt; 13     GRC      1.450459           0.4766389       0.0008403844</span></span>
-<span><span class="co">#&gt; 14     HKG      1.456702           1.0297257       0.0050721423</span></span>
-<span><span class="co">#&gt; 15     IND      1.930336           0.2933663       0.0030570998</span></span>
-<span><span class="co">#&gt; 16     IRL      1.473624           0.7271773       0.0035162918</span></span>
-<span><span class="co">#&gt; 17     ITA      1.975659           0.3413902       0.0210409652</span></span>
-<span><span class="co">#&gt; 18     JPN      1.928339           0.1351515       0.0269893283</span></span>
-<span><span class="co">#&gt; 19     KOR      1.988313           0.4362860       0.0102672586</span></span>
-<span><span class="co">#&gt; 20     MEX      1.562506           0.3542938       0.0025632750</span></span>
-<span><span class="co">#&gt; 21     NDL      1.579268           0.6539386       0.0170240366</span></span>
-<span><span class="co">#&gt; 22     PRT      1.813322           0.5236525       0.0017732553</span></span>
-<span><span class="co">#&gt; 23     SWE      1.725532           0.5043674       0.0103124186</span></span>
-<span><span class="co">#&gt; 24     TWN      1.676048           0.5120606       0.0073320388</span></span>
-<span><span class="co">#&gt; 25     USA      1.878020           0.1923963       0.0655620433</span></span>
-<span><span class="co">#&gt; 26     ROW      1.756742           0.4076203       0.0956546757</span></span>
-<span><span class="co">#&gt;    interdependence_index</span></span>
-<span><span class="co">#&gt; 1             0.16096024</span></span>
-<span><span class="co">#&gt; 2             0.30353773</span></span>
-<span><span class="co">#&gt; 3             0.46379603</span></span>
-<span><span class="co">#&gt; 4             0.12132247</span></span>
-<span><span class="co">#&gt; 5             0.25938982</span></span>
-<span><span class="co">#&gt; 6             0.12244405</span></span>
-<span><span class="co">#&gt; 7             0.23270710</span></span>
-<span><span class="co">#&gt; 8             0.33602791</span></span>
-<span><span class="co">#&gt; 9             0.21552141</span></span>
-<span><span class="co">#&gt; 10            0.24499350</span></span>
-<span><span class="co">#&gt; 11            0.21259247</span></span>
-<span><span class="co">#&gt; 12            0.18891127</span></span>
-<span><span class="co">#&gt; 13            0.32861241</span></span>
-<span><span class="co">#&gt; 14            0.70688863</span></span>
-<span><span class="co">#&gt; 15            0.15197676</span></span>
-<span><span class="co">#&gt; 16            0.49346193</span></span>
-<span><span class="co">#&gt; 17            0.17279815</span></span>
-<span><span class="co">#&gt; 18            0.07008703</span></span>
-<span><span class="co">#&gt; 19            0.21942515</span></span>
-<span><span class="co">#&gt; 20            0.22674721</span></span>
-<span><span class="co">#&gt; 21            0.41407711</span></span>
-<span><span class="co">#&gt; 22            0.28878074</span></span>
-<span><span class="co">#&gt; 23            0.29229676</span></span>
-<span><span class="co">#&gt; 24            0.30551677</span></span>
-<span><span class="co">#&gt; 25            0.10244637</span></span>
-<span><span class="co">#&gt; 26            0.23203195</span></span>
+<span><span class="va">miom_world</span><span class="op">$</span><span class="fu">get_regional_interdependence</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   country self_reliance total_spillover_out total_spillover_in</span></span>
+<span><span class="co">#&gt; 1     AUS      1.968515           0.3168527        0.006511634</span></span>
+<span><span class="co">#&gt; 2     AUT      1.614535           0.4900724        0.004048698</span></span>
+<span><span class="co">#&gt; 3     BEL      1.649908           0.7652207        0.011148228</span></span>
+<span><span class="co">#&gt; 4     BRA      1.918948           0.2328115        0.004065824</span></span>
+<span><span class="co">#&gt; 5     CAN      1.650380           0.4280919        0.007634451</span></span>
+<span><span class="co">#&gt; 6     CHN      2.342241           0.2867934        0.016735715</span></span>
+<span><span class="co">#&gt;   interdependence_index</span></span>
+<span><span class="co">#&gt; 1             0.1609602</span></span>
+<span><span class="co">#&gt; 2             0.3035377</span></span>
+<span><span class="co">#&gt; 3             0.4637960</span></span>
+<span><span class="co">#&gt; 4             0.1213225</span></span>
+<span><span class="co">#&gt; 5             0.2593898</span></span>
+<span><span class="co">#&gt; 6             0.1224440</span></span>
 <span></span>
 <span><span class="co"># get country summary</span></span>
-<span><span class="va">miom_world</span><span class="op">$</span><span class="fu">get_country_summary</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    country multiplier_simple_mean multiplier_simple_sum multiplier_simple_sd</span></span>
-<span><span class="co">#&gt; 1      AUS               2.285368              52.56346            0.2943434</span></span>
-<span><span class="co">#&gt; 2      AUT               2.104608              48.40598            0.2595025</span></span>
-<span><span class="co">#&gt; 3      BEL               2.415129              55.54796            0.3495773</span></span>
-<span><span class="co">#&gt; 4      BRA               2.151760              49.49047            0.4011159</span></span>
-<span><span class="co">#&gt; 5      CAN               2.078472              47.80486            0.3334081</span></span>
-<span><span class="co">#&gt; 6      CHN               2.629034              60.46779            0.4657446</span></span>
-<span><span class="co">#&gt; 7      DEU               2.157389              49.61994            0.2843985</span></span>
-<span><span class="co">#&gt; 8      DNK               2.121905              48.80382            0.3295126</span></span>
-<span><span class="co">#&gt; 9      ESP               2.276249              52.35372            0.3673208</span></span>
-<span><span class="co">#&gt; 10     FIN               2.259596              51.97070            0.3496083</span></span>
-<span><span class="co">#&gt; 11     FRA               2.267674              52.15651            0.3314330</span></span>
-<span><span class="co">#&gt; 12     GBR               2.236131              51.43102            0.2534105</span></span>
-<span><span class="co">#&gt; 13     GRC               1.927098              44.32326            0.3743875</span></span>
-<span><span class="co">#&gt; 14     HKG               2.486427              57.18783            0.6228530</span></span>
-<span><span class="co">#&gt; 15     IND               2.223703              51.14516            0.5532397</span></span>
-<span><span class="co">#&gt; 16     IRL               2.200801              50.61843            0.2742686</span></span>
-<span><span class="co">#&gt; 17     ITA               2.317049              53.29214            0.3875865</span></span>
-<span><span class="co">#&gt; 18     JPN               2.063490              47.46027            0.3292166</span></span>
-<span><span class="co">#&gt; 19     KOR               2.424599              55.76579            0.4950520</span></span>
-<span><span class="co">#&gt; 20     MEX               1.916799              44.08638            0.4216234</span></span>
-<span><span class="co">#&gt; 21     NDL               2.233206              51.36375            0.3128269</span></span>
-<span><span class="co">#&gt; 22     PRT               2.336974              53.75041            0.3771554</span></span>
-<span><span class="co">#&gt; 23     ROW               2.164363              49.78034            0.3800173</span></span>
-<span><span class="co">#&gt; 24     SWE               2.229899              51.28768            0.3076712</span></span>
-<span><span class="co">#&gt; 25     TWN               2.188108              50.32649            0.4428694</span></span>
-<span><span class="co">#&gt; 26     USA               2.070416              47.61957            0.2678378</span></span>
-<span><span class="co">#&gt;    multiplier_direct_mean multiplier_direct_sum multiplier_direct_sd</span></span>
-<span><span class="co">#&gt; 1               0.5910851              13.59496            0.1243854</span></span>
-<span><span class="co">#&gt; 2               0.5424757              12.47694            0.1079106</span></span>
-<span><span class="co">#&gt; 3               0.6272375              14.42646            0.1371100</span></span>
-<span><span class="co">#&gt; 4               0.5551566              12.76860            0.1760325</span></span>
-<span><span class="co">#&gt; 5               0.5436337              12.50358            0.1541054</span></span>
-<span><span class="co">#&gt; 6               0.6247874              14.37011            0.1544596</span></span>
-<span><span class="co">#&gt; 7               0.5735571              13.19181            0.1257155</span></span>
-<span><span class="co">#&gt; 8               0.5483842              12.61284            0.1627911</span></span>
-<span><span class="co">#&gt; 9               0.5818832              13.38331            0.1514225</span></span>
-<span><span class="co">#&gt; 10              0.5861276              13.48093            0.1504276</span></span>
-<span><span class="co">#&gt; 11              0.6003713              13.80854            0.1365743</span></span>
-<span><span class="co">#&gt; 12              0.5768597              13.26777            0.1178258</span></span>
-<span><span class="co">#&gt; 13              0.4795222              11.02901            0.1730478</span></span>
-<span><span class="co">#&gt; 14              0.6955571              15.99781            0.2574222</span></span>
-<span><span class="co">#&gt; 15              0.5776381              13.28568            0.2488502</span></span>
-<span><span class="co">#&gt; 16              0.5622517              12.93179            0.1102378</span></span>
-<span><span class="co">#&gt; 17              0.5974856              13.74217            0.1545091</span></span>
-<span><span class="co">#&gt; 18              0.5343955              12.29110            0.1212272</span></span>
-<span><span class="co">#&gt; 19              0.5993085              13.78410            0.1704651</span></span>
-<span><span class="co">#&gt; 20              0.4865362              11.19033            0.2019697</span></span>
-<span><span class="co">#&gt; 21              0.5973635              13.73936            0.1482268</span></span>
-<span><span class="co">#&gt; 22              0.6045684              13.90507            0.1527213</span></span>
-<span><span class="co">#&gt; 23              0.5388760              12.39415            0.1530084</span></span>
-<span><span class="co">#&gt; 24              0.5772032              13.27567            0.1396862</span></span>
-<span><span class="co">#&gt; 25              0.5741787              13.20611            0.1716934</span></span>
-<span><span class="co">#&gt; 26              0.5416578              12.45813            0.1136737</span></span>
-<span><span class="co">#&gt;    multiplier_indirect_mean multiplier_indirect_sum multiplier_indirect_sd</span></span>
-<span><span class="co">#&gt; 1                  1.694283                38.96850              0.1750524</span></span>
-<span><span class="co">#&gt; 2                  1.562132                35.92904              0.1570810</span></span>
-<span><span class="co">#&gt; 3                  1.787891                41.12149              0.2174743</span></span>
-<span><span class="co">#&gt; 4                  1.596603                36.72187              0.2283837</span></span>
-<span><span class="co">#&gt; 5                  1.534839                35.30129              0.1888710</span></span>
-<span><span class="co">#&gt; 6                  2.004247                46.09768              0.3222542</span></span>
-<span><span class="co">#&gt; 7                  1.583832                36.42813              0.1655095</span></span>
-<span><span class="co">#&gt; 8                  1.573521                36.19098              0.1887727</span></span>
-<span><span class="co">#&gt; 9                  1.694365                38.97040              0.2259730</span></span>
-<span><span class="co">#&gt; 10                 1.673468                38.48977              0.2052737</span></span>
-<span><span class="co">#&gt; 11                 1.667303                38.34797              0.2014659</span></span>
-<span><span class="co">#&gt; 12                 1.659271                38.16324              0.1512847</span></span>
-<span><span class="co">#&gt; 13                 1.447576                33.29425              0.2108174</span></span>
-<span><span class="co">#&gt; 14                 1.790870                41.19001              0.3712546</span></span>
-<span><span class="co">#&gt; 15                 1.646065                37.85949              0.3214000</span></span>
-<span><span class="co">#&gt; 16                 1.638549                37.68664              0.1695499</span></span>
-<span><span class="co">#&gt; 17                 1.719564                39.54997              0.2418168</span></span>
-<span><span class="co">#&gt; 18                 1.529095                35.16918              0.2148490</span></span>
-<span><span class="co">#&gt; 19                 1.825291                41.98169              0.3412776</span></span>
-<span><span class="co">#&gt; 20                 1.430263                32.89605              0.2357968</span></span>
-<span><span class="co">#&gt; 21                 1.635843                37.62439              0.1784893</span></span>
-<span><span class="co">#&gt; 22                 1.732406                39.84534              0.2372139</span></span>
-<span><span class="co">#&gt; 23                 1.625487                37.38619              0.2330413</span></span>
-<span><span class="co">#&gt; 24                 1.652696                38.01201              0.1776820</span></span>
-<span><span class="co">#&gt; 25                 1.613930                37.12038              0.2780501</span></span>
-<span><span class="co">#&gt; 26                 1.528758                35.16144              0.1606822</span></span></code></pre></div>
+<span><span class="va">miom_world</span><span class="op">$</span><span class="fu">get_country_summary</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   country multiplier_simple_mean multiplier_simple_sum multiplier_simple_sd</span></span>
+<span><span class="co">#&gt; 1     AUS               2.285368              52.56346            0.2943434</span></span>
+<span><span class="co">#&gt; 2     AUT               2.104608              48.40598            0.2595025</span></span>
+<span><span class="co">#&gt; 3     BEL               2.415129              55.54796            0.3495773</span></span>
+<span><span class="co">#&gt; 4     BRA               2.151760              49.49047            0.4011159</span></span>
+<span><span class="co">#&gt; 5     CAN               2.078472              47.80486            0.3334081</span></span>
+<span><span class="co">#&gt; 6     CHN               2.629034              60.46779            0.4657446</span></span>
+<span><span class="co">#&gt;   multiplier_direct_mean multiplier_direct_sum multiplier_direct_sd</span></span>
+<span><span class="co">#&gt; 1              0.5910851              13.59496            0.1243854</span></span>
+<span><span class="co">#&gt; 2              0.5424757              12.47694            0.1079106</span></span>
+<span><span class="co">#&gt; 3              0.6272375              14.42646            0.1371100</span></span>
+<span><span class="co">#&gt; 4              0.5551566              12.76860            0.1760325</span></span>
+<span><span class="co">#&gt; 5              0.5436337              12.50358            0.1541054</span></span>
+<span><span class="co">#&gt; 6              0.6247874              14.37011            0.1544596</span></span>
+<span><span class="co">#&gt;   multiplier_indirect_mean multiplier_indirect_sum multiplier_indirect_sd</span></span>
+<span><span class="co">#&gt; 1                 1.694283                38.96850              0.1750524</span></span>
+<span><span class="co">#&gt; 2                 1.562132                35.92904              0.1570810</span></span>
+<span><span class="co">#&gt; 3                 1.787891                41.12149              0.2174743</span></span>
+<span><span class="co">#&gt; 4                 1.596603                36.72187              0.2283837</span></span>
+<span><span class="co">#&gt; 5                 1.534839                35.30129              0.1888710</span></span>
+<span><span class="co">#&gt; 6                 2.004247                46.09768              0.3222542</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="related-tools">Related tools<a class="anchor" aria-label="anchor" href="#related-tools"></a>
@@ -345,6 +387,8 @@
 <li><a href="https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/albersonmiranda/fio/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/albersonmiranda/fio?branch=main" class="external-link"><img src="https://codecov.io/gh/albersonmiranda/fio/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://CRAN.R-project.org/package=fio" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/fio" alt="Downloads"></a></li>
+<li><a href="https://deepwiki.com/albersonmiranda/fio" class="external-link"><img src="https://deepwiki.com/badge.svg" alt="DeepWiki"></a></li>
+<li><a href="https://extendr.github.io/extendr/extendr_api/" class="external-link"><img src="https://img.shields.io/badge/extendr-%5E0.8.1-276DC2" alt="extendr"></a></li>
 </ul>
 </div>
 
