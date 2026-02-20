@@ -24,16 +24,18 @@ A (\code{matrix}).
 Import data from a input-output matrix (IOM) from Excel format.
 }
 \examples{
-# Excel file with IOM data
-path_to_xlsx <- system.file("extdata", "iom/br/2020.xlsx", package = "fio")
-# Import IOM data
-intermediate_transactions <- import_element(
-  file = path_to_xlsx,
-  sheet = "iom",
-  range = "D6:BB56",
-  col_names = "D4:BB4",
-  row_names = "B6:B56"
-)
-# Show the first 6 rows and 6 columns
-intermediate_transactions[1:6, 1:6]
+if (isNamespaceLoaded("fiodata")) {
+ # Excel file with IOM data
+ path_to_xlsx <- system.file("extdata", "/2020.xlsx", package = "fiodata")
+ # Import IOM data
+ intermediate_transactions <- import_element(
+   file = path_to_xlsx,
+   sheet = "iom",
+   range = "D6:BB56",
+   col_names = "D4:BB4",
+   row_names = "B6:B56"
+ )
+ # Show the first 6 rows and 6 columns
+ intermediate_transactions[1:6, 1:6]
+}
 }

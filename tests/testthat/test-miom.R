@@ -147,8 +147,9 @@ test_that("miom functionality", {
 })
 
 test_that("miom integration functionality (real data)", {
+  skip_if_not_installed("fiodata")
   # load data
-  data("world_2000", package = "fio")
+  data("world_2000", package = "fiodata")
   expect_true(!is.null(world_2000))
 
   # compute multipliers

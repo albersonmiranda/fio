@@ -1,6 +1,6 @@
 Package: fio
 Title: Friendly Input-Output Analysis
-Version: 0.1.6.9005
+Version: 1.0.0
 Authors@R: c(
   person(
     given = "Alberson",
@@ -17,11 +17,10 @@ Authors@R: c(
     comment = c(ORCID = "0000-0001-7616-0244")
     )
   )
-Description: Simplifies the process of importing and managing input-output
-  matrices from 'Microsoft Excel' into R, and provides a suite of functions for
-  analysis. It leverages the 'R6' class for clean, memory-efficient
-  object-oriented programming. Furthermore, all linear algebra computations are
-  implemented in 'Rust' to achieve highly optimized performance.
+Description: Simplifies the process of economic input-output analysis by combining
+  user-friendly interfaces with high-performance computation. It provides tools
+  for analyzing both single-region and multi-regional economic systems through a
+  hybrid architecture that pairs R's accessibility with Rust's computational efficiency.
 URL: https://albersonmiranda.github.io/fio/, https://github.com/albersonmiranda/fio
 BugReports: https://github.com/albersonmiranda/fio/issues
 Encoding: UTF-8
@@ -54,7 +53,8 @@ Suggests:
     ggplot2,
     writexl,
     callr,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    fiodata
 VignetteBuilder: knitr
 Language: en-US
 Config/testthat/edition: 3
