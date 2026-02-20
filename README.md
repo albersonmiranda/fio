@@ -77,11 +77,14 @@ user-facing interface.
   - Regional interdependence
   - Country extraction for single-region analysis from multi-region data
 
-{fio} also includes 2 built-in datasets — `br_2020` for single-region
-and `world_2000` for multi-region analysis — and a utility function to
-download input-output data from University of Groningen’s [World
-Input-Output Database
-(WIOD)](https://www.rug.nl/ggdc/valuechain/wiod/?lang=en).
+{fio} also includes an utility function to download input-output data
+from University of Groningen’s [World Input-Output Database
+(WIOD)](https://www.rug.nl/ggdc/valuechain/wiod/?lang=en). Furthermore,
+it counts with a companion data package
+[{fiodata}](https://github.com/albersonmiranda/fiodata) that includes
+two real world datasets — `br_2020` for single-region and `world_2000`
+for multi-region analysis — in raw format (.xlsx) and R-ready (.rda) for
+analysis and experimenting with {fio}.
 
 ## Installation
 
@@ -95,15 +98,21 @@ install.packages("fio")
 
 ### Development version
 
-If you prefer compiling from source, [Rust](https://rust-lang.org/) is
-required to be installed on your system. You can install Rust from your
-OS package manager or, preferably, from [official
-installer](https://rust-lang.org/tools/install/).
-
-or the precompiled master branch from R-Universe:
+You can install the precompiled binaries from Github’s `main` branch
+from R-Universe:
 
 ``` r
 install.packages("fio", repos = c("https://albersonmiranda.r-universe.dev", "https://cloud.r-project.org"))
+```
+
+For bleeding edge development branches, other than `main`, compiling
+from source requires [Rust](https://rust-lang.org/) to be installed on
+your system. You can install Rust from your OS package manager or,
+preferably, from [official
+installer](https://rust-lang.org/tools/install/). Then:
+
+``` r
+remotes::install_github("albersonmiranda/fio", ref = "branch-name")
 ```
 
 ## Getting Started
@@ -117,7 +126,7 @@ for a comprehensive overview of the package.
 
 ``` r
 # load included dataset
-iom_br <- fio::br_2020
+iom_br <- fiodata::br_2020
 
 # compute technical coefficients matrix
 iom_br$compute_tech_coeff()
@@ -227,7 +236,7 @@ World Input-Output Database (26 countries, 23 sectors):
 
 ``` r
 # load included dataset
-miom_world <- fio::world_2000
+miom_world <- fiodata::world_2000
 
 # get bilateral trade (from -> to)
 miom_world$get_bilateral_trade("BRA", "CHN")[1:5, 1:2]

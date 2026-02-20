@@ -62,13 +62,13 @@ $$
 
 # SHOWCASING THE `miom` CLASS: 2000 WORLD ECONOMY EXAMPLE
 
-The `fio` package includes the `world_2000` dataset, which contains real multi-regional input-output data for 26 countries and 23 sectors from the year 2000. This dataset was created using element-by-element imports from Excel files with `import_element()` as demonstrated in the [World 2000 script](https://github.com/albersonmiranda/fio/blob/main/data-raw/world_2000.R).
+The `fiodata` package includes the `world_2000` dataset, which contains real multi-regional input-output data for 26 countries and 23 sectors from the year 2000. This dataset was created using element-by-element imports from Excel files with `import_element()` as demonstrated in the [World 2000 script](https://github.com/albersonmiranda/fiodata/blob/main/data-raw/world_2000.R).
 
 Let's load and examine this real-world dataset:
 
 ```{r world_data}
 # Load the built-in world_2000 dataset
-world_2000 <- fio::world_2000
+world_2000 <- fiodata::world_2000
 
 # Examine the structure
 world_2000$n_countries

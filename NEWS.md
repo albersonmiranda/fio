@@ -12,6 +12,10 @@
 * New param `matrix` to `compute_key_sectors()` and `compute_hypothetical_extraction()` so users can decide if should be used Leontief or Ghosh matrices when computing forward linkages (#148).
 * New `download_wiod()` function to download World Input-Output Database (WIOD) tables directly from their website (#152).
 
+## 💥 Breaking changes
+
+* Built-in data (`fio::br_2020` and `fio::world_2000`) was moved from {fio} to a data-only companion package [{fiodata}](https://github.com/albersonmiranda/fiodata).
+
 # fio 0.1.6
 
 ## 🐞 Bug fixes
