@@ -33,7 +33,7 @@ articles:
     desc: >
       These vignettes provide an introduction to performing multi-regional input-output analysis using the {fio} package.
     contents:
-      - multiregional_analysis
+      - articles/multiregional_analysis
       - articles/wiod_2014_analysis
   - title: "Performance"
     desc: >

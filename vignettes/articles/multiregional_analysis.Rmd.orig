@@ -2,14 +2,20 @@
 title: "Multi-Regional Input-Output Analysis"
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
-  rmarkdown::html_vignette:
+  html_document:
     toc: true
+    toc_depth: 2
+    toc_float:
+      collapsed: false
+      toc_levels: 2
     number_sections: true
-vignette: >
-  %\VignetteIndexEntry{Multi-Regional Input-Output Analysis}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+    highlight: zenburn
+    code_folding: show
+    fig_caption: true
+    df_print: paged 
 ---
+
+<!-- This is a precomputing script. To run it, `knitr::knit("vignettes/articles/multiregional_analysis.Rmd.orig", output = "vignettes/articles/multiregional_analysis.Rmd")` -->
 
 <style>
 p.caption {
@@ -67,8 +73,8 @@ The `fiodata` package includes the `world_2000` dataset, which contains real mul
 Let's load and examine this real-world dataset:
 
 ```{r world_data}
-library(fio)
-library(fiodata)
+# import real-world dataset
+world_2000 <- fiodata::world_2000
 
 # Examine the structure
 world_2000$n_countries
