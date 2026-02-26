@@ -5,9 +5,6 @@
 ❯ checking CRAN incoming feasibility ... [5s/32s] NOTE
   Maintainer: ‘Alberson da Silva Miranda <albersonmiranda@hotmail.com>’
   
-  Suggests or Enhances not in mainstream repositories:
-    fiodata
-  
   Size of tarball: 12253105 bytes
 ```
 

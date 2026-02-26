@@ -26,7 +26,6 @@ Multi-region input-output tables from the World Input-Output Database
 }
 \examples{
 \dontrun{
-file_path <- tempfile()
-fio::download_wiod("2016", file_path)
+fio::download_wiod("2016")
 }
 }

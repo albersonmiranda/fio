@@ -16,8 +16,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' file_path <- tempfile()
-#' fio::download_wiod("2016", file_path)
+#' fio::download_wiod("2016")
 #' }
 #' @export
 download_wiod <- function(year = "2016", out_dir = tempdir()) {
