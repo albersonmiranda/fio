@@ -68,9 +68,7 @@ Let's load and examine this real-world dataset:
 
 ```{r world_data}
 library(fio)
-
-# Load the built-in world_2000 dataset
-world_2000 <- fiodata::world_2000
+library(fiodata)
 
 # Examine the structure
 world_2000$n_countries
