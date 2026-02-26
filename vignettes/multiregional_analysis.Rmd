@@ -67,6 +67,8 @@ The `fiodata` package includes the `world_2000` dataset, which contains real mul
 Let's load and examine this real-world dataset:
 
 ```{r world_data}
+library(fio)
+
 # Load the built-in world_2000 dataset
 world_2000 <- fiodata::world_2000
 
