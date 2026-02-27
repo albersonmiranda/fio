@@ -43,3 +43,8 @@ articles:
       - articles/benchmarking_i7
       - articles/benchmarking_m1
       - articles/benchmarking_m4
+
+news:
+  releases:
+  - text: "Version 1.0.0"
+    href: https://datamares.netlify.app/posts/202602_fio-1-0-0/
