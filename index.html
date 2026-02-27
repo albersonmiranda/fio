@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Friendly Input-Output Analysis">
-<meta property="og:description" content="Simplifies the process of importing and managing input-output matrices from Microsoft Excel into R, and provides a suite of functions for analysis. It leverages the R6 class for clean, memory-efficient object-oriented programming. Furthermore, all linear algebra computations are implemented in Rust to achieve highly optimized performance.">
+<meta property="og:description" content="Simplifies the process of economic input-output analysis by combining user-friendly interfaces with high-performance computation. It provides tools for analyzing both single-region and multi-regional economic systems through a hybrid architecture that pairs Rs accessibility with Rusts computational efficiency.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">fio</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@
 <p>Friendly &amp; Fast Input-Output Analysis <img src="reference/figures/leontief.jpg" align="right" width="240px" style="margin-left: 20px;"></p>
 <!-- badges: start -->
 
-<p><a href="https://albersonmiranda.github.io/fio/">fio</a> (<em>Friendly Input-Output</em>) is a R package designed for economic input-output analysis that combines user-friendly interfaces with high-performance computation. It provides tools for analyzing both single-region and multi-regional economic systems through a hybrid architecture that pairs R’s accessibility with <a href="https://www.rust-lang.org/" class="external-link">Rust’s</a> computational efficiency.</p>
+<p><a href="https://albersonmiranda.github.io/fio/">fio</a> (<em>Friendly Input-Output</em>) is a R package designed for economic input-output analysis that combines user-friendly interfaces with high-performance computation. It provides tools for analyzing both single-region and multi-regional economic systems through a hybrid architecture that pairs R’s accessibility with <a href="https://rust-lang.org/" class="external-link">Rust’s</a> computational efficiency.</p>
 <p>The package is optimized for speed and efficiency. It leverages the <a href="https://r6.r-lib.org/" class="external-link">R6 class</a> for clean, memory-efficient object-oriented programming. Furthermore, all linear algebra computations are implemented using <a href="https://docs.rs/faer/latest/faer/" class="external-link">faer</a> Rust crate to achieve highly optimized performance.</p>
 <div class="section level2">
 <h2 id="input-output-analysis">Input-Output Analysis?<a class="anchor" aria-label="anchor" href="#input-output-analysis"></a>
@@ -117,7 +117,7 @@
 </ul>
 </li>
 </ul>
-<p>{fio} also includes 2 built-in datasets — <code>br_2020</code> for single-region and <code>world_2000</code> for multi-region analysis — and a utility function to download input-output data from University of Groningen’s <a href="https://www.rug.nl/ggdc/valuechain/wiod/?lang=en" class="external-link">World Input-Output Database (WIOD)</a>.</p>
+<p>{fio} also includes an utility function to download input-output data from University of Groningen’s <a href="https://www.rug.nl/ggdc/valuechain/wiod/?lang=en" class="external-link">World Input-Output Database (WIOD)</a>. Furthermore, it counts with a companion data package <a href="https://github.com/albersonmiranda/fiodata" class="external-link">{fiodata}</a> that includes two real world datasets — <code>br_2020</code> for single-region and <code>world_2000</code> for multi-region analysis — in raw format (.xlsx) and R-ready (.rda) for analysis and experimenting with {fio}.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -132,10 +132,12 @@
 <div class="section level3">
 <h3 id="development-version">Development version<a class="anchor" aria-label="anchor" href="#development-version"></a>
 </h3>
-<p>If you prefer compiling from source, <a href="https://www.rust-lang.org/" class="external-link">Rust</a> is required to be installed on your system. You can install Rust from your OS package manager or, preferably, from <a href="https://www.rust-lang.org/tools/install" class="external-link">official installer</a>.</p>
-<p>or the precompiled master branch from R-Universe:</p>
+<p>You can install the precompiled binaries from Github’s <code>main</code> branch from R-Universe:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"fio"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"https://albersonmiranda.r-universe.dev"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>For bleeding edge development branches, other than <code>main</code>, compiling from source requires <a href="https://rust-lang.org/" class="external-link">Rust</a> to be installed on your system. You can install Rust from your OS package manager or, preferably, from <a href="https://rust-lang.org/tools/install/" class="external-link">official installer</a>. Then:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"albersonmiranda/fio"</span>, ref <span class="op">=</span> <span class="st">"branch-name"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -146,9 +148,9 @@
 <div class="section level2">
 <h2 id="single-region-input-output-analysis">Single-region input-output analysis<a class="anchor" aria-label="anchor" href="#single-region-input-output-analysis"></a>
 </h2>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load included dataset</span></span>
-<span><span class="va">iom_br</span> <span class="op">&lt;-</span> <span class="fu">fio</span><span class="fu">::</span><span class="va"><a href="reference/br_2020.html">br_2020</a></span></span>
+<span><span class="va">iom_br</span> <span class="op">&lt;-</span> <span class="fu">fiodata</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/fiodata/man/br_2020.html" class="external-link">br_2020</a></span></span>
 <span></span>
 <span><span class="co"># compute technical coefficients matrix</span></span>
 <span><span class="va">iom_br</span><span class="op">$</span><span class="fu">compute_tech_coeff</span><span class="op">(</span><span class="op">)</span></span>
@@ -254,9 +256,9 @@
 <h2 id="multi-region-input-output-analysis">Multi-region input-output analysis<a class="anchor" aria-label="anchor" href="#multi-region-input-output-analysis"></a>
 </h2>
 <p>Calculate multi-regional multipliers and interdependence from the 2000 World Input-Output Database (26 countries, 23 sectors):</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load included dataset</span></span>
-<span><span class="va">miom_world</span> <span class="op">&lt;-</span> <span class="fu">fio</span><span class="fu">::</span><span class="va"><a href="reference/world_2000.html">world_2000</a></span></span>
+<span><span class="va">miom_world</span> <span class="op">&lt;-</span> <span class="fu">fiodata</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/fiodata/man/world_2000.html" class="external-link">world_2000</a></span></span>
 <span></span>
 <span><span class="co"># get bilateral trade (from -&gt; to)</span></span>
 <span><span class="va">miom_world</span><span class="op">$</span><span class="fu">get_bilateral_trade</span><span class="op">(</span><span class="st">"BRA"</span>, <span class="st">"CHN"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span></span>
@@ -388,7 +390,7 @@
 <li><a href="https://app.codecov.io/gh/albersonmiranda/fio?branch=main" class="external-link"><img src="https://codecov.io/gh/albersonmiranda/fio/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://CRAN.R-project.org/package=fio" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/fio" alt="Downloads"></a></li>
 <li><a href="https://deepwiki.com/albersonmiranda/fio" class="external-link"><img src="https://deepwiki.com/badge.svg" alt="DeepWiki"></a></li>
-<li><a href="https://extendr.github.io/extendr/extendr_api/" class="external-link"><img src="https://img.shields.io/badge/extendr-%5E0.8.1-276DC2" alt="extendr"></a></li>
+<li><a href="https://extendr.rs/extendr/extendr_api/" class="external-link"><img src="https://img.shields.io/badge/extendr-%5E0.8.1-276DC2" alt="extendr"></a></li>
 </ul>
 </div>
 

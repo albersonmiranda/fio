@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fio</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -76,15 +76,16 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Multi-Regional Input-Output Analysis</h1>
             
-            <h4 data-toc-skip class="date">February 07, 2026</h4>
+            <h4 data-toc-skip class="date">February 26, 2026</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/albersonmiranda/fio/blob/main/vignettes/multiregional_analysis.Rmd" class="external-link"><code>vignettes/multiregional_analysis.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/albersonmiranda/fio/blob/v1.0.0/vignettes/articles/multiregional_analysis.Rmd" class="external-link"><code>vignettes/articles/multiregional_analysis.Rmd</code></a></small>
       <div class="hidden name"><code>multiregional_analysis.Rmd</code></div>
 
     </div>
 
     
     
+<!-- This is a precomputing script. To run it, `knitr::knit("vignettes/articles/multiregional_analysis.Rmd.orig", output = "vignettes/articles/multiregional_analysis.Rmd")` -->
 <style>
 p.caption {
   font-size: 0.6em;
@@ -147,16 +148,16 @@ functionality needed for multi-regional analysis.</p>
 <h2 id="showcasing-the-miom-class-2000-world-economy-example">SHOWCASING THE <code>miom</code> CLASS: 2000 WORLD ECONOMY
 EXAMPLE<a class="anchor" aria-label="anchor" href="#showcasing-the-miom-class-2000-world-economy-example"></a>
 </h2>
-<p>The <code>fio</code> package includes the <code>world_2000</code>
+<p>The <code>fiodata</code> package includes the <code>world_2000</code>
 dataset, which contains real multi-regional input-output data for 26
 countries and 23 sectors from the year 2000. This dataset was created
 using element-by-element imports from Excel files with
-<code><a href="../reference/import_element.html">import_element()</a></code> as demonstrated in the <a href="https://github.com/albersonmiranda/fio/blob/main/data-raw/world_2000.R" class="external-link">World
+<code><a href="../reference/import_element.html">import_element()</a></code> as demonstrated in the <a href="https://github.com/albersonmiranda/fiodata/blob/main/data-raw/world_2000.R" class="external-link">World
 2000 script</a>.</p>
 <p>Let’s load and examine this real-world dataset:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Load the built-in world_2000 dataset</span></span>
-<span><span class="va">world_2000</span> <span class="op">&lt;-</span> <span class="fu">fio</span><span class="fu">::</span><span class="va"><a href="../reference/world_2000.html">world_2000</a></span></span>
+<code class="sourceCode R"><span><span class="co"># import real-world dataset</span></span>
+<span><span class="va">world_2000</span> <span class="op">&lt;-</span> <span class="fu">fiodata</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/fiodata/man/world_2000.html" class="external-link">world_2000</a></span></span>
 <span></span>
 <span><span class="co"># Examine the structure</span></span>
 <span><span class="va">world_2000</span><span class="op">$</span><span class="va">n_countries</span></span>
