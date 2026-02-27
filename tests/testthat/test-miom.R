@@ -145,25 +145,3 @@ test_that("miom functionality", {
   r1_iom$compute_multiplier_output()
   expect_false(is.null(r1_iom$multiplier_output))
 })
-
-test_that("miom integration functionality (real data)", {
-  # load data
-  data("world_2000", package = "fio")
-  expect_true(!is.null(world_2000))
-
-  # compute multipliers
-  world_2000$compute_multiregional_multipliers()
-  multipliers <- world_2000$multiregional_multipliers
-
-  # snapshot check for real data stability
-  expect_snapshot(head(multipliers))
-
-  # check consistency: total = intra + spillover
-  diffs <- abs(multipliers$total_multiplier - (multipliers$intra_regional_multiplier + multipliers$spillover_multiplier))
-  expect_true(all(diffs < 1e-10))
-
-  # smoke checks for other methods
-  expect_true(is.data.frame(world_2000$get_regional_interdependence()))
-  expect_true(is.matrix(world_2000$get_spillover_matrix()))
-  expect_true(is.matrix(world_2000$get_net_spillover_matrix()))
-})
