@@ -15,8 +15,6 @@ output:
     df_print: paged 
 ---
 
-<!-- This is a precomputing script. To run it, `knitr::knit("vignettes/articles/multiregional_analysis.Rmd.orig", output = "vignettes/articles/multiregional_analysis.Rmd")` -->
-
 <style>
 p.caption {
   font-size: 0.6em;
