@@ -29,6 +29,8 @@ knitr::opts_chunk$set(
   fig.align = "center",
   out.width = "70%"
 )
+
+library(ggplot2)
 ```
 
 # Introduction
@@ -108,8 +110,7 @@ The intermediate transactions matrix shows the flows of goods and services betwe
 The `miom` class computes several types of multipliers following Miller & Blair (2009):
 
 - **Intra-regional multipliers**: Effects within the same region
-- **Inter-regional multipliers**: Effects between different regions  
-- **Spillover multipliers**: Total effects on other regions
+- **Spillover multipliers**: Effects on other regions
 - **Total multipliers**: Sum of intra-regional and spillover effects
 
 ```{r compute_multipliers}
@@ -130,12 +131,13 @@ The multipliers table shows several key measures for each country-sector combina
 - **Intra-regional multiplier**: The total effect within the same country when that sector receives a $1 shock
 - **Spillover multiplier**: The total effect on all other countries from the same shock  
 - **Total multiplier**: The sum of intra-regional and spillover effects
-- **Multiplier to [Country]**: The specific effect on each individual country
+- **Multiplier to [Country]**: The specific spillover effect on each individual country
+
+Let's find an interesting example. Take a look at Brazil Agriculture and it's effects on USA:
 
 ```{r interpret_multipliers}
-# Find an interesting example - let's look at Brazil Agriculture -> to USA
+# Find Brazil agriculture row
 bra_agr_index <- which(grepl("BRA.*Agriculture", world_2000$multiregional_multipliers$shock_label))[1]
-
 bra_agr <- world_2000$multiregional_multipliers[bra_agr_index, ]
 
 # Show key multiplier components
@@ -162,6 +164,16 @@ Regional interdependence measures help understand cross-country multiplier linka
 ```{r interdependence}
 interdependence <- world_2000$get_regional_interdependence()
 knitr::kable(interdependence, digits = 4)
+
+ggplot(interdependence, aes(x = reorder(country, spillover_export_share), y = spillover_export_share)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(
+    title = "Spillover export share by country",
+    x = "Country",
+    y = "total_spillover_out / (out + in)"
+  ) +
+  theme_minimal()
 ```
 
 The results show that `r interdependence$country[which.max(interdependence$self_reliance)]` has the highest self-reliance (`r round(max(interdependence$self_reliance), 4)`). Open economies such as `r interdependence$country[which.max(interdependence$total_spillover_out)]` show the largest total spillover out (`r round(max(interdependence$total_spillover_out), 2)`).
