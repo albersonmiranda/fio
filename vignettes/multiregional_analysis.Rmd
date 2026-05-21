@@ -125,7 +125,7 @@ knitr::kable(
 
 ## Interpreting the Multipliers
 
-The multipliers table shows several key measures for each country-sector combination:
+The multipliers table shows several key measures for each country-sector combination (each row is a $1 final-demand shock in `shock_country` / `shock_sector`):
 
 - **Intra-regional multiplier**: The total effect within the same country when that sector receives a $1 shock
 - **Spillover multiplier**: The total effect on all other countries from the same shock  
@@ -134,12 +134,12 @@ The multipliers table shows several key measures for each country-sector combina
 
 ```{r interpret_multipliers}
 # Find an interesting example - let's look at Brazil Agriculture -> to USA
-bra_agr_index <- which(grepl("BRA.*Agriculture", world_2000$multiregional_multipliers$destination_label))[1]
+bra_agr_index <- which(grepl("BRA.*Agriculture", world_2000$multiregional_multipliers$shock_label))[1]
 
 bra_agr <- world_2000$multiregional_multipliers[bra_agr_index, ]
 
 # Show key multiplier components
-multiplier_cols <- c("destination_label", "intra_regional_multiplier", "spillover_multiplier", "total_multiplier", "multiplier_to_USA")
+multiplier_cols <- c("shock_label", "intra_regional_multiplier", "spillover_multiplier", "total_multiplier", "multiplier_to_USA")
 available_cols <- intersect(multiplier_cols, names(bra_agr))
 knitr::kable(bra_agr[, available_cols],
   digits = 4,
@@ -151,19 +151,33 @@ The multipliers reveal important insights about global economic linkages. The in
 
 ## Regional Interdependence Analysis
 
-Regional interdependence measures help understand the economic integration between countries. The `get_regional_interdependence()` method computes several key indicators:
+Regional interdependence measures help understand cross-country multiplier linkages. The `get_regional_interdependence()` method computes several key indicators (Miller & Blair, 2009, section 6.3.2):
 
-- **Self-reliance**: Average intra-regional multiplier (higher values indicate more self-sufficient economies)
-- **Spillover out**: Average impact on other regions when this country is shocked
-- **Spillover in**: Average sensitivity to shocks from other regions  
-- **Interdependence index**: Ratio of spillover to self-reliance
+- **Self-reliance**: Average intra-regional column multiplier by country (sector-level mean)
+- **Total spillover out**: Block sum of foreign output induced by all unit shocks in the country
+- **Total spillover in**: Block sum of domestic output induced by all unit shocks abroad
+- **Spillover balance**: `total_spillover_out - total_spillover_in` (negative means net recipient of cross-region spillovers)
+- **Spillover export share**: `total_spillover_out / (total_spillover_out + total_spillover_in)`
 
 ```{r interdependence}
 interdependence <- world_2000$get_regional_interdependence()
 knitr::kable(interdependence, digits = 4)
 ```
 
-The results show that `r interdependence$country[which.max(interdependence$self_reliance)]` has the highest self-reliance (`r round(max(interdependence$self_reliance), 4)`), indicating a more self-sufficient economy. Meanwhile, `r interdependence$country[which.max(interdependence$interdependence_index)]` has the highest interdependence index (`r round(max(interdependence$interdependence_index), 4)`), suggesting greater integration with other economies.
+The results show that `r interdependence$country[which.max(interdependence$self_reliance)]` has the highest self-reliance (`r round(max(interdependence$self_reliance), 4)`). Open economies such as `r interdependence$country[which.max(interdependence$total_spillover_out)]` show the largest total spillover out (`r round(max(interdependence$total_spillover_out), 2)`).
+
+### USA spillover in vs out
+
+In this 2000 MRIO, the USA often ranks low on **total spillover out** and high on **total spillover in**. That pattern is consistent with IO multiplier definitions, not necessarily with a "demand engine" narrative:
+
+- **Spillover out** measures extra output required *abroad* when demand shocks hit *USA* sectors. The large USA domestic block in **L** absorbs most of the response.
+- **Spillover in** measures extra output required *in the USA* when demand shocks hit *foreign* sectors—high when the USA is an upstream supplier in global value chains.
+
+```{r usa_spillover, echo=FALSE}
+usa_row <- interdependence[interdependence$country == "USA", ]
+```
+
+For the USA: spillover out = `r round(usa_row$total_spillover_out, 2)`, spillover in = `r round(usa_row$total_spillover_in, 2)`, balance = `r round(usa_row$spillover_balance, 2)`, export share = `r round(usa_row$spillover_export_share, 3)`.
 
 ## Bilateral Trade Analysis
 
@@ -212,20 +226,20 @@ These values show the output response in each foreign country-sector to a unit s
 
 ## Net Spillover Effects
 
-Net spillover effects reveal asymmetric economic relationships between countries. Positive values indicate that the row country benefits more from economic activity in the column country than vice versa.
+Net spillover effects reveal asymmetric cross-regional multiplier linkages. For countries `r` and `s`, `net[r, s] = spillover_{s→r} - spillover_{r→s}` (block sums from the spillover matrix).
 
 ```{r net_spillover}
 net_spillover <- world_2000$get_net_spillover_matrix()
 knitr::kable(net_spillover, digits = 4, caption = "Net Spillover Effects Matrix")
 ```
 
-The interpretation is straightforward:
+The interpretation is:
 
-- Positive values: row country benefits more from column country
-- Negative values: column country benefits more from row country  
-- Values close to zero: symmetric spillover relationship
+- **Positive** `net[r, s]`: country `r` receives more cross-regional output response from shocks in `s` than `s` receives from shocks in `r` (row country is a net *recipient* relative to the column country).
+- **Negative** `net[r, s]`: the column country receives more than the row country.
+- Values close to zero: roughly symmetric spillover relationship.
 
-For example, the USA has positive net spillover effects with every other country, indicating it generally benefits more from economic interactions with the world.
+For example, `net["USA", "CHN"] > 0` means a unit final-demand shock in China induces more output response in the USA than a comparable shock in the USA induces in China—not that the USA "exports" more spillover to the world in aggregate. The USA's negative **spillover balance** in `get_regional_interdependence()` confirms it is a net recipient in total cross-region spillovers for this dataset.
 
 ## Key Sectors Analysis
 

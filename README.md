@@ -258,14 +258,14 @@ miom_world$compute_multiregional_multipliers()
 
 # show multipliers for specific country-sector pairs
 # example: Chemicals from Brazil to China and US
-bra_chemicals_index <- which(grepl("BRA.*Chemicals", miom_world$multiregional_multipliers$destination_label))[1]
+bra_chemicals_index <- which(grepl("BRA.*Chemicals", miom_world$multiregional_multipliers$shock_label))[1]
 bra_chemicals <- miom_world$multiregional_multipliers[bra_chemicals_index, ]
 
 # Show key multiplier components
-multiplier_cols <- c("destination_label", "intra_regional_multiplier", "spillover_multiplier", "total_multiplier", "multiplier_to_CHN", "multiplier_to_USA")
+multiplier_cols <- c("shock_label", "intra_regional_multiplier", "spillover_multiplier", "total_multiplier", "multiplier_to_CHN", "multiplier_to_USA")
 available_cols <- intersect(multiplier_cols, names(bra_chemicals))
 bra_chemicals[, available_cols]
-#>                       destination_label intra_regional_multiplier
+#>                             shock_label intra_regional_multiplier
 #> 76 BRA_Chemicals and chemicals products                  2.165192
 #>    spillover_multiplier total_multiplier multiplier_to_CHN multiplier_to_USA
 #> 76            0.3714218         2.536614        0.01258698        0.08826115
@@ -273,19 +273,19 @@ bra_chemicals[, available_cols]
 # get regional interdependence
 miom_world$get_regional_interdependence() |> head()
 #>   country self_reliance total_spillover_out total_spillover_in
-#> 1     AUS      1.968515           0.3168527        0.006511634
-#> 2     AUT      1.614535           0.4900724        0.004048698
-#> 3     BEL      1.649908           0.7652207        0.011148228
-#> 4     BRA      1.918948           0.2328115        0.004065824
-#> 5     CAN      1.650380           0.4280919        0.007634451
-#> 6     CHN      2.342241           0.2867934        0.016735715
-#>   interdependence_index
-#> 1             0.1609602
-#> 2             0.3035377
-#> 3             0.4637960
-#> 4             0.1213225
-#> 5             0.2593898
-#> 6             0.1224440
+#> 1     AUS      1.968515            7.287611           3.893957
+#> 2     AUT      1.614535           11.271665           2.421121
+#> 3     BEL      1.649908           17.600076           6.666640
+#> 4     BRA      1.918948            5.354665           2.431363
+#> 5     CAN      1.650380            9.846113           4.565402
+#> 6     CHN      2.342241            6.596249          10.007958
+#>   spillover_balance spillover_export_share
+#> 1          3.393654              0.6517521
+#> 2          8.850544              0.8231827
+#> 3         10.933436              0.7252764
+#> 4          2.923302              0.6877274
+#> 5          5.280711              0.6832115
+#> 6         -3.411708              0.3972637
 
 # get country summary
 miom_world$get_country_summary() |> head()

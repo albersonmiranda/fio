@@ -48,81 +48,80 @@ my_miom <- miom$new(
 
 }
 \section{Super class}{
-\code{\link[fio:iom]{fio::iom}} -> \code{miom}
+\code{\link[fio:iom]{iom}} -> \code{miom}
 }
 \section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{countries}}{(\code{character})\cr
+  \if{html}{\out{<div class="r6-fields">}}
+  \describe{
+    \item{\code{countries}}{(\code{character})\cr
 Vector of region names.}
 
-\item{\code{sectors}}{(\code{character})\cr
+    \item{\code{sectors}}{(\code{character})\cr
 Vector of sector names.}
 
-\item{\code{n_countries}}{(\code{integer})\cr
+    \item{\code{n_countries}}{(\code{integer})\cr
 Number of regions in the matrix.}
 
-\item{\code{n_sectors}}{(\code{integer})\cr
+    \item{\code{n_sectors}}{(\code{integer})\cr
 Number of sectors per country.}
 
-\item{\code{bilateral_trade}}{(\code{list})\cr
+    \item{\code{bilateral_trade}}{(\code{list})\cr
 Bilateral trade flows between regions by sector.}
 
-\item{\code{domestic_intermediate_transactions}}{(\code{list})\cr
+    \item{\code{domestic_intermediate_transactions}}{(\code{list})\cr
 List of domestic intermediate transaction matrices by region.}
 
-\item{\code{international_intermediate_transactions}}{(\code{list})\cr
+    \item{\code{international_intermediate_transactions}}{(\code{list})\cr
 List of international intermediate transaction matrices between regions.}
 
-\item{\code{multiregional_multipliers}}{(\code{data.frame})\cr
+    \item{\code{multiregional_multipliers}}{(\code{data.frame})\cr
 Multi-regional output multipliers including intra-regional, inter-regional, and spillover effects.}
-}
-\if{html}{\out{</div>}}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-miom-new}{\code{miom$new()}}
-\item \href{#method-miom-extract_country}{\code{miom$extract_country()}}
-\item \href{#method-miom-get_bilateral_trade}{\code{miom$get_bilateral_trade()}}
-\item \href{#method-miom-get_country_summary}{\code{miom$get_country_summary()}}
-\item \href{#method-miom-compute_multiplier_output}{\code{miom$compute_multiplier_output()}}
-\item \href{#method-miom-compute_key_sectors}{\code{miom$compute_key_sectors()}}
-\item \href{#method-miom-compute_multiregional_multipliers}{\code{miom$compute_multiregional_multipliers()}}
-\item \href{#method-miom-get_spillover_matrix}{\code{miom$get_spillover_matrix()}}
-\item \href{#method-miom-get_net_spillover_matrix}{\code{miom$get_net_spillover_matrix()}}
-\item \href{#method-miom-get_regional_interdependence}{\code{miom$get_regional_interdependence()}}
-\item \href{#method-miom-clone}{\code{miom$clone()}}
+  \itemize{
+    \item \href{#method-miom-initialize}{\code{miom$new()}}
+    \item \href{#method-miom-extract_country}{\code{miom$extract_country()}}
+    \item \href{#method-miom-get_bilateral_trade}{\code{miom$get_bilateral_trade()}}
+    \item \href{#method-miom-get_country_summary}{\code{miom$get_country_summary()}}
+    \item \href{#method-miom-compute_multiplier_output}{\code{miom$compute_multiplier_output()}}
+    \item \href{#method-miom-compute_key_sectors}{\code{miom$compute_key_sectors()}}
+    \item \href{#method-miom-compute_multiregional_multipliers}{\code{miom$compute_multiregional_multipliers()}}
+    \item \href{#method-miom-get_spillover_matrix}{\code{miom$get_spillover_matrix()}}
+    \item \href{#method-miom-get_net_spillover_matrix}{\code{miom$get_net_spillover_matrix()}}
+    \item \href{#method-miom-get_regional_interdependence}{\code{miom$get_regional_interdependence()}}
+    \item \href{#method-miom-clone}{\code{miom$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details><summary>Inherited methods</summary>
+\if{html}{\out{<details><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="add"><a href='../../fio/html/iom.html#method-iom-add'><code>fio::iom$add()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="close_model"><a href='../../fio/html/iom.html#method-iom-close_model'><code>fio::iom$close_model()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="compute_allocation_coeff"><a href='../../fio/html/iom.html#method-iom-compute_allocation_coeff'><code>fio::iom$compute_allocation_coeff()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="compute_field_influence"><a href='../../fio/html/iom.html#method-iom-compute_field_influence'><code>fio::iom$compute_field_influence()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="compute_ghosh_inverse"><a href='../../fio/html/iom.html#method-iom-compute_ghosh_inverse'><code>fio::iom$compute_ghosh_inverse()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="compute_hypothetical_extraction"><a href='../../fio/html/iom.html#method-iom-compute_hypothetical_extraction'><code>fio::iom$compute_hypothetical_extraction()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="compute_leontief_inverse"><a href='../../fio/html/iom.html#method-iom-compute_leontief_inverse'><code>fio::iom$compute_leontief_inverse()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="compute_multiplier_employment"><a href='../../fio/html/iom.html#method-iom-compute_multiplier_employment'><code>fio::iom$compute_multiplier_employment()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="compute_multiplier_taxes"><a href='../../fio/html/iom.html#method-iom-compute_multiplier_taxes'><code>fio::iom$compute_multiplier_taxes()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="compute_multiplier_wages"><a href='../../fio/html/iom.html#method-iom-compute_multiplier_wages'><code>fio::iom$compute_multiplier_wages()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="compute_tech_coeff"><a href='../../fio/html/iom.html#method-iom-compute_tech_coeff'><code>fio::iom$compute_tech_coeff()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="remove"><a href='../../fio/html/iom.html#method-iom-remove'><code>fio::iom$remove()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="set_max_threads"><a href='../../fio/html/iom.html#method-iom-set_max_threads'><code>fio::iom$set_max_threads()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="update_final_demand_matrix"><a href='../../fio/html/iom.html#method-iom-update_final_demand_matrix'><code>fio::iom$update_final_demand_matrix()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="update_value_added_matrix"><a href='../../fio/html/iom.html#method-iom-update_value_added_matrix'><code>fio::iom$update_value_added_matrix()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="add"><a href='../../fio/html/iom.html#method-iom-add'><code>iom$add()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="close_model"><a href='../../fio/html/iom.html#method-iom-close_model'><code>iom$close_model()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="compute_allocation_coeff"><a href='../../fio/html/iom.html#method-iom-compute_allocation_coeff'><code>iom$compute_allocation_coeff()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="compute_field_influence"><a href='../../fio/html/iom.html#method-iom-compute_field_influence'><code>iom$compute_field_influence()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="compute_ghosh_inverse"><a href='../../fio/html/iom.html#method-iom-compute_ghosh_inverse'><code>iom$compute_ghosh_inverse()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="compute_hypothetical_extraction"><a href='../../fio/html/iom.html#method-iom-compute_hypothetical_extraction'><code>iom$compute_hypothetical_extraction()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="compute_leontief_inverse"><a href='../../fio/html/iom.html#method-iom-compute_leontief_inverse'><code>iom$compute_leontief_inverse()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="compute_multiplier_employment"><a href='../../fio/html/iom.html#method-iom-compute_multiplier_employment'><code>iom$compute_multiplier_employment()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="compute_multiplier_taxes"><a href='../../fio/html/iom.html#method-iom-compute_multiplier_taxes'><code>iom$compute_multiplier_taxes()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="compute_multiplier_wages"><a href='../../fio/html/iom.html#method-iom-compute_multiplier_wages'><code>iom$compute_multiplier_wages()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="compute_tech_coeff"><a href='../../fio/html/iom.html#method-iom-compute_tech_coeff'><code>iom$compute_tech_coeff()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="remove"><a href='../../fio/html/iom.html#method-iom-remove'><code>iom$remove()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="set_max_threads"><a href='../../fio/html/iom.html#method-iom-set_max_threads'><code>iom$set_max_threads()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="update_final_demand_matrix"><a href='../../fio/html/iom.html#method-iom-update_final_demand_matrix'><code>iom$update_final_demand_matrix()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="fio" data-topic="iom" data-id="update_value_added_matrix"><a href='../../fio/html/iom.html#method-iom-update_value_added_matrix'><code>iom$update_value_added_matrix()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-miom-new"></a>}}
-\if{latex}{\out{\hypertarget{method-miom-new}{}}}
-\subsection{Method \code{new()}}{
-Creates a new instance of this \link[R6:R6Class]{R6} class.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{miom$new(
+\if{html}{\out{<a id="method-miom-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-miom-initialize}{}}}
+\subsection{\code{miom$new()}}{
+  Creates a new instance of this \link[R6:R6Class]{R6} class.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{miom$new(
   id,
   intermediate_transactions,
   total_production,
@@ -138,226 +137,241 @@ Creates a new instance of this \link[R6:R6Class]{R6} class.
   operating_income = NULL,
   value_added_others = NULL,
   occupation = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{id}}{(\code{character})\cr
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{id}}{(\code{character})\cr
 Identifier for the multi-regional input-output matrix.}
-
-\item{\code{intermediate_transactions}}{(\code{matrix})\cr
+      \item{\code{intermediate_transactions}}{(\code{matrix})\cr
 Multi-regional intermediate transactions matrix. Rows and columns should follow
 the structure: Country1_Sector1, Country1_Sector2, ..., Country2_Sector1 etc.}
-
-\item{\code{total_production}}{(\code{matrix})\cr
+      \item{\code{total_production}}{(\code{matrix})\cr
 Total production vector by country and sector.}
-
-\item{\code{countries}}{(\code{character})\cr
+      \item{\code{countries}}{(\code{character})\cr
 Vector of region names in the matrix.}
-
-\item{\code{sectors}}{(\code{character})\cr
+      \item{\code{sectors}}{(\code{character})\cr
 Vector of sector names in the matrix.}
-
-\item{\code{household_consumption}}{(\code{matrix})\cr
+      \item{\code{household_consumption}}{(\code{matrix})\cr
 Household consumption vector by region and sector.}
-
-\item{\code{government_consumption}}{(\code{matrix})\cr
+      \item{\code{government_consumption}}{(\code{matrix})\cr
 Government consumption vector by region and sector.}
-
-\item{\code{exports}}{(\code{matrix})\cr
+      \item{\code{exports}}{(\code{matrix})\cr
 Exports vector by region and sector.}
-
-\item{\code{final_demand_others}}{(\code{matrix})\cr
+      \item{\code{final_demand_others}}{(\code{matrix})\cr
 Other vectors of final demand that doesn't have dedicated slots.}
-
-\item{\code{imports}}{(\code{matrix})\cr
+      \item{\code{imports}}{(\code{matrix})\cr
 Imports vector by region and sector.}
-
-\item{\code{taxes}}{(\code{matrix})\cr
+      \item{\code{taxes}}{(\code{matrix})\cr
 Taxes vector by region and sector.}
-
-\item{\code{wages}}{(\code{matrix})\cr
+      \item{\code{wages}}{(\code{matrix})\cr
 Wages vector by region and sector.}
-
-\item{\code{operating_income}}{(\code{matrix})\cr
+      \item{\code{operating_income}}{(\code{matrix})\cr
 Operating income vector by region and sector.}
-
-\item{\code{value_added_others}}{(\code{matrix})\cr
+      \item{\code{value_added_others}}{(\code{matrix})\cr
 Other vectors of value-added that doesn't have dedicated slots.}
-
-\item{\code{occupation}}{(\code{matrix})\cr
+      \item{\code{occupation}}{(\code{matrix})\cr
 Occupation matrix by region and sector.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-miom-extract_country"></a>}}
 \if{latex}{\out{\hypertarget{method-miom-extract_country}{}}}
-\subsection{Method \code{extract_country()}}{
-Extract domestic input-output matrix for a specific country.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{miom$extract_country(country)}\if{html}{\out{</div>}}
+\subsection{\code{miom$extract_country()}}{
+  Extract domestic input-output matrix for a specific country.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{miom$extract_country(country)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{country}}{(\code{character})\cr
+Country name/code to extract.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    An \code{iom} object for the specified country.
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{country}}{(\code{character})\cr
-Country name/code to extract.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-An \code{iom} object for the specified country.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-miom-get_bilateral_trade"></a>}}
 \if{latex}{\out{\hypertarget{method-miom-get_bilateral_trade}{}}}
-\subsection{Method \code{get_bilateral_trade()}}{
-Get bilateral trade flows between two countries by sector.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{miom$get_bilateral_trade(origin_country, destination_country)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{origin_country}}{(\code{character})\cr
+\subsection{\code{miom$get_bilateral_trade()}}{
+  Get bilateral trade flows between two countries by sector.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{miom$get_bilateral_trade(origin_country, destination_country)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{origin_country}}{(\code{character})\cr
 Origin country name/code.}
-
-\item{\code{destination_country}}{(\code{character})\cr
+      \item{\code{destination_country}}{(\code{character})\cr
 Destination country name/code.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A matrix of trade flows by sector from origin to destination.
+  }
 }
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A matrix of trade flows by sector from origin to destination.
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-miom-get_country_summary"></a>}}
 \if{latex}{\out{\hypertarget{method-miom-get_country_summary}{}}}
-\subsection{Method \code{get_country_summary()}}{
-Get summary statistics by country for multipliers.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{miom$get_country_summary()}\if{html}{\out{</div>}}
+\subsection{\code{miom$get_country_summary()}}{
+  Get summary statistics by country for multipliers.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{miom$get_country_summary()}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A data.frame with summary statistics by country.
+  }
 }
 
-\subsection{Returns}{
-A data.frame with summary statistics by country.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-miom-compute_multiplier_output"></a>}}
 \if{latex}{\out{\hypertarget{method-miom-compute_multiplier_output}{}}}
-\subsection{Method \code{compute_multiplier_output()}}{
-Override the parent compute_multiplier_output to add country/sector information.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{miom$compute_multiplier_output()}\if{html}{\out{</div>}}
+\subsection{\code{miom$compute_multiplier_output()}}{
+  Override the parent compute_multiplier_output to add country/sector information.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{miom$compute_multiplier_output()}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    Self (invisibly).
+  }
 }
 
-\subsection{Returns}{
-Self (invisibly).
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-miom-compute_key_sectors"></a>}}
 \if{latex}{\out{\hypertarget{method-miom-compute_key_sectors}{}}}
-\subsection{Method \code{compute_key_sectors()}}{
-Override the parent compute_key_sectors to add country/sector information.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{miom$compute_key_sectors(matrix = "leontief")}\if{html}{\out{</div>}}
+\subsection{\code{miom$compute_key_sectors()}}{
+  Override the parent compute_key_sectors to add country/sector information.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{miom$compute_key_sectors(matrix = "leontief")}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{matrix}}{(\code{character})\cr
+Which matrix to use for forward linkage computation: "leontief" or "ghosh".}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    Self (invisibly).
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{matrix}}{(\code{character})\cr
-Which matrix to use for forward linkage computation: "leontief" or "ghosh".}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-Self (invisibly).
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-miom-compute_multiregional_multipliers"></a>}}
 \if{latex}{\out{\hypertarget{method-miom-compute_multiregional_multipliers}{}}}
-\subsection{Method \code{compute_multiregional_multipliers()}}{
-Compute multi-regional output multipliers following Miller & Blair (2009).
-This includes intra-regional, inter-regional, and spillover multipliers.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{miom$compute_multiregional_multipliers()}\if{html}{\out{</div>}}
+\subsection{\code{miom$compute_multiregional_multipliers()}}{
+  Compute multi-regional output multipliers following Miller & Blair (2009),
+section 6.3.2--6.3.3. For a unit final-demand shock in a country-sector
+(a column of the Leontief inverse), returns intra-regional and
+inter-regional (spillover) output multipliers.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{miom$compute_multiregional_multipliers()}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    Self (invisibly).
+  }
 }
 
-\subsection{Returns}{
-Self (invisibly).
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-miom-get_spillover_matrix"></a>}}
 \if{latex}{\out{\hypertarget{method-miom-get_spillover_matrix}{}}}
-\subsection{Method \code{get_spillover_matrix()}}{
-Compute spillover effects matrix showing how shocks in each region-sector
-affect output in all other regions. Returns the inter-regional elements
-from the Leontief inverse matrix (excluding intra-regional effects).
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{miom$get_spillover_matrix()}\if{html}{\out{</div>}}
+\subsection{\code{miom$get_spillover_matrix()}}{
+  Compute spillover effects matrix showing how shocks in each region-sector
+affect output in all other regions. Returns off-diagonal regional blocks
+of the Leontief inverse (Miller & Blair, 2009, interregional spillover
+effects; section 6.3.2).
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{miom$get_spillover_matrix()}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A matrix of spillover effects.
+  }
 }
 
-\subsection{Returns}{
-A matrix of spillover effects.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-miom-get_net_spillover_matrix"></a>}}
 \if{latex}{\out{\hypertarget{method-miom-get_net_spillover_matrix}{}}}
-\subsection{Method \code{get_net_spillover_matrix()}}{
-Compute net spillover effects for each country pair. Net spillover represents
-the difference in total spillover effects between country pairs, showing
-which country benefits more from economic shocks in the other. Uses the
-spillover matrix (Leontief inverse with intra-regional effects set to zero).
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{miom$get_net_spillover_matrix()}\if{html}{\out{</div>}}
+\subsection{\code{miom$get_net_spillover_matrix()}}{
+  Compute net spillover effects for each country pair. For countries \code{r} and
+\code{s}, \verb{net[r, s] = spillover_\{s->r\} - spillover_\{r->s\}} (block sums from
+\link[=miom]{get_spillover_matrix()}). A positive value means country \code{r} receives more
+cross-regional output response from shocks in \code{s} than \code{s} receives from
+shocks in \code{r}.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{miom$get_net_spillover_matrix()}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A matrix showing net spillover effects between countries.
+  }
 }
 
-\subsection{Returns}{
-A matrix showing net spillover effects between countries.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-miom-get_regional_interdependence"></a>}}
 \if{latex}{\out{\hypertarget{method-miom-get_regional_interdependence}{}}}
-\subsection{Method \code{get_regional_interdependence()}}{
-Compute regional self-reliance and interdependence measures.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{miom$get_regional_interdependence()}\if{html}{\out{</div>}}
+\subsection{\code{miom$get_regional_interdependence()}}{
+  Compute regional self-reliance and cross-regional spillover measures by
+country. Sector-level intra-regional multipliers follow Miller & Blair
+(2009, section 6.3.2). Country spillover totals are block sums of the
+spillover matrix from \link[=miom]{get_spillover_matrix()}: spillover out is foreign
+output induced by all unit shocks in the country; spillover in is domestic
+output induced by all unit shocks abroad.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{miom$get_regional_interdependence()}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A data.frame with self-reliance and spillover measures by country.
+  }
 }
 
-\subsection{Returns}{
-A data.frame with self-reliance and interdependence measures by country.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-miom-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-miom-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{miom$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{miom$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{miom$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

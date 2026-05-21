@@ -9,7 +9,7 @@
 #'   Release year from WIOD. One of "2016", "2013" or "long-run".
 #'   Defaults to "2016".
 #' @param out_dir (`string`)\cr
-#'   Path to download. Defaults to current working directory.
+#'   Path to download. Defaults to `tempdir()`.
 #'
 #' @return
 #'   Invisibly returns the path to the downloaded file.

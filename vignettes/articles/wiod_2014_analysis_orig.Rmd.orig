@@ -65,7 +65,7 @@ Then the intermediate transactions matrix, followed by the final demand matrix.
 load("WIOT2014_October16_ROW.RData")
 
 # columns
-names(wiot)
+head(names(wiot), 20)
 ```
 
 Expanding the `Country` column, we find that it has 45 unique values, corresponding to the 44 countries in the WIOD 2014 release plus a "Total" row. The `IndustryDescription` column has 56 unique values, corresponding to the 56 sectors in the WIOD 2014 release, plus a total row for the intermediate transactions matrix and the Value Added matrix.
@@ -160,23 +160,13 @@ wiod_miom$get_country_summary()
 Analyze bilateral trade between two specific countries, e.g., USA and CHN.
 
 ```{r bilateral}
-# check if USA and CHN are in countries list
-if ("USA" %in% wiod_miom$countries && "CHN" %in% wiod_miom$countries) {
-  trade_usa_chn <- wiod_miom$get_bilateral_trade(origin = "USA", destination = "CHN")
-  # show first few rows/cols
-  trade_usa_chn[1:5, 1:5]
+trade_usa_chn <- wiod_miom$get_bilateral_trade(origin = "USA", destination = "CHN")
 
-  # total exports from USA to China by sector (aggregated over destination sectors)
-  # this sums the rows of the bilateral trade matrix (which is dest x origin)
-  # wait, get_bilateral_trade returns: rows = Dest_Sector, cols = Origin_Sector
-  # so colSums gives total imports of Dest from Origin_Sector.
-  # rowSums gives total exports from Origin to Dest_Sector? No.
+# show first few rows/cols
+trade_usa_chn[1:5, 1:5]
 
-  # matrix is M[dest, origin].
-  # sum over rows (dest) = total exports of Origin_Sector to Dest.
-  exports_by_sector <- colSums(trade_usa_chn)
-  head(exports_by_sector)
-}
+exports_by_sector <- colSums(trade_usa_chn)
+head(exports_by_sector)
 ```
 
 ## Spillover Effects
@@ -203,11 +193,15 @@ Compute regional interdependence measures.
 interdep <- wiod_miom$get_regional_interdependence()
 print(interdep)
 
-# visualize interdependence index
+# visualize spillover export share by country
 library(ggplot2)
-ggplot(interdep, aes(x = reorder(country, interdependence_index), y = interdependence_index)) +
+ggplot(interdep, aes(x = reorder(country, spillover_export_share), y = spillover_export_share)) +
   geom_bar(stat = "identity") +
   coord_flip() +
-  labs(title = "Regional Interdependence Index", x = "Country", y = "Index") +
+  labs(
+    title = "Spillover export share by country",
+    x = "Country",
+    y = "total_spillover_out / (out + in)"
+  ) +
   theme_minimal()
 ```

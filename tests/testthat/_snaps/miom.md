@@ -3,21 +3,16 @@
     Code
       my_miom$multiregional_multipliers
     Output
-        destination_country destination_sector destination_label
-      1                  R1                 S1             R1_S1
-      2                  R1                 S2             R1_S2
-      3                  R2                 S1             R2_S1
-      4                  R2                 S2             R2_S2
-        intra_regional_multiplier spillover_multiplier total_multiplier
-      1                  1.220128           0.04777924         1.267907
-      2                  1.203969           0.06268995         1.266659
-      3                  1.291260           0.09283816         1.384098
-      4                  1.253676           0.04347194         1.297148
-        multiplier_to_R1 multiplier_to_R2
-      1       1.22012815       0.04777924
-      2       1.20396888       0.06268995
-      3       0.09283816       1.29126007
-      4       0.04347194       1.25367608
+        shock_country shock_sector shock_label intra_regional_multiplier
+      1            R1           S1       R1_S1                  1.220128
+      2            R1           S2       R1_S2                  1.203969
+      3            R2           S1       R2_S1                  1.291260
+      4            R2           S2       R2_S2                  1.253676
+        spillover_multiplier total_multiplier multiplier_to_R1 multiplier_to_R2
+      1           0.04777924         1.267907       1.22012815       0.04777924
+      2           0.06268995         1.266659       1.20396888       0.06268995
+      3           0.09283816         1.384098       0.09283816       1.29126007
+      4           0.04347194         1.297148       0.04347194       1.25367608
 
 ---
 
@@ -72,11 +67,11 @@
       interdependence
     Output
         country self_reliance total_spillover_out total_spillover_in
-      1      R1      1.212049          0.05523460         0.03407752
-      2      R2      1.272468          0.06815505         0.02761730
-        interdependence_index
-      1            0.04557127
-      2            0.05356130
+      1      R1      1.212049           0.1104692          0.1363101
+      2      R2      1.272468           0.1363101          0.1104692
+        spillover_balance spillover_export_share
+      1       -0.02584091              0.4476437
+      2        0.02584091              0.5523563
 
 ---
 

@@ -363,8 +363,10 @@ miom <- R6Class(
     },
 
     #' @description
-    #' Compute multi-regional output multipliers following Miller & Blair (2009).
-    #' This includes intra-regional, inter-regional, and spillover multipliers.
+    #' Compute multi-regional output multipliers following Miller & Blair (2009),
+    #' section 6.3.2--6.3.3. For a unit final-demand shock in a country-sector
+    #' (a column of the Leontief inverse), returns intra-regional and
+    #' inter-regional (spillover) output multipliers.
     #' @return Self (invisibly).
     compute_multiregional_multipliers = function() {
       if (is.null(self$technical_coefficients_matrix)) {
@@ -377,7 +379,7 @@ miom <- R6Class(
       # Initialize storage for results
       multiplier_results <- list()
 
-      # For each country r (destination of the shock)
+      # For each country r (origin of the final-demand shock)
       for (r in 1:self$n_countries) {
         country_r <- self$countries[r]
         r_indices <- ((r - 1) * self$n_sectors + 1):(r * self$n_sectors)
@@ -410,9 +412,9 @@ miom <- R6Class(
 
           # Store results
           result_row <- data.frame(
-            destination_country = country_r,
-            destination_sector = sector_j,
-            destination_label = paste(country_r, sector_j, sep = "_"),
+            shock_country = country_r,
+            shock_sector = sector_j,
+            shock_label = paste(country_r, sector_j, sep = "_"),
             intra_regional_multiplier = intra_regional,
             spillover_multiplier = spillover,
             total_multiplier = total_multiplier,
@@ -437,8 +439,9 @@ miom <- R6Class(
 
     #' @description
     #' Compute spillover effects matrix showing how shocks in each region-sector
-    #' affect output in all other regions. Returns the inter-regional elements
-    #' from the Leontief inverse matrix (excluding intra-regional effects).
+    #' affect output in all other regions. Returns off-diagonal regional blocks
+    #' of the Leontief inverse (Miller & Blair, 2009, interregional spillover
+    #' effects; section 6.3.2).
     #' @return A matrix of spillover effects.
     get_spillover_matrix = function() {
       if (is.null(self$leontief_inverse_matrix)) {
@@ -458,10 +461,11 @@ miom <- R6Class(
     },
 
     #' @description
-    #' Compute net spillover effects for each country pair. Net spillover represents
-    #' the difference in total spillover effects between country pairs, showing
-    #' which country benefits more from economic shocks in the other. Uses the
-    #' spillover matrix (Leontief inverse with intra-regional effects set to zero).
+    #' Compute net spillover effects for each country pair. For countries `r` and
+    #' `s`, `net[r, s] = spillover_{s->r} - spillover_{r->s}` (block sums from
+    #' [get_spillover_matrix()][miom]). A positive value means country `r` receives more
+    #' cross-regional output response from shocks in `s` than `s` receives from
+    #' shocks in `r`.
     #' @return A matrix showing net spillover effects between countries.
     get_net_spillover_matrix = function() {
       # Get the spillover matrix
@@ -488,7 +492,7 @@ miom <- R6Class(
             # (sum of spillover matrix elements from r-sectors to s-sectors)
             spillover_r_to_s <- sum(spillover_matrix[s_indices, r_indices])
 
-            # Net spillover (positive means r benefits more from shocks in s than vice versa)
+            # Positive: r receives more spillover from shocks in s than s from shocks in r
             net_spillover[r, s] <- spillover_s_to_r - spillover_r_to_s
           }
         }
@@ -498,58 +502,52 @@ miom <- R6Class(
     },
 
     #' @description
-    #' Compute regional self-reliance and interdependence measures.
-    #' @return A data.frame with self-reliance and interdependence measures by country.
+    #' Compute regional self-reliance and cross-regional spillover measures by
+    #' country. Sector-level intra-regional multipliers follow Miller & Blair
+    #' (2009, section 6.3.2). Country spillover totals are block sums of the
+    #' spillover matrix from [get_spillover_matrix()][miom]: spillover out is foreign
+    #' output induced by all unit shocks in the country; spillover in is domestic
+    #' output induced by all unit shocks abroad.
+    #' @return A data.frame with self-reliance and spillover measures by country.
     get_regional_interdependence = function() {
-      if (is.null(self$multiregional_multipliers)) {
-        self$compute_multiregional_multipliers()
-      }
+
+      spillover_matrix <- self$get_spillover_matrix()
 
       interdependence_results <- data.frame(
         country = self$countries,
         self_reliance = numeric(self$n_countries),
         total_spillover_out = numeric(self$n_countries),
         total_spillover_in = numeric(self$n_countries),
-        interdependence_index = numeric(self$n_countries),
+        spillover_balance = numeric(self$n_countries),
+        spillover_export_share = numeric(self$n_countries),
         stringsAsFactors = FALSE
       )
 
-      for (r in 1:self$n_countries) {
+      for (r in seq_len(self$n_countries)) {
         country_r <- self$countries[r]
+        r_indices <- private$country_indices(r)
 
-        # Self-reliance: average intra-regional multiplier
         self_reliance <- mean(self$multiregional_multipliers[
-          self$multiregional_multipliers$destination_country == country_r,
-          "intra_regional_multiplier"
+          self$multiregional_multipliers$shock_country == country_r,
+          "intra_regional_multiplier",
+          drop = TRUE
         ])
 
-        # Total spillover out: average spillover when this country is shocked
-        spillover_out <- mean(self$multiregional_multipliers[
-          self$multiregional_multipliers$destination_country == country_r,
-          "spillover_multiplier"
-        ])
-
-        # Total spillover in: average multiplier effect on this country from other countries
-        spillover_in <- mean(sapply(1:self$n_countries, function(s) {
-          if (s != r) {
-            mean(self$multiregional_multipliers[
-              self$multiregional_multipliers$destination_country == self$countries[s],
-              paste0("multiplier_to_", country_r)
-            ])
-          } else {
-            0
-          }
-        }))
-
-        # Interdependence index: ratio of spillover to self-reliance
-        interdependence_idx <- spillover_out / self_reliance
+        spillover_out <- sum(spillover_matrix[-r_indices, r_indices, drop = FALSE])
+        spillover_in <- sum(spillover_matrix[r_indices, -r_indices, drop = FALSE])
+        spillover_total <- spillover_out + spillover_in
 
         interdependence_results[r, ] <- list(
           country = country_r,
           self_reliance = self_reliance,
           total_spillover_out = spillover_out,
           total_spillover_in = spillover_in,
-          interdependence_index = interdependence_idx
+          spillover_balance = spillover_out - spillover_in,
+          spillover_export_share = if (spillover_total > 0) {
+            spillover_out / spillover_total
+          } else {
+            NA_real_
+          }
         )
       }
 
@@ -559,6 +557,9 @@ miom <- R6Class(
 
   # private members
   private = list(
+    country_indices = function(country_index) {
+      ((country_index - 1) * self$n_sectors + 1):(country_index * self$n_sectors)
+    },
     ensure_labels = function(intermediate_transactions, total_production) {
       # Generate country-sector labels if not present
       expected_labels <- paste(

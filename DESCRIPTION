@@ -25,7 +25,6 @@ URL: https://albersonmiranda.github.io/fio/, https://github.com/albersonmiranda/
 BugReports: https://github.com/albersonmiranda/fio/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE, r6 = TRUE)
-RoxygenNote: 7.3.3
 Depends: 
     R (>= 4.2)
 SystemRequirements: Cargo (Rust's package manager), rustc >= 1.84, xz
@@ -57,3 +56,4 @@ VignetteBuilder: knitr
 Language: en-US
 Config/testthat/edition: 3
 RdMacros: Rdpack
+Config/roxygen2/version: 8.0.0
