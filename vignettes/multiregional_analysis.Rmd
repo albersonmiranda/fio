@@ -151,7 +151,72 @@ knitr::kable(bra_agr[, available_cols],
 
 The multipliers reveal important insights about global economic linkages. The intra-regional multiplier shows the domestic effect within a country when one of its sectors receives a demand shock, while the spillover multiplier captures the total impact on all other countries.
 
+## Spillover Matrix
+
+The spillover matrix provides a comprehensive view of how shocks in each country-sector affect all other country-sectors in the system:
+
+```{r spillover_matrix}
+spillover_matrix <- world_2000$get_spillover_matrix()
+```
+
+This $598 \times 598$ matrix contains the complete set of multiplier effects. For example, we can examine how a shock to the **US electrical sector** affects **manufacturing** in other countries:
+
+```{r us_effects}
+# Effects of a shock to US Electrical sector
+electrical_effects <- spillover_matrix[grepl("Manufacturing", rownames(spillover_matrix)), "USA_Electrical and optical equipment"]
+knitr::kable(
+  electrical_effects,
+  digits = 10,
+  caption = "Effects of a unit shock to US Electrical sector"
+)
+```
+
+These values show the output response in each foreign country-sector to a unit shock in USA Electrical and optical equipment.
+
+## Net Spillover Effects
+
+Net spillover effects reveal asymmetric cross-regional multiplier linkages. For countries $r$ and $s$, $net[r, s] = spillover_{s→r} - spillover_{r→s}$ (block sums from the spillover matrix).
+
+```{r net_spillover}
+net_spillover <- world_2000$get_net_spillover_matrix()
+knitr::kable(net_spillover, digits = 4, caption = "Net Spillover Effects Matrix")
+```
+
+The interpretation is:
+
+- **Positive** `net[r, s]`: country `r` receives more cross-regional output response from shocks in `s` than `s` receives from shocks in `r` (row country is a net *recipient* relative to the column country).
+- **Negative** `net[r, s]`: the column country receives more than the row country.
+- Values close to zero: roughly symmetric spillover relationship.
+
+For example, `net["USA", "CHN"] > 0` means a unit final-demand shock in China induces more output response in the USA than a comparable shock in the USA induces in China—not that the USA "exports" more spillover to the world in aggregate. The USA's negative **spillover balance** in `get_regional_interdependence()` confirms it is a net recipient in total cross-region spillovers for this dataset.
+
+## Key Sectors Analysis
+
+Key sectors analysis identifies sectors with strong backward and forward linkages in the multi-regional system:
+
+```{r key_sectors}
+world_2000$compute_key_sectors()
+
+key_sectors_table <- world_2000$key_sectors[, c(
+  "country", "sector_name",
+  "power_dispersion", "sensitivity_dispersion", "key_sectors"
+)]
+knitr::kable(head(key_sectors_table), digits = 4, caption = "Key Sectors Analysis")
+```
+
+Key sectors are defined as those with above-average values in both power dispersion (backward linkages) and sensitivity dispersion (forward linkages). If both values exceed 1, the sector is classified as a key sector.
+
+```{r identify_key_sectors}
+knitr::kable(
+  subset(key_sectors_table, key_sectors == "Key Sector"),
+  digits = 4,
+  caption = "World Key Sectors"
+)
+```
+
 ## Regional Interdependence Analysis
+
+When a region increases its final demand, it doesn't just buy from local suppliers. It imports intermediate inputs from other regions, which in turn require inputs from their suppliers, creating a chain reaction.
 
 Regional interdependence measures help understand cross-country multiplier linkages. The `get_regional_interdependence()` method computes several key indicators (Miller & Blair, 2009, section 6.3.2):
 
@@ -162,9 +227,85 @@ Regional interdependence measures help understand cross-country multiplier linka
 - **Spillover export share**: `total_spillover_out / (total_spillover_out + total_spillover_in)`
 
 ```{r interdependence}
-interdependence <- world_2000$get_regional_interdependence()
-knitr::kable(interdependence, digits = 4)
+#| tbl-cap: "A glimpse on interdependence indexes table"
 
+interdependence <- world_2000$get_regional_interdependence()
+knitr::kable(interdependence, digits = 4) |> head()
+```
+
+Now let's plot the results and make sense of it. China has the greater self-reliance index, meaning that, on average, shocks in that economy causes higher domestic impact.
+
+```{r}
+ggplot(interdependence, aes(x = reorder(country, self_reliance), y = self_reliance)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(
+    title = "Self-reliance index by country",
+    x = "Country",
+    y = "Average intra-regional multiplier"
+  ) +
+  theme_minimal()
+```
+
+Concerning spillover to other countries, Hong Kong has the greatest value, meaning demand increases in that country triggers demand abroad. It is expected that a small city-state isn't able to fulfill demand industry-wide, thus stimulating suppliers abroad.
+
+```{r}
+ggplot(interdependence, aes(x = reorder(country, total_spillover_out), y = total_spillover_out)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(
+    title = "Total spillover to other countries by country",
+    x = "Country",
+    y = "Sum of induced multipliers abroad"
+  ) +
+  theme_minimal()
+```
+
+On the other hand, USA has absorbs the most spillover in effects. It means that USA benefits the most from demand shocks in other countries.
+
+```{r}
+interdependence |>
+  subset(!country %in% "ROW") |>
+  ggplot(aes(x = reorder(country, total_spillover_in), y = total_spillover_in)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(
+    title = "Total spillover absorbed by country",
+    x = "Country",
+    y = "Sum of induced multipliers at home"
+  ) +
+  theme_minimal()
+```
+
+The Spillover Balance measures whether a specific region or sector is a net "giver" or a net "receiver" of economic stimulus across boundaries. It is calculated as the difference between the economic activity a region exports via spillovers and what it pulls in from others.
+
+If balance is positive, the region is a net contributor. This means when your region spends money, it leaks a massive amount of demand out to other regions, but when they spend money, your industries don't catch much of it.
+
+A negative balance indicates the country is a net beneficiary, meaning your economy is highly capable of capturing the spillover effects of external spending. When other regions increase production, your local industries see a massive surge in demand for your intermediate inputs.
+
+Results demonstrates that highly industrialized countries has negative balance, meaning they are able to absorb more spillover effects than leak it.
+
+```{r}
+interdependence |>
+  subset(!country %in% "ROW") |>
+  ggplot(aes(x = reorder(country, spillover_balance), y = spillover_balance)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(
+    title = "Spillover balance by country",
+    x = "Country",
+    y = "Spillover out - Spillover in"
+  ) +
+  theme_minimal()
+```
+
+The Spillover Export Share measures the degree of external leakages relative to the total economic impact. It evaluates how much of the total economic multiplier generated by a region's initial spending escapes to benefit foreign economies rather than staying local.
+
+A higher share (e.g., 60%) indicates that a massive portion of the economic stimulus leaves the region. This typically happens in highly specialized, smaller, or open economies that rely heavily on importing specialized components, parts, or raw materials to complete production.
+
+A lower share (e.g., 10%) means that the vast majority of the multiplier effect stays locked inside the domestic economy. This is characteristic of large, highly diversified economies with mature internal supply chains that can supply almost all of their own intermediate needs.
+
+```{r}
 ggplot(interdependence, aes(x = reorder(country, spillover_export_share), y = spillover_export_share)) +
   geom_bar(stat = "identity") +
   coord_flip() +
@@ -175,43 +316,6 @@ ggplot(interdependence, aes(x = reorder(country, spillover_export_share), y = sp
   ) +
   theme_minimal()
 ```
-
-The results show that `r interdependence$country[which.max(interdependence$self_reliance)]` has the highest self-reliance (`r round(max(interdependence$self_reliance), 4)`). Open economies such as `r interdependence$country[which.max(interdependence$total_spillover_out)]` show the largest total spillover out (`r round(max(interdependence$total_spillover_out), 2)`).
-
-### USA spillover in vs out
-
-In this 2000 MRIO, the USA often ranks low on **total spillover out** and high on **total spillover in**. That pattern is consistent with IO multiplier definitions, not necessarily with a "demand engine" narrative:
-
-- **Spillover out** measures extra output required *abroad* when demand shocks hit *USA* sectors. The large USA domestic block in **L** absorbs most of the response.
-- **Spillover in** measures extra output required *in the USA* when demand shocks hit *foreign* sectors—high when the USA is an upstream supplier in global value chains.
-
-```{r usa_spillover, echo=FALSE}
-usa_row <- interdependence[interdependence$country == "USA", ]
-```
-
-For the USA: spillover out = `r round(usa_row$total_spillover_out, 2)`, spillover in = `r round(usa_row$total_spillover_in, 2)`, balance = `r round(usa_row$spillover_balance, 2)`, export share = `r round(usa_row$spillover_export_share, 3)`.
-
-## Bilateral Trade Analysis
-
-The `miom` class allows extraction of bilateral trade flows between any two countries using the `get_bilateral_trade()` method:
-
-```{r bilateral_trade}
-
-# Get bilateral trade flows
-trade_flow1 <- world_2000$get_bilateral_trade("BRA", "USA")
-knitr::kable(trade_flow1[1:10, 1:5],
-  digits = 2,
-  caption = paste("Trade flows from", "BRA", "to", "USA", "(first 10 buying sectors, first 5 supplying sectors)")
-)
-
-trade_flow2 <- world_2000$get_bilateral_trade("USA", "BRA")
-knitr::kable(trade_flow2[1:10, 1:5],
-  digits = 2,
-  caption = paste("Trade flows from", "USA", "to", "BRA", "(first 10 buying sectors, first 5 supplying sectors)")
-)
-```
-
-These matrices show the intermediate goods flows from the origin country (columns) to the destination country (rows) by sector. The values represent the monetary flows of intermediate inputs used in production.
 
 ## Spillover Matrix
 
@@ -224,12 +328,11 @@ spillover_matrix <- world_2000$get_spillover_matrix()
 This $598 \times 598$ matrix contains the complete set of multiplier effects. For example, we can examine how a shock to the US electrical sector affects manufacturing in other countries:
 
 ```{r us_effects}
-
 # Effects of a shock to US Electrical sector
-electrical_effects <- spillover_matrix[grepl("*_Manufacturing, recycling", rownames(spillover_matrix)), "USA_Electrical and optical equipment"]
+electrical_effects <- spillover_matrix[grepl("Manufacturing", rownames(spillover_matrix)), "USA_Electrical and optical equipment"]
 knitr::kable(
   electrical_effects,
-  digits = 4,
+  digits = 10,
   caption = "Effects of a unit shock to US Electrical sector"
 )
 ```
@@ -276,6 +379,27 @@ knitr::kable(
   caption = "World Key Sectors"
 )
 ```
+
+## Bilateral Trade Analysis
+
+The `miom` class allows extraction of bilateral trade flows between any two countries using the `get_bilateral_trade()` method:
+
+```{r bilateral_trade}
+# Get bilateral trade flows
+trade_flow1 <- world_2000$get_bilateral_trade("BRA", "USA")
+knitr::kable(trade_flow1[1:10, 1:5],
+  digits = 2,
+  caption = paste("Trade flows from", "BRA", "to", "USA", "(first 10 buying sectors, first 5 supplying sectors)")
+)
+
+trade_flow2 <- world_2000$get_bilateral_trade("USA", "BRA")
+knitr::kable(trade_flow2[1:10, 1:5],
+  digits = 2,
+  caption = paste("Trade flows from", "USA", "to", "BRA", "(first 10 buying sectors, first 5 supplying sectors)")
+)
+```
+
+These matrices show the intermediate goods flows from the origin country (columns) to the destination country (rows) by sector. The values represent the monetary flows of intermediate inputs used in production.
 
 ## Extracting Country-Specific Input-Output Tables
 
