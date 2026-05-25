@@ -261,7 +261,7 @@ ggplot(interdependence, aes(x = reorder(country, total_spillover_out), y = total
   theme_minimal()
 ```
 
-On the other hand, USA has absorbs the most spillover in effects. It means that USA benefits the most from demand shocks in other countries.
+On the other hand, USA absorbs the most spillover-in effects. It means that USA benefits the most from demand shocks in other countries.
 
 ```{r}
 interdependence |>
@@ -315,69 +315,6 @@ ggplot(interdependence, aes(x = reorder(country, spillover_export_share), y = sp
     y = "total_spillover_out / (out + in)"
   ) +
   theme_minimal()
-```
-
-## Spillover Matrix
-
-The spillover matrix provides a comprehensive view of how shocks in each country-sector affect all other country-sectors in the system:
-
-```{r spillover_matrix}
-spillover_matrix <- world_2000$get_spillover_matrix()
-```
-
-This $598 \times 598$ matrix contains the complete set of multiplier effects. For example, we can examine how a shock to the US electrical sector affects manufacturing in other countries:
-
-```{r us_effects}
-# Effects of a shock to US Electrical sector
-electrical_effects <- spillover_matrix[grepl("Manufacturing", rownames(spillover_matrix)), "USA_Electrical and optical equipment"]
-knitr::kable(
-  electrical_effects,
-  digits = 10,
-  caption = "Effects of a unit shock to US Electrical sector"
-)
-```
-
-These values show the output response in each foreign country-sector to a unit shock in USA Electrical and optical equipment.
-
-## Net Spillover Effects
-
-Net spillover effects reveal asymmetric cross-regional multiplier linkages. For countries `r` and `s`, `net[r, s] = spillover_{s→r} - spillover_{r→s}` (block sums from the spillover matrix).
-
-```{r net_spillover}
-net_spillover <- world_2000$get_net_spillover_matrix()
-knitr::kable(net_spillover, digits = 4, caption = "Net Spillover Effects Matrix")
-```
-
-The interpretation is:
-
-- **Positive** `net[r, s]`: country `r` receives more cross-regional output response from shocks in `s` than `s` receives from shocks in `r` (row country is a net *recipient* relative to the column country).
-- **Negative** `net[r, s]`: the column country receives more than the row country.
-- Values close to zero: roughly symmetric spillover relationship.
-
-For example, `net["USA", "CHN"] > 0` means a unit final-demand shock in China induces more output response in the USA than a comparable shock in the USA induces in China—not that the USA "exports" more spillover to the world in aggregate. The USA's negative **spillover balance** in `get_regional_interdependence()` confirms it is a net recipient in total cross-region spillovers for this dataset.
-
-## Key Sectors Analysis
-
-Key sectors analysis identifies sectors with strong backward and forward linkages in the multi-regional system:
-
-```{r key_sectors}
-world_2000$compute_key_sectors()
-
-key_sectors_table <- world_2000$key_sectors[, c(
-  "country", "sector_name",
-  "power_dispersion", "sensitivity_dispersion", "key_sectors"
-)]
-knitr::kable(head(key_sectors_table), digits = 4, caption = "Key Sectors Analysis")
-```
-
-Key sectors are defined as those with above-average values in both power dispersion (backward linkages) and sensitivity dispersion (forward linkages). If both values exceed 1, the sector is classified as a key sector.
-
-```{r identify_key_sectors}
-knitr::kable(
-  subset(key_sectors_table, key_sectors == "Key Sector"),
-  digits = 4,
-  caption = "World Key Sectors"
-)
 ```
 
 ## Bilateral Trade Analysis
