@@ -120,82 +120,214 @@ print(wiod_miom)
 
 # Analysis
 
-## Technical Coefficients
+## Multi-Regional Multiplier Analysis
 
-Compute the technical coefficients matrix ($A$).
+The `miom` class computes several types of multipliers following Miller & Blair (2009):
 
-```{r tech_coeff}
-wiod_miom$compute_tech_coeff()
+- **Intra-regional multipliers**: Effects within the same country
+- **Spillover multipliers**: Effects on other countries
+- **Total multipliers**: Sum of intra-regional and spillover effects
 
-# inspect a small corner of the matrix
-wiod_miom$technical_coefficients_matrix[1:5, 1:5]
-```
-
-## Leontief Inverse
-
-Compute the Leontief inverse matrix ($L = (I-A)^{-1}$).
-
-```{r leontief}
-wiod_miom$compute_leontief_inverse()
-
-# inspect a small corner of the matrix
-wiod_miom$leontief_inverse_matrix[1:5, 1:5]
-```
-
-## Multipliers
-
-Compute multi-regional multipliers.
-
-```{r multipliers}
+```{r compute_multipliers}
 wiod_miom$compute_multiregional_multipliers()
-multipliers <- wiod_miom$multiregional_multipliers
-head(multipliers)
 
-# summary of simple multipliers by country
-wiod_miom$get_country_summary()
+# Show first 10 rows of multipliers for readability
+knitr::kable(
+  wiod_miom$multiregional_multipliers[1:10, 1:10],
+  digits = 4,
+  caption = "Multi-Regional Multipliers (first 10 country-sectors)"
+)
 ```
 
-## Bilateral Trade
+## Interpreting the Multipliers
 
-Analyze bilateral trade between two specific countries, e.g., USA and CHN.
+The multipliers table shows several key measures for each country-sector combination (each row is a $1 final-demand shock in `shock_country` / `shock_sector`):
 
-```{r bilateral}
-trade_usa_chn <- wiod_miom$get_bilateral_trade(origin = "USA", destination = "CHN")
+- **Intra-regional multiplier**: The total effect within the same country when that sector receives a $1 shock
+- **Spillover multiplier**: The total effect on all other countries from the same shock  
+- **Total multiplier**: The sum of intra-regional and spillover effects
+- **Multiplier to [Country]**: The specific spillover effect on each individual country
 
-# show first few rows/cols
-trade_usa_chn[1:5, 1:5]
+Let's find an interesting example. Take a look at China's Manufacturing and its effects on USA:
 
-exports_by_sector <- colSums(trade_usa_chn)
-head(exports_by_sector)
+```{r interpret_multipliers}
+# Find China manufacturing row
+chn_mfg_index <- which(grepl("CHN.*[Mm]anufacturing", wiod_miom$multiregional_multipliers$shock_label))[1]
+if (!is.na(chn_mfg_index)) {
+  chn_mfg <- wiod_miom$multiregional_multipliers[chn_mfg_index, ]
+  
+  # Show key multiplier components
+  multiplier_cols <- c("shock_label", "intra_regional_multiplier", "spillover_multiplier", "total_multiplier", "multiplier_to_USA")
+  available_cols <- intersect(multiplier_cols, names(chn_mfg))
+  knitr::kable(chn_mfg[, available_cols],
+    digits = 4,
+    caption = "Example: China Manufacturing Multipliers"
+  )
+}
 ```
 
-## Spillover Effects
+The multipliers reveal important insights about global economic linkages. The intra-regional multiplier shows the domestic effect within a country when one of its sectors receives a demand shock, while the spillover multiplier captures the total impact on all other countries.
 
-Compute the spillover matrix and net spillover matrix.
+## Spillover Matrix
 
-```{r spillover}
+The spillover matrix provides a comprehensive view of how shocks in each country-sector affect all other country-sectors in the system:
+
+```{r spillover_matrix}
 spillover_matrix <- wiod_miom$get_spillover_matrix()
-
-# inspect
-spillover_matrix[1:5, 1:5]
-
-net_spillover <- wiod_miom$get_net_spillover_matrix()
-
-# inspect a subset
-net_spillover[1:10, 1:10]
 ```
 
-## Regional Interdependence
+This matrix contains the complete set of multiplier effects. For example, we can examine how a shock to a particular sector affects manufacturing in other countries:
 
-Compute regional interdependence measures.
+```{r sector_effects}
+# Show manufacturing effects structure
+mfg_rows <- grep("[Mm]anufacturing", rownames(spillover_matrix))
+if (length(mfg_rows) > 0) {
+  knitr::kable(
+    spillover_matrix[mfg_rows[1:min(10, length(mfg_rows))], 1:5],
+    digits = 4,
+    caption = "Sample spillover effects on manufacturing sectors from first 5 shocks"
+  )
+}
+```
+
+These values show the output response in each foreign country-sector to unit shocks in various origin sectors.
+
+## Net Spillover Effects
+
+Net spillover effects reveal asymmetric cross-regional multiplier linkages. For countries $r$ and $s$, $net[r, s] = spillover_{s→r} - spillover_{r→s}$ (block sums from the spillover matrix).
+
+```{r net_spillover}
+net_spillover <- wiod_miom$get_net_spillover_matrix()
+knitr::kable(net_spillover[1:15, 1:15], digits = 4, caption = "Net Spillover Effects Matrix (sample)")
+```
+
+The interpretation is:
+
+- **Positive** `net[r, s]`: country `r` receives more cross-regional output response from shocks in `s` than `s` receives from shocks in `r` (row country is a net *recipient* relative to the column country).
+- **Negative** `net[r, s]`: the column country receives more than the row country.
+- Values close to zero: roughly symmetric spillover relationship.
+
+## Key Sectors Analysis
+
+Key sectors analysis identifies sectors with strong backward and forward linkages in the multi-regional system:
+
+```{r key_sectors}
+wiod_miom$compute_key_sectors()
+
+key_sectors_table <- wiod_miom$key_sectors[, c(
+  "country", "sector_name",
+  "power_dispersion", "sensitivity_dispersion", "key_sectors"
+)]
+knitr::kable(head(key_sectors_table, 15), digits = 4, caption = "Key Sectors Analysis")
+```
+
+Key sectors are defined as those with above-average values in both power dispersion (backward linkages) and sensitivity dispersion (forward linkages). If both values exceed 1, the sector is classified as a key sector.
+
+```{r identify_key_sectors}
+key_sector_subset <- subset(key_sectors_table, key_sectors == "Key Sector")
+if (nrow(key_sector_subset) > 0) {
+  knitr::kable(
+    key_sector_subset[1:min(15, nrow(key_sector_subset)), ],
+    digits = 4,
+    caption = "Key Sectors in WIOD 2014"
+  )
+}
+```
+
+## Regional Interdependence Analysis
+
+When a region increases its final demand, it doesn't just buy from local suppliers. It imports intermediate inputs from other regions, which in turn require inputs from their suppliers, creating a chain reaction.
+
+Regional interdependence measures help understand cross-country multiplier linkages. The `get_regional_interdependence()` method computes several key indicators (Miller & Blair, 2009, section 6.3.2):
+
+- **Self-reliance**: Average intra-regional column multiplier by country (sector-level mean)
+- **Total spillover out**: Block sum of foreign output induced by all unit shocks in the country
+- **Total spillover in**: Block sum of domestic output induced by all unit shocks abroad
+- **Spillover balance**: `total_spillover_out - total_spillover_in` (negative means net recipient of cross-region spillovers)
+- **Spillover export share**: `total_spillover_out / (total_spillover_out + total_spillover_in)`
 
 ```{r interdependence}
-interdep <- wiod_miom$get_regional_interdependence()
-print(interdep)
+#| tbl-cap: "A glimpse on interdependence indexes table"
 
-# visualize spillover export share by country
+interdependence <- wiod_miom$get_regional_interdependence()
+knitr::kable(head(interdependence, 15), digits = 4)
+```
+
+Now let's visualize some key findings. First, let's look at self-reliance by country:
+
+```{r self_reliance_plot}
 library(ggplot2)
-ggplot(interdep, aes(x = reorder(country, spillover_export_share), y = spillover_export_share)) +
+
+interdependence |>
+  ggplot(aes(x = reorder(country, self_reliance), y = self_reliance)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(
+    title = "Self-reliance index by country",
+    x = "Country",
+    y = "Average intra-regional multiplier"
+  ) +
+  theme_minimal()
+```
+
+Countries with higher self-reliance have more diversified economies and rely less on imports for intermediate inputs.
+
+Next, let's examine total spillover to other countries:
+
+```{r spillover_out_plot}
+interdependence |>
+  ggplot(aes(x = reorder(country, total_spillover_out), y = total_spillover_out)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(
+    title = "Total spillover to other countries by country",
+    x = "Country",
+    y = "Sum of induced multipliers abroad"
+  ) +
+  theme_minimal()
+```
+
+Countries with higher spillover-out tend to be net importers of intermediate inputs, requiring supplies from abroad to fulfill domestic demand.
+
+On the other hand, let's see which countries absorb the most spillover-in effects:
+
+```{r spillover_in_plot}
+interdependence |>
+  subset(!country %in% "RoW") |>
+  ggplot(aes(x = reorder(country, total_spillover_in), y = total_spillover_in)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(
+    title = "Total spillover absorbed by country",
+    x = "Country",
+    y = "Sum of induced multipliers at home"
+  ) +
+  theme_minimal()
+```
+
+The Spillover Balance measures whether a specific region or sector is a net "giver" or a net "receiver" of economic stimulus across boundaries:
+
+```{r spillover_balance_plot}
+interdependence |>
+  subset(!country %in% "RoW") |>
+  ggplot(aes(x = reorder(country, spillover_balance), y = spillover_balance)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(
+    title = "Spillover balance by country",
+    x = "Country",
+    y = "Spillover out - Spillover in"
+  ) +
+  theme_minimal()
+```
+
+If balance is positive, the region is a net contributor. A negative balance indicates the country is a net beneficiary of cross-regional spillovers.
+
+Finally, let's examine the Spillover Export Share, which measures the degree of external leakages:
+
+```{r spillover_share_plot}
+interdependence |>
+  ggplot(aes(x = reorder(country, spillover_export_share), y = spillover_export_share)) +
   geom_bar(stat = "identity") +
   coord_flip() +
   labs(
@@ -205,3 +337,66 @@ ggplot(interdep, aes(x = reorder(country, spillover_export_share), y = spillover
   ) +
   theme_minimal()
 ```
+
+A higher share indicates that a larger portion of the economic stimulus leaks out to foreign economies. This is typical for highly specialized or smaller economies.
+
+## Bilateral Trade Analysis
+
+The `miom` class allows extraction of bilateral trade flows between any two countries using the `get_bilateral_trade()` method:
+
+```{r bilateral_trade}
+# Get bilateral trade flows between USA and CHN
+trade_usa_chn <- wiod_miom$get_bilateral_trade("USA", "CHN")
+knitr::kable(trade_usa_chn[1:10, 1:5],
+  digits = 2,
+  caption = "Trade flows from USA to CHN (first 10 buying sectors, first 5 supplying sectors)"
+)
+
+trade_chn_usa <- wiod_miom$get_bilateral_trade("CHN", "USA")
+knitr::kable(trade_chn_usa[1:10, 1:5],
+  digits = 2,
+  caption = "Trade flows from CHN to USA (first 10 buying sectors, first 5 supplying sectors)"
+)
+```
+
+These matrices show the intermediate goods flows from the origin country (columns) to the destination country (rows) by sector. The values represent the monetary flows of intermediate inputs used in production.
+
+## Extracting Country-Specific Input-Output Tables
+
+Lastly, one can obtain single-region `iom` objects from the multi-regional system. The `extract_country()` method allows you to extract domestic input-output tables for individual countries from the multi-regional system:
+
+```{r extract_country}
+# Extract domestic economy for USA in the dataset
+usa_iom <- wiod_miom$extract_country("USA")
+```
+
+The extracted `iom` object contains only the domestic transactions for the specified country:
+
+```{r country_tables}
+# Show a subset of the domestic intermediate transactions
+knitr::kable(usa_iom$intermediate_transactions[1:8, 1:8],
+  digits = 0,
+  caption = "USA Domestic Intermediate Transactions (first 8x8 sectors)"
+)
+
+# Show total production
+knitr::kable(t(usa_iom$total_production[1, 1:12]),
+  digits = 0,
+  caption = "USA Total Production (first 12 sectors)"
+)
+```
+
+You can then perform standard input-output analysis on the domestic economy:
+
+```{r country_analysis}
+usa_iom$compute_tech_coeff()$compute_leontief_inverse()$compute_multiplier_output()
+
+knitr::kable(head(usa_iom$multiplier_output, 12),
+  digits = 4,
+  caption = "USA Domestic Output Multipliers (first 12 sectors)"
+)
+```
+
+# REFERENCES
+
+Miller, Ronald E., and Peter D. Blair. Input-Output Analysis: Foundations and Extensions. 2nd ed. Cambridge University Press, 2009. https://doi.org/10.1017/CBO9780511626982.
