@@ -1,5 +1,8 @@
 url: https://albersonmiranda.github.io/fio/
 template:
+  bootstrap: 5
+  bslib:
+    navbar-bg: "#121212"
   params:
     bootswatch: cosmo
 

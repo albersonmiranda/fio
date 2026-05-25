@@ -12,7 +12,7 @@ Release year from WIOD. One of "2016", "2013" or "long-run".
 Defaults to "2016".}
 
 \item{out_dir}{(\code{string})\cr
-Path to download. Defaults to current working directory.}
+Path to download. Defaults to \code{tempdir()}.}
 }
 \value{
 Invisibly returns the path to the downloaded file.
