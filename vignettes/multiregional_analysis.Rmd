@@ -181,7 +181,7 @@ The interpretation is:
 - **Negative** `net[r, s]`: the column country receives more than the row country.
 - Values close to zero: roughly symmetric spillover relationship.
 
-For example, `net["USA", "CHN"] > 0` means a unit final-demand shock in China induces more output response in the USA than a comparable shock in the USA induces in China—not that the USA "exports" more spillover to the world in aggregate. The USA's negative **spillover balance** in `get_regional_interdependence()` confirms it is a net recipient in total cross-region spillovers for this dataset.
+For example, `net["USA", "CHN"] > 0` means a unit final-demand shock in China induces more output response in the USA than a comparable shock in the USA induces in China.
 
 ## Key Sectors Analysis
 
