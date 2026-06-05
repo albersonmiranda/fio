@@ -1,0 +1,169 @@
+# Changelog
+
+## fio (development version)
+
+### 💥 Breaking changes
+
+- `miom$compute_multiregional_multipliers()` output columns renamed:
+  `destination_country`, `destination_sector`, and `destination_label`
+  are now `shock_country`, `shock_sector`, and `shock_label` (they
+  identify the origin of the final-demand shock).
+- `miom$get_regional_interdependence()` now uses block sums from the
+  spillover matrix for `total_spillover_out` and `total_spillover_in`.
+  Removed `interdependence_index`; added `spillover_balance` and
+  `spillover_export_share`.
+
+## fio 1.0.0
+
+CRAN release: 2026-02-27
+
+### ✨ Enhancements
+
+- New
+  [`miom()`](https://albersonmiranda.github.io/fio/reference/miom.md)
+  function to create multi-regional input-output models
+  ([\#155](https://github.com/albersonmiranda/fio/issues/155)).
+  - New `get_bilateral_trade()` function to extract bilateral trade
+    flows from multi-regional input-output models.
+  - New `compute_multiregional_multipliers()` function to compute
+    intra-regional, inter-regional and spillover multipliers from
+    multi-regional input-output models.
+  - New `get_spillover_matrix()` function to show how shocks in one
+    region affect other regions in multi-regional input-output models.
+  - New `get_net_spillover_matrix()` function to show net spillover
+    effects between regions pairs in multi-regional input-output models.
+  - New `get_regional_interdependence()` function to compute regional
+    self-reliance and interdependence measures in multi-regional
+    input-output models.
+- New `close_model()` method to support closed single-region
+  input-output models by moving household and/or government sectors from
+  final demand to intermediate transactions matrix
+  ([\#154](https://github.com/albersonmiranda/fio/issues/154)).
+- New param `matrix` to `compute_key_sectors()` and
+  `compute_hypothetical_extraction()` so users can decide if should be
+  used Leontief or Ghosh matrices when computing forward linkages
+  ([\#148](https://github.com/albersonmiranda/fio/issues/148)).
+- New
+  [`download_wiod()`](https://albersonmiranda.github.io/fio/reference/download_wiod.md)
+  function to download World Input-Output Database (WIOD) tables
+  directly from their website
+  ([\#152](https://github.com/albersonmiranda/fio/issues/152)).
+
+### 💥 Breaking changes
+
+- Built-in data (`fio::br_2020` and `fio::world_2000`) was moved from
+  {fio} to a data-only companion package
+  [{fiodata}](https://github.com/albersonmiranda/fiodata).
+
+## fio 0.1.6
+
+CRAN release: 2025-04-06
+
+### 🐞 Bug fixes
+
+- Fix R-devel (4.5) issues
+  ([\#119](https://github.com/albersonmiranda/fio/issues/119)).
+- Remove CARGO_LINKER environment variable to use the correct linker for
+  Windows ([\#123](https://github.com/albersonmiranda/fio/issues/123)).
+- Fix `makevars.in` and `makevars.win.in` to avoid race condition when
+  building package in parallel make
+  ([\#127](https://github.com/albersonmiranda/fio/issues/127)).
+
+### 💥 Breaking changes
+
+- Removed `threads` slot from `iom` object
+  ([\#95](https://github.com/albersonmiranda/fio/issues/95)).
+- Raise minimum supported Rust version to 1.77 due to pulp crate (faer
+  dependency)
+  ([\#127](https://github.com/albersonmiranda/fio/issues/127)).
+
+### 🛠️ Other improvements
+
+- Fix homebrew installation instructions in README and `tools/msrv.r`
+  ([\#105](https://github.com/albersonmiranda/fio/issues/105)).
+- Translate `br_2020` dataset to English
+  ([\#113](https://github.com/albersonmiranda/fio/issues/113)).
+- Fedora 36, 37, 38 and 39 from test workflow, since CRAN runners were
+  updated to Fedora 40
+  ([\#126](https://github.com/albersonmiranda/fio/issues/126)).
+
+## fio 0.1.2
+
+CRAN release: 2024-08-27
+
+### 🛠️ Other improvements
+
+- Fixes system checks scripts to correctly handle errors when Rust and
+  Cargo are not found.
+
+## fio 0.1.1
+
+CRAN release: 2024-08-21
+
+### 🛠️ Other improvements
+
+- Update `extraction.rs`and `multipliers.rs` in order to lower minimum
+  supported Rust version from 1.71 to 1.67.
+- Set minimum version of rustc \>= 1.67.1 in `SystemRequirements`.
+- Add system checks to rustc and prompt users either install, if
+  missing, or update when version is lower than specified in
+  `DESCRIPTION`.
+
+## fio 0.1.0
+
+CRAN release: 2024-08-01
+
+### ✨ Enhancements
+
+- New
+  [`import_element()`](https://albersonmiranda.github.io/fio/reference/import_element.md)
+  to programmatically import data from an Excel file
+- New data import addin makes easy to import data from clipboard or an
+  Excel file
+- New `iom` uses the efficiency of R6 classes
+- New `add` and `remove` methods to add and remove elements from an
+  `iom` object
+- New `br_2020` dataset with a 51 sector Brazilian input-output table
+  for 2020
+- New `compute_tech_coeff()` and `compute_leontief_inverse()` methods
+  uses the power of Rust and `faer` crate to substantially increase
+  performance
+- New `compute_multiplier_*()` methods to compute multipliers from a
+  given input-output table:
+  - `compute_multiplier_output()` for the output multiplier
+  - `compute_multiplier_employment()` for the employment multiplier
+  - `compute_multiplier_wages()` for the wages multiplier
+  - `compute_multiplier_taxes()` for the taxes multiplier
+- New `compute_influence_field()` method to compute the field of
+  influence of each sector
+- New `compute_key_sectors()` method to compute the key sectors of an
+  input-output table, based on power of dispersion and sensitivity of
+  dispersion, and their coefficients of variations
+- New `compute_allocation_coeff()` method to compute the allocation
+  coefficients of an input-output table
+- New `compute_ghosh_inverse()` method to compute the Ghosh inverse of
+  an input-output table
+- New `compute_hypothetical_extraction()` method to compute impact on
+  demand, supply and both structures after hypothetical extraction of a
+  sector
+- New `set_max_threads()` method to allow the user to control number of
+  threads used by {fio} (required by CRAN).
+
+### 🚀 Performance improvements
+
+- Use Rust instead of base R for `compute_*()` functions
+- Use `faer` crate instead of `nalgebra` for faster linear algebra
+  calculations
+- Use R6 classes for a clean, object state-changes, memory-efficient
+  object-oriented programming
+
+### 🛠️ Other improvements
+
+- Added assertions to check if elements imported into slots are matrices
+  at initialization of `iom` object and at `add()` method
+- Added assertions to check matrices dimensions at initialization of
+  `iom` object and at `add()` method
+- More informative warnings and errors messages with {cli} package
+- Added assertions to check if number format of slots is `double` at
+  initialization of `iom` object and at `add()` method
+- Fix build configuration to comply with CRAN policies
