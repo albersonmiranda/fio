@@ -1,6 +1,6 @@
 ---
 title: "WIOD 2014 Analysis"
-date: 'maio 24, 2026'
+date: 'June 05, 2026'
 output:
   html_document:
     toc: true
