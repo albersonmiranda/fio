@@ -112,6 +112,31 @@ test_that("miom functionality", {
   interdependence <- my_miom$get_regional_interdependence()
   expect_snapshot(interdependence)
 
+  # block-sum spillover totals match spillover matrix
+  spillover_matrix <- my_miom$get_spillover_matrix()
+  for (r in seq_len(my_miom$n_countries)) {
+    r_indices <- ((r - 1) * my_miom$n_sectors + 1):(r * my_miom$n_sectors)
+    expect_equal(
+      interdependence$total_spillover_out[r],
+      sum(spillover_matrix[-r_indices, r_indices, drop = FALSE])
+    )
+    expect_equal(
+      interdependence$total_spillover_in[r],
+      sum(spillover_matrix[r_indices, -r_indices, drop = FALSE])
+    )
+    expect_equal(
+      interdependence$spillover_balance[r],
+      interdependence$total_spillover_out[r] - interdependence$total_spillover_in[r]
+    )
+  }
+
+  # spillover balance is negative row sum of net spillover matrix
+  net_spillover <- my_miom$get_net_spillover_matrix()
+  expect_equal(
+    interdependence$spillover_balance,
+    -unname(rowSums(net_spillover))
+  )
+
   # spillover matrix
   spillover_matrix <- my_miom$get_spillover_matrix()
   expect_snapshot(spillover_matrix)

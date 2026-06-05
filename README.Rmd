@@ -139,11 +139,11 @@ miom_world$compute_multiregional_multipliers()
 
 # show multipliers for specific country-sector pairs
 # example: Chemicals from Brazil to China and US
-bra_chemicals_index <- which(grepl("BRA.*Chemicals", miom_world$multiregional_multipliers$destination_label))[1]
+bra_chemicals_index <- which(grepl("BRA.*Chemicals", miom_world$multiregional_multipliers$shock_label))[1]
 bra_chemicals <- miom_world$multiregional_multipliers[bra_chemicals_index, ]
 
 # Show key multiplier components
-multiplier_cols <- c("destination_label", "intra_regional_multiplier", "spillover_multiplier", "total_multiplier", "multiplier_to_CHN", "multiplier_to_USA")
+multiplier_cols <- c("shock_label", "intra_regional_multiplier", "spillover_multiplier", "total_multiplier", "multiplier_to_CHN", "multiplier_to_USA")
 available_cols <- intersect(multiplier_cols, names(bra_chemicals))
 bra_chemicals[, available_cols]
 

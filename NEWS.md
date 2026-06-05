@@ -1,5 +1,10 @@
 # fio (development version)
 
+## 💥 Breaking changes
+
+* `miom$compute_multiregional_multipliers()` output columns renamed: `destination_country`, `destination_sector`, and `destination_label` are now `shock_country`, `shock_sector`, and `shock_label` (they identify the origin of the final-demand shock).
+* `miom$get_regional_interdependence()` now uses block sums from the spillover matrix for `total_spillover_out` and `total_spillover_in`. Removed `interdependence_index`; added `spillover_balance` and `spillover_export_share`.
+
 # fio 1.0.0
 
 ## ✨ Enhancements
