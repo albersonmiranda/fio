@@ -1,6 +1,6 @@
 Package: fio
 Title: Friendly Input-Output Analysis
-Version: 1.1.0
+Version: 1.1.0.9000
 Authors@R: c(
   person(
     given = "Alberson",
