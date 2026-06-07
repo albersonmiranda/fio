@@ -1,0 +1,4 @@
+/* force Lux tables to be compact */
+.table th, .table td {
+  padding: 0.5rem;
+}

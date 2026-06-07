@@ -2,6 +2,8 @@
 
 ## fio 1.1.0
 
+CRAN release: 2026-06-07
+
 ### 💥 Breaking changes
 
 - `miom$compute_multiregional_multipliers()` output columns renamed:
