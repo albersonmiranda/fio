@@ -2,13 +2,13 @@ url: https://albersonmiranda.github.io/fio/
 template:
   bootstrap: 5
   bslib:
-    bootswatch: cosmo
-    bg: "#121212"
+    bootswatch: lux
+    pkgdown-nav-height: 100px
 
 navbar:
   title: "fio"
   left:
-    - icon: fa-home fa-lg
+    - icon: fa-home
       href: index.html
     - text: "Vignettes"
       href: articles/index.html
