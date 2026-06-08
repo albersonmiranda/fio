@@ -11,7 +11,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/albersonmiranda/fio/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/albersonmiranda/fio/blob/v1.1.0/DESCRIPTION)
 
 da Silva Miranda A (2026). *fio: Friendly Input-Output Analysis*. R
 package version 1.1.0, <https://albersonmiranda.github.io/fio/>.
