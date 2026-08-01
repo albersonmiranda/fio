@@ -38,6 +38,7 @@ jobs:
           - { os: windows-2025, r: "release" }
           - { os: windows-2025, r: "devel" }
           - { os: windows-2025, r: "oldrel-1" }
+          - { os: windows-11-arm, r: "release" }
           - { os: ubuntu-24.04-arm, r: "release" }
           - { os: ubuntu-24.04-arm, r: "devel" }
           - { os: ubuntu-24.04, r: "devel" }
@@ -54,6 +55,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - if: ${{ runner.os == 'windows' && runner.arch == 'ARM64' }}
+        run: rustup target add aarch64-pc-windows-gnullvm
 
       - uses: r-lib/actions/setup-pandoc@v2
 

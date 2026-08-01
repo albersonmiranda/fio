@@ -14,7 +14,7 @@ crate-type = [ 'staticlib' ]
 name = 'fio'
 
 [dependencies]
-extendr-api = { version = '0.8.1', default-features = false }
+extendr-api = { version = '0.8.2', default-features = false }
 rayon = { version = '1.10.0', default-features = false }
 num_cpus = { version = '1.16.0', default-features = false }
 faer = { version = '0.24.0', default-features = false, features = ["rayon"] }
