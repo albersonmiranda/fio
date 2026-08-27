@@ -1,4 +1,4 @@
-# fio (development version)
+# fio 1.1.1
 
 ## ✨ Enhancements
 
