@@ -5,7 +5,7 @@ use std::panic;
 /// @description
 /// Get the global parallelism settings from faer
 /// @noRd
-fn get_parallelism_settings() -> Result<usize> {
+fn get_parallelism_settings() -> Result<usize, Error> {
     let result = panic::catch_unwind(|| faer::get_global_parallelism());
 
     match result {
