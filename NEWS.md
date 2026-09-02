@@ -1,4 +1,15 @@
-# fio (development version)
+# fio 1.1.1
+
+## ✨ Enhancements
+
+* `fio` now supports Windows arm64 (#191, @jeroen).
+
+## 🛠️ Maintenence
+
+* Change email provider per CRAN request due to Microsoft service instability.
+* Bump `faer` to 0.24.4.
+* Bump `rayon` to 1.12.0.
+* Bump `extendr-api` to 0.9.0 and updating package scaffolding.
 
 # fio 1.1.0
 

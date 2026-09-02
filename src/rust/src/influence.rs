@@ -43,7 +43,7 @@ fn compute_field_influence(
   tech_coeff_matrix: &[f64],
   leontief_inverse_matrix: &[f64],
   epsilon: f64
-) -> RArray<f64, [usize;2]> {
+) -> RArray<f64, 2> {
   
   // get dimensions
   let n = (leontief_inverse_matrix.len() as f64).sqrt() as usize;
